@@ -1,0 +1,394 @@
+# CLAUDE.md
+
+Lean 4 + Mathlib formalisation of Section 4 ("fluctuations") of the grammar paper
+*Grammar (Expectations and the Exceptional Divisor)* (Gerraty & Murfet, 2026): the
+fluctuation function `S_μ(a)`, the normal-crossing block programme (deterministic and
+stochastic posterior quotients, chart assembly, the `N(x₀x₁,1)` end-to-end example,
+the leading Mellin coefficient), and the Taylor-tree programme (`thm:TaylorTree`,
+`cor:standardintegralexp`) in every positive dimension under the paper's holomorphic-polydisc
+hypothesis with the paper's coefficient data.
+
+Factored out of `timaeus-research/laplace` (branch `tide/grammar-normal-crossing-model`,
+pin `b48bc6f`) on 2026-09-07; history preserved. Namespace `Grammar` (formerly
+`Laplace.Grammar`), library `Grammar`, 261 modules, no `sorry`, no additional axioms.
+
+## Where to start
+
+- `Grammar/HEADLINES.md` — the index of headline theorems (I–XXXIII), gates, review verdicts,
+  scope statements and non-claims. Read this before adding anything.
+- `retrospectives/` — one LaTeX retrospective per tide/stage (compile with `lualatex`).
+- `tide-log/` — Astra (GPT-6) big-picture consults `gpt6_bigpicture_v*.md` and independent
+  fidelity reviews `gpt6_fidelity_review_v*.md`, with their prompts.
+- Paper-facing material lives in the SRI repo: `learning-theory/projects/grammar/staging/`
+  (leanref staging notes, hand-off reports) and the annotated mirror
+  `learning-theory/papers/grammar/grammar_lean.tex` (`\leanrefL{Grammar/File.lean#Lnn}{name}`
+  dots pinned to a commit of this repo).
+
+## Status (2026-09-07)
+
+Both programmes are complete and frozen (Astra #25, #32). Do not add theorems without
+explicit authorisation; the preferred separately authorised successor is posterior weak
+convergence for the normal-crossing model.
+
+## Conventions specific to this repo
+
+- Lean `n` is the dimension index (`d = n + 1`); Lean `N` is the paper's sample size; the log
+  degree `j` is the paper's `m − 1`.
+- `K_k = ∏ 1/(2kᵢ)`, `Q = latticeQ k = 2∏kᵢ`, `candidateExp h k μ ↔ μ ∈ Λ(h,k)`.
+- `CoeffFamily.conv` is the Cauchy product on `Fin d → ℕ` (`Finset.Iic`); there is also an
+  unrelated `Grammar.conv` (double series), so always qualify.
+- Every unit is one file `Grammar/<Name>.lean`, registered in `Grammar.lean`; a build proves
+  nothing about an unregistered file.
+
+## Tooling
+
+### `scripts/lean-search`
+
+Python wrapper around https://leansearch.net/ for semantic Mathlib search.
+
+### `scripts/sorries`
+
+Audit `sorry`, `#exit`, `native_decide`, `axiom` across the codebase (must report all zeros).
+
+### Searching Mathlib directly
+
+```bash
+rg 'cauchyPowerSeries|circleIntegral' .lake/packages/mathlib/Mathlib/
+```
+
+## Build commands
+
+```bash
+lake exe cache get   # Download prebuilt Mathlib oleans (run after fresh clone or lake clean)
+lake build           # Build the Grammar library
+```
+
+Gate every commit on `lake build > log 2>&1; echo $?` (exit 0, last line
+"Build completed successfully", `grep -c "error:" log` = 0, the new `.olean` present),
+`scripts/sorries`, and `awk 'length > 100'` on the changed files.
+
+## Lean / Mathlib conventions
+
+- Toolchain pinned to `v4.29.0` in `lean-toolchain`; Mathlib pinned to the
+  matching `v4.29.0` tag in `lakefile.toml`.
+- Use `↦` (not `=>`) for lambda arrows: `fun x ↦ ...`
+- Avoid `native_decide` — sidesteps the kernel's trust boundary. Prefer
+  `decide +kernel`. We have no certificates here so this should not come up.
+- Avoid `@[implemented_by]`, `@[extern]`, `unsafePerformIO` entirely.
+- Prefer algebraic notation: `1` not `ContinuousLinearMap.id ℝ _`.
+
+## Proof workflow
+
+**Skeleton correctness > filling sorries.** A `sorry` with a correct statement
+is valuable; a `sorry` with a wrong statement actively misleads. When auditing
+reveals a wrong statement, fix the statement first.
+
+**Verify against the primary source.** The primer is the ground truth. Always
+re-read the relevant section before committing to a proof structure.
+
+**Estimate before attacking a sorry.** Quick estimate of probability of direct
+proof (e.g. 30%, 60%, 80%). If <50%, factor into intermediate lemmas first.
+
+**Recognise thrashing.** After 3+ failed approaches to the same goal, stop and
+ask the user. Signs: oscillating between approaches, growing helper count
+without progress, repeated restructuring.
+
+**Sanity-check formulas empirically.** Before a long proof, write a Python
+script with `numpy`/`scipy.integrate.quad` that evaluates the formula at
+specific parameter values and compares to numerical integration. A mismatch at
+this stage is much cheaper to find than mid-proof. The primer's
+`figures/plot1_convergence.png` already does this for the example formulas.
+
+**"Easy to see" in papers is a red flag.** When the primer says a formula
+"follows by Wick" without listing the contractions explicitly, write out all
+contractions before formalising — formalisation needs every term named.
+
+## Mathlib API reference (build out as we go)
+
+### Gaussian / Gamma integrals
+
+- `Real.Gamma_eq_integral {s : ℝ} (hs : 0 < s) : Gamma s = ∫ x in Ioi 0, exp(-x) * x^(s-1)`
+- `Real.Gamma_nat_add_half (k : ℕ) : Gamma (k + 1/2) = (2*k - 1)‼ * √π / 2^k`
+  (in `Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral`)
+- `integral_rpow_mul_exp_neg_mul_rpow {p q b : ℝ} (hp : 0 < p) (hq : -1 < q) (hb : 0 < b) : ∫ x in Ioi 0, x^q * exp(-b * x^p) = b^(-(q+1)/p) * (1/p) * Gamma((q+1)/p)`
+  (in `Mathlib.MeasureTheory.Integral.Gamma`)
+- `integral_gaussian (b : ℝ) : ∫ x : ℝ, exp(-b * x^2) = √(π/b)` (full real line, `b ≥ 0`)
+- `integral_gaussian_Ioi (b : ℝ) : ∫ x in Ioi 0, exp(-b * x^2) = √(π/b) / 2` (half line, `b > 0`)
+
+### Symmetry / substitution
+
+- `integral_comp_abs : ∫ x : ℝ, f|x| = 2 * ∫ x in Ioi 0, f x`
+  (in `Mathlib.MeasureTheory.Measure.Lebesgue.Integral`)
+- `integral_neg_eq_self f μ : ∫ x, f(-x) ∂μ = ∫ x, f x ∂μ` (needs `μ.IsNegInvariant`, holds for `volume`)
+- `MeasureTheory.Measure.integral_comp_mul_right (g : ℝ → F) (a : ℝ) : ∫ x : ℝ, g(x * a) = |a⁻¹| • ∫ y : ℝ, g y`
+  (in `Mathlib.MeasureTheory.Measure.Haar.NormedSpace` — note **`Measure.` prefix needed**)
+- `integral_comp_rpow_Ioi_of_pos (g : ℝ → E) (hp : 0 < p) : ∫ x in Ioi 0, (p * x^(p-1)) • g(x^p) = ∫ y in Ioi 0, g y`
+
+### Asymptotics
+
+- `Asymptotics.IsBigO`, `Asymptotics.IsLittleO` and full API in
+  `Mathlib.Analysis.Asymptotics.Defs` / `Lemmas` / `AsymptoticEquivalent`.
+- Notation: `f =O[l] g`, `f =o[l] g`, `f ~[l] g`.
+
+### Double factorial
+
+- `Nat.doubleFactorial : ℕ → ℕ`, notation `n‼` (scope `Nat`)
+- `Nat.doubleFactorial_add_two : (n+2)‼ = (n+2) * n‼`
+- `Nat.doubleFactorial_pos : 0 < n‼`
+
+## Proof tactics (build out as we go)
+
+**`(2 * k : ℕ)` vs `2 * (k : ℝ)`.** Mathlib's `integral_rpow_mul_exp_neg_*` lemmas use real
+exponents (`Real.rpow`) for the integrand. Our user-facing theorems use natural-number
+exponents (`Monoid.npow`). Bridge for `x > 0`:
+```lean
+rw [show (2 * (k : ℝ) : ℝ) = ((2 * k : ℕ) : ℝ) by push_cast; ring, rpow_natCast]
+```
+
+**Cascading `rw [(1/2) = 2⁻¹]` stomps inside exponents.** If you rewrite `(1/2)` to
+`2⁻¹` while exponents like `↑k + 1/2` are still in the goal, the `1/2` inside the
+exponent gets rewritten too, producing `↑k + 2⁻¹`. Fix: use `nth_rewrite` for
+positional rewrites, or factor scalar arithmetic into a side `have` so the
+exponent stays unmolested.
+
+**`ring` cannot unify under `exp`.** `exp` is opaque to `ring`. For goals like
+`x^n * exp(a) = x^n * exp(b)`, use `congr 2; ring` (peels one `*` and one `exp`)
+rather than plain `ring`.
+
+**`positivity` proves `0 < x` and `0 ≤ x`, not `c < x` for nonzero `c`.** For
+`(-1 : ℝ) < 2 * (k : ℝ)`, use
+`by have : (0:ℝ) ≤ (k:ℝ) := Nat.cast_nonneg k; linarith`.
+
+**Even-function symmetry: cleanest path is `integral_comp_abs`.** Phrase the
+integrand as `f(|x|)` and then `integral_comp_abs` directly gives `2 * ∫_{Ioi 0} f`.
+For `x^(2k)` (even Nat power):
+```lean
+rw [show x^(2*k) = |x|^(2*k) from by rw [pow_mul x 2 k, ← sq_abs x, ← pow_mul]]
+```
+For `x^2`: `(sq_abs x).symm` gives `x^2 = |x|^2`.
+
+**Mathlib namespace gotchas.** Some lemmas live under deeper namespaces than
+expected. `integral_comp_mul_right` is `MeasureTheory.Measure.integral_comp_mul_right`,
+not `MeasureTheory.integral_comp_mul_right`. When in doubt, write a scratch
+`#check @SomeName` snippet via `lake env lean /tmp/probe.lean`.
+
+**`rpow_natCast` for converting Nat to Real powers.** `x ^ ((n : ℕ) : ℝ) = x ^ n`
+unconditionally. Use it when the goal mixes `x^(n:ℝ)` (rpow) with `x^(n:ℕ)` (npow).
+
+**Pi.add vs single-lambda mismatch in `rw [MeasureTheory.integral_add ...]`.**
+`Integrable.add` returns `Integrable (f + g)` where `f + g` is `Pi.add` —
+*not* a single lambda `fun u => f u + g u`. When `rw [MeasureTheory.integral_add (h1.add h2) h3]`
+fires, Lean's pattern-matcher tries to syntactically match
+`∫ a, ((fun x => ...) + fun x => ...) a + h3.f a` (Pi.add over lambdas)
+against the goal `∫ u, T1 u + T2 u + T3 u`. Beta-reduction is automatic
+in `rw`, but Pi.add unfolding is *not*. Symptom: `rewrite failed: did not
+find an occurrence of the pattern` even though the math is correct.
+
+Workaround: introduce a *type-ascribed* single-lambda integrability
+witness:
+
+```lean
+have h_12 : Integrable (fun u : ι → ℝ => T1 u + T2 u) volume := h1.add h2
+-- ... now `MeasureTheory.integral_add h_12 h3` matches cleanly because
+-- h_12.f IS a single lambda, so the pattern reduces under beta only.
+```
+
+The same class occurs for **`Pi.div`**: `isEquivalent_iff_tendsto_one`
+produces a ratio `(f / g)` as `Pi.div` of lambdas, which `field_simp`
+will not see through. `simp only [Pi.div_apply]` first, then `field_simp`.
+Related: `tendsto_rpow_atTop` / `tendsto_rpow_neg_atTop` are top-level
+constants (not `Real.`-namespaced), and `tendsto_nhds_unique` against a
+constant function needs the `tendsto_const_nhds` witness type-ascribed
+(`have h : Tendsto (fun _ : ℝ ↦ c) atTop (nhds c) := tendsto_const_nhds`)
+or the elaborator unifies the function the wrong way.
+
+**Identities mixing `t` and `Real.sqrt t`: fold the radical into an atom
+first.** `ring`/`field_simp` do not know `(√t)² = t`. The safe pattern:
+`set st := Real.sqrt t` (folds every `√t` in the goal into the opaque
+local `st`), then `rw [show t = st * st from (Real.mul_self_sqrt ht.le).symm]`
+— safe exactly because after the `set`, no goal occurrence of `t` sits
+inside a radical. The identity is then rational in `st` and closes with
+`field_simp; ring`. Used for the quadratised six-term decomposition
+(`laplace: Laplace/OneD/JnSecondOrder.lean`).
+
+**Calc chains over multi-term sum integrands push past the default
+heartbeat budget.** A calc chain that combines `MeasureTheory.integral_congr_ae`
++ N×`MeasureTheory.integral_add` + N×`MeasureTheory.integral_const_mul`
+over a 4-term integrand can exceed the default 200000 heartbeat budget
+in `whnf`/`isDefEq`. Symptom: `(deterministic) timeout at whnf` on the
+calc step, not on any specific tactic. Workaround:
+`set_option maxHeartbeats 1600000 in` on the lemma. Add a comment
+explaining why (the linter requires it).
+
+**`open scoped Nat` steals `φ` (and `!`).** The `Nat` scope defines `φ` as
+notation for `Nat.totient`, so after `open scoped Nat` a binder like
+`{f φ : ℝ → ℝ}` fails to parse (`unexpected token 'φ'; expected '}'`).
+Identifiers *containing* φ (`hφ_c`, `Mφ`) are fine — only the bare name
+breaks. If a file needs both a `φ` variable and double factorials, skip the
+scoped open and write `Nat.doubleFactorial (…)` explicitly; the closed-form
+lemmas stated with `‼` still apply, since `‼` is notation for the same
+constant.
+
+**A `lake build` proves nothing about a file outside the import
+closure.** The build gate is vacuous for a new file until
+`Grammar.lean` imports it: `lake build` and CI both pass while the
+file has arbitrarily many errors (this shipped an uncompiled file in
+PR #55). After creating a file, verify BOTH the import line in
+`Grammar.lean` AND the presence of the new `.olean` under
+`.lake/build/lib/lean/` before reporting a build result. Job-count
+deltas are too noisy to serve as the check.
+
+**`CFC.sqrt` on matrices needs `open scoped MatrixOrder` in every
+file.** The matrix `PartialOrder` instance is scoped; without the
+open, every `CFC.sqrt`/`PosSemidef.nonneg` use site errors with a
+baffling `failed to synthesize PartialOrder (Matrix ...)` (no
+missing-import hint). Same for `CFC.sqrt_mul_sqrt_self H
+(ha := hH.posSemidef.nonneg)` — the nonneg argument is an autoParam,
+pass it named.
+
+**Class-level `map_star` fails on `Matrix.toEuclideanCLM`.** Instance
+synthesis cannot find `StarHomClass` for the star-algebra-equivalence
+type `Matrix n n ℝ ≃⋆ₐ[ℝ] (EuclideanSpace ℝ n →L[ℝ] ...)`. Use the
+structure field directly: `(Matrix.toEuclideanCLM (𝕜 := ℝ)).map_star'
+A : toEuclideanCLM (star A) = star (toEuclideanCLM A)` — accepted as
+a term (defeq through the raw `toFun`), though `rw` with it can
+stumble; bind it in a `have` with the coerced statement first.
+
+**`rfl` bridging `(CLM S * CLM S) x` to a def-wrapped composition
+times out at whnf.** Deterministic heartbeat timeout, not an error in
+the maths. Fold the composition into an equation (`have hcomp :
+toEuclideanCLM H = whitening H * whitening H`), then rewrite with
+`ContinuousLinearMap.mul_apply`; never ask `rfl` to unfold CLM
+multiplication applied to a point.
+
+**`PiLp.continuous_apply` takes `p` and `β` explicitly.** A bare
+coordinate index as first argument silently coerces into the `p` slot
+(`Fin d → ℝ≥0∞`!) and produces `Invalid field 'mul': ...
+Function.mul` at the use site. Call as `PiLp.continuous_apply 2
+(fun _ : Fin d ↦ ℝ) a`.
+
+**`integral_fintype_prod_volume_eq_prod` needs NO integrability.**
+Mathlib's finite-product Fubini for `∏ i, f i (x i)` on pi types is
+unconditional; combined with `PiLp.volume_preserving_toLp` +
+`MeasurePreserving.integral_comp` (the FourierTransform.lean idiom)
+this makes coordinate-moment computations on `EuclideanSpace`
+essentially free. The one-hot factor trick: integrate
+`fun i t ↦ if i = a then t else 1` and collapse the product with
+`Finset.prod_ite_eq'`.
+
+**Passing `HasFDerivWithinAt` hypotheses to
+`Convex.norm_image_sub_le_of_norm_fderiv_le` is a unification bomb.**
+That lemma wants `∀ x ∈ s, DifferentiableAt 𝕜 f x` and a bound on
+`fderiv 𝕜 f x`; feeding it explicit-derivative hypotheses makes the
+elaborator attempt a whnf-unfolding unification that survives even
+8M heartbeats (minutes of wall clock, then death). The
+explicit-derivative variant is
+`Convex.norm_image_sub_le_of_norm_hasFDerivWithin_le` (dot-notation
+on the `Convex` fact) — with it the same application elaborates
+instantly. Symptom to recognize: `(deterministic) timeout at whnf`
+pointing at the theorem's `:=` line while every `have` checks fine.
+
+**`ω` (analytic grade) is scoped notation.** Without `open scoped
+ContDiff`, a bare `ω` in a theorem statement silently auto-binds as a
+free implicit variable; the symptom is an "expected `ContDiffAt ℝ ⊤`,
+got `ContDiffAt ℝ ω`" mismatch at use sites (Mathlib displays the
+analytic grade as ⊤ of `WithTop ℕ∞`). Higher-order symmetry of
+iterated derivatives (`ContDiffAt.iteratedFDeriv_comp_perm`) exists
+ONLY at ω regularity; for C^k, Mathlib has just order-2
+(`second_derivative_symmetric`). Polarization and any
+tensor-symmetry consumer should take an abstract `IsSymm` hypothesis
+and let callers discharge it (J3 pattern).
+
+**`field_simp`/`linarith` on equations between integrals: fold the
+integral values into scalar atoms first.** field_simp rewrites under
+integral binders, reassociating mul/div inside the integrand and
+silently desynchronizing what linarith needs to see as one atom
+(symptom: linarith failure where the hypothesis and goal print
+almost-identical integrals differing in integrand association).
+Fix: `set B := ∫ x, ... with hB` for each integral value (scalars
+are safe to fold — no lambda under them), then the equation is pure
+scalar algebra. Also: squeeze arguments against a previously proven
+Tendsto must reuse its RAW statement — a `simpa using h.norm`
+renormalizes `-c * ‖x‖^2` to `-(c * ‖x‖^2)` inside binders and the
+squeeze's syntactic matching dies.
+
+**`grep` may be shadowed (rg-style) in the user shell: `-c` with zero
+matches prints NOTHING instead of `0`.** The retrospective compile
+gate `N=$(grep -cE '^!|Error|Overfull' file.log)` then sets `N` empty
+— `exit $N` succeeds vacuously and real errors (e.g. Unicode
+characters in `\code{}` spans) pass the gate silently. Always use
+`/usr/bin/grep` in gate expressions, and treat an empty `[$N]` echo as
+a broken gate, not a pass.
+
+**`integral_congr_ae` (and `Integrable.congr`) hand pointwise goals as
+applied lambdas.** Every `rw` inside then dies on the beta redex
+(`(fun w ↦ ...) x = ...`). Run `beta_reduce` (or a goal-changing
+`change` — the style linter rejects `show` for this) before any
+rewrite in such blocks. Same for the per-point goals of
+`setIntegral_congr_fun`.
+
+**`positivity` cannot see nonnegativity/positivity of opaque
+structure fields or `choose`-extracted constants.** `D.lambda / 4 > 0`
+or `0 ≤ D.remConst` fail even when provable: derive a local fact once
+(`by linarith [D.lambda_pos]`, or an explicit `mul_nonneg` chain) and
+thread it.
+
+**Argument-orientation renames on this pin.** `add_le_add_right h c`
+produces `c + a ≤ c + b` (adds on the LEFT) — use
+`add_le_add h le_rfl` for the right-hand form. `div_eq_iff` wants the
+division on the LEFT of the equation (`eq_div_iff` for the right).
+`MeasureTheory.integral_div` rewrites `∫ f x / c` forward; the `←`
+pattern `(∫ f)/c` is often not present. `Finset.sum_div` pushes a sum
+through division numerator-first; convert per-term with
+`mul_div_assoc` afterwards. `tsum_le_tsum` is now dot-notation
+`Summable.tsum_le_tsum` on the LHS summability. `Real.sqrt_le_one` is
+an iff. `IsLittleO.neg` is `IsLittleO.neg_left`. `push_neg` is
+deprecated for `push Not`.
+
+**`set ... with` must run AFTER obtaining the hypotheses it should
+fold.** Instances pulled from an `∀ᶠ`-fact after the `set` contain
+fresh unfolded copies, and `linarith`/`field_simp` then see two
+different atoms. Order: `filter_upwards`/`have` the instances first,
+then `set` (which folds every existing occurrence).
+
+**`rw [Real.exp_add]` with identical instantiations rewrites all
+copies at once.** A three-factor exponential split needs two
+`exp_add` rewrites, not three; the third fails with
+"did not find an occurrence".
+
+**λ cannot appear inside an identifier** (`hλ` fails to parse — it is
+the anonymous-function token). Use `hlam`.
+
+**`rw [show (0:ℝ) = ∫ 0 ...]` rewrites the zero inside the filter
+`𝓝[>] (0:ℝ)` too.** State the DCT conclusion with `∫ 0` and transfer
+by `simpa`, never rewrite the goal's zero.
+
+**`Real.rpow_neg_one` does not exist.** Only the NNReal/ENNReal
+versions do. For a real base write
+`show t⁻¹ = t ^ (-1 : ℝ) from by rw [Real.rpow_neg ht.le, Real.rpow_one]`
+and then `← Real.rpow_mul` for `(t⁻¹)^r = t^(-r)` manipulations.
+
+**`have`-bound constructors are opaque: consume postconditions
+through structure fields.** `have A := someConstructor ...` erases
+the definition, so a later `(A k).field = <constructed value> := rfl`
+cannot reduce (symptom: "application type mismatch ... ?m = ?m"
+against the projection). Even with the application inlined, internal
+`Exists.choose` terms are Classical-opaque and cannot be re-derived
+by spelling them identically. The pattern: have the constructor set
+RELATED fields from the same local (e.g. `U := ball 0 ρ` and
+`delta := ρ`), then callers get `U = ball 0 delta` by `rfl` and
+positivity from `delta_pos` — postconditions read off fields, never
+reconstructed from choice chains.
+
+**A sibling theorem missing from the import closure presents as an
+unknown identifier.** With forty-plus files in one namespace,
+`Grammar.Foo.bar` failing to resolve usually means the FILE is
+not imported, not that the name is wrong. Check the import chain
+before renaming anything.
+
+**`have h := f a b ?_` + `case _ =>` does not defer the trailing
+explicit argument.** The elaborator inserts the metavariable eagerly
+and the `case` block finds no goal (symptom: `introN` failure then
+"unknown identifier h"). Pass the argument as an inline lambda (with
+a `by` block if tactics are needed), or restate it as a separate
+`have` with an explicit type.
