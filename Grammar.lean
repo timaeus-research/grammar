@@ -270,3 +270,4 @@ import Grammar.StochasticTaylorTreeJoint
 import Grammar.TangentialData
 import Grammar.TangentialRemainder
 import Grammar.StochasticTangential
+import Grammar.AbstractExpansion
