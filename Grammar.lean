@@ -274,3 +274,4 @@ import Grammar.AbstractExpansion
 import Grammar.ChartExpansion
 import Grammar.ChartAssemblyGlobal
 import Grammar.StochasticAssembly
+import Grammar.AssemblyBridges
