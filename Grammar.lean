@@ -276,3 +276,4 @@ import Grammar.ChartAssemblyGlobal
 import Grammar.StochasticAssembly
 import Grammar.AssemblyBridges
 import Grammar.QuotientInDistribution
+import Grammar.PosteriorLeading

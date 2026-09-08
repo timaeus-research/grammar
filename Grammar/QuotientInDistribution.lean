@@ -17,7 +17,7 @@ bounds `limsup P(|W_ℓ| ≤ δ)` by `P(|B| ≤ δ)`, which tends to `0` as `δ 
 and continuous mapping handles `T_δ` at fixed `δ`. Division is Lean's totalised division: the value
 of `A/B` on the null set `{B = 0}` is irrelevant to its law; nothing is claimed about `W_ℓ ≠ 0`
 almost surely at finite `ℓ`. A scaled form (`tendstoInDistribution_div_of_scaled`) removes a common
-deterministic normalisation `a_ℓ` from numerator and denominator.
+deterministic normalisation `a_ℓ ≠ 0` from numerator and denominator. Review v31: pass.
 -/
 
 open MeasureTheory Set Real Filter Topology
@@ -194,9 +194,10 @@ theorem tendstoInDistribution_div (Y W : ι → Ω → ℝ) (hYm : ∀ i, Measur
   rw [abs_sub_comm (∫ ω, f (truncDiv δ (A ω, B ω)) ∂μ')] at htri2
   linarith
 
-/-- **Scaled quotients**: if `(U_ℓ/a_ℓ, V_ℓ/a_ℓ) ⇒ (A, B)` for a deterministic normalisation `a_ℓ`
-and `P(B = 0) = 0`, then `U_ℓ/V_ℓ ⇒ A/B` (the normalisation cancels, at every index where
-`a_ℓ ≠ 0`; where `a_ℓ = 0` both quotients are compared through the totalised division). -/
+/-- **Scaled quotients**: if `(U_ℓ/a_ℓ, V_ℓ/a_ℓ) ⇒ (A, B)` for a deterministic normalisation
+`a_ℓ ≠ 0` (every index) and `P(B = 0) = 0`, then `U_ℓ/V_ℓ ⇒ A/B`: the normalisation cancels,
+`(U/a)/(V/a) = U/V`, an identity of the totalised division valid for `a ≠ 0` (it fails at `a = 0`,
+which is why `a_ℓ ≠ 0` is required at every index). -/
 theorem tendstoInDistribution_div_of_scaled (U V : ι → Ω → ℝ) (a : ι → ℝ) (ha : ∀ i, a i ≠ 0)
     (hUm : ∀ i, Measurable (U i)) (hVm : ∀ i, Measurable (V i)) (A B : Ω' → ℝ)
     (hAm : Measurable A) (hBm : Measurable B)
