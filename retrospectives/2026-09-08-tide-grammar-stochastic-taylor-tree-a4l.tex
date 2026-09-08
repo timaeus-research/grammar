@@ -1,0 +1,79 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\emergencystretch=3em
+
+\title{Quotients in distribution and the leading-order posterior expectation (Programme S, tranche A4-L)}
+\author{Claude, with Daniel Murfet}
+\date{2026-09-08}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\begin{abstract}
+Units 286--288 close Programme S with the leading term of \texttt{cor:empirical\_expectation} after
+finite chart assembly. The generic statement is probabilistic: if $(Y_\ell,W_\ell)\Rightarrow(A,B)$
+jointly and $P(B=0)=0$ then $Y_\ell/W_\ell\Rightarrow A/B$ (Lean's totalised division; nothing about
+$W_\ell\ne0$ at finite $\ell$). Mathlib has no continuous mapping theorem for maps continuous only
+almost surely, so the proof uses the truncated division $T_\delta(a,b)=ab/\max(b^2,\delta^2)$, globally
+continuous and equal to $a/b$ on $|b|\ge\delta$: for a bounded Lipschitz test function of oscillation
+$C$ the integrals of $f(Y/W)$ and $f(T_\delta(Y,W))$ differ by at most $C\,P(|W|\le\delta)$, portmanteau
+bounds $\limsup P(|W_\ell|\le\delta)$ by $P(|B|\le\delta)$, and $P(|B|\le1/(m+1))\downarrow P(B=0)=0$.
+The assembled corollary takes the pair (denominator, numerator) of joint chart data, a.e.\ chart
+decompositions with residuals negligible at the leading scale $a_\ell=N_\ell^{-\mu_0}(\log N_\ell)^{j_0}$,
+aggregate predecessor sums vanishing a.s.\ at every source index, and $P(C^1_{\mu_0,j_0}(X)=0)=0$; the
+normalised pair converges jointly by vector Slutsky and the quotient theorem finishes (Headline~XXXVIII).
+Review v31: pass. Three units against a cap of twelve. No \texttt{sorry}, no additional \texttt{axiom};
+3415 jobs; pin \texttt{a1a7d1a}.
+\end{abstract}
+
+\section{Why only the leading term}
+Astra~\#35 refused the all-orders quotient expansion: \texttt{lemma:division} has no statement in the
+source, and dividing by $1+c/\log n$ produces an infinite block of inverse logarithmic powers at a fixed
+power of $n$, which the finite predecessor ordering of the Taylor tree cannot host. The leading term,
+however, is exactly a joint-convergence-plus-division statement, and the assembled Taylor tree already
+provides the joint convergence.
+
+\section{The generic quotient theorem (u286)}
+The weak convergence of laws is characterised by integrals of bounded Lipschitz test functions
+(\texttt{tendsto\_iff\_forall\_lipschitz\_integral\_tendsto}, hence the countably generated filter). For
+such an $f$ with oscillation bound $C$: (i) $|f(Y/W)-f(T_\delta(Y,W))|\le C\,\mathbf 1_{\{|W|\le\delta\}}$
+pointwise, so the integral difference is at most $C\,P(|W|\le\delta)$ (indicator integral on a probability
+space; integrability from the oscillation bound, $\|f(x)\|\le\|f(0)\|+C$); (ii) $W_\ell\Rightarrow B$ by
+projecting the pair, and \texttt{ProbabilityMeasure.limsup\_measure\_closed\_le\_of\_tendsto} on the closed
+set $\{|b|\le\delta\}$ gives eventually $P(|W_\ell|\le\delta)<\eta$ once $P(|B|\le\delta)<\eta$; (iii) the
+sets $\{|B|\le1/(m+1)\}$ decrease to $\{B=0\}$, so $\delta$ exists (\texttt{tendsto\_measure\_iInter\_atTop});
+(iv) continuous mapping at fixed $\delta$; (v) $\varepsilon/3$ with $\eta=\varepsilon/(6(C+1))$. The scaled
+form removes a common deterministic normalisation $a_\ell\ne0$ (the cancellation
+$(U/a)/(V/a)=U/V$ fails at $a=0$ under totalised division, so $a_\ell\ne0$ is required at every index).
+
+\section{The assembled leading quotient (u287--288)}
+\texttt{PairData} is a \texttt{def} synonym of \texttt{JointData × JointData} with the sup norm and the
+Borel $\sigma$-algebra (denominator first, numerator second). The type does not enforce a common phase
+or $\eta_\phi=\phi\cdot\eta_1$; the paper's model is a specialisation. With the a.e.\ decompositions and
+vanishing predecessor sums,
+$Z^0_\ell/a_\ell-C(X_\ell)=(R_\ell-C(X_\ell))+E_\ell/a_\ell$ a.e.\ for both families; the first term is
+uniformly small on joint balls (the sup norm of the pair dominates both components), the second is the
+normalised residual; both pairs tend to zero in probability (two small lemmas: sums and pairs of
+in-probability-zero sequences), and vector Slutsky gives $(Z^0[\phi]/a,Z^0[1]/a)\Rightarrow(C^\phi(Y),C^1(X))$.
+The reviewer's points: remainders minus coefficients \emph{at the same source datum} tend to zero (the
+limit lives on another probability space); aggregate predecessor sums vanish, individual coefficients
+need not; the numerator coefficient may vanish; $P(C^1=0)=0$ is not positivity; no convergence of
+expectations follows.
+
+\section{Lessons}
+\begin{itemize}
+\item \textbf{Truncate the map, not the variables.} A globally continuous surrogate agreeing with the
+discontinuous map off a small-probability set replaces the a.s.-continuous mapping theorem; the test
+function's boundedness pays for the bad set.
+\item \textbf{\texttt{rw} versus \texttt{refine} on weak-convergence characterisations.} Rewriting the
+\texttt{Tendsto} goal with the characterisation fails on instance mismatch; \texttt{refine (lemma (Ω := ℝ)).2 ?\_}
+unifies.
+\item \textbf{Order of the pair.} Store data as (denominator, numerator) and produce coefficients as
+(numerator, denominator) for division; the reviewer checked this explicitly --- document it.
+\item \textbf{Product $\sigma$-algebras.} Products of nonseparable function spaces need a declared Borel
+instance on a synonym; never let \texttt{Pi.borelSpace}/\texttt{Prod.borelSpace} be assumed.
+\end{itemize}
+\end{document}
