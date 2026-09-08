@@ -271,3 +271,4 @@ import Grammar.TangentialData
 import Grammar.TangentialRemainder
 import Grammar.StochasticTangential
 import Grammar.AbstractExpansion
+import Grammar.ChartExpansion
