@@ -269,3 +269,4 @@ import Grammar.StochasticTaylorTree
 import Grammar.StochasticTaylorTreeJoint
 import Grammar.TangentialData
 import Grammar.TangentialRemainder
+import Grammar.StochasticTangential
