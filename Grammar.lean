@@ -280,3 +280,4 @@ import Grammar.PosteriorLeading
 import Grammar.ClosingCorollaries
 import Grammar.PopulationTaylorTree
 import Grammar.PopulationCoefficient
+import Grammar.PopulationGammaMoment
