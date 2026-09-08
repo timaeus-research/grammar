@@ -278,3 +278,4 @@ import Grammar.AssemblyBridges
 import Grammar.QuotientInDistribution
 import Grammar.PosteriorLeading
 import Grammar.ClosingCorollaries
+import Grammar.PopulationTaylorTree
