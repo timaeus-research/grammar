@@ -9,10 +9,12 @@ import Grammar.HeadlineAmplitude
 # The first-candidate coefficient of the population expansion is the face functional
 (grammar §3 rewrite, Astra #37 P1, unit 294)
 
-For the population Taylor tree on the unit box (`ξ = 0`, `b = 1`) with a continuous amplitude
-`η` admitting a holomorphic `Fη` on a polydisc of radius `R > 1` with `Re Fη = η` on the box, let
-`λ = min_i (hᵢ+1)/(2kᵢ)` and `m = |{i : (hᵢ+1)/(2kᵢ) = λ}|`. Then the canonical Taylor-tree
-coefficients at the exponent `λ` satisfy
+For the population Taylor tree on the unit box (`ξ = 0`, `b = 1`) with an amplitude `η` that is
+continuous on all of `ℝ^{n+1}` (the ambient continuity required by Headline VIII) and admits a
+holomorphic `Fη` on a polydisc of radius `R > 1` with `Re Fη = η` on the box, let
+`λ = min_i (hᵢ+1)/(2kᵢ)` and `m = |{i : (hᵢ+1)/(2kᵢ) = λ}|`. Then the Taylor-tree coefficients
+(any coefficient system satisfying the Taylor-tree conclusion whose family integral is the
+population integral) at the exponent `λ` satisfy
 ```
 C(λ, j) = 0  for m − 1 < j ≤ n,        C(λ, m − 1) = amplitudeCoeff h k λ β η,
 ```
@@ -20,8 +22,11 @@ where `amplitudeCoeff h k λ β η = Γ(λ)β^{-λ}/(m−1)! ∏_{i∈J} 1/(2k�
 ∫_{(0,1]^{n+1}} η(P_J u) ∏_{i∉J} uᵢ^{hᵢ−2kᵢλ} du` is the face-supported functional of Headline VIII
 (`P_J` zeroes the minimal-ratio coordinates). This is the corrected form of the paper's
 `eq:thm_leading_coeff` at chart level (Astra #37 Theorem A(c)): the coefficient lives on the
-minimal-ratio face, and evaluation at the corner is the answer only when every ratio is minimal
-(`amplitudeCoeff_equal`). No nonvanishing is asserted: `C(λ, m−1)` may be zero for a signed `η`.
+minimal-ratio face; in the all-minimal case it reduces to corner evaluation
+(`amplitudeCoeff_equal`), and in general the face integral is essential. No nonvanishing is asserted: `C(λ, m−1)` may be zero
+for a signed `η`. Not established here: that `λ` is the first exponent with a NONZERO coefficient,
+formulas for `C(λ,j)` with `j < m−1`, anything about `C(λ,j)` for `j > n`, uniqueness of the whole
+coefficient system, or any statement for `b ≠ 1` or a chart sum.
 
 Route (review v32 §5): the isolated cutoff expansion gives `𝒵(N) = N^{-λ} P(log N) + o(N^{-λ}
 (log N)^{m−1})` with `P(x) = ∑_{j≤n} C(λ,j) x^j`; Headline VIII gives `𝒵(N)/(N^{-λ}(log N)^{m−1})
@@ -95,9 +100,9 @@ theorem population_leadingCoeff_of_conclusion (n : ℕ) (h k : Fin (n + 1) → �
     Real.tendsto_log_atTop hP
   exact ⟨hzero, hlead hm_le⟩
 
-/-- **Headline (P1): the leading population coefficient is the face functional.** For a
-continuous amplitude `η` on `(0,1]^{n+1}` with a holomorphic `Fη` on the polydisc of radius
-`R > 1`, `Re Fη = η` on the box: there is a coefficient system `C` with the full Taylor-tree
+/-- **Headline (P1): the leading population coefficient is the face functional.** For an
+amplitude `η` continuous on `ℝ^{n+1}` with a holomorphic `Fη` on the polydisc of radius `R > 1`,
+`Re Fη = η` on `(0,1]^{n+1}`: there is a coefficient system `C` with the full Taylor-tree
 conclusion for the population integral `∫ η u^h e^{-βN u^{2k}}`, whose coefficients at the
 minimal ratio `λ` vanish above log degree `m − 1` and whose `(λ, m − 1)` coefficient is
 `Γ(λ)β^{-λ}/(m−1)! ∏_{J} 1/(2kᵢ) ∫ η(P_J u) ∏_{∉J} uᵢ^{hᵢ−2kᵢλ} du`. -/
