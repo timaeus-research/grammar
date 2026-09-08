@@ -12,10 +12,13 @@ coefficient `C_{μ,j} = dataBoxCoeff n h k β b · μ j` — the coefficient of 
 Taylor-tree expansion of the original box integral `Z(N; ξ, η)` — is Lipschitz on every ball of
 the weighted-ℓ¹ data space `E_b × E_b` (`taylorTree_coeff_lipschitzOn_ball`), hence continuous
 (`continuous_taylorTree_coeff`) and Borel measurable, for every real `μ` and every `j`; finite
-vectors of coefficients are continuous (`continuous_taylorTree_coeffVec`). This is a precise
-sufficient replacement for the paper's cited-but-unstated `prop:convergence` (continuity of
-`ξ ↦ C_{μ,m}(ξ)`), in the weighted-ℓ¹ topology at the box radius `b`; the identification with a
-topology on `C^ω([0,b]^d)` is not claimed. The Lipschitz constant on the ball of radius `R` is
+vectors of coefficients are continuous (`continuous_taylorTree_coeffVec`). This is a weighted-ℓ¹
+continuity substitute for the paper's cited-but-unstated `prop:convergence` (continuity of
+`ξ ↦ C_{μ,m}(ξ)` on `C^ω([0,b]^d)`): the topology is weighted ℓ¹ at the box radius `b` (weighted
+summability gives an absolutely convergent series on the closed box, not an analytic extension
+across its boundary); the Lipschitz constant depends on the ball radius `R` (ballwise, not
+global); both phase and amplitude vary (the paper's deterministic amplitude is the fixed-amplitude
+slice). Review v27: pass / pass / qualified pass. The Lipschitz constant on the ball of radius `R` is
 `dataLipConst = b^{|h|+d} (b^{2|k|})^{-μ} (∑_{q=j}^{d-1} C(q,j) |log b^{2|k|}|^{q-j}) · 2L`,
 `L = familyLipConst`.
 -/
@@ -112,8 +115,8 @@ theorem taylorTree_coeff_lipschitzOn_ball (n : ℕ) (h k : Fin (n + 1) → ℕ) 
   rw [Real.dist_eq, dist_eq_norm, Real.coe_toNNReal _ (dataLipConst_nonneg n h k β hβ hb μ j hR0)]
   exact abs_dataBoxCoeff_sub_le n h k hk β hβ hb hy' hx' μ j
 
-/-- **Headline XXXIV**: the canonical coefficient map is continuous on the data space (the
-paper's `prop:convergence`, in the weighted-ℓ¹ topology). -/
+/-- **Headline XXXIV**: the canonical coefficient map is continuous on the data space (a
+weighted-ℓ¹ continuity substitute for the paper's cited `prop:convergence`). -/
 theorem continuous_taylorTree_coeff (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : ∀ i, 0 < k i) (β : ℝ)
     (hβ : 0 < β) {b : ℝ} (hb : 0 < b) (μ : ℝ) (j : ℕ) :
     Continuous fun x : DataSpace (n + 1) => dataBoxCoeff n h k β b x μ j := by
