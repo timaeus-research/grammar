@@ -267,3 +267,4 @@ import Grammar.DataIntegralContinuity
 import Grammar.OrderedRemainder
 import Grammar.StochasticTaylorTree
 import Grammar.StochasticTaylorTreeJoint
+import Grammar.TangentialData
