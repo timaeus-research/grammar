@@ -13,8 +13,8 @@ Unit 271 (Astra #33, unit 2 of Programme S). The canonical unit-box coefficients
 `A_{μ,j}(cξ, cη) = familySpectralCoeff` are Lipschitz on every ball of the weighted-ℓ¹ data:
 for absolutely summable families with `mass cξ, mass cξ', mass cη, mass cη' ≤ R`,
 
-`|A_{μ,j}(cξ', cη') − A_{μ,j}(cξ, cη)| ≤ familyLipConst n k β μ R · (mass(cξ' − cξ) + mass(cη' − cη))`
-(`abs_familySpectralCoeff_sub_le`). The new ingredient compared with the Stage 4 stability gate
+`|A_{μ,j}(cξ', cη') − A_{μ,j}(cξ, cη)| ≤ familyLipConst · (mass(cξ' − cξ) + mass(cη' − cη))`
+(`abs_familySpectralCoeff_sub_le`, constant `familyLipConst n k β μ R`). The new ingredient compared with the Stage 4 stability gate
 (`abs_spectralCoeff_sub_le`, fixed constant phase) is the **varying constant phase**
 `a = ξ(0)`: by the mean value theorem and `∂_a fluctMoment = β fluctMoment(p+1)`
 (`hasDerivAt_fluctMoment`),
