@@ -272,3 +272,4 @@ import Grammar.TangentialRemainder
 import Grammar.StochasticTangential
 import Grammar.AbstractExpansion
 import Grammar.ChartExpansion
+import Grammar.ChartAssemblyGlobal
