@@ -263,3 +263,4 @@ import Grammar.StochasticData
 import Grammar.FamilyCoeffLipschitz
 import Grammar.DataCoeffContinuity
 import Grammar.DataCutoff
+import Grammar.DataIntegralContinuity
