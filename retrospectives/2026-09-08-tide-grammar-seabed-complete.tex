@@ -1,0 +1,70 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\emergencystretch=3em
+
+\title{Closing corollaries and the completion of the grammar seabed (conditional \S4 release)}
+\author{Claude, with Daniel Murfet}
+\date{2026-09-08}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\begin{abstract}
+Unit 289 closes Programme S with two thin corollaries and the seabed is marked complete as a
+conditional \S4 release (Astra~\#36). (i) Different leading scales: if
+$(U_\ell/a_\ell,V_\ell/b_\ell)\Rightarrow(A,B)$ with deterministic nonzero normalisations and $P(B=0)=0$
+then $(b_\ell/a_\ell)\,U_\ell/V_\ell\Rightarrow A/B$; assembled, with numerator target $(\mu_\phi,j_\phi)$
+and denominator target $(\mu_1,j_1)$, $N_\ell^{\mu_\phi-\mu_1}(\log N_\ell)^{j_1-j_\phi}\,
+Z^0_\ell[\phi]/Z^0_\ell[1]\Rightarrow C^\phi_{\mu_\phi,j_\phi}(Y)/C^1_{\mu_1,j_1}(X)$. (ii) The
+conditional deterministic finite-chart normal-form expansion: for a fixed joint datum $x$ and
+$Z_{\rm pop}=\mathcal Z^{\rm glob}(\cdot;x)+E$ with $E=o(N^{-\mu}(\log N)^j)$, the ordered normalised
+remainder of $Z_{\rm pop}$ tends to $C^{\rm glob}_{\mu,j}(x)$, and with vanishing predecessors and a
+nonzero coefficient $Z_{\rm pop}(N)\sim c\,N^{-\mu}(\log N)^j$ --- a corollary of the assembly
+machinery, not the unrevised \S3 theorem. The seabed now holds Headlines I--XXXVIII over units 1--289
+with reviews v1--v31; no \texttt{sorry}, no additional \texttt{axiom}; 3416 jobs; pin
+\texttt{f1c0138}.
+\end{abstract}
+
+\section{What ``complete'' means here}
+Astra~\#36's wording is adopted verbatim in \texttt{HEADLINES.md}: the Lean formalisation establishes
+the fluctuation-function and ladder-algebra results, the Taylor-tree expansion in every positive normal
+dimension under the declared analytic hypotheses, a continuous-coefficient finite-cutoff stochastic
+extension through tangential integration and finite chart assembly, and the leading-order posterior
+quotient under joint data convergence, source predecessor cancellation, negligible decomposition
+residuals and an almost-surely nonzero limiting denominator coefficient. The stochastic results are
+conditional on convergence in the stated weighted-$\ell^1$/tangential-data topologies and on an
+externally supplied finite-chart decomposition; they do not derive those inputs from Hypothesis~I,
+construct a resolution atlas, or identify a Gaussian empirical-process limit. All-orders posterior
+division and the population expansion in the unrevised \S3 remain outside the release. ``Complete''
+is a release decision about a delimited scope, not a claim that every paper label has a Lean
+counterpart.
+
+\section{The closing corollaries}
+The different-scale quotient is the generic quotient theorem applied to the normalised pair and the
+identity $(U/a)/(V/b)=(b/a)(U/V)$ for $a,b\ne0$; the assembled form needs the pair of assembled
+remainders at two \emph{different} targets, a two-target copy of the uniform-on-balls pair lemma. The
+deterministic bridge is the uniform-on-balls global remainder theorem evaluated at one point
+(\texttt{TendstoUniformlyOn.tendsto\_at}), plus the residual and, for the equivalence,
+\texttt{isEquivalent\_of\_tendsto\_one} (one explicit argument at this pin).
+
+\section{Hand-off}
+Reports: \texttt{normal-block-report-v3.pdf}, \texttt{taylor-tree-report.pdf},
+\texttt{stochastic-taylor-tree-report.pdf} (all in \texttt{projects/grammar/staging/}); the annotated
+mirror \texttt{grammar\_lean\_annotated.tex} carries 111 statement-level links pinned at
+\texttt{f1c0138}. Last notes for the authors (Astra~\#36): adopt or amend the replacement statements
+for \texttt{prop:convergence} and \texttt{lemma:AsymInt}; separate \S4.3 into conditional analysis
+and model verification; repair posterior statements at the source datum; state denominator
+nonvanishing independently; specify the algebra of all-orders division before requesting its
+formalisation; rewrite \S3 before opening a geometry programme; freeze one authoritative release
+manifest.
+
+\section{Lessons of the programme}
+Nineteen units, five reviews, no mathematical defect found: the recipe was a frozen deterministic
+core, an abstract bookkeeping layer (finite-cutoff expansions), Mathlib's convergence-in-distribution
+API used as-is, and a gate after every third unit. The recurring tooling lesson is mechanical: gate
+every commit on the build, the sorry audit and the line-length linter, and keep hypothesis names away
+from \texttt{variable} names.
+\end{document}
