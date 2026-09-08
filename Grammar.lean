@@ -284,3 +284,5 @@ import Grammar.PopulationGammaMoment
 import Grammar.PopulationLeadingIsolation
 import Grammar.PopulationLeadingCoeff
 import Grammar.PopulationShift
+import Grammar.PopulationPositivity
+import Grammar.PopulationEquivalent
