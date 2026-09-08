@@ -23,7 +23,8 @@ where `amplitudeCoeff h k λ β η = Γ(λ)β^{-λ}/(m−1)! ∏_{i∈J} 1/(2k�
 (`P_J` zeroes the minimal-ratio coordinates). This is the corrected form of the paper's
 `eq:thm_leading_coeff` at chart level (Astra #37 Theorem A(c)): the coefficient lives on the
 minimal-ratio face; in the all-minimal case it reduces to corner evaluation
-(`amplitudeCoeff_equal`), and in general the face integral is essential. No nonvanishing is asserted: `C(λ, m−1)` may be zero
+(`amplitudeCoeff_equal`), and in general the face integral is essential. No nonvanishing is
+asserted: `C(λ, m−1)` may be zero
 for a signed `η`. Not established here: that `λ` is the first exponent with a NONZERO coefficient,
 formulas for `C(λ,j)` with `j < m−1`, anything about `C(λ,j)` for `j > n`, uniqueness of the whole
 coefficient system, or any statement for `b ≠ 1` or a chart sum.
