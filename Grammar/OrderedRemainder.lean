@@ -233,15 +233,15 @@ theorem tendsto_remainderMajorant (n : ℕ) (h k : Fin (n + 1) → ℕ) (β b μ
     simpa using this
   simpa using h1.add h2
 
-/-- **Ordered normalised remainders converge uniformly on data balls**: for a target `(μ, j)` with
-`μ ∈ Q⁻¹ℕ` and `j ≤ n`, `R_N^{μ,j}(x) → C_{μ,j}(x)` uniformly in `‖x‖ ≤ R` as `N → ∞`. -/
-theorem tendstoUniformlyOn_orderedRemainder (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : ∀ i, 0 < k i)
+/-- **The explicit majorant estimate**: for `‖x‖ ≤ R`, `N ≥ e` and `N b^{2|k|} ≥ 1`,
+`|R_N^{μ,j}(x) − C_{μ,j}(x)| ≤ remainderMajorant n h k β b μ j R N`. -/
+theorem abs_orderedRemainder_sub_le (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : ∀ i, 0 < k i)
     (β : ℝ) (hβ : 0 < β) {b : ℝ} (hb : 0 < b) {μ : ℝ} (hμ : ∃ m : ℕ, μ = (m : ℝ) / latticeQ k)
-    {j : ℕ} (hj : j ≤ n) (R : ℝ) :
-    TendstoUniformlyOn (fun N x => orderedRemainder n h k β b x μ j N)
-      (fun x => dataBoxCoeff n h k β b x μ j) atTop (Metric.closedBall 0 R) := by
+    {j : ℕ} (hj : j ≤ n) {R : ℝ} {x : DataSpace (n + 1)} (hx : ‖x‖ ≤ R) {N : ℝ}
+    (hNe : Real.exp 1 ≤ N) (hNb : 1 ≤ boxScale k b N) :
+    |orderedRemainder n h k β b x μ j N - dataBoxCoeff n h k β b x μ j| ≤
+      remainderMajorant n h k β b μ j R N := by
   have hQ : 0 < latticeQ k := latticeQ_pos k hk
-  have hQ' : (0 : ℝ) < latticeQ k := by exact_mod_cast hQ
   obtain ⟨m, hm⟩ := hμ
   have hμ0 : 0 ≤ μ := by rw [hm]; positivity
   set Q := latticeQ k with hQdef
@@ -261,55 +261,40 @@ theorem tendstoUniformlyOn_orderedRemainder (n : ℕ) (h k : Fin (n + 1) → ℕ
   have hsub : predSet n Q μ j ∪ {(μ, j)} ⊆ indexSet n Q (μ + 1) :=
     Finset.union_subset hpred_sub (Finset.singleton_subset_iff.2 htarget)
   -- the key algebraic decomposition
-  have hdecomp : ∀ (x : DataSpace (n + 1)) (N : ℝ),
+  have hdecomp :
       dataBoxIntegral n h k β N b x - predSum n h k β b x μ j N -
           dataBoxCoeff n h k β b x μ j * (N ^ (-μ) * Real.log N ^ j) =
         (dataBoxIntegral n h k β N b x -
           ∑ p ∈ indexSet n Q (μ + 1), expTerm n h k β b x N p) +
         ∑ p ∈ restSet n Q μ j, expTerm n h k β b x N p := by
-    intro x N
     unfold restSet predSum
     rw [← Finset.sum_sdiff hsub, Finset.sum_union (Finset.disjoint_singleton_right.2 htarget_notin),
       Finset.sum_singleton]
     unfold expTerm
     ring
-  rw [Metric.tendstoUniformlyOn_iff]
-  intro ε hε
-  have hmaj := tendsto_remainderMajorant n h k β b μ j R
-  have hev : ∀ᶠ N in atTop, remainderMajorant n h k β b μ j R N < ε :=
-    hmaj.eventually (gt_mem_nhds hε)
-  filter_upwards [hev, eventually_ge_atTop (Real.exp 1), eventually_ge_atTop (1 / c)] with N hNε hNe
-    hNc x hx
-  have hx' : ‖x‖ ≤ R := by simpa using hx
   have hN1 : 1 < N := lt_of_lt_of_le (by have := Real.add_one_lt_exp one_ne_zero; linarith) hNe
   have hN0 : 0 < N := by linarith
   have hlog1 : 1 ≤ Real.log N := by
     rw [← Real.log_exp 1]; exact Real.log_le_log (Real.exp_pos 1) hNe
   have hD : 0 < N ^ (-μ) * Real.log N ^ j := by positivity
-  have hscale : 1 ≤ boxScale k b N := by
-    unfold boxScale; rw [← hc]
-    rwa [div_le_iff₀ hc0] at hNc
-  rw [Real.dist_eq]
-  -- `C − R_N = −(Z − pred − C D)/D`
-  have hRN : dataBoxCoeff n h k β b x μ j - orderedRemainder n h k β b x μ j N =
-      -((dataBoxIntegral n h k β N b x - predSum n h k β b x μ j N -
+  -- `R_N − C = (Z − pred − C D)/D`
+  have hRN : orderedRemainder n h k β b x μ j N - dataBoxCoeff n h k β b x μ j =
+      (dataBoxIntegral n h k β N b x - predSum n h k β b x μ j N -
         dataBoxCoeff n h k β b x μ j * (N ^ (-μ) * Real.log N ^ j)) /
-          (N ^ (-μ) * Real.log N ^ j)) := by
+          (N ^ (-μ) * Real.log N ^ j) := by
     unfold orderedRemainder
     have hD' := hD.ne'
     field_simp
-    ring
-  rw [hRN, abs_neg, hdecomp, add_div, Finset.sum_div]
-  refine lt_of_le_of_lt ((abs_add_le _ _).trans (add_le_add ?_ ?_)) hNε
+  rw [hRN, hdecomp, add_div, Finset.sum_div]
+  unfold remainderMajorant
+  refine (abs_add_le _ _).trans (add_le_add ?_ ?_)
   · -- the cutoff error
-    have hcut := dataTaylorTree_cutoff_bound n h k hk β hβ (L := μ + 1) (by linarith) hb hN0 hscale
-      hx'
+    have hcut := dataTaylorTree_cutoff_bound n h k hk β hβ (L := μ + 1) (by linarith) hb hN0 hNb hx
     rw [spectralSum_eq_sum_indexSet] at hcut
     rw [abs_div, abs_of_pos hD, div_le_iff₀ hD]
     refine hcut.trans ?_
-    -- `(Nc)^{-L}(1+log(Nc))^n ≤ c^{-L}(1+|log c|)^n N^{-L}(1+log N)^n` and `(log N)^j ≥ 1`
     have hK0 : 0 ≤ b ^ (∑ i, h i + (n + 1)) * dataCutoffConst n k β (μ + 1) R :=
-      mul_nonneg (by positivity) (dataCutoffConst_nonneg n k β hβ _ ((norm_nonneg x).trans hx'))
+      mul_nonneg (by positivity) (dataCutoffConst_nonneg n k β hβ _ ((norm_nonneg x).trans hx))
     have hbs : boxScale k b N = N * c := by unfold boxScale; rw [hc]
     have h1 : boxScale k b N ^ (-(μ + 1)) = N ^ (-(μ + 1)) * c ^ (-(μ + 1)) := by
       rw [hbs, Real.mul_rpow hN0.le hc0.le]
@@ -342,6 +327,29 @@ theorem tendstoUniformlyOn_orderedRemainder (n : ℕ) (h k : Fin (n + 1) → ℕ
   · -- the retained terms
     refine (Finset.abs_sum_le_sum_abs _ _).trans (Finset.sum_le_sum fun p hp => ?_)
     obtain ⟨hpi, hpμ, hpq⟩ := mem_restSet hp
-    exact abs_expTerm_div_le n h k hk β hβ hb hx' hpμ hpq (mem_indexSet_snd_le hpi) hNe
+    exact abs_expTerm_div_le n h k hk β hβ hb hx hpμ hpq (mem_indexSet_snd_le hpi) hNe
+
+/-- **Ordered normalised remainders converge uniformly on data balls**: for a target `(μ, j)` with
+`μ ∈ Q⁻¹ℕ` and `j ≤ n`, `R_N^{μ,j}(x) → C_{μ,j}(x)` uniformly in `‖x‖ ≤ R` as `N → ∞`. -/
+theorem tendstoUniformlyOn_orderedRemainder (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : ∀ i, 0 < k i)
+    (β : ℝ) (hβ : 0 < β) {b : ℝ} (hb : 0 < b) {μ : ℝ} (hμ : ∃ m : ℕ, μ = (m : ℝ) / latticeQ k)
+    {j : ℕ} (hj : j ≤ n) (R : ℝ) :
+    TendstoUniformlyOn (fun N x => orderedRemainder n h k β b x μ j N)
+      (fun x => dataBoxCoeff n h k β b x μ j) atTop (Metric.closedBall 0 R) := by
+  set c : ℝ := b ^ (2 * ∑ i, k i) with hc
+  have hc0 : 0 < c := by positivity
+  rw [Metric.tendstoUniformlyOn_iff]
+  intro ε hε
+  have hmaj := tendsto_remainderMajorant n h k β b μ j R
+  have hev : ∀ᶠ N in atTop, remainderMajorant n h k β b μ j R N < ε :=
+    hmaj.eventually (gt_mem_nhds hε)
+  filter_upwards [hev, eventually_ge_atTop (Real.exp 1), eventually_ge_atTop (1 / c)] with N hNε hNe
+    hNc x hx
+  have hx' : ‖x‖ ≤ R := by simpa using hx
+  have hscale : 1 ≤ boxScale k b N := by
+    unfold boxScale; rw [← hc]
+    rwa [div_le_iff₀ hc0] at hNc
+  rw [Real.dist_eq, abs_sub_comm]
+  exact lt_of_le_of_lt (abs_orderedRemainder_sub_le n h k hk β hβ hb hμ hj hx' hNe hscale) hNε
 
 end Grammar
