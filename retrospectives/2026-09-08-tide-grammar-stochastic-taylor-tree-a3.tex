@@ -1,0 +1,113 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\emergencystretch=3em
+
+\title{Tangential integration and finite chart assembly of the stochastic Taylor tree (Programme S, tranche A3)}
+\author{Claude, with Daniel Murfet}
+\date{2026-09-08}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\begin{abstract}
+Units 278--285 carry the one-chart stochastic Taylor tree (Headline~XXXV) through the two
+remaining steps of the paper's \S4.3 proof: integration over the tangential parameter of a stratum
+(the cited-but-unstated \texttt{lemma:AsymInt}) and the sum over finitely many charts. Tangential
+data are continuous maps $C(K,E_b\times E_b)$ from a compact parameter space into the weighted-$\ell^1$
+data space; the integrated integral and coefficients are Bochner integrals against a finite measure;
+the finite cutoff estimate is integrated (no infinite-series interchange), the integrated ordered
+remainders converge uniformly on sup-norm balls, and the probabilistic transfer of A2 applies
+verbatim (Headline~XXXVI). For assembly, every chart integral is an abstract finite-cutoff expansion
+on its own lattice; expansions add, refine to a common lattice $Q^{-1}\mathbb N$ and pad to a common
+degree with the support theorems as justification; the global ordered remainder converges uniformly
+on joint data balls at every common-lattice target, including targets no single chart sees; and
+with an external chart decomposition $Z^0_\ell=\sum_I\mathcal Z^I(N_\ell;X_{\ell,I})+E_\ell$ whose
+residual is negligible at the target scale (in particular exponentially small in probability), the
+ordered normalised remainder of $Z^0_\ell$ converges in distribution to the limiting global
+coefficient (Headline~XXXVII). Reviews v29 and v30: pass. Eight units against a cap of eighteen.
+No \texttt{sorry}, no additional \texttt{axiom}; 3413 jobs; pin \texttt{5d5fb10}.
+\end{abstract}
+
+\section{The design (Astra \#34)}
+Two layers for tangential integration: a finite-measure core (bounded measurable data) and the public
+interface $C(K,E)$ on a compact metrizable $K$, whose sup norm supplies the uniform ball control that
+the A2 estimates need; the partition-of-unity weight $\rho_I(v)$ absorbed into the amplitude family.
+For assembly: a dependent product over charts (not a sigma type, not padding of normal dimensions), a
+common rational lattice with zero coefficients where a chart's own lattice or degree is exceeded, all
+charts expanded through one cutoff $L>\mu$, and the global predecessors subtracted after summation.
+Review v29 added the demand that the padding be a theorem (coefficients vanish off the local lattice
+and above the local degree) and that global targets not be handled by invoking local remainder
+theorems whose hypotheses fail.
+
+\section{Tangential integration (units 278--280)}
+\texttt{TangentialData K d = C(K, DataSpace d)} with the Borel $\sigma$-algebra; $\|x(v)\|\le\|x\|$
+(\texttt{ContinuousMap.norm\_coe\_le\_norm}). Integrands are continuous on the compact $K$ (composition
+of the ballwise-Lipschitz functionals of A1--A2 with the continuous map), hence integrable against a
+finite measure; the integrated cutoff estimate is the pointwise one integrated under a bound
+independent of $v$ (\texttt{norm\_integral\_le\_of\_norm\_le\_const}, total mass $\nu(K)$). The integrated
+remainder is the integral of the pointwise remainder (finite sums and division by the scalar
+$N^{-\mu}(\log N)^j$ pass through the Bochner integral), so the integrated majorant is
+$\nu(K)$ times the A2 majorant and convergence is uniform on sup-norm balls. The probability step is
+the A2 pipeline with the generic lemmas restated for an arbitrary Borel normed group (norm-boundedness
+in probability by portmanteau on $\{\|\cdot\|\ge m\}$, uniform-on-balls $\Rightarrow$ in probability,
+Slutsky), giving Headline~XXXVI and its joint form.
+
+\section{Assembly (units 281--285)}
+\paragraph{Abstract expansions (u281).} \texttt{CutoffExpansion Q D Z c}: for every cutoff $L>0$ an
+eventual bound $KN^{-L}(1+\log N)^D$ on $Z$ minus its spectral sum over $\Lambda^Q_L\times\{0..D\}$.
+Closed under sums; \texttt{refine} for $Q\mid Q'$ when the coefficients vanish off $Q^{-1}\mathbb N$
+(equality of spectral sums by \texttt{Finset.sum\_subset}); \texttt{pad} when they vanish above $D$.
+The abstract quantitative estimate: cutoff bound at $L=\mu+1$ with constant $K$ and coefficient bound
+$C$ on the index set give $|R_N^{\mu,j}-c_{\mu,j}|\le K N^{-(\mu+1)}(1+\log N)^D/N^{-\mu}+C\sum_{\rm rest}
+\mathrm{termMajorant}$ for $N\ge e$ --- the unit-275 argument with the ball bound replaced by $C$.
+\paragraph{Charts as expansions (u282).} Support theorems: \texttt{dataBoxCoeff} vanishes for $j>n$
+(empty \texttt{Ico}), off the candidate set, hence off $(2\prod k_i)^{-1}\mathbb N$; the chart cutoff
+bound in the sample size, $c^{-L}(1+|\log c|)^n$ absorbing the box scale $c=b^{2|k|}$
+(\texttt{one\_add\_log\_mul\_le}); every chart integral is a \texttt{CutoffExpansion}.
+\paragraph{Global assembly (u283).} \texttt{JointData K n = ∀ I, C(K\_I, DataSpace (n\_I+1))} as a
+\texttt{def} synonym carrying the sup norm and the \emph{Borel} $\sigma$-algebra (the product
+$\sigma$-algebra need not coincide in a nonseparable function space); $Q=\prod_IQ_I$, $D=\max_In_I$;
+global integral and coefficients are sums over charts. The global cutoff bound rewrites each chart's
+common-lattice spectral sum to its own by the two support equalities and applies the chart bound;
+the global ordered remainder is then a direct instance of the abstract estimate with uniform constants
+on joint balls --- so global targets off a chart's lattice or above its degree need no separate
+argument, and predecessor compatibility is structural (the global remainder is defined from the common
+index set).
+\paragraph{Stochastic assembly (u284--285).} Continuous mapping on \texttt{JointData}, norm-boundedness
+in probability, uniform-on-balls, Slutsky give convergence of the assembled remainder; the external
+decomposition $Z^0_\ell=\mathcal Z^{\rm glob}(N_\ell;X_\ell)+E_\ell$ with
+$E_\ell/(N_\ell^{-\mu}(\log N_\ell)^j)\to0$ in probability adds one more Slutsky step (the difference of
+the two normalised remainders is exactly the normalised residual, by \texttt{ring} under Lean's
+totalised division). Unit 285 adds the bridge from the paper's exponential residual
+($E_\ell e^{\varepsilon N_\ell}\to0$ in probability, via
+\texttt{tendsto\_rpow\_mul\_exp\_neg\_mul\_atTop\_nhds\_zero}) and the a.e.\ form of the decomposition
+(\texttt{TendstoInMeasure.congr}).
+
+\section{Reviews and non-claims}
+Review v29 (u278--280): pass, with the assembly prerequisites listed above. Review v30 (u281--284):
+pass, no blocking issue; nonblocking improvements done in u285. Non-claims: the function-space
+regularity and the joint convergence in distribution of the chart data are hypotheses (not derived
+from Hypothesis~I, pointwise analyticity, or empirical-process theory); the chart decomposition, the
+partition of unity and its absorption into amplitudes, the away-from-minimum contribution and the
+identification with the original partition function are external; the common lattice is an indexing
+superset of the paper's $\Lambda^*$ and chart contributions may cancel; no Gaussianity; deterministic
+sample sizes; targetwise statements (finite vectors of coefficients jointly).
+
+\section{Lessons}
+\begin{itemize}
+\item \textbf{Abstract the bookkeeping once.} The finite-cutoff expansion abstraction turned chart
+assembly into three short lemmas (add, refine, pad) plus one quantitative estimate, and made
+``global targets a chart does not see'' a non-issue.
+\item \textbf{Padding by theorem.} The support lemmas cost twenty lines and remove any doubt about what
+the common lattice means; the reviewer insisted, rightly.
+\item \textbf{Borel by declaration.} For products of function spaces, declare the Borel structure on a
+\texttt{def} synonym; do not rely on \texttt{Pi.borelSpace}, which needs second countability.
+\item \textbf{$\pi$ is not a variable name.} With \texttt{open Real}, a named argument \texttt{(π := …)}
+parses as the constant; Mathlib's implicit family in \texttt{continuous\_apply} is \texttt{A}.
+\item \textbf{Mechanise the gate.} All eight units passed \texttt{lake build} first or second time;
+the long-line linter caught something on five of them and is now a hard precondition of the commit.
+\end{itemize}
+\end{document}
