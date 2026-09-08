@@ -267,3 +267,11 @@ import Grammar.DataIntegralContinuity
 import Grammar.OrderedRemainder
 import Grammar.StochasticTaylorTree
 import Grammar.StochasticTaylorTreeJoint
+import Grammar.TangentialData
+import Grammar.TangentialRemainder
+import Grammar.StochasticTangential
+import Grammar.AbstractExpansion
+import Grammar.ChartExpansion
+import Grammar.ChartAssemblyGlobal
+import Grammar.StochasticAssembly
+import Grammar.AssemblyBridges
