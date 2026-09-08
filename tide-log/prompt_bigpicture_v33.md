@@ -1,3 +1,118 @@
+# Astra consult #33 — the grammar paper after the Taylor tree: what is the next autoformalisation programme?
+
+Context: Lean 4 / Mathlib formalisation of the grammar paper (Gerraty–Murfet, "Grammar (Expectations and the Exceptional Divisor)"), now in its own repository `timaeus-research/grammar` (library/namespace `Grammar`, 261 modules, no sorry, pin `3a861ed`; factored out of `laplace` on 2026-09-07). Your consults #24–#32 steered the normal-block programme (Headlines I–XXI, frozen at #25) and the Taylor-tree programme (Headlines XXII–XXXIII, frozen at #32: `thm:TaylorTree`/`cor:standardintegralexp` in every positive dimension under the holomorphic-polydisc hypothesis with coefficient families `Re(∂^γ F(0)/γ!)` and the original integral; reviews v18–v26 no defect). Your #32 ranking of successors was: (1) posterior weak convergence for the normal-crossing model, (2) a second concrete Taylor-tree example, (3) boundary/Δ tail and non-box domains, (4) the resolution-based §3/§4.3 application.
+
+**The user has now instructed: "continue on autoformalisation of the grammar paper as before".** That is authorisation for a new programme in this seabed. I need a roadmap of the same kind as #26 (staged, with gates, unit estimates, and explicit non-claims), aimed at *the paper's remaining statements*, not at adjacent mathematics.
+
+## What the paper contains and what is formalised
+
+Sections: 1 Introduction; 2 Background (resolution of singularities, irreducible decomposition, stratification, asymptotic expansions, comparability `defn:comparable`, empirical extension); 3 Expectation via resolution (normal crossing divisors and normal bundles `lem:normal_deriv`, `defn:normal_diff`; tubular neighbourhoods and integration along fibres; moment tensors; standard form and normal moment integrals; per-stratum decomposition `lem:adapted_pou`, **`thm:expectation_expansion`**; general expectation values `cor:expectation_expansion`); 4 Fluctuations (4.1 fluctuation function + ladder algebra/log insertions — fully formalised, ~40 dots; 4.2 standard integral `thm:TaylorTree`, `cor:standardintegralexp` — fully formalised; 4.3 Application to SLT: Hypothesis I, **`thm:strataempiricalexpansion`**, `cor:empirical_expectation`, `rem:pop_vs_emp`); 5 Related work; 6 Conclusion.
+
+Lean dots: §4.1–4.2 dense; §4.3 has 4 dots (single-chart d=2 statements from the normal-block programme, see below); §3 has SIX dots into a *different* Lean repo (`StrucDual/Geometry/*`: chart-local tubular neighbourhoods, global tubular neighbourhood, tangent well-definedness — the shared differential-geometry layer) and none for `thm:expectation_expansion`; §2 has none. Note two dangling references in the paper: `\cref{prop:convergence}` (continuity of ξ ↦ C_μ,m(ξ) on C^ω([0,b]^d)) and `\cref{lemma:AsymInt}` (integrating an asymptotic expansion over the stratum) are cited in the §4.3 proof but no such labelled statements exist in the source — the paper relies on them without stating them.
+
+### §3 main theorem (the paper's authors mark it in red: "The theorem is now out of date, and needs to be rewritten with the progress on fluctuations etc.")
+
+```latex
+\begin{thm}\label{thm:expectation_expansion}
+Let $\phi: W \to \mathbb{R}$ be a real analytic observable, and write $l_i = \operatorname{ord}_{E_i}(\phi \circ \pi) \ge 0$ for the generic vanishing order of $\phi \circ \pi$ along $E_i$ (which is well-defined and constant on a dense open subset of $E_i$ by analyticity). Then
+\begin{equation}\label{eq:thm_strata_decomp}
+\mathcal{Z}_n[\phi] = \sum_I \mathcal{Z}_n[\phi;\, I] + O(e^{-n\varepsilon})
+\end{equation}
+where the sum is over all strata of $E$. Each contribution admits the asymptotic expansion
+\begin{equation}\label{eq:thm_per_stratum}
+\mathcal{Z}_n[\phi;\, I] \sim \sum_{k=1}^\infty \sum_{j=1}^{m_{I,k}} C_{I,k,j}(\phi)\, n^{-\lambda_{I,k}}(\log n)^{j-1}\,.
+\end{equation}
+Writing $l = (l_i)_{i \in I}$ for the multi-index of vanishing orders, if $D^l_\perp(\phi \circ \pi)|_{S_I} \not\equiv 0$ then the leading exponent is
+\begin{equation}\label{eq:thm_leading_exponent}
+\lambda_{I,1} = \min_{i \in I} \frac{h_i + l_i + 1}{2k_i}
+\end{equation}
+with multiplicity $m_{I,1} = \big|\big\{i \in I : (h_i + l_i + 1)/(2k_i) = \lambda_{I,1}\big\}\big|$; otherwise $\lambda_{I,1}$ is strictly larger, determined by the first $\gamma \ge l$ for which $D^\gamma_\perp(\phi \circ \pi)|_{S_I} \not\equiv 0$. The expansion \eqref{eq:thm_per_stratum} admits the coordinate-free expression
+\begin{equation}\label{eq:thm_coordfree}
+\mathcal{Z}_n[\phi;\, I] \sim \sum_{r \ge 0} \frac{1}{r!}\int_{S_I}
+\big\langle D_\perp^r(\phi\circ\pi),\,\mathsf{M}_{I,r}(n)\big\rangle\;
+\tau_*|\mu_I|
+\end{equation}
+where $D_\perp^r(\phi \circ \pi) \in \Gamma(S_I, \operatorname{Sym}^r(N^*S_I))$ is the $r$-th conormal derivative \textup{(\cref{defn:normal_diff})} and $\mathsf{M}_{I,r}(n) \in \Gamma(S_I, \operatorname{Sym}^r(NS_I))$ is the $r$-th moment tensor \eqref{eq:moment_tensor_defn}. In particular, if $l_i = 0$ for all $i \in I$ (so that $(\phi \circ \pi)|_{S_I} \not\equiv 0$), the leading coefficient is
+\begin{equation}\label{eq:thm_leading_coeff}
+C_{I,1,m_{I,1}}(\phi) = \frac{\Gamma(\lambda_{I,1})}{(m_{I,1}-1)!}\, a_{I}\,\int_{S_I} (\phi \circ \pi)|_{S_I}\; c_0\; |dv|
+\end{equation}
+where $c_0(v) = b(v,0)\,(\varphi \circ \pi)(v,0) > 0$ is the restriction of the smooth density factor, and $a_I > 0$ depends only on the numerical data $(k_i, h_i)_{i \in I}$ via \eqref{eq:a_minus_m_explicit}. When some $l_i > 0$, the leading coefficient instead involves the conormal derivative $D^l_\perp(\phi \circ \pi)|_{S_I}$ contracted against the moment tensor $\mathsf{M}_{I,|l|}(n)$ via \eqref{eq:thm_coordfree}.
+\end{thm}
+\begin{proof}
+Steps 1--4 above establish each part: the pullback to the resolution \eqref{eq:pullback_integral}, localisation near the divisor \eqref{eq:localisation}, the strata decomposition via \cref{lem:adapted_pou}, and the tubular neighbourhood expansion of \cref{subsec:tubular_nbhd}. The asymptotic exponents and multiplicities follow from the zeta function analysis of \cref{subsec:standard_form}, and the leading coefficient is computed by combining the moment asymptotics with the dressed moment expansion \eqref{eq:dressed_moment} at $\gamma = 0$, $\delta = 0$.
+\end{proof}
+\begin{comment}
+\begin{remark}[Two forms of the expansion]\label{rem:two_forms}
+There are two natural ways to present the asymptotic expansion of $\mathcal{Z}_n[\phi]$. The \emph{per-stratum form} of \cref{thm:expectation_expansion} writes it as a sum over strata, with each stratum $S_I$ contributing its own sub-expansion \eqref{eq:thm_per_stratum}. This is the geometric presentation: it makes visible which components of the exceptional divisor are responsible for each asymptotic term, and is the natural setting for the coordinate-free machinery of \cref{subsec:moment_tensors}.
+```
+
+### §4.3 stochastic theorem and its currently formalised scope
+
+```latex
+\begin{thm} \label{thm:strataempiricalexpansion}\leanrefL{Grammar/Headline.lean\#L180}{headline\_coefficients\_in\_distribution}\leanrefL{Grammar/Headline.lean\#L201}{headline\_normalised\_remainders}
+Assume the triple $(p,q,\varphi)$ satisfies hypothesis I with index $s=2$ and relative finite variance. Let $\phi : W \to \mathbb{R}$ be a real analytic function. The partition function for the tempered Bayesian posterior with observable decomposes 
+\begin{equation}
+    Z_n[\phi] = \int_W \phi(w) e^{-\beta n L_n(w)}\varphi(w) dw = e^{-\beta n L_n(w_0)}\cdot Z_n^0,
+\end{equation}
+where $Z_n^0$ has the following asymptotic expansion 
+\begin{equation}
+    Z^0_n[\phi] \sim \sum_{\mu \in \Lambda^*}\sum_{m=1}^d C_{\mu,m}(\xi_n) n^{-\mu}(\log n)^{m-1}.
+\end{equation}
+The coefficients $C_{\mu,m}(\xi_n)$ are random variables that converge in distribution $C_{\mu,m}(\xi_n) \to C_{\mu,m}(G)$ where $G$ is a Gaussian process as $n\to\infty$. For each $(\mu',m') \in \Lambda^* \times \{1,\ldots,d\}$, the following convergence in distribution holds 
+    \[
+     \frac{1}{n^{-\mu'}(\log n)^{m' - 1}} \bigg\{ Z^0_n[\phi] - \sum_{(\mu,m)<(\mu',m')} C_{\mu, m}(\xi_n)\, n^{-\mu} (\log n)^{m - 1} \bigg\}\, \to C_{\mu',m'}(G).
+    \]
+\end{thm}
+```
+Formalised-scope remark (what the normal-block programme proved, single chart, d = 2, conditional on convergence in distribution of the weighted Taylor data (ξ_n, η_n) in the coefficient Banach space ℓ¹_ρ):
+```latex
+\begin{remark}[Formalised scope of \cref{thm:strataempiricalexpansion}]\label{rem:strataempirical_lean}
+The Lean formalisation proves the single-chart $d=2$ statements conditional on convergence in distribution of the weighted Taylor data $(\xi_n,\eta_n)$ in the coefficient Banach space $\ell^1_\rho$: every finite vector of canonical coefficients $(A_\alpha,B_\alpha)$ converges in distribution (\texttt{headline\_coefficients\_in\_distribution}; in the notation above $C_{\mu,2}=A_{2\mu}/2$, $C_{\mu,1}=B_{2\mu}$), the coefficient maps being locally Lipschitz in $\ell^1_\rho$ (\texttt{headline\_coefficient\_lipschitz}, \texttt{\_B}); and the ordered normalised remainders converge, first $\big(Z-\sum_{\gamma<\alpha}\big)/(N^{-\alpha}\log N)\Rightarrow A_\alpha$ and then, after subtracting the \emp
+\end{remark}
+```
+```latex
+\begin{cor}\label{cor:empirical_expectation}\leanrefL{Grammar/HeadlinePosterior.lean\#L82}{headline\_chart\_posterior\_limit}\leanrefL{Grammar/HeadlinePosterior.lean\#L46}{headline\_quotient\_in\_distribution}
+Under the hypotheses of \cref{thm:strataempiricalexpansion}, the expectation $\mathbb{E}_{w|\mathcal{D}_n}[\phi] := Z_n[\phi]/Z_n$ admits the asymptotic expansion 
+\begin{equation}\label{eq:empirical_expectation_full_expansion}
+\mathbb{E}_{w|\mathcal{D}_n}[\phi]\sim \sum_{s \in \mathcal{S}} \sum_{q \in \mathcal{Q}} d_{s,q}(\phi,\xi_n)\, n^{-s}(\log n)^{q-1},
+\end{equation}
+where $\mathcal{S} \subset \mathbb{Q}_{\ge 0}$ and $\mathcal{Q} \subset \mathbb{Z}$ are discrete index sets and $\xi_n$ is the empirical process. The coefficients  converge in distribution  $d_{s,q}(\phi,\xi_n) \to d_{s,q}(\phi,G)$ as $n\to\infty$, and are determined recursively from the coefficients $A_{k,j}(\phi,\xi_n)$ of $Z_n[\phi]$ and the coefficients $B_{k,p}(\xi_n) := A_{k,p}(1,\xi_n)$ of $Z_n$ via the division formula \cref{lemma:division}. All the coefficients $A_{k,p}(1,\xi_n)$, $B_{k,p}(\xi_n)$ and $d_{s,q}(\phi,\xi_n)$ converge in distribution  to a random variable as $n\to\infty$. The leading term is
+\begin{equation}
+d_{s_0,q_0}(\phi,\xi_n) = \frac{A_{i_0,j_0}(\phi,\xi_n)}{B_{k_0,p_0}(\xi_n)},
+\end{equation}
+where $(i_0, j_0)$ and $(k_0, p_0)$ are the leading indices of the asymptotic expansions of $Z^0_n[\phi]$ and $Z^0_n$ respectively.
+\end{cor}
+\begin{proof}
+```
+```latex
+Apply \cref{thm:strataempiricalexpansion} to the numerator $Z_n[\phi]$ and the denominator $Z_n[1]$. The term $e^{-\beta n L_n(w_0)}$ cancels and the proof follows from applying \cref{lemma:division} and $B_{k_0,p_0}(\xi_n) > 0$ for all $\xi_n$ by \cite[Main Theorem II]{greybook}. 
+\end{proof}
+\begin{remark}[Formalised scope of \cref{cor:empirical_expectation}]\label{rem:empirical_expectation_lean}
+At chart level, for $d=2$ with equal starting exponents $p=(h_1+1)/k_1=(h_2+1)/k_2$, deterministic amplitudes $\eta_\phi,\eta_1$ (the pull-backs of $\phi\varphi$ and $\varphi$) with $\eta_1(0)>0$, and a common random phase whose Taylor data converge in distribution, the Lean formalisation proves the leading term of the quotient: $Z_n[\phi]/Z_n[1]\Rightarrow\eta_\phi(0)/\eta_1(0)$ (\texttt{headline\_chart\_posterior\_limit}). The random fluctuation factor $\int_0^\infty s^{p-1}e^{-\beta s^2+\beta s\xi(0)}ds$ common to numerator and denominator cancels, so the leading empirical posterior expectation converges to the deterministic corner ratio $\phi(0)$ when $\eta_\phi=\phi\eta_1$; fluctuations
+\end{remark}
+```
+```latex
+\begin{remark}[Population vs.\ empirical expectation values]\label{rem:pop_vs_emp}
+The population partition function $\mathcal{Z}_n[\phi] = \int \phi\, e^{-nK}\varphi\, dw$ and the empirical partition function $Z_n[\phi] = \int \phi\, e^{-\beta n L_n}\varphi\, dw$ are related but distinct objects. After resolution and applying the standard form \citep[Main Theorem~6.1]{greybook}, the empirical partition function on each chart takes the form $Z(\beta,n;\xi_n,\eta)$ where $\xi_n$ is the empirical process; the population version is the specialisation $\xi = 0$. Several aspects of this relationship deserve comment.
+\begin{itemize}
+\item[\textup{(i)}] \emph{Exponents are shared.} The asymptotic exponents $\mu \in \Lambda^*$ and their multiplicities $m \in \mathbb{Z}_{\geq 1}$ are determined by the resolution data $(k_i, h_i)$ and are the same for both the population and empirical expansions. In particular, the per-stratum organisation (\cref{thm:expectation_expansion}), the shifted exponent $\mu_I(\phi)$ from the vanishing orders \cref{eq:mu_I_phi}, and the wall-crossing mechanism driven by changes in vanishing order all apply equally to the empirical case.
+\item[\textup{(ii)}] \emph{Coefficients differ.} The population coefficients (e.g.\ \eqref{eq:thm_leading_coeff}) are deterministic integrals over the strata, while the empirical coefficients $C_{\mu,m}(\xi_n)$ are random variables depending on the empirical process. Although $\mathbb{E}_{\mathcal{D}_n}[\xi_n(u)] = 0$ \citep[Remark~6.3]{greybook}, the coefficients depend non-linearly on $\xi_n$ through the fluctuation function, so the expected empirical coefficient $\mathbb{E}_{\mathcal{D}_n}[C(\xi_n)]$ is not equal to the population coefficient $C(0)$.
+\end{itemize}
+Understanding the precise relationship between the population and empirical coefficients, in particular, whether the fluctuation tree structure of the empirical expansion (\cref{thm:TaylorTree}) can be used to express the empirical coefficients systematically in terms of the population ones and the empirical process, is left to future work.
+For the simplest random fluctuation --- a Gaussian constant $\xi(0)=X\sim N(0,v)$ --- the Lean formalisation makes the non-commutation of expectation and expansion quantitative: with $J_p(x)=\int_0^\infty s^{p-1}e^{-\beta s^2+\beta sx}\,ds$ the positive factor of the leading coefficient, $\mathbb E_+[J_p(X)]=\int_0^\infty s^{p-1}e^{-(\beta-\beta^2v/2)s^2}\,ds$ in the extended reals (\texttt{lintegral\_gaussMomentJ\_eq}), which exceeds $J_p(0)$ and is finite only when $\beta v<2$; the expected leading coefficient can thus be infinite although every sample coefficient is finite.
+\end{remark}
+```
+
+## What the Taylor-tree programme now makes available (relevant for §4.3 in general d)
+
+- `thm_TaylorTree_coeffFamily` (every d): for coefficient families cξ, cη with Σ|c_γ| b^|γ| < ∞, `TaylorTreeConclusion`: support in Λ(h,k), cutoff-independent coefficients A_{μ,j}(cξ,cη) = explicit absolutely convergent series Σ_p β^p/p! T_{μ,j,p}(cη * J^{*p}) (J = constant-free part of cξ, * = Cauchy product), remainder bound |Z(N) − Σ_{μ<L} Σ_j A_{μ,j} N^{-μ} (log N)^j| ≤ C(L)·N^{-L}(1+log N)^{d-1} for N b^{2|k|} ≥ 1 with C(L) depending on the data only through ξ(0) = cξ 0 and the two weighted masses (`cutoffBound`, monotone in the masses).
+- Stability of coefficients under perturbation of the family: `abs_spectralCoeff_sub_le` / `abs_truncCoeff_sub_le` (appended-perturbation stability with fixed constant phase; constants depend on masses and ξ(0)); the kernel functional T_{μ,j,p} is bounded by (mass) × M_{ν,r,p}(|a|) (`abs_kernelFunctional_le`); the phase-moment generating identity Σ_p (βB)^p/p! M_{ν,r,p}(b) = M_{ν,r,0}(b+B).
+- Derivative dictionary: β^p fluctMoment = (−∂_μ)^i ∂_a^p S_μ(a) (`fluctMoment_eq_mixed_deriv`); ∂_a^p S_μ = β^p S_{μ+p/2}.
+- Analytic bridge: holomorphic F on a polydisc of radius R > b ⇒ Cauchy families, |c_γ| ≤ M r^{-|γ|}, `polyCoeff_eq_coordDeriv_div`, `thm_TaylorTree_taylor`.
+- From the normal-block programme (d = 2 single chart): coefficient Banach space ℓ¹_ρ of weighted Taylor data, locally Lipschitz coefficient maps (`headline_coefficient_lipschitz`), convergence in distribution of finite vectors of coefficients and of ordered normalised remainders (`headline_coefficients_in_distribution`, `headline_normalised_remainders`), chart posterior limit (`headline_chart_posterior_limit`), random-phase transfer (`PhaseRandomTransfer`: F_{N_n}(X_n) ⇒ F(Z) for random phases), stochastic chart assembly (Headline XVIII, conditional on an external chart decomposition), the 1/log N stochastic regime, `lintegral_gaussMomentJ_eq`.
+
+## HEADLINES index (verbatim, for reference)
+
 # Grammar §4 formalisation — headline index (general-dimensional normal block)
 
 ## Taylor-tree programme (opened 2026-09-07, after the freeze; Astra #26)
@@ -67,9 +182,6 @@ Remaining for general `d` (superseded — done above): iterated one-variable Cau
 | XXXIII | **`thm:TaylorTree` with Taylor-derivative coefficients, every positive dimension (u268)**: same hypotheses as XXXII′ (`0 < b < R`, `Fξ, Fη` holomorphic on the polydisc, `Re Fξ = ξ`, `Re Fη = η` on `(0,b]^d`); the Taylor-tree conclusion holds for the families `taylorFamily F γ = Re(∂^γ F(0)/γ!)` and the family integral is the original `Z(N)`; `taylorFamily F 0 = Re F(0)` | TaylorTreeDerivatives.lean:57 (`thm_TaylorTree_taylor`) |
 Non-claims (Astra #32, review v26): no permutation invariance of `∂^γ` (fixed-order nested derivative); the families are the Taylor coefficients at `0` of the real restriction `u ↦ Re F(u)`, not derivatives of the supplied `ξ, η` (constrained only on the positive box); the holomorphic polydisc extensions are hypotheses (not constructed from real analyticity); cutoff independence = independence from the spectral threshold `L`; candidate support is containment, not nonvanishing. Corollary: `polyCoeff` is independent of the admissible radius (`polyCoeff_radius_indep`, CoordDeriv.lean:137).
 Review v26 (u266–268): pass / pass / qualified pass, overall qualified pass — "the derivative identification is mathematically correct and closes the specific qualification left by v25"; wording fixes applied in u269 (holomorphic-polydisc setting named explicitly, "every positive dimension", real-restriction phrasing).
-
-**Programme S — the §4.3 stochastic Taylor tree in every positive dimension (Astra #33; `tide-log/gpt6_bigpicture_v33.md`) — IN PROGRESS (tranche A1–A2, cap 18 units, hard review after unit 3).** Target: `thm:strataempiricalexpansion` at chart level for arbitrary normal dimension `d = n+1`: (A1) the canonical box coefficients `C_{μ,j}` are Lipschitz on balls, hence continuous and measurable, on the weighted-ℓ¹ data space `E_b × E_b` (this is the paper's dangling `prop:convergence`); (A2) under convergence in distribution of the data, every finite coefficient vector and every ordered normalised remainder converges in distribution. Later tranches: (A3) tangential integration (`lemma:AsymInt`, dominated) and finite chart assembly; (A4) posterior division after a statement gate. Non-claims: no derivation from Hypothesis I; no common analytic radius for random phases (data are `E_b`-valued by hypothesis); no Gaussian identification of the limit; `N` = paper sample size.
-| — | **S1 statement lock (u270)**: `DataSpace d = ℓ¹((Fin d → ℕ) ⊕ (Fin d → ℕ))` = `E_b × E_b` in rescaled coordinates; `xiCoord/etaCoord` are the rescaled unit-box families (`scale_toXi`), `toXi b/toEta b` the box families, `‖x‖ = mass ξ + mass η`, coordinates 1-Lipschitz, `ofFamilies` embeds weighted-summable pairs; canonical coefficient map `dataBoxCoeff` (L201) = `boxCoeff` of the box families, `= b^{|h|+d} (b^{2|k|})^{-μ} ∑_q familySpectralCoeff (xiCoord x) (etaCoord x) μ q C(q,j) log(b^{2|k|})^{q-j}` (L218); `taylorTree_data` | StochasticData.lean |
 
 **★ TAYLOR-TREE PROGRAMME — COMPLETE AND FROZEN (2026-09-07; Headlines XXII–XXXIII, units 223–269; reviews v18–v26, no mathematical defect).** `thm:TaylorTree` / `cor:standardintegralexp` are formalised in the holomorphic-polydisc, normal-crossing-box setting in every positive dimension with the paper's coefficient data `Re(∂^γ F(0)/γ!)` and the original integral `Z(N)` (`thm_TaylorTree_taylor`), with exponent support `Λ(h,k)`, the paper's log indexing, cutoff-independent coefficients equal to the explicit absolutely convergent Cauchy-product series, the mixed derivative dictionary, and remainder `O(N^{-L}(1+log N)^{d-1})` for every `L`. Per Astra #32 no further theorems are added here; the preferred separately authorised successor is posterior weak convergence for the normal-crossing model.
 | — | **gate passed (u266)**: `x ↦ polyCoeff d r (F ∘ Fin.cons x) γ'` is holomorphic on the disc of radius `ρ ∈ (r,R)` for `F` holomorphic on the open polydisc of radius `R` — no differentiation under the integral: slice Cauchy formula at radius `ρ`, Fubini `iterOp_circleOp_swap` (from `circleOp_eq_integral`: `A_r` is the circle average), then `hasFPowerSeriesOn_cauchy_integral` | ParamHolo.lean:137 (`differentiableOn_polyCoeff_param`) |
@@ -151,3 +263,16 @@ Headlines XX/XX'/XX'' concern one concrete statistical model with no chart-decom
 hypothesis (XX assumes `Zₙ → z`; XX'/XX'' assume i.i.d. `N(0,1)` data). They are fixed-`θ` moment-generating-function
 limits, not weak convergence of the posterior law, with no rate; the weight `ρ` may be signed (`ρ(0) > 0` only), and for a
 genuine prior (`ρ ≥ 0` on the box) the evidence is positive at every sample size (`NormalCrossingPrior.lean`). Reviews v16–v17.
+
+
+## Questions
+
+1. **What is the right next programme?** Candidates as I see them: (A) **the stochastic Taylor tree in general d** — upgrade `thm:strataempiricalexpansion` from the d = 2 single-chart normal-block version to the full Taylor-tree coefficient system: (A1) `prop:convergence` as a theorem — the coefficient map (cξ, cη) ↦ A_{μ,j}(cξ, cη) is continuous/locally Lipschitz on the weighted-ℓ¹ ball (we have the stability gates and the ℓ¹ kernel functional; the constant depends on ξ(0), so local Lipschitz on balls); (A2) convergence in distribution of every finite vector of coefficients and of the ordered normalised remainders, given convergence in distribution of the Taylor data in weighted ℓ¹ (continuous mapping + the uniform remainder bound with `cutoffBound` monotone in the masses — tightness of the masses gives o_p); (A3) chart assembly and the stratum integral (the dangling `lemma:AsymInt`: integrating over v ∈ S_I with a compactly supported ρ_I, uniformity of C(L) in v), conditional on an external chart decomposition as in Headline XV/XVIII; (A4) `cor:empirical_expectation` via division of asymptotic series (`lemma:division`) in general d. (B) The §3 population theorem `thm:expectation_expansion` in a conditional form (the authors say it must be rewritten; formalising a statement its authors consider out of date seems premature — but a conditional per-stratum decomposition given an external resolution atlas might be the honest target). (C) Your #32 successors (posterior weak convergence for the normal-crossing model; a second example). (D) The Δ boundary tail / general domains. Please rank, with unit estimates and go/no-go gates, and say which the user's instruction most plausibly points at.
+
+2. **For (A), the formal shape.** What is the right Lean statement of `prop:convergence` (continuity vs local Lipschitz; in which norm — Σ|c_γ| b^|γ| with which b, the box radius or a larger r; role of ξ(0))? What is the right formal model of "ξ_n → G in distribution" for the coefficient data (a random variable in the weighted-ℓ¹ Banach space? measurability of the coefficient maps? Portmanteau/continuous mapping in Mathlib: `Tendsto (map …) … (𝓝 …)` in `ProbabilityMeasure` with `tendsto_iff_forall_integral_tendsto` / `MeasureTheory.ProbabilityMeasure.tendsto_iff_forall_lintegral_tendsto`?) — the d = 2 programme already did this in ℓ¹_ρ; should we generalise that infrastructure or restate it over `CoeffFamily d`? Gates?
+
+3. **The dangling `prop:convergence` / `lemma:AsymInt`.** Should the formalisation supply these as named theorems (paper-facing value: they are cited but missing), and how should the hand-off report flag this to the authors?
+
+4. **Non-claims and traps** you foresee (e.g. Hypothesis I / the greybook standard form is external input; the random phase ξ_n must be real-analytic on the box for the analytic bridge, but the empirical process's holomorphic extension radius is data-dependent — how should the hypothesis be phrased so it is honest and matches the greybook's fundamental conditions; measurability of ξ ↦ Cauchy coefficients).
+
+5. **Order of work for the first 3 units**, so I can start immediately after this consult, with the gate that would make you say stop.
