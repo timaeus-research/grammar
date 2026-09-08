@@ -58,9 +58,10 @@ theorem taylorFamily_const_zero (d : ℕ) :
 
 /-- **The population Taylor tree on the original integral** (`thm:TaylorTree` at `ξ = 0`, the
 §3 population instance of Headline XXXIII): for `η` on `(0,b]^{n+1}` and a holomorphic `Fη` on
-the polydisc of radius `R > b` with `Re Fη = η` on the box, the population integral `∫ η u^h e^{-βN u^{2k}}` has the
-full Taylor-tree conclusion for the zero phase family and the amplitude family `Re(∂^γ Fη(0)/γ!)`,
-and the family integral is the original population integral. -/
+the polydisc of radius `R > b` with `Re Fη = η` on the box, the population integral
+`∫ η u^h e^{-βN u^{2k}}` has the full Taylor-tree conclusion for the zero phase family and the
+amplitude family `Re(∂^γ Fη(0)/γ!)`, and the family integral is the original population
+integral. -/
 theorem population_TaylorTree_taylor (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : ∀ i, 0 < k i) (β : ℝ)
     (hβ : 0 < β) {b R : ℝ} (hb : 0 < b) (hbR : b < R) {Fη : (Fin (n + 1) → ℂ) → ℂ}
     {η : (Fin (n + 1) → ℝ) → ℝ} (hFη : DifferentiableOn ℂ Fη (openPolydisc (n + 1) R))
