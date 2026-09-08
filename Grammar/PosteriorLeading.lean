@@ -7,26 +7,34 @@ import Grammar.QuotientInDistribution
 /-!
 # The leading-order posterior quotient after chart assembly (Stage S18 — Headline XXXVIII)
 
-Unit 287 (Astra #35, tranche A4-L). Numerator and denominator of the posterior expectation
-`E[φ] = Z^0[φ]/Z^0[1]` are the assembled integrals of two amplitude families on the same charts
-(`η_φ = φ·η_1` and `η_1`, common phase); their joint tangential data form `PairData K n =
-JointData K n × JointData K n` (sup norm, Borel σ-algebra by declared instances; `.den`, `.num`).
-Let `(X_ℓ, Y_ℓ) ⇒ (X, Y)` jointly, `N_ℓ → ∞`, `N_ℓ > 1`, and let the external a.e. decompositions
-`Z^0_ℓ[1] = 𝒵^{glob}(N_ℓ; X_ℓ) + E¹_ℓ`, `Z^0_ℓ[φ] = 𝒵^{glob}(N_ℓ; Y_ℓ) + E^φ_ℓ` hold with residuals
-negligible in probability at the leading scale `a_ℓ = N_ℓ^{-μ₀}(log N_ℓ)^{j₀}`. Suppose the target
-`(μ₀, j₀)` is **leading at the source**: all predecessor sums vanish a.s. for both families, and
-the limiting denominator coefficient is a.s. nonzero, `P(C¹_{μ₀,j₀}(X) = 0) = 0`. Then
+Unit 287 (Astra #35, tranche A4-L; review v31: pass). Numerator and denominator of the posterior
+expectation `E[φ] = Z^0[φ]/Z^0[1]` are the assembled integrals of two amplitude families on the
+same charts; their joint tangential data form `PairData K n = JointData K n × JointData K n`
+(denominator first, numerator second; sup norm; Borel σ-algebra by the declared instances;
+`.den`, `.num`). **The type does not enforce a shared phase or the relation `η_φ = φ·η_1`**: the
+paper's common-phase, amplitude-linked posterior model is a specialisation of the pair model, and
+the joint convergence `(X_ℓ, Y_ℓ) ⇒ (X, Y)` is a hypothesis retaining whatever dependence the
+pair has. Let `N_ℓ → ∞` with `N_ℓ > 1`, and let the external a.e. decompositions
+`Z^0_ℓ[1] = 𝒵^{glob}(N_ℓ; X_ℓ) + E¹_ℓ`, `Z^0_ℓ[φ] = 𝒵^{glob}(N_ℓ; Y_ℓ) + E^φ_ℓ` hold with
+residuals negligible in probability at the leading scale `a_ℓ = N_ℓ^{-μ₀}(log N_ℓ)^{j₀}`. Suppose
+the target `(μ₀, j₀)` is **leading at the source**: the aggregate predecessor sums of both
+families vanish a.s. at every source index (individual predecessor coefficients need not vanish;
+the numerator coefficient itself may vanish), and the limiting denominator coefficient is a.s.
+nonzero, `P(C¹_{μ₀,j₀}(X) = 0) = 0` (not positivity). Then
 
 `Z^0_ℓ[φ] / Z^0_ℓ[1] ⇒ C^φ_{μ₀,j₀}(Y) / C¹_{μ₀,j₀}(X)`
 
 (`tendstoInDistribution_posterior_leading`, **Headline XXXVIII**): the leading-order clause of
-`cor:empirical_expectation` after finite chart assembly in arbitrary normal dimensions. Route:
-joint convergence of the normalised pair `(Z^0[φ]/a, Z^0[1]/a)` by vector Slutsky (the pair of
-assembled remainders converges in probability to the pair of coefficients; residuals and vanishing
-predecessors enter through a.e. congruence), then the generic quotient theorem of unit 286.
-Non-claims: no all-orders quotient expansion; the leading target is deterministic and given;
-predecessor vanishing at the LIMIT alone would not suffice; finite-sample positivity of `Z^0[1]` is
-a separate application fact; no randomness of the leading index; joint convergence is a hypothesis.
+`cor:empirical_expectation` after finite chart assembly in arbitrary normal dimensions. Route: the
+pair of assembled remainders **minus the coefficients evaluated at the same source datum** tends
+to zero in probability (uniform on joint balls + norm-boundedness in probability), the residual
+pair tends to zero in probability, so the normalised pair `(Z^0[φ]/a_ℓ, Z^0[1]/a_ℓ)` converges
+jointly to `(C^φ(Y), C¹(X))` by vector Slutsky, and the generic quotient theorem of unit 286
+finishes. Non-claims: no all-orders quotient expansion; the leading target is deterministic and
+given; predecessor vanishing at the LIMIT alone would not suffice (source vanishing is a
+sufficient hypothesis, not the weakest); finite-sample positivity of `Z^0[1]` is a separate
+application fact; no random leading index; no convergence of expectations or moments follows
+from the convergence in distribution.
 -/
 
 open MeasureTheory Set Real Filter Topology
@@ -117,7 +125,8 @@ theorem continuous_pairCoeff (hk : ∀ I i, 0 < k I i) (hβ : 0 < β) (hb : ∀ 
   ((continuous_gCoeff ν h k β b hk hβ hb μ₀ j).comp continuous_num).prodMk
     ((continuous_gCoeff ν h k β b hk hβ hb μ₀ j).comp continuous_den)
 
-/-- The pair of assembled remainders minus the pair of coefficients tends to zero in probability. -/
+/-- The pair of assembled remainders minus the pair of coefficients **at the same source datum**
+tends to zero in probability. -/
 theorem tendstoInMeasure_pairRemainder_sub (hk : ∀ I i, 0 < k I i) (hβ : 0 < β) (hb : ∀ I, 0 < b I)
     {μ₀ : ℝ} (hμ : ∃ m : ℕ, μ₀ = (m : ℝ) / commonQ k) {j : ℕ} (hj : j ≤ commonD n)
     (XY : ι → Ω → PairData K n) (Z : Ω' → PairData K n)
