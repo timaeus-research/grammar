@@ -18,7 +18,8 @@ continuity substitute for the paper's cited-but-unstated `prop:convergence` (con
 summability gives an absolutely convergent series on the closed box, not an analytic extension
 across its boundary); the Lipschitz constant depends on the ball radius `R` (ballwise, not
 global); both phase and amplitude vary (the paper's deterministic amplitude is the fixed-amplitude
-slice). Review v27: pass / pass / qualified pass. The Lipschitz constant on the ball of radius `R` is
+slice). Review v27: pass / pass / qualified pass. The Lipschitz constant on the ball of radius `R`
+is
 `dataLipConst = b^{|h|+d} (b^{2|k|})^{-μ} (∑_{q=j}^{d-1} C(q,j) |log b^{2|k|}|^{q-j}) · 2L`,
 `L = familyLipConst`.
 -/
