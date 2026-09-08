@@ -1,0 +1,112 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\emergencystretch=3em
+
+\title{The stochastic Taylor tree in every positive dimension: coefficient continuity and ordered remainders (Programme S, tranche A1--A2)}
+\author{Claude, with Daniel Murfet}
+\date{2026-09-08}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\begin{abstract}
+Units 270--277 lift the stochastic clause of \texttt{thm:strataempiricalexpansion} from the
+single-chart $d=2$ statements of the normal-block programme to arbitrary normal dimension, on top of
+the completed Taylor tree. On the Banach space $E_b\times E_b$ of weighted-$\ell^1$ phase and amplitude
+data ($\sum_\gamma|c_\gamma|b^{|\gamma|}<\infty$, modelled as $\ell^1$ over a disjoint union of
+multi-index sets in rescaled coordinates), every canonical coefficient $C_{\mu,j}$ of
+$N^{-\mu}(\log N)^j$ in the expansion of the original box integral is Lipschitz on balls, hence
+continuous and Borel measurable (Headline~XXXIV, a weighted-$\ell^1$ substitute for the paper's
+cited-but-unstated \texttt{prop:convergence}). Ordering the terms by $(\nu,q)\prec(\mu,j)$ iff
+$\nu<\mu$ or ($\nu=\mu$, $q>j$), the ordered normalised remainders converge to $C_{\mu,j}$ uniformly on
+data balls, and for measurable random data $X_n\Rightarrow Z$ in $E_b\times E_b$ and sample sizes
+$N_n\to\infty$, finite coefficient vectors and ordered normalised remainders converge in distribution,
+jointly for finitely many targets (Headline~XXXV). Reviews v27 and v28: pass. Eight units against a cap
+of eighteen. No \texttt{sorry}, no additional \texttt{axiom}; 3405 jobs; pin \texttt{caa3727}.
+\end{abstract}
+
+\section{The design (Astra \#33)}
+After the Taylor tree was frozen, the instruction to continue formalising the paper pointed at
+\S4.3. Astra~\#33 ranked the stochastic Taylor tree first: (A1) continuity of the coefficient
+functionals, (A2) convergence in distribution of coefficients and ordered remainders, with a hard
+review after the third unit; then (A3) tangential integration and chart assembly and (A4) posterior
+division behind statement gates. Two design points shaped everything: use a genuine Banach space with
+the frozen \texttt{CoeffFamily} theorems as its analytic interface, and treat the constant phase
+$a=\xi(0)$ as a perturbation in its own right --- the Stage~4 stability gate had held it fixed.
+
+\section{A1: the data space and the Lipschitz estimate (units 270--272)}
+\paragraph{Data space (u270).} \texttt{DataSpace d} is real $\ell^1$ over
+$(\mathrm{Fin}\,d\to\mathbb N)\sqcup(\mathrm{Fin}\,d\to\mathbb N)$. Its raw coordinates are exactly the
+\emph{rescaled unit-box families} $\mathrm{scale}\,c_\xi\,b$, $\mathrm{scale}\,c_\eta\,b$ of the Taylor
+tree, so the box families are recovered by dividing by $b^{|\gamma|}$ and the norm is the sum of the two
+masses. The canonical map \texttt{dataBoxCoeff} is \texttt{boxCoeff} of the box families; through
+\texttt{boxSpectralSum\_eq} it is literally the coefficient of $N^{-\mu}(\log N)^j$ for the original
+integral, including the binomial conversion of $\log(Nb^{2|k|})$.
+\paragraph{The gate (u271).} With $f=c_\eta*J^{*p}$, $J$ the constant-free phase, the coefficient series
+term is $\beta^p/p!\;T_p(a;f)$. The difference of two data splits as
+$[T_p(a';f')-T_p(a;f')]+T_p(a;f'-f)$. The first piece is new: by the mean value theorem on $[-R,R]$ and
+$\partial_a\,\mathrm{fluctMoment}=\beta\,\mathrm{fluctMoment}(p{+}1)$,
+$|\mathrm{fluctMoment}(a)-\mathrm{fluctMoment}(a')|\le\beta M_{\mu,n,p+1}(R)|a-a'|$, which propagates through
+the kernel $S_p$ and the functional $T_p$. The second piece uses linearity and the mass algebra of the
+Cauchy product, $\operatorname{mass}(f'-f)\le\Delta_\eta R^p+R\,pR^{p-1}\Delta_\xi$. The three series in
+$p$ are summed in closed form by the Tonelli identity $\sum_p(\beta R)^p/p!\,M_{\nu,n,p}(R)=M_{\nu,n,0}(2R)$
+and its shifted forms, giving the ballwise constant
+$K_kD\bigl(2\beta RM_{\mu+1/2,n,0}(2R)+M_{\mu,n,0}(2R)\bigr)$.
+\paragraph{Headline XXXIV (u272).} Transport to the data space (masses $\le\|x\|$, differences
+$\le\|y-x\|$) and the finite log conversion give Lipschitz continuity on every closed ball, continuity
+(the closed ball of radius $\|x\|+1$ is a neighbourhood), Borel measurability, and continuity of finite
+coefficient vectors.
+
+\section{A2: the deterministic core and the probability (units 273--277)}
+\paragraph{Uniform constants (u273--274).} The cutoff constant is monotone in $|\xi(0)|$ and the two
+masses, so on a data ball it is bounded by $\mathrm{cutoffBound}(R,R,R)$; the box integral itself is
+Lipschitz in the data for fixed $N$ (the integrand is continuous on the closed cube by the Weierstrass
+M-test, integrable on the box, and $|e^{A+s\xi}-e^{A+s\xi'}|\le e^{\beta\sqrt TR}\beta\sqrt T|\xi-\xi'|$
+with $T=Nb^{2|k|}$), hence measurable.
+\paragraph{Ordered remainders (u275).} With the cutoff $L=\mu+1$ the retained index set is the finite
+$\Lambda_{\mu+1}\times\{0,\dots,n\}$; the predecessors of $(\mu,j)$ are its $\prec$-filter, independent
+of the cutoff (u277). $Z-\sum_\prec-C_{\mu,j}N^{-\mu}(\log N)^j$ is the cutoff error plus the retained
+terms with $\nu>\mu$ or ($\nu=\mu$, $q<j$); after normalisation these are
+$O(N^{-(\nu-\mu)}(1+\log N)^n)$ and $O(1/\log N)$ with constants uniform on the ball, and the cutoff error
+is $O(N^{-1}(1+\log N)^n)$. The explicit majorant is exported (\texttt{abs\_orderedRemainder\_sub\_le})
+and gives \texttt{TendstoUniformlyOn} on the closed ball.
+\paragraph{Headline XXXV (u276--277).} Coefficient vectors converge in distribution by Mathlib's
+continuous mapping theorem. For the remainders, the norms $\|X_n\|$ are bounded in probability
+(portmanteau on the closed sets $\{\|\cdot\|\ge m\}$, a generic copy of the $d=2$ argument), so uniform
+convergence on balls gives convergence in probability of $R_{N_n}(X_n)-C(X_n)$ to zero, and
+\texttt{tendstoInDistribution\_of\_tendstoInMeasure\_sub} (Slutsky) finishes. The joint version for
+finitely many targets uses the sup norm on $\mathrm{Fin}\,m\to\mathbb R$ and
+\texttt{Filter.eventually\_all}.
+
+\section{Reviews and non-claims}
+Review v27 (u270--272): pass, pass, qualified pass; it asked for the canonical cutoff to be restated
+with \texttt{dataBoxCoeff}, for measurability of the integral and remainders, for the finite predecessor
+set and descending-log ordering, for uniform convergence on balls with thresholds, and for the
+boundedness-in-probability and Slutsky steps --- all done in u273--277. Review v28 (u273--276): pass on
+all four units, ``no mathematical blocker''. Non-claims: the result is conditional on convergence in
+distribution of the data in the weighted-$\ell^1$ topology at the fixed box radius $b$ (nothing is
+derived from Hypothesis~I; no common analytic radius is manufactured for random phases); one chart, no
+tangential integration or assembly; no Gaussianity of the limit; deterministic sample sizes
+$N_n\ge0$ in the paper's convention; the normalised quotient is meaningful above the thresholds
+$N\ge e$, $Nb^{2|k|}\ge1$.
+
+\section{Lessons}
+\begin{itemize}
+\item \textbf{Use the induction structure you already have.} Every estimate here is a transport of a
+frozen Taylor-tree theorem through the identification ``raw $\ell^1$ coordinates $=$ rescaled unit-box
+families''; no new analysis of the integral was needed except the mean-value step in $\xi(0)$.
+\item \textbf{Mean value beats differentiation under the integral.} The phase perturbation is a
+one-line consequence of the existing derivative theorem for \texttt{fluctMoment}.
+\item \textbf{Deterministic first, probability last.} Stating the uniform-on-balls theorem separately
+made the probability step a two-lemma composition and let the reviewer check the analysis on its own.
+\item \textbf{Tooling.} In this repository \texttt{lake env lean} cannot see the artifact-cached
+package oleans; build single modules with \texttt{lake build Grammar.X}. Long-line lint must gate the
+commit (three fix-up commits were needed before the gate was made mechanical). GPT consults must run in
+the foreground on this host.
+\item \textbf{Mathlib's probability API is enough.} \texttt{TendstoInDistribution} with its continuous
+mapping, Slutsky and portmanteau lemmas covered A2 without new infrastructure.
+\end{itemize}
+\end{document}
