@@ -13,12 +13,12 @@ Unit 271 (Astra #33, unit 2 of Programme S). The canonical unit-box coefficients
 `A_{μ,j}(cξ, cη) = familySpectralCoeff` are Lipschitz on every ball of the weighted-ℓ¹ data:
 for absolutely summable families with `mass cξ, mass cξ', mass cη, mass cη' ≤ R`,
 
-`|A_{μ,j}(cξ', cη') − A_{μ,j}(cξ, cη)| ≤ familyLipConst n k β μ R · (mass (cξ' − cξ) + mass (cη' − cη))`
-
+`|A_{μ,j}(cξ', cη') − A_{μ,j}(cξ, cη)| ≤ familyLipConst n k β μ R · (mass(cξ' − cξ) + mass(cη' − cη))`
 (`abs_familySpectralCoeff_sub_le`). The new ingredient compared with the Stage 4 stability gate
 (`abs_spectralCoeff_sub_le`, fixed constant phase) is the **varying constant phase**
 `a = ξ(0)`: by the mean value theorem and `∂_a fluctMoment = β fluctMoment(p+1)`
-(`hasDerivAt_fluctMoment`), `|fluctMoment β a p μ i − fluctMoment β a' p μ i| ≤ β M_{μ,n,p+1}(R) |a − a'|`
+(`hasDerivAt_fluctMoment`),
+`|fluctMoment β a p μ i − fluctMoment β a' p μ i| ≤ β M_{μ,n,p+1}(R) |a − a'|`
 on `|a|, |a'| ≤ R` (`abs_fluctMoment_sub_le`), which propagates through the kernel `S_p` and the
 kernel functional `T_p` (`abs_kernelFunctional_sub_phase_le`). The other two perturbations
 (amplitude and constant-free phase `J`) go through the linearity of `T_p` and the mass algebra of
@@ -101,9 +101,11 @@ theorem abs_kernelFunctional_sub_phase_le (n : ℕ) (h k : Fin (n + 1) → ℕ) 
   unfold kernelFunctional
   rw [← mul_sub, abs_mul, abs_of_nonneg hK]
   have hs1 : Summable fun γ => f γ * kernelS n h k β a p μ j γ :=
-    Summable.of_norm (by simpa [Real.norm_eq_abs] using summable_kernel_term n h k hk β a hβ p hμ j hf)
+    Summable.of_norm
+      (by simpa [Real.norm_eq_abs] using summable_kernel_term n h k hk β a hβ p hμ j hf)
   have hs2 : Summable fun γ => f γ * kernelS n h k β a' p μ j γ :=
-    Summable.of_norm (by simpa [Real.norm_eq_abs] using summable_kernel_term n h k hk β a' hβ p hμ j hf)
+    Summable.of_norm
+      (by simpa [Real.norm_eq_abs] using summable_kernel_term n h k hk β a' hβ p hμ j hf)
   rw [← hs1.tsum_sub hs2]
   set C := kernelBudget n k * (β * phaseLogMoment β R μ n (p + 1)) * |a - a'| with hC
   have hC0 : 0 ≤ C :=
