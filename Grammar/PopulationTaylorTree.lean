@@ -10,8 +10,9 @@ import Grammar.TaylorTreeDerivatives
 The population partition function of §3 is, chart by chart, the standard integral of §4 at zero
 empirical process (`rem:pop_vs_emp`: "the population version is the specialisation `ξ = 0`").
 This file records that specialisation of Headline XXXIII on the **original** integral: for an
-amplitude `η` on `(0,b]^{n+1}` with a holomorphic extension `Fη` to the polydisc of radius
-`R > b`, the population integral
+amplitude `η` on `(0,b]^{n+1}` admitting a holomorphic function `Fη` on the polydisc of radius
+`R > b` whose real part agrees with `η` on the box (real-part agreement, not a complex-valued
+extension), the population integral
 ```
 𝒵(N) = ∫_{(0,b]^{n+1}} η(u) u^h e^{-βN u^{2k}} du = origPhaseIntegral n h k β N b 0 η
 ```
@@ -56,8 +57,8 @@ theorem taylorFamily_const_zero (d : ℕ) :
   simp [taylorFamily, coordDeriv_const_zero]
 
 /-- **The population Taylor tree on the original integral** (`thm:TaylorTree` at `ξ = 0`, the
-§3 population instance of Headline XXXIII): for `η` on `(0,b]^{n+1}` with a holomorphic extension
-`Fη` to the polydisc of radius `R > b`, the population integral `∫ η u^h e^{-βN u^{2k}}` has the
+§3 population instance of Headline XXXIII): for `η` on `(0,b]^{n+1}` and a holomorphic `Fη` on
+the polydisc of radius `R > b` with `Re Fη = η` on the box, the population integral `∫ η u^h e^{-βN u^{2k}}` has the
 full Taylor-tree conclusion for the zero phase family and the amplitude family `Re(∂^γ Fη(0)/γ!)`,
 and the family integral is the original population integral. -/
 theorem population_TaylorTree_taylor (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : ∀ i, 0 < k i) (β : ℝ)

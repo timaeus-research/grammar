@@ -16,13 +16,19 @@ familyCoeffSeries n h k β 0 cη μ j = kernelFunctional n h k β 0 0 μ j cη
                                    = K_k ∑_γ cη_γ S_0(μ,j;γ),
 ```
 the paper's dressed-moment expansion `∑_γ (η_γ/γ!)·[coefficient of N^{-μ}(log N)^j in M_{h+γ}]`
-(`eq:tubular_expansion`) with `S_0(μ,j;γ) = ∑_{q≥j} coeffAt(ρ_{h+γ},μ,q) C(q,j)
-fluctMoment β 0 0 μ (q−j)` (`kernelS`). Under absolute summability of `cη` and `μ > 0` this is the
-canonical (limit-defined) family coefficient (`familySpectralCoeff_population`).
+(`eq:tubular_expansion`) with `S_0(μ,j;γ) = ∑_{j≤q≤n} coeffAt(ρ_{h+γ},μ,q) C(q,j)
+fluctMoment β 0 0 μ (q−j)` (`kernelS`; the state density is that of the shifted monomial
+`u^{h+γ}`, the finite `q`-range is `j ≤ q ≤ n`). Here `cη_γ` are already the normalised Taylor
+coefficients `η_γ/γ!` when `η_γ` denotes derivative data (`taylorFamily` divides by `γ!` once); for
+arbitrary input `cη` no derivative interpretation is asserted. Under `kᵢ > 0`, `β > 0`, absolute
+summability of `cη` and `μ > 0` this is the canonical (limit-defined) family coefficient
+(`familySpectralCoeff_population`, exactly the hypotheses of the frozen
+`familySpectralCoeff_eq_series` after discharging `AbsSummable 0`).
 
 These are algebraic identities; they do not by themselves assert convergence of the inner
-amplitude series (`kernelFunctional` is a `tsum`), which is supplied by the admissibility
-hypotheses of the Taylor tree. Zero `sorry`/`axiom`.
+amplitude series (`kernelFunctional` is a `tsum`), and equality with `familySpectralCoeff` is not a
+proof of that convergence either — it is supplied by the admissible-kernel summability results of
+the Taylor tree when needed. Zero `sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Real Filter Topology
