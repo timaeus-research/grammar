@@ -16,7 +16,8 @@ vectors of coefficients are continuous (`continuous_taylorTree_coeffVec`). This 
 sufficient replacement for the paper's cited-but-unstated `prop:convergence` (continuity of
 `ξ ↦ C_{μ,m}(ξ)`), in the weighted-ℓ¹ topology at the box radius `b`; the identification with a
 topology on `C^ω([0,b]^d)` is not claimed. The Lipschitz constant on the ball of radius `R` is
-`dataLipConst = b^{|h|+d} (b^{2|k|})^{-μ} (∑_{q=j}^{d-1} C(q,j) |log b^{2|k|}|^{q-j}) · 2 familyLipConst`.
+`dataLipConst = b^{|h|+d} (b^{2|k|})^{-μ} (∑_{q=j}^{d-1} C(q,j) |log b^{2|k|}|^{q-j}) · 2L`,
+`L = familyLipConst`.
 -/
 
 open MeasureTheory Set Real Filter Topology
