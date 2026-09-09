@@ -388,3 +388,4 @@ import Grammar.RandomEvidenceRatio
 import Grammar.RandomMixedVector
 import Grammar.UniformIntegrability
 import Grammar.UniformAssembly
+import Grammar.ChartAllocation
