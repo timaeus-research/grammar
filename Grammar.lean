@@ -354,3 +354,4 @@ import Grammar.SpatialTwoTerm
 import Grammar.StateDensitySecondCoeff
 import Grammar.KernelSecondCoeff
 import Grammar.FaceFunctionalTop
+import Grammar.FaceFunctionalLog
