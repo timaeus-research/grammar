@@ -334,3 +334,5 @@ import Grammar.ConstantPhaseUniform
 import Grammar.ConstantPhaseMoving
 import Grammar.PhaseLaplace
 import Grammar.PhaseLaplaceLaw
+import Grammar.PhaseMomentHierarchy
+import Grammar.ConstantPhaseFreeEnergy
