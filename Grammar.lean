@@ -299,3 +299,4 @@ import Grammar.FirstNonzeroAsymptotic
 import Grammar.Flatness
 import Grammar.LpContinuity
 import Grammar.PolyCoeffParam
+import Grammar.AnalyticFamilyData
