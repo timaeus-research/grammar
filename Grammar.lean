@@ -390,3 +390,4 @@ import Grammar.UniformIntegrability
 import Grammar.UniformAssembly
 import Grammar.ChartAllocation
 import Grammar.RandomAssembled
+import Grammar.Localisation
