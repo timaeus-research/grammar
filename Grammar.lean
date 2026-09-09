@@ -321,3 +321,4 @@ import Grammar.GammaLaplace
 import Grammar.SecondOrderStochastic
 import Grammar.FacePositivity
 import Grammar.EnergyHierarchyChart
+import Grammar.PhaseMomentRecurrence
