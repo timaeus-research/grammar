@@ -373,3 +373,4 @@ import Grammar.ContinuousConvergence
 import Grammar.GraphLawTransfer
 import Grammar.RandomFieldTransfer
 import Grammar.PosteriorDraw
+import Grammar.SpatialIndependenceAE
