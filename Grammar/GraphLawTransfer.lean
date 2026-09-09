@@ -28,7 +28,7 @@ open BoundedContinuousFunction
 
 section engine
 
-variable {P V : Type*} [TopologicalSpace P] [T2Space P] [MeasurableSpace P] [BorelSpace P]
+variable {P V : Type*} [TopologicalSpace P] [MeasurableSpace P] [BorelSpace P]
   [PseudoMetricSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
 
 /-- The graph law `(id, S)_# μ` of a measurable map. -/
@@ -44,7 +44,7 @@ theorem integral_graphLaw (μ : ProbabilityMeasure P) {S : P → V} (hS : Measur
   rfl
 
 /-- The comparison `|∫ f_n dμ − ∫ f_∞ dμ| ≤ δ + 2‖f‖ μ(Cᶜ)` when `|f_n − f_∞| < δ` on `C`. -/
-theorem abs_integral_sub_le_of_close_on {μ : Measure P} [IsProbabilityMeasure μ]
+theorem abs_integral_sub_le_of_close_on [T2Space P] {μ : Measure P} [IsProbabilityMeasure μ]
     (f : (P × V) →ᵇ ℝ) {S S' : P → V} (hS : Measurable S) (hS' : Measurable S') {C : Set P}
     (hC : IsCompact C) {δ : ℝ} (hδ : 0 ≤ δ)
     (hclose : ∀ p ∈ C, dist (f (p, S p)) (f (p, S' p)) < δ) :
@@ -80,7 +80,7 @@ theorem abs_integral_sub_le_of_close_on {μ : Measure P} [IsProbabilityMeasure �
 
 /-- **Graph-law transfer** (tight-input engine): if `μ_n ⇒ μ₀`, the `μ_n` are uniformly tight,
 and `Tn → T` continuously with `Tn` measurable, then `(id, Tn n)_# μ_n ⇒ (id, T)_# μ₀`. -/
-theorem tendsto_graphLaw_of_continuouslyConverges {μ : ℕ → ProbabilityMeasure P}
+theorem tendsto_graphLaw_of_continuouslyConverges [T2Space P] {μ : ℕ → ProbabilityMeasure P}
     {μ₀ : ProbabilityMeasure P} (hμ : Tendsto μ atTop (𝓝 μ₀))
     (htight : ∀ δ : ℝ, 0 < δ → ∃ C : Set P, IsCompact C ∧ ∀ n, ((μ n : Measure P) Cᶜ).toReal ≤ δ)
     {Tn : ℕ → P → V} {T : P → V} (hTm : ∀ n, Measurable (Tn n))
