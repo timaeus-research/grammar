@@ -372,3 +372,4 @@ import Grammar.PhaseSpace
 import Grammar.ContinuousConvergence
 import Grammar.GraphLawTransfer
 import Grammar.RandomFieldTransfer
+import Grammar.PosteriorDraw
