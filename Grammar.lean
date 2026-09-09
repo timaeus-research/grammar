@@ -364,3 +364,4 @@ import Grammar.SpatialEnergyCorrection
 import Grammar.SpatialJointConvergence
 import Grammar.SpatialAssembly
 import Grammar.TwoDimRegression
+import Grammar.SpatialIndependence
