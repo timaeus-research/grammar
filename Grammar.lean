@@ -286,3 +286,4 @@ import Grammar.PopulationLeadingCoeff
 import Grammar.PopulationShift
 import Grammar.PopulationPositivity
 import Grammar.PopulationEquivalent
+import Grammar.PopulationRegression
