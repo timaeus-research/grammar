@@ -347,3 +347,4 @@ import Grammar.PolynomialObservables
 import Grammar.PhaseLawOrdering
 import Grammar.SpatialPhaseLeading
 import Grammar.SpatialEnergyLaw
+import Grammar.SpatialLocationLaw
