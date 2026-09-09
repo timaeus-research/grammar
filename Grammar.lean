@@ -383,3 +383,4 @@ import Grammar.RandomNextLogPosterior
 import Grammar.DataSpaceSeparable
 import Grammar.DataTilt
 import Grammar.RandomNextLogLaplace
+import Grammar.RandomNextLogFreeEnergy
