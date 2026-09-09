@@ -375,3 +375,4 @@ import Grammar.RandomFieldTransfer
 import Grammar.PosteriorDraw
 import Grammar.SpatialIndependenceAE
 import Grammar.QuenchedStable
+import Grammar.TemperatureScaling
