@@ -332,3 +332,5 @@ import Grammar.ConstantPhaseRandom
 import Grammar.AssembledLaplace
 import Grammar.ConstantPhaseUniform
 import Grammar.ConstantPhaseMoving
+import Grammar.PhaseLaplace
+import Grammar.PhaseLaplaceLaw

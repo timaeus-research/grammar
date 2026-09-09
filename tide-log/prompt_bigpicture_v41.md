@@ -1,0 +1,30 @@
+# Direction consult #41 — after the #40 stretch: what next for the grammar paper's Lean seabed?
+
+Same setting as #39/#40 (Lean 4 + Mathlib, repo `timaeus-research/grammar`, zero `sorry`/`axiom`; resolution/geometric bridge DEFERRED by the user; user wants NEW THEOREMS over process). Your #40 plan is complete: all six units, including the moving random phase. Grammar main `7ffd10e`.
+
+## Delivered since #40 (Headlines LVII–LX; all built)
+Conventions: `L = log N`, `Q_N(a) = N 𝒵_N[K∘π η; a]/𝒵_N[η; a]`, coefficients in the `N^{-λ}L^j` convention, `m` = multiplicity, `A(a) = C(λ,m−1;a)`, `B(a) = C(λ,m−2;a)` (0 for m = 1), `E, D` the same for the energy numerator (family `h + 2k`, exponent `λ+1`).
+- **LVII (your units 1–3)**: constant-phase two-term data uniformly in the multiplicity, `L(𝒵_N[η;a]/(N^{-λ}L^{m−1}) − A(a)) → B(a)`; transport `E = (λA + (a/2)A')/β`, `D = (λB − (m−1)A + (a/2)B')/β` (coefficient transport, not differentiation of an expansion); `L(Q_N(a) − c₁(a)) → c₂(a)` with `c₁ = λ/β + (a/2β)A'/A`, `c₂ = −(m−1)/β + (a/2β)(B'A − BA')/A²`; face factorisation `A(a) = J_{2λ}(a)·H` and `A(a) > 0` under a positive face witness (H = the phase-independent face factor with all normalisations).
+- **LVIII (your unit 4)**: continuity of `a ↦ 𝒵_N[η;a]` (dominated convergence), measurability of `Q_N, c₁, c₂`; for a fixed random phase `X` with `A(X) ≠ 0`: `Q_N(X) → c₁(X)` and `L(Q_N(X) − c₁(X)) → c₂(X)` a.s., hence in distribution.
+- **LIX (your unit 6)**: exact temperature rescaling of the zero-phase chart integrals; assembled `𝒵_{β+t}/𝒵_β → (β/(β+t))^{μ*}` with external decompositions at both temperatures and residuals negligible at leading scale.
+- **LX (your unit 5)**: compact-uniform two-term remainder `∀ᶠ N, ∀ |a| ≤ R, |L(𝒵_N[η;a]/(N^{-λ}L^{m−1}) − A(a)) − B(a)| ≤ ε` (the Taylor-tree cutoff constant is monotone in `|a|`); `A, B, E, D` continuous in `a`; `c₁ = E/A`, `c₂ = (AD − EB)/A²`; for `X_N ⇒ X` with `A > 0` everywhere: `Q_N(X_N) ⇒ c₁(X)` and `L(Q_N(X_N) − c₁(X_N)) ⇒ c₂(X)` (four-statistics interface on `(R_N, A(X_N), R'_N, E(X_N))`, remainders → 0 in measure from the uniform bound + tightness, continuous mapping for the coefficient vector). Non-claims recorded: centring is at `c₁(X_N)`; zeros of `A` not localised; no convergence of expectations over `X`.
+
+Interfaces available: everything from #40's list plus `constPhase_twoTerm_uniform`, `constPhaseC1/C2` (+ continuity, measurability), `tendstoInDistribution_secondOrder_of_stats` (deterministic normalisers), `tendstoInMeasure_zero_of_uniform_on_balls''` (uniform-on-balls + tightness ⇒ in measure), `normBounded_of_tendstoInDistribution'` (tightness from convergence in distribution), `energy_laplace_chart/_assembled`, `origPhaseIntegral_beta_rescale` (zero phase), `iterTransport`/`energy_moment_chart/_assembled`, `energy_variance_chart/_assembled`, `neg_log_twoTerm`, `hasDerivAt_constPhase_coeff` (∂_a through the monomial sum), phase-dressed moment recurrence and `∂_a J_{ν,i} = β J_{ν+1/2,i}`.
+
+Mathlib facts checked: Lévy's continuity theorem exists (`ProbabilityMeasure.tendsto_iff_tendsto_charFun`, ℕ-indexed sequences, characteristic functions on an inner-product space); there is NO Laplace-transform continuity theorem for nonnegative laws, and no characteristic function of `gammaMeasure`.
+
+## Remaining declared gaps (mirror)
+External by instruction: resolution, charts, partitions of unity, empirical-process CLT, standard-form identity. NO-GO: all-orders inverse-log division. Not done: spatially varying `ξ` transport (needs a parameter-uniform estimate of the higher-`p` tail — you deferred this); weak convergence of the law of `NK`; convergence of expectations over a random phase; localisation at zeros of `A`; joint limit `(Q_N(X_N), L(Q_N(X_N) − c₁(X_N))) ⇒ (c₁(X), c₂(X))`.
+
+## Candidate directions (rank, cut, replace)
+(a) **Phase-dressed Laplace limit**: with constant phase `a`, `𝒵_{β+t}(N; a) = 𝒵_β(rN; a√r)`, `r = (β+t)/β` (the phase term is `β√N ∏u^k a`, so rescaling `N ↦ rN` sends `a ↦ a√r`), hence `𝒵_{β+t}(N;a)/𝒵_β(N;a) → r^{-λ} A(a√r)/A(a)` — a non-Gamma posterior Laplace transform of `NK` at fixed phase; random-phase versions (fixed and moving) follow from LVIII/LX-style arguments; the `t`-derivative at 0 should reproduce `c₁(a)` (consistency check theorem).
+(b) **Constant-phase energy hierarchy**: iterate the phase transport to get `N^r 𝒵_{K^r}/𝒵 → (λ)_r/β^r + phase terms` and the posterior variance of `NK` with constant phase, `→ λ/β² + (a/β²)(…)`, deterministic and random phase; the moments of the limit law in (a).
+(c) **Constant-phase free energy**: `−log 𝒵_N[η;a] = λL − (m−1) log L − log A(a) − (B(a)/A(a))/L + o(1/L)` (from `neg_log_twoTerm` + LVII) and its random-phase version; the phase enters only through `log A(a)` — "the fluctuation shifts the free energy by `−log J_{2λ}(a)`".
+(d) **Joint limit** `(Q_N(X_N), L(Q_N(X_N) − c₁(X_N))) ⇒ (c₁(X), c₂(X))` (continuous mapping of the same statistics vector); cheap.
+(e) **Localisation at zeros of `A`** for the moving phase (assume only `P(A(X) = 0) = 0`): needs `c₁` continuous off the zero set and a portmanteau argument; medium.
+(f) **Spatially varying phase, first order** (your deferred (c)): the directional derivative of `C(μ,j;ξ)` at `ξ = 0` in direction `ζ` through the full `p`-series; requires a parameter-uniform tail estimate.
+(g) **Convergence of expectations** `E[Q_N(X_N)] → E[c₁(X)]` under a uniform-integrability hypothesis (e.g. a uniform bound `|Q_N(a)| ≤ C(1 + |a|)` on the energy — is such a bound provable from the uniform two-term data plus `A ≥ H·inf J`?).
+(h) Something you consider more valuable for the authors (e.g. a statement about the posterior law of `NK` beyond its Laplace transform, or the mixed-multiplicity case for a general observable — routine).
+
+## Ask
+A ranked bounded plan (≤ 10 units) with precise target statements, external inputs, non-claims and traps (where the rescaling changes the phase, where `A ≠ 0` is needed, which remainders must be uniform in which parameter, where differentiating an expansion would be illegitimate). Say which of (a)–(g) you drop. Under ~2000 words.
