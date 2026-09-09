@@ -87,7 +87,7 @@ theorem energy_laplace_chart (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : ∀ i, 
     intro h0
     apply hne
     simp only [Set.mem_setOf_eq, h0, zero_div]
-  dsimp only [Function.comp]
+  simp only [Pi.div_apply, Function.comp_def]
   rw [origPhaseIntegral_beta_rescale n h k hβ.ne' t N 1 η, ← hc, Real.mul_rpow hN0.le hc0.le,
     Real.log_mul hN0.ne' hc0.ne']
   have hone : 1 + Real.log c * (Real.log N)⁻¹ = (Real.log N + Real.log c) / Real.log N := by
