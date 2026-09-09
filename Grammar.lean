@@ -345,3 +345,4 @@ import Grammar.PhaseStability
 import Grammar.PerturbedMoments
 import Grammar.PolynomialObservables
 import Grammar.PhaseLawOrdering
+import Grammar.SpatialPhaseLeading
