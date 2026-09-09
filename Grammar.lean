@@ -352,3 +352,4 @@ import Grammar.SpatialMoments
 import Grammar.SpatialPhaseStability
 import Grammar.SpatialTwoTerm
 import Grammar.StateDensitySecondCoeff
+import Grammar.KernelSecondCoeff
