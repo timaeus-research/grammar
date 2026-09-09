@@ -35,6 +35,9 @@ The decomposition `𝒵_pop = ∑_I 𝒵^I + E` is an external hypothesis (Steps
 analytic admissibility of the chart amplitudes); sums of face functionals may cancel across charts,
 which is why `A_* ≠ 0` is a hypothesis of the equivalence. If `A_* = 0` the theorem asserts only the
 zero limit at this scale; the true leading term must be sought among later ordered coefficients.
+Throughout, `(μ_*, m_*−1)` is the global FIRST CANDIDATE; it is the leading pair only when
+`A_* ≠ 0` (cancellation among tied charts is possible), and no theorem here selects the leading
+pair after such a cancellation.
 Zero `sorry`/`axiom`.
 -/
 
@@ -101,6 +104,8 @@ noncomputable def assembledFace (x : JointData K n) (lam : Fin M → ℝ) (μs :
   ∑ I, if lam I = μs ∧ multCount (ratioExp (h I) (k I)) (lam I) = ms then chartFace ν h k β x lam I
     else 0
 
+omit [∀ I, CompactSpace (K I)] [∀ I, T2Space (K I)] [∀ I, OpensMeasurableSpace (K I)]
+  [∀ I, IsFiniteMeasure (ν I)] in
 /-- **The assembled coefficient at the global target is the assembled face functional.** -/
 theorem gCoeff_population_leading (hk : ∀ I i, 0 < k I i) (hβ : 0 < β) (x : JointData K n)
     (hx : ∀ I v, xiCoord (x.chart I v) = 0) (lam : Fin M → ℝ)
@@ -126,6 +131,8 @@ theorem gCoeff_population_leading (hk : ∀ I i, 0 < k I i) (hβ : 0 < β) (x : 
     · exact tanCoeff_eq_zero_of_lt_min (ν I) (n I) (h I) (k I) (hk I) β hβ one_pos (x.chart I)
         (hmin I) (lt_of_le_of_ne (hμ I) (Ne.symm hIμ)) _
 
+omit [∀ I, CompactSpace (K I)] [∀ I, T2Space (K I)] [∀ I, OpensMeasurableSpace (K I)]
+  [∀ I, IsFiniteMeasure (ν I)] in
 /-- Every assembled coefficient at a predecessor of the global target vanishes. -/
 theorem gCoeff_population_pred_eq_zero (hk : ∀ I i, 0 < k I i) (hβ : 0 < β) (x : JointData K n)
     (hx : ∀ I v, xiCoord (x.chart I v) = 0) (lam : Fin M → ℝ)
@@ -148,6 +155,17 @@ theorem gCoeff_population_pred_eq_zero (hk : ∀ I i, 0 < k I i) (hβ : 0 < β) 
     · exact tanCoeff_eq_zero_of_lt_min (ν I) (n I) (h I) (k I) (hk I) β hβ one_pos (x.chart I)
         (hmin I) (lt_of_le_of_ne (hμ I) (Ne.symm hIμ)) _
 
+/-- **General wrapper**: if every assembled coefficient at a predecessor of the target vanishes,
+the assembled predecessor sum vanishes. -/
+theorem absPredSum_eq_zero_of_pred {Q D : ℕ} (c : ℝ → ℕ → ℝ) {μ : ℝ} {j : ℕ}
+    (hc : ∀ p : ℝ × ℕ, precedes p (μ, j) → c p.1 p.2 = 0) (N : ℝ) :
+    absPredSum Q D c μ j N = 0 := by
+  unfold absPredSum
+  refine Finset.sum_eq_zero fun p hp => ?_
+  obtain ⟨-, hprec⟩ := mem_predSet_iff.1 hp
+  unfold absTerm
+  rw [hc p hprec, zero_mul]
+
 /-- The assembled predecessor sum at the global target vanishes identically. -/
 theorem absPredSum_population_eq_zero (hk : ∀ I i, 0 < k I i) (hβ : 0 < β) (x : JointData K n)
     (hx : ∀ I v, xiCoord (x.chart I v) = 0) (lam : Fin M → ℝ)
@@ -155,11 +173,8 @@ theorem absPredSum_population_eq_zero (hk : ∀ I i, 0 < k I i) (hβ : 0 < β) (
     {μs : ℝ} (hμ : ∀ I, μs ≤ lam I) {ms : ℕ}
     (hm : ∀ I, lam I = μs → multCount (ratioExp (h I) (k I)) (lam I) ≤ ms) (N : ℝ) :
     absPredSum (commonQ k) (commonD n) (gCoeff ν h k β (fun _ => 1) x) μs (ms - 1) N = 0 := by
-  unfold absPredSum
-  refine Finset.sum_eq_zero fun p hp => ?_
-  obtain ⟨-, hprec⟩ := mem_predSet_iff.1 hp
-  unfold absTerm
-  rw [gCoeff_population_pred_eq_zero ν h k β hk hβ x hx lam hmin hatt hμ hm hprec, zero_mul]
+  exact absPredSum_eq_zero_of_pred _
+    (fun p hp => gCoeff_population_pred_eq_zero ν h k β hk hβ x hx lam hmin hatt hμ hm hp) N
 
 /-- The global first candidate lies on the common lattice. -/
 theorem global_target_mem_lattice (hk : ∀ I i, 0 < k I i) (lam : Fin M → ℝ)
@@ -243,5 +258,20 @@ theorem population_assembled_tendsto_exp (hk : ∀ I i, 0 < k I i) (hβ : 0 < β
       (𝓝 (assembledFace ν h k β x lam μs ms)) :=
   population_assembled_tendsto ν h k β hk hβ x hx lam hmin hatt hμ hμatt hm hmatt Zpop E hdecomp
     (tendsto_target_of_exp E hε hE μs (ms - 1))
+
+/-- Asymptotic equivalence with the paper's exponentially small residual, when `A_* ≠ 0`. -/
+theorem population_assembled_isEquivalent_exp (hk : ∀ I i, 0 < k I i) (hβ : 0 < β)
+    (x : JointData K n) (hx : ∀ I v, xiCoord (x.chart I v) = 0) (lam : Fin M → ℝ)
+    (hmin : ∀ I i, lam I ≤ ratioExp (h I) (k I) i) (hatt : ∀ I, ∃ i, ratioExp (h I) (k I) i = lam I)
+    {μs : ℝ} (hμ : ∀ I, μs ≤ lam I) (hμatt : ∃ I, lam I = μs) {ms : ℕ}
+    (hm : ∀ I, lam I = μs → multCount (ratioExp (h I) (k I)) (lam I) ≤ ms)
+    (hmatt : ∃ I, lam I = μs ∧ multCount (ratioExp (h I) (k I)) (lam I) = ms) (Zpop E : ℝ → ℝ)
+    (hdecomp : ∀ N, Zpop N = gInt ν h k β (fun _ => 1) x N + E N) {ε : ℝ} (hε : 0 < ε)
+    (hE : Tendsto (fun N => E N * Real.exp (ε * N)) atTop (𝓝 0))
+    (hA : assembledFace ν h k β x lam μs ms ≠ 0) :
+    Zpop ~[atTop] fun N => assembledFace ν h k β x lam μs ms *
+      (N ^ (-μs) * Real.log N ^ (ms - 1)) :=
+  population_assembled_isEquivalent ν h k β hk hβ x hx lam hmin hatt hμ hμatt hm hmatt Zpop E
+    hdecomp (tendsto_target_of_exp E hε hE μs (ms - 1)) hA
 
 end Grammar

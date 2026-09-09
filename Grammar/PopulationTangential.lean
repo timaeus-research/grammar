@@ -28,7 +28,11 @@ Programme S** (`tendstoUniformlyOn_tanRemainder`, the integrated `lemma:AsymInt`
 (`tanIntegral_population_tendsto`), with asymptotic equivalence when the integrated face
 functional is nonzero and positivity when the pointwise face functionals are positive and `ν ≠ 0`.
 This is Theorem A(c) for one stratum with tangential integration; the remainder control is the
-Programme S majorant, not a pointwise-to-integrated inference. Zero `sorry`/`axiom`.
+Programme S majorant, not a pointwise-to-integrated inference. `(λ, m−1)` is the FIRST CANDIDATE;
+it is the leading pair only when the integrated face functional is nonzero (tangential signed
+cancellation is possible). "The represented amplitude" means `evalF (etaCoord (x v))`; that an
+externally given amplitude is so represented is a hypothesis on the data, not proved here. Zero
+`sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Real Filter Topology Asymptotics
@@ -125,6 +129,16 @@ theorem tanIntegral_population_isEquivalent (n : ℕ) (h k : Fin (n + 1) → ℕ
   simp only [Pi.div_apply]
   rw [div_div, mul_comm]
 
+/-- The pointwise face functional is integrable over the tangential space. -/
+theorem integrable_tanFace (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : ∀ i, 0 < k i) (β : ℝ)
+    (hβ : 0 < β) (x : TangentialData K (n + 1)) (hx : ∀ v, xiCoord (x v) = 0) {l : ℝ}
+    (hmin : ∀ i, l ≤ ratioExp h k i) (hatt : ∃ i, ratioExp h k i = l) :
+    Integrable (fun v => amplitudeCoeff h k l β (dataAmplitude (x v))) ν := by
+  have := integrable_dataBoxCoeff_tan ν n h k hk β hβ one_pos x l
+    (multCount (ratioExp h k) l - 1)
+  refine this.congr (Eventually.of_forall fun v => ?_)
+  exact (dataBoxCoeff_population_leading n h k hk β hβ (x v) (hx v) hmin hatt).2
+
 /-- Positivity of the integrated face functional when the pointwise face functionals are
 positive and the tangential measure is nonzero. -/
 theorem tanCoeff_population_pos (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : ∀ i, 0 < k i) (β : ℝ)
@@ -132,12 +146,8 @@ theorem tanCoeff_population_pos (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : ∀ 
     (hmin : ∀ i, l ≤ ratioExp h k i) (hatt : ∃ i, ratioExp h k i = l)
     (hpos : ∀ v, 0 < amplitudeCoeff h k l β (dataAmplitude (x v))) (hν : ν ≠ 0) :
     0 < ∫ v, amplitudeCoeff h k l β (dataAmplitude (x v)) ∂ν := by
-  have hint : Integrable (fun v => amplitudeCoeff h k l β (dataAmplitude (x v))) ν := by
-    have := integrable_dataBoxCoeff_tan ν n h k hk β hβ one_pos x l
-      (multCount (ratioExp h k) l - 1)
-    refine this.congr (Eventually.of_forall fun v => ?_)
-    exact (dataBoxCoeff_population_leading n h k hk β hβ (x v) (hx v) hmin hatt).2
-  rw [integral_pos_iff_support_of_nonneg (fun v => (hpos v).le) hint]
+  rw [integral_pos_iff_support_of_nonneg (fun v => (hpos v).le)
+    (integrable_tanFace ν n h k hk β hβ x hx hmin hatt)]
   have hsupp : Function.support (fun v => amplitudeCoeff h k l β (dataAmplitude (x v))) = univ :=
     Set.eq_univ_of_forall fun v => (hpos v).ne'
   rw [hsupp]

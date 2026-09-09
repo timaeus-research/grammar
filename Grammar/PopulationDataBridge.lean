@@ -30,6 +30,8 @@ by clamping to the closed cube (`dataAmplitude`; it agrees with `evalF (etaCoord
 cube, which is all the face functional and the box integral see). No holomorphic hypothesis is
 needed here: absolute summability of the amplitude family at the unit box radius is the
 admissibility hypothesis of the coefficient-family Taylor tree (`thm_TaylorTree_coeffFamily`).
+"Represented amplitude" means `evalF (etaCoord x)`: that an externally supplied chart amplitude is
+represented by some `x` (admissibility) is a hypothesis on the data, not established here.
 Zero `sorry`/`axiom`.
 -/
 
@@ -69,34 +71,34 @@ theorem evalF_zero (u : Fin d → ℝ) : evalF (0 : CoeffFamily d) u = 0 := by
   simp [evalF]
 
 /-- Clamping to the closed cube. -/
-def clampCube (u : Fin d → ℝ) : Fin d → ℝ := fun i => max 0 (min 1 (u i))
+def cubeClamp (u : Fin d → ℝ) : Fin d → ℝ := fun i => max 0 (min 1 (u i))
 
-theorem continuous_clampCube : Continuous (clampCube (d := d)) :=
+theorem continuous_cubeClamp : Continuous (cubeClamp (d := d)) :=
   continuous_pi fun i => continuous_const.max (continuous_const.min (continuous_apply i))
 
-theorem clampCube_mem_closedCube (u : Fin d → ℝ) : clampCube u ∈ closedCube d := by
+theorem cubeClamp_mem_closedCube (u : Fin d → ℝ) : cubeClamp u ∈ closedCube d := by
   refine Set.mem_univ_pi.2 fun i => ⟨le_max_left _ _, ?_⟩
-  simp only [clampCube]
+  simp only [cubeClamp]
   exact max_le zero_le_one (min_le_left _ _)
 
-theorem clampCube_eq_of_mem {u : Fin d → ℝ} (hu : u ∈ closedCube d) : clampCube u = u := by
+theorem cubeClamp_eq_of_mem {u : Fin d → ℝ} (hu : u ∈ closedCube d) : cubeClamp u = u := by
   funext i
   have hi := Set.mem_univ_pi.1 hu i
-  simp only [clampCube]
+  simp only [cubeClamp]
   rw [min_eq_right hi.2, max_eq_right hi.1]
 
 /-- The represented amplitude of a datum, extended continuously by clamping. -/
 noncomputable def dataAmplitude (x : DataSpace d) (u : Fin d → ℝ) : ℝ :=
-  evalF (etaCoord x) (clampCube u)
+  evalF (etaCoord x) (cubeClamp u)
 
 theorem continuous_dataAmplitude (x : DataSpace d) : Continuous (dataAmplitude x) :=
-  (continuousOn_evalF (absSummable_etaCoord x)).comp_continuous continuous_clampCube
-    clampCube_mem_closedCube
+  (continuousOn_evalF (absSummable_etaCoord x)).comp_continuous continuous_cubeClamp
+    cubeClamp_mem_closedCube
 
 theorem dataAmplitude_eq_of_mem (x : DataSpace d) {u : Fin d → ℝ} (hu : u ∈ closedCube d) :
     dataAmplitude x u = evalF (etaCoord x) u := by
   unfold dataAmplitude
-  rw [clampCube_eq_of_mem hu]
+  rw [cubeClamp_eq_of_mem hu]
 
 /-- **Zero noise is zero phase**: for `xiCoord x = 0` the represented unit-box integral is the
 population integral of the amplitude. -/
