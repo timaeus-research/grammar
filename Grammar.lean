@@ -320,3 +320,4 @@ import Grammar.EnergyHierarchy
 import Grammar.GammaLaplace
 import Grammar.SecondOrderStochastic
 import Grammar.FacePositivity
+import Grammar.EnergyHierarchyChart
