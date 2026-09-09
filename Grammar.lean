@@ -305,3 +305,4 @@ import Grammar.EnergyDerivative
 import Grammar.MomentRecurrence
 import Grammar.PowLogShift
 import Grammar.CoefficientTransport
+import Grammar.EnergyCorrectionCore

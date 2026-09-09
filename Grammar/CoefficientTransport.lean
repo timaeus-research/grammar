@@ -20,8 +20,11 @@ C_K(μ+1, j) = (μ C(μ, j) − (j+1) C(μ, j+1)) / β                 (populati
 where `C` are the population coefficients of `(h, η)` and `C_K` those of `(h + 2k, η)` (both as
 `familySpectralCoeff … 0 cη`, the canonical Taylor-tree coefficients at `b = 1`). This is Route B of
 Astra #38: the transport is proved by coefficient algebra, never by differentiating a remainder.
-At the first candidate `(λ, m−1)` it recovers `A_K = (λ/β) A` (unit 304) since `C(λ, m) = 0`, and at
-`(λ, m−2)` it gives the log-correction coefficient `B_K = (λ B − (m−1) A)/β`. Zero `sorry`/`axiom`.
+At the first candidate `(λ, m−1)` it recovers `A_K = (λ/β) A` (unit 304), using the leading-support
+vanishing `C(λ, m) = 0` (from `population_leadingCoeff_of_conclusion` for `m ≤ n` and
+`population_coeff_eq_zero_of_gt_degree` for `m > n`; `m ≥ 1`), and for `m ≥ 2` at `(λ, m−2)` it
+gives the log-correction coefficient `B_K = (λ B − (m−1) A)/β` with `B = C(λ, m−2)`. The ambient
+degree bound `j > n ⇒ C(μ,j) = 0` is not the leading-support statement. Zero `sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Real Filter Topology
@@ -129,7 +132,8 @@ theorem population_coeff_add_two_k (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : �
   exact kernelFunctional_add_two_k n h k hk hβ hμ j hη
 
 /-- Population coefficients vanish above the top log degree. -/
-theorem population_coeff_eq_zero_of_lt (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : ∀ i, 0 < k i) {β : ℝ}
+theorem population_coeff_eq_zero_of_gt_degree (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : ∀ i, 0 < k i)
+{β : ℝ}
     (hβ : 0 < β) {cη : CoeffFamily (n + 1)} (hη : AbsSummable cη) {μ : ℝ} (hμ : 0 < μ) {j : ℕ}
     (hj : n < j) : familySpectralCoeff n h k β 0 cη μ j = 0 := by
   rw [familySpectralCoeff_population n h k hk β hβ hη hμ j]

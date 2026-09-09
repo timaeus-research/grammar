@@ -7,7 +7,8 @@ import Grammar.PopulationBounded
 /-!
 # The exact energy identity `𝒵_N[K∘π] = −(1/β) d/dN 𝒵_N[1]` (Programme Q, N2, unit 313)
 
-For a continuous amplitude `η` on the unit box the population integral
+For an amplitude `η` continuous on `ℝ^{n+1}` (only its values on the unit box enter) the population
+integral
 `𝒵(N) = ∫ η u^h e^{-βN u^{2k}} du` is differentiable in `N > 0` with
 ```
 𝒵'(N) = −β ∫ (u^{2k} η) u^h e^{-βN u^{2k}} du = −β 𝒵_K(N),
