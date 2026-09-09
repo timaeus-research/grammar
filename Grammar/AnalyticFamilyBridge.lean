@@ -116,6 +116,17 @@ theorem tanIntegral_analytic_isEquivalent (n : ℕ) (h k : Fin (n + 1) → ℕ) 
   isEquivalent_of_tendsto_remainder
     (tanIntegral_analytic_tendsto ν n h k hk β hβ hr hrR h1r F hF hFc hM hmin hatt) hA
 
+omit [T2Space K] [MeasurableSpace K] [OpensMeasurableSpace K] in
+/-- **Compactness supplies the uniform bound**: a family jointly continuous on
+`K × closedPolydisc d r` with `K` compact is bounded there. -/
+theorem exists_bound_of_continuousOn_compact {d : ℕ} {r : ℝ} (F : K → (Fin d → ℂ) → ℂ)
+    (hFc : ContinuousOn (fun p : K × (Fin d → ℂ) => F p.1 p.2) (univ ×ˢ closedPolydisc d r)) :
+    ∃ M, ∀ v, ∀ w ∈ closedPolydisc d r, ‖F v w‖ ≤ M := by
+  obtain ⟨M, hM⟩ := (isCompact_univ.prod (isCompact_closedPolydisc d
+r)).exists_bound_of_continuousOn
+    hFc
+  exact ⟨M, fun v w hw => hM (v, w) ⟨mem_univ v, hw⟩⟩
+
 omit [CompactSpace K] [T2Space K] [MeasurableSpace K] [OpensMeasurableSpace K] in
 /-- **A continuous tangential factor preserves the hypotheses**: holomorphy… -/
 theorem analyticFamily_smul_differentiableOn {d : ℕ} {R : ℝ} (ρ : C(K, ℝ))
