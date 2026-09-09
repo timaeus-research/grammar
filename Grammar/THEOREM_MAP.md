@@ -1,4 +1,4 @@
-# Theorem map — the spatial-phase and random-data programme (Headlines LXXII–CIII)
+# Theorem map — the spatial-phase and random-data programme (Headlines LXXII–CVI)
 
 One page. What is proved, at which level of generality, under which hypotheses. Row numbers are
 the headline indices of `HEADLINES.md`; names are Lean theorems in `Grammar/`. Standing chart
@@ -19,6 +19,7 @@ the original-space posterior.
 | **Uniform (coefficient topology)** | On balls/compacts of the weighted-ℓ¹ data space: `L(𝒵_N(x)/(N^{−λ}L^{m−1}) − F(x)) → B(x)` uniformly, `F`, `B` continuous; `m = 1`: `L(N^λ𝒵_N − F) → 0`; uniform quotient and logarithmic lemmas with a positivity floor; the data space is Polish. | XCV, u387, C, XCVIII: `tendstoUniformlyOn_spatialTwoTerm`, `tendstoUniformlyOn_nextLog_div`, `tendstoUniformlyOn_nextLog_log`, `secondCountableTopology_lp_one` |
 | **Random data, next order** (external input: `X_m ⇒ X` on the data space) | Evidence: `(X_m, L(𝒵/… − F(X_m))) ⇒ (X, B(X))`; on the admissible domain `{F > 0}`: posterior energy mean `→ c₂(X)`, posterior Laplace transforms `→ C_s(X)`, free energy `→ −B(X)/F(X)`; evidence ratios under a joint pair law; **all of these jointly** in one vector under one weak-convergence hypothesis (no tightness hypothesis: Polish domain). | XCVI, XCVII, XCIX, C, CI, **CII**: `randomNextLog_graphLaw_tendsto'`, `randomEnergyMean_graphLaw_tendsto'`, `randomLaplace_graphLaw_tendsto`, `randomFreeEnergy_graphLaw_tendsto`, `randomEvidenceRatio_graphLaw_tendsto`, `randomMixed_graphLaw_tendsto` |
 | **Physical identifications** | The statistics are the posterior quantities: `energyStat_eq` (`E_{Q_N(x)}[NK]`), `laplaceStat_eq` (`E[e^{−sNK}]`), `freeEnergyStat_eq`, `evidenceRatio_eq`; the coefficients are the explicit deterministic ones (`dataBoxCoeff_spatialFace`, `dataBoxCoeff_spatialSecondFace`, `energyCorrection_eq`); nonnegative amplitude with positive face weight ⇒ admissible (`dataLead_pos_of_nonneg_of_faceWeight_pos`). | XCV, XCVII, XCIX, C, CI, `DataTilt.lean` |
+| **Assembled models** (finite charts, common datum) | Uniform scale separation and the compact-uniform assembled two-term theorem `L((∑Z_i)/(N^{−λ}L^{m−1}) − A) → D₁ = ∑_{I₀}B_i + ∑_{I₁}F_i`; first corrections to chart allocations `L(p_{i,N} − a_i/A) → (d_iA − a_iD₁)/A²` (jointly in `i`, summing to `0`); assembled quotients and chart marks; the joint random assembled law `(X_m, (L(G−A), −L(log G − log A), (L(p_i − p_i⁰))_i)) ⇒ (X, (D₁, −D₁/A, (h_i)_i))` on the Polish admissible domain `{A > 0}`. | CIV, CV, CVI: `tendstoUniformlyOn_assembled`, `tendstoUniformlyOn_chartAlloc_pi`, `tendstoUniformlyOn_assembledQuotient`, `randomAssembled_graphLaw_tendsto` |
 | **Expectations** | Only with an additional uniform-integrability hypothesis on the statistic laws: `E[stat_m] → E[limit(X)]` (energy and free-energy corrections); tightness is not UI. | CIII: `integrable_and_tendsto_integral_of_uniformIntegrable`, `randomEnergyMean_expectation_tendsto` |
 
 ## Non-claims (recorded in the mirror `grammar_lean.tex`)
@@ -26,7 +27,8 @@ Next-order corrections for observables not given by coefficient families; conver
 phase field itself (a scalar CLT is not sufficient); stable convergence relative to an environment
 σ-algebra without the sampling identity; draw-level corrections from corrections of expectations;
 process convergence in the Laplace parameter `s`; any correction after cancellation of the face
-coefficient; all-orders division; the geometric bridge.
+coefficient (or of the total assembled leading coefficient); variable-temperature or sharper
+lattice-order expansions; all-orders division; the geometric bridge.
 
 ## Reading order for an author
 `SpatialPhaseLeading` → `SpatialJointConvergence` → `SpatialSecondCoeffExplicit` →
