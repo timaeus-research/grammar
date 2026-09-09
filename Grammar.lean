@@ -344,3 +344,4 @@ import Grammar.AssembledEnergyLaw
 import Grammar.PhaseStability
 import Grammar.PerturbedMoments
 import Grammar.PolynomialObservables
+import Grammar.PhaseLawOrdering
