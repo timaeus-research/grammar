@@ -140,7 +140,7 @@ theorem integrable_piece (i : ι) {N : ℝ} (hN : 0 ≤ N) :
 /-- **The finite decomposition of the localised integral**: `Z_{<δ} = ∑_i ∫ ρ_i F e^{−NK}`. -/
 theorem Zsublevel_eq_sum {N : ℝ} (hN : 0 ≤ N) : D.Zsublevel N = ∑ i, P.piece i N := by
   unfold Zsublevel piece
-  rw [← integral_finset_sum _ fun i _ => P.integrable_piece i hN]
+  rw [← integral_finsetSum _ fun i _ => P.integrable_piece i hN]
   refine integral_congr_ae ?_
   filter_upwards [P.sum_eq_one] with z hz
   rw [← Finset.sum_mul, hz, one_mul]
