@@ -166,7 +166,8 @@ noncomputable def chartEnergyMeasure (n : ℕ) (h k : Fin (n + 1) → ℕ) (β N
 theorem chartEnergyMeasure_real_univ (n : ℕ) (h k : Fin (n + 1) → ℕ) (β N : ℝ)
     {η : (Fin (n + 1) → ℝ) → ℝ} (hηc : Continuous η) (hηnn : ∀ u ∈ unitBox (n + 1), 0 ≤ η u)
     (a : ℝ) (hZ : 0 < origPhaseIntegral n h k β N 1 (fun _ => a) η) :
-    (chartEnergyMeasure n h k β N η a).real univ = origPhaseIntegral n h k β N 1 (fun _ => a) η := by
+    (chartEnergyMeasure n h k β N η a).real univ =
+      origPhaseIntegral n h k β N 1 (fun _ => a) η := by
   have := energyLaw_isProbabilityMeasure n h k β N hηc hηnn a hZ
   rw [chartEnergyMeasure, measureReal_ennreal_smul_apply, probReal_univ, mul_one,
     ENNReal.toReal_ofReal hZ.le]
@@ -175,7 +176,7 @@ theorem chartEnergyMeasure_isFiniteMeasure (n : ℕ) (h k : Fin (n + 1) → ℕ)
     {η : (Fin (n + 1) → ℝ) → ℝ} (hηc : Continuous η) (hηnn : ∀ u ∈ unitBox (n + 1), 0 ≤ η u)
     (a : ℝ) (hZ : 0 < origPhaseIntegral n h k β N 1 (fun _ => a) η) :
     IsFiniteMeasure (chartEnergyMeasure n h k β N η a) := by
-  haveI := energyLaw_isProbabilityMeasure n h k β N hηc hηnn a hZ
+  have := energyLaw_isProbabilityMeasure n h k β N hηc hηnn a hZ
   refine ⟨?_⟩
   rw [chartEnergyMeasure, Measure.smul_apply, smul_eq_mul]
   exact ENNReal.mul_lt_top ENNReal.ofReal_lt_top (measure_lt_top _ _)
@@ -226,9 +227,9 @@ theorem assembled_energyLaw_tendsto {M : Type*} [Fintype M] [Nonempty M] (n : �
             Finset.univ_nonempty).ne'])⟩) := by
   have hl0 : 0 < l := ratioExp_min_pos (h (Classical.arbitrary M)) (k (Classical.arbitrary M))
     (hk _) (hatt _)
-  haveI : Fact (0 < β) := ⟨hβ⟩
-  haveI : Fact (0 < l) := ⟨hl0⟩
-  haveI : ∀ I m, IsFiniteMeasure (chartEnergyMeasure n (h I) (k I) β (Nseq m) (η I) (a I)) :=
+  have : Fact (0 < β) := ⟨hβ⟩
+  have : Fact (0 < l) := ⟨hl0⟩
+  have : ∀ I m, IsFiniteMeasure (chartEnergyMeasure n (h I) (k I) β (Nseq m) (η I) (a I)) :=
     fun I m => chartEnergyMeasure_isFiniteMeasure n (h I) (k I) β (Nseq m) (hηc I) (hηnn I) (a I)
       (hZ I m)
   have hb : ∀ m, 0 < Nseq m ^ (-l) * Real.log (Nseq m) ^ (mstar - 1) := fun m =>
