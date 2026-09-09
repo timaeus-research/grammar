@@ -294,3 +294,4 @@ import Grammar.PopulationQuotient
 import Grammar.PopulationBounded
 import Grammar.PopulationEnergy
 import Grammar.PopulationEnergyAssembled
+import Grammar.FirstNonzero
