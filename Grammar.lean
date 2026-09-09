@@ -360,3 +360,4 @@ import Grammar.FaceFunctionalSecond
 import Grammar.DressedFamily
 import Grammar.SpatialSecondCoeffExplicit
 import Grammar.TransverseSensitivity
+import Grammar.SpatialEnergyCorrection
