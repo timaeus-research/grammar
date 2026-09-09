@@ -19,7 +19,11 @@ the numerator cannot precede the denominator in the asymptotic order: `λ ≤ μ
 `μ = λ` (`not_precedes_of_bounded_quotient`; otherwise the quotient would be unbounded). This is
 the exclusion Astra #37 attached to Corollary B: it uses the common positive underlying integrand,
 not two unrelated abstract expansions. The three admissible cases are exactly those of unit 302.
-Zero `sorry`/`axiom`.
+Conventions: `B` is any uniform bound of `|φ|` on the box (the prose `‖φ‖_∞` is shorthand; no sup
+norm is defined). Bridge between the two theorems: for `c ≥ 0` with a nonzero leading coefficient
+the denominator is eventually positive (its equivalent is eventually of one sign), so dividing the
+inequality gives the bounded quotient `|𝒵[φc]/𝒵[c]| ≤ B` that `not_precedes_of_bounded_quotient`
+consumes; the composition is not recorded as a separate theorem. Zero `sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Real Filter Topology Asymptotics

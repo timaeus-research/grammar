@@ -22,9 +22,11 @@ Hence, when the denominator face functional `A = amplitudeCoeff h k λ β ψ` is
 N · 𝒵_N[K∘π] / 𝒵_N[1] → λ/β                                                  (energy_ratio_tendsto)
 ```
 at chart level (`β = 1`: the posterior expected KL divergence decays as `λ/n`, Watanabe's
-Theorem 6.10). The factor `λ/β` comes from the face-functional normalisation, not merely from the
-exponent shift. Not established: the exact identity `𝒵_n[K] = −𝒵_n'(n)` (differentiation under
-the geometric integral) and the correction `−(m−1)/(n log n)`, which is not a consequence of
+Theorem 6.10 — the posterior interpretation needs the nonnegative base-density setting; the ratio
+theorem itself is more general). The factor `λ/β` comes from the face-functional normalisation,
+not merely from the exponent shift. Not established: the exact identity
+`𝒵_N[K] = −(1/β) d/dN 𝒵_N[1]` (differentiation under the geometric integral; `β = 1` gives the
+paper's `−𝒵_n'(n)`) and the correction `−(m−1)/(β N log N)`, which is not a consequence of
 differentiating an asymptotic equivalent. Zero `sorry`/`axiom`.
 -/
 

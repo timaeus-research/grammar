@@ -26,7 +26,11 @@ with `IsEquivalent.div` and the natural-power statements of P1–P3), and the th
 * `μ > λ` (fully vanishing): `E_n[φ] → 0` with power decay (`quotient_tendsto_zero_pow`).
 
 These classify **actual leading pairs** (supplied as asymptotic equivalences with nonzero
-coefficients), not pairs derived from divisor orders; with `C_φ = 0` nothing is asserted. The
+coefficients), not pairs derived from divisor orders. Classification concerns actual nonzero
+leading coefficients: a vanishing candidate coefficient supplies no numerator equivalence and does
+not identify the next leading pair (equivalence to the zero function is eventual vanishing, not a
+next-term theorem). In the paper's multiplicity indexing keep `m, r ≥ 1`, so that `r < m` is
+exactly `r−1 < m−1` in log degrees. The
 inputs are the equivalences produced by P2/P3 (`population_isEquivalent`,
 `tanIntegral_population_isEquivalent`, `population_assembled_isEquivalent`) for the numerator and
 denominator, with the denominator coefficient positive by `amplitudeCoeff_pos` and its

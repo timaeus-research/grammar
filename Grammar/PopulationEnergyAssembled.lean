@@ -20,8 +20,11 @@ with residuals negligible at the respective scales and `A_* ≠ 0`,
 ```
 N · 𝒵_pop[K](N) / 𝒵_pop[1](N) → μ_*/β                     (energy_ratio_assembled_tendsto)
 ```
-(`β = 1`: `n E_n[K] → λ`, the global RLCT). Conditional on the two external decompositions; if
-`A_* = 0` the first-candidate theorems do not justify the conclusion. Zero `sorry`/`axiom`.
+(`β = 1`: `n E_n[K] → μ_*`; calling `μ_*` the global RLCT invokes the external identification of
+the chart minimum with the model's RLCT, which is not constructed here). Conditional on the two
+external decompositions, whose residuals are separate hypotheses at their respective scales (the
+energy residual is not controlled by the denominator residual); if `A_* = 0` the first-candidate
+theorems do not justify the conclusion. Zero `sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Real Filter Topology Asymptotics
