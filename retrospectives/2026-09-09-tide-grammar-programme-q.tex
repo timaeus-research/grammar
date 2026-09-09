@@ -1,0 +1,95 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\emergencystretch=3em
+
+\title{Programme Q: selection after cancellation, analytic admissibility, and the first logarithmic energy correction}
+\author{Claude, with Daniel Murfet}
+\date{2026-09-09}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\begin{abstract}
+After Programme P the user deferred the geometric bridge (resolution of singularities) and asked for
+the rest of \S3 to continue. Astra \#38 supplied a bounded plan under a 24-unit cap: N1, the first
+nonzero admissible term after cancellation and superpolynomial flatness; N3, analytic families as
+admissible data; N2, the exact energy identity and the first logarithmic correction obtained by
+coefficient algebra rather than by differentiating a remainder; N4, positive normal boxes; N8, a
+reserve on zero-noise continuity. Fourteen theorem units (306--319) and four reviews (v37--v40, all
+PASS; v40 the release audit) later, the seabed holds the chart-level correction
+$N\log N\,(\mathcal Z_N[K\circ\pi]/\mathcal Z_N-\lambda/(\beta N))\to-(m-1)/\beta$ for every
+multiplicity $m\ge1$, the exact dilation law for boxes $(0,b]^d$, and the selection theorem for
+the first nonzero admissible pair.
+\end{abstract}
+
+\section{What changed in the mathematics}
+The paper states $\mathbb E[K]=\lambda/n-(m-1)/(n\log n)+o(1/(n\log n))$ and obtains it by
+differentiating the asymptotic expansion of $\mathcal Z_n$ in $n$. That step is not justified in
+general, and review v38 forbade it. The formal route instead transports coefficients: the energy
+insertion is the exact weight shift $h\mapsto h+2k$ (an identity of integrands), the state-density
+representation commutes with the unit shift of its weights, and the Mellin moment recurrence
+$M(\mu+1,i)=(\mu M(\mu,i)-iM(\mu,i-1))/\beta$ turns into the coefficient recurrence
+$C_K(\mu+1,j)=(\mu C(\mu,j)-(j+1)C(\mu,j+1))/\beta$. With $C(\lambda,q)=0$ above $m-1$ this gives
+$A_K=\lambda A/\beta$ and $B_K=(\lambda B-(m-1)A)/\beta$ for the two leading coefficients, and the
+quotient algebra $N L(\mathcal Z_K/\mathcal Z-\lambda/(\beta N))=(A(B_K+\varepsilon_K)-A_K(B+\varepsilon))/(A(A+(B+\varepsilon)/L))$
+on an eventual set where $\mathcal Z\neq0$ closes the theorem. The remainder control needed at the
+next-log scale, and the log-weighted control needed for $m=1$, both come from the same positive
+power gap $\lambda+1/Q>\lambda$ of the cutoff expansion; convergence at the leading scale alone
+would not have sufficed, and the exact energy identity $\mathcal Z_K=-(1/\beta)\mathcal Z'$ is
+proved as a theorem about integrals but is never used to differentiate an expansion.
+
+Selection after cancellation (N1) is a finite combinatorial statement about the admissible index set
+$\Lambda\cap[0,L]\times\{0,\dots,D\}$ under the order ``smaller exponent, then larger log degree'':
+a globally first nonzero pair exists uniquely whenever any coefficient is nonzero, and a cutoff
+expansion is asymptotically equivalent to that term; when every admissible coefficient vanishes the
+integral is $o(N^{-L})$ for every $L$, which does not make it zero ($e^{-N}$ is flat and nonzero).
+
+Analytic families (N3) close a hypothesis Programme P had left open: a family $F_v$ holomorphic on a
+common polydisc of radius $R>1$, jointly continuous and bounded on a smaller radius $1<r<R$,
+defines continuous zero-noise data in the weighted-$\ell^1$ topology (the geometric majorant
+$Mr^{-|\gamma|}$ dominates the Cauchy coefficients uniformly), so the tangential integration and
+assembly theorems of Programme P apply with $\operatorname{Re}F_v$ as the represented amplitude.
+
+Positive boxes (N4) are an exact dilation $\mathcal Z_b(N;\eta)=b^{|h|+d}\mathcal Z_1(Nb^{2|k|};\eta(b\,\cdot))$,
+so the leading coefficient on $(0,b]^d$ is $b^{|h|+d-2|k|\lambda}A(\eta(b\,\cdot))$ and the lower
+log coefficients are the binomial re-expansion of $\log N+2|k|\log b$ already built into the box
+coefficient of Headline XXVIII.
+
+\section{Lessons}
+\begin{itemize}
+\item \emph{Transcribe interfaces from the file, not from memory.} The one blocking item in the
+release audit was a minus sign I typed into the frozen-interface block of the review prompt; the
+Lean definition has the positive shift. The reviewer could not see the repository and rightly held
+the release until the sign was reconciled. Copy definitions with \texttt{grep}.
+\item \emph{The remainder scale is part of the statement.} Review v39 distinguished three scales
+(leading, next-log, log-weighted) and the proof needed the stronger two. Generalising
+\texttt{population\_remainder\_tendsto} to divide by $L^j$ and to multiply by $L^j$ cost one lemma
+each because the underlying estimate was a power gap; had it been a leading-scale limit only, the
+theorem would have been unprovable from it.
+\item \emph{\texttt{set} shadows terms introduced later.} Abbreviations made with \texttt{set}
+before a \texttt{rw \dots\ at} broke \texttt{div\_self} and \texttt{mul\_div\_cancel\_left₀} three
+times; fold with \texttt{simp only [← hdef]} or avoid \texttt{set} in algebraic closers.
+\item \emph{Integral notation swallows subtraction.} \verb|∫ …, a - b * ∫ …| parses the tail into the
+integrand; parenthesise the first integral.
+\item \emph{Root-build name clashes are silent until the full build.} Two clashes
+(\texttt{clampCube}, \texttt{population\_coeff\_eq\_zero\_of\_lt}) passed per-module builds; the
+exit-gated full build before every push caught both.
+\item \emph{Do not restate a lemma under new names to spend budget.} The assembled energy correction
+was left out on the reviewer's advice: the missing pieces are the paired numerator/denominator
+assembled coefficient identification and the assembly bridges, not residual decay, and a wrapper
+would have proved nothing new.
+\end{itemize}
+
+\section{Hand-off}
+Branch \texttt{tide/programme-q} merged into \texttt{main}; \texttt{HEADLINES.md} carries the
+Programme Q block with the release paragraph and fourteen non-claims; the paper mirror
+\texttt{grammar\_lean.tex} receives dots for the selection theorem, flatness, analytic admissibility,
+the exact energy identity, the chart-level correction, the box dilation and the zero-noise
+continuity corollaries; the hand-off report is
+\texttt{projects/grammar/staging/programme-q-report.pdf}. Not undertaken: parity (N5),
+wall-crossing (N6), all-orders inverse-log division (N7, NO-GO), and the assembled next-log
+correction. The geometric bridge remains external by the user's instruction.
+\end{document}
