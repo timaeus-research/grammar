@@ -370,3 +370,4 @@ import Grammar.SpatialNextLogDictionary
 import Grammar.SpatialJointMoving
 import Grammar.PhaseSpace
 import Grammar.ContinuousConvergence
+import Grammar.GraphLawTransfer
