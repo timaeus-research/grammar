@@ -379,3 +379,4 @@ import Grammar.TemperatureScaling
 import Grammar.UniformSpatialTwoTerm
 import Grammar.UniformNextLogQuotient
 import Grammar.RandomNextLogEvidence
+import Grammar.RandomNextLogPosterior
