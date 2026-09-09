@@ -13,10 +13,14 @@ immediate from Headline XXXIV (`continuous_taylorTree_coeff`): if data `X a → 
 data topology and `x` has zero noise, then every canonical coefficient converges to the population
 coefficient, `dataBoxCoeff (X a) μ j → dataBoxCoeff x μ j` (`tendsto_dataBoxCoeff_of_tendsto`), and
 at the first candidate the limit is the face functional of the represented amplitude
-(`tendsto_dataBoxCoeff_leading`). Non-claims (Astra #38): this is convergence of individual
-coefficients, not of whole expansions (that needs uniform remainder control), and normalised
-empirical noise need not converge to zero (it may have a nondegenerate limit); nothing stochastic is
-asserted. Zero `sorry`/`axiom`.
+(`tendsto_dataBoxCoeff_leading`). Two qualifications: the hypothesis is convergence of the FULL
+datum (noise and amplitude coordinates together) in the weighted-ℓ¹ topology, not merely of the
+noise coordinate; and the limiting face functional may be zero, so this is a first-candidate, not a
+first-nonzero, statement. Non-claims (Astra #38, review v40): convergence of individual
+coefficients, not of whole expansions (that needs uniform remainder control); normalised empirical
+noise need not
+converge to zero (it may have a nondegenerate limit); nothing stochastic is asserted.
+Zero `sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Real Filter Topology

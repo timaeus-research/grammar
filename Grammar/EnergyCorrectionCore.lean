@@ -13,8 +13,9 @@ Abstract analysis for the first logarithmic correction of `E_N[K]`. Write `L = l
 * **Remainder at every log scale** (`population_remainder_tendsto_pow`): for a Taylor-tree
   conclusion on the unit box, `(𝒵(N) − N^{-λ} P(L))/(N^{-λ} L^j) → 0` for EVERY `j : ℕ`
   (the cutoff gap `L' = λ + 1/Q > λ` beats any fixed power of `L`); this is the stronger remainder
-  control review v39 required for the next-log term (`j = m − 2`) and for the `m = 1` branch (`j =
-1`).
+  control review v39 required for the next-log term (`j = m − 2`). The `m = 1` branch needs the
+  MULTIPLICATIVE log version `(𝒵(N) − N^{-λ} P(L)) L^j / N^{-λ} → 0`
+  (`population_remainder_tendsto_mul_pow`, same power gap), used at `j = 1`.
 * **Two-term quotient, `m ≥ 2`** (`twoTerm_energy_quotient`): if
   `𝒵/(N^{-λ}L^{m−2}) − A L → B` and `𝒵_K/(N^{-(λ+1)}L^{m−2}) − A_K L → B_K` with `A ≠ 0`,
   `A_K = λA/β`, `B_K = (λB − (m−1)A)/β`, then `N L (𝒵_K/𝒵 − λ/(βN)) → −(m−1)/β`.

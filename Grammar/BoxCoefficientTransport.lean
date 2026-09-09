@@ -18,11 +18,14 @@ coefficient system `C` of the box conclusion is the unit-box system of the **res
 `b^H (b^{2K})^{-λ} ∑_{q ≥ m−1} C(λ,q) C(q, m−1) (log b^{2K})^{q−(m−1)}`; since `C(λ,q) = 0` above
 `m − 1`, only `q = m−1` survives:
 ```
-boxCoeff … b … λ (m−1) = b^H (b^{2K})^{-λ} · amplitudeCoeff h k λ β (η(b·))    (boxCoeff_leading)
+boxCoeff … b … λ (m−1) = b^H (b^{2K})^{-λ} · amplitudeCoeff h k λ β (η(b·))
 ```
-in agreement with the direct limit of unit 317. Lower log coefficients at `λ` follow the same
-binomial formula (they involve the unit-box coefficients `C(λ, q)`, `q ≤ m−1`, and powers of
-`2K log b`); no separate closed form is claimed for them. Zero `sorry`/`axiom`.
+(final clause of `population_box_leadingCoeff`), in agreement with the direct limit of unit 317.
+The vanishing clause is proved for `m − 1 < j ≤ n` (log degrees above `m−1` through the ambient
+degree `n`). Lower log coefficients at `λ` are given by `boxCoeff`'s binomial re-expansion of
+`log(N b^{2K}) = log N + 2K log b` (positive shift, matching `origPhaseIntegral_dilation`); they
+involve the unit-box coefficients `C(λ, q)`, `q ≤ m−1`, and no separate closed form is claimed for
+them. Zero `sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Real Filter Topology
