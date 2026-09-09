@@ -377,3 +377,4 @@ import Grammar.SpatialIndependenceAE
 import Grammar.QuenchedStable
 import Grammar.TemperatureScaling
 import Grammar.UniformSpatialTwoTerm
+import Grammar.UniformNextLogQuotient
