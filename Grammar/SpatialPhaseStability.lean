@@ -193,12 +193,14 @@ theorem spatialFace_pos_of_faceWeight {d : ℕ} (h k : Fin (d + 1) → ℕ) (hk 
     · exact one_pos
   have hM := phaseMoment_pos β (2 * l) (-C) hβ (by linarith)
   have hI : phaseMoment β (2 * l) (-C) * (∫ u in unitBox (d + 1), faceWeight h k l η u) ≤
-      ∫ u in unitBox (d + 1), faceWeight h k l η u * phaseMoment β (2 * l) (ξ (faceProj h k l u)) := by
+      ∫ u in unitBox (d + 1),
+        faceWeight h k l η u * phaseMoment β (2 * l) (ξ (faceProj h k l u)) := by
     rw [← integral_const_mul]
     refine setIntegral_mono_on ((integrableOn_faceWeight h k hk hmin hηc).const_mul _) ?_
       (measurableSet_unitBox _) fun u hu => ?_
     · -- integrability of the face integrand: bounded moment times the face weight
-      refine Integrable.bdd_mul (c := phaseMoment β (2 * l) C) (integrableOn_faceWeight h k hk hmin hηc)
+      refine Integrable.bdd_mul (c := phaseMoment β (2 * l) C)
+        (integrableOn_faceWeight h k hk hmin hηc)
         ((continuous_phaseMoment β (2 * l) hβ (by linarith)).measurable.comp
           (hξc.measurable.comp (measurable_faceProj h k l))).aestronglyMeasurable ?_ |>.congr
         (Eventually.of_forall fun u => mul_comm _ _)
