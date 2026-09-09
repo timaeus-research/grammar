@@ -297,3 +297,4 @@ import Grammar.PopulationEnergyAssembled
 import Grammar.FirstNonzero
 import Grammar.FirstNonzeroAsymptotic
 import Grammar.Flatness
+import Grammar.LpContinuity
