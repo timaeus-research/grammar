@@ -1,0 +1,30 @@
+# Direction consult #47 — the random-field transfer: which formal route, given what Mathlib has?
+
+Same setting (Lean 4 + Mathlib, repo `timaeus-research/grammar`, zero `sorry`/`axiom`; resolution/geometric bridge DEFERRED; user wants NEW THEOREMS over process). Grammar main `c00e487`; 87 headlines. Your #46 units 1–3 and 5 are done:
+- **LXXXIII** finite-chart assembly at next order (`A = ∑_{I₀} F_i`, `D = ∑_{I₀} B_i + ∑_{I₁} F_i`; assembled quotient, free energy; spatial instantiation).
+- **LXXXIV** the `d = 2`, `h = (0,0)`, `k = (1,1)` regression: `F(a,1) = J_{1/2}(a)/4`, `B(a,1) = J̇_{1/2}(a)/4`; `J_ν` strictly increasing in the phase; `(J(c+at) − J(c))/t ≤ J(c+a) − J(c)` on `(0,1]`; for `ξ = c + ax`, `a > 0`: `B(ξ,1) − B(c,1) = (1/2)∫₀¹ (J(c+at) − J(c))/t dt > 0` and `𝒵_N[1;ξ] > 𝒵_N[1;c]` for all large `N`.
+- **LXXXV/LXXXVI** independence characterisation: `ξ∘P_J ≡ a ⇒ Q̃^ξ = ρ_a ⊗ ν^ξ`; conversely `Q̃^ξ = ρ̄ ⊗ ν^ξ ⇒ ∃ a₀, ξ = a₀` `ν^ξ`-a.e. (via `μ_P = (P_J)_#(ηw/Z du)`, the `lintegral` conditional mean `J_{λ+1}/J_λ`, `ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite₀`, strict monotonicity of the tilted mean).
+- **LXXXVII** next-log dictionary: moments `E[(NK)^r g]` (observable given by a coefficient family `cg`), energy Laplace transforms (`β+s`, phase `ξβ/(β+s)`), evidence ratios between phases — all by the single two-term quotient lemma.
+
+## The remaining item: #46 unit 4 (conditional random-field transfer)
+Deterministic inputs available: `spatialPhase_perturbation_tendsto` (LXXVI): for `N_m → ∞`, `‖ξ_m − ξ₀‖_∞ ≤ ε_m → 0` on the box, uniformly bounded measurable observables `g_m`: `E_{Q_{N_m}^{ξ_m}}[g_m] − E_{Q_{N_m}^{ξ₀}}[g_m] → 0`; the fixed-phase joint weak convergence (LXXXII) with generators `e^{−(sy⁺+ty⁻)}F(u)`; energy tightness via Laplace transforms; `jointAlgebra` separating points on `ℝ × ℝ^d`.
+
+**Mathlib inventory (checked on our pin):**
+- `ProbabilityMeasure.tendsto_map_of_tendsto_of_continuous`: continuous mapping theorem for a FIXED continuous map. NO extended continuous mapping theorem (varying maps `T_m → T` continuously).
+- Prokhorov, one direction: `isTightMeasureSet_of_isCompact_closure` (relatively compact ⇒ tight) on Polish spaces; `Tendsto.isCompact_insert_range` (a convergent sequence with its limit is compact). So a weakly convergent sequence of laws on a Polish space is tight.
+- NO lemma "weak convergence of product measures from weak convergence of factors" (FiniteMeasureProd has only algebraic identities).
+- `ProbabilityMeasure X` is metrizable (Lévy–Prokhorov) for Polish `X`; `ProbabilityMeasure.tendsto_iff_forall_integral_tendsto`; `tendsto_of_tight_of_separatesPoints` (we used it).
+- Function spaces: `C(X, Y)` compact-open is second countable for `X` locally compact second countable; `BoundedContinuousFunction` on a non-compact domain is not separable. I do not see a `PolishSpace` instance for `C(ℝ^d, ℝ)` (compact-open) or for `C(K, ℝ)` with `K` compact, though `C(K,ℝ)` is a complete separable normed space so `PolishSpace` should follow from instances (`polish_of_complete_second_countable`?) — unverified.
+- `ℕ∞` has the order topology; no `CompactSpace ℕ∞` instance seen in `Topology/Instances/ENat.lean` (it may exist elsewhere via `WithTop`).
+- Uniform convergence API exists (`TendstoUniformlyOn`), but no "continuous convergence on a compact set implies uniform convergence" lemma seen.
+
+Our phases are functions `ξ : ℝ^d → ℝ`, continuous everywhere, evaluated on the closed cube `K = [0,1]^d` (the theorems only use `ξ` on `K`, via `P_J u` and `P_J u + t e_i`); a random field would most naturally live in `C(K, ℝ)` (sup norm), with the phase on the box obtained by restriction; extending to a continuous function on `ℝ^d` (e.g. by composing with the metric projection onto the cube) is harmless.
+
+## Candidate routes
+(R1) **Direct extended CMT for finite observables**: for Polish `P`, `X_m ⇒ X` in `P`, `T_m, T : P → ℝ^r` with `T` continuous and `T_m(ξ_m) → T(ξ)` whenever `ξ_m → ξ`: `(X_m, T_m(X_m)) ⇒ (X, T(X))`. Proof: tightness (Prokhorov direction) + continuous convergence ⇒ uniform convergence on compacts (to be proved: sequential compactness argument) + fixed-map CMT for `(id, T)` + `tendsto_iff_forall_integral_tendsto` with an ε/3 split. Estimated 2 units of abstract topology/measure theory, plus 1 unit for the deterministic core (moving-phase finite-observable convergence `T_m(ξ_m) → T(ξ)` from LXXVI + LXXXII: the observables `∫ e^{-sNK}F(u) dQ_N^ξ`, or any bounded continuous `g(NK, u)`?) and 1 unit for the instantiation (phase space `C(K,ℝ)`, measurability of `ξ ↦ T_m(ξ)`).
+(R2) **The `ℕ∞ × P` trick**: `Φ(m, ξ) = (ξ, T_m(ξ))` continuous on `ℕ∞ × P` ⇒ fixed-map CMT — but needs weak convergence of `δ_m ⊗ Law(X_m) → δ_∞ ⊗ Law(X)`, i.e. a product-convergence lemma we don't have (proving it needs its own tightness/algebra argument).
+(R3) **Stop at the deterministic core** (moving-phase joint weak convergence `Q_{N_m}^{ξ_m} ⇒ Q̃^{ξ}` for `ξ_m → ξ` in sup norm — the joint version of LXXVI) and state the random theorem only as a corollary hypothesis-schema, leaving the extended CMT external. Cheap (1 unit) but weaker.
+(R4) Skip unit 4; instead: the a.e. version of the product form (LXXXV) to make the independence characterisation a clean iff; or the theorem map (#46 unit 6); or something else you rank higher.
+
+## Ask
+Which route (or cut) do you recommend, with precise Lean-level target statements (including the exact form of "continuous convergence" and which observables `T_m` to use — the `e^{−sNK}F(u)` generators suffice to determine the joint law, but is the random theorem more useful with general bounded continuous `g(NK,u)`?), the traps (measurability of `ξ ↦ Q_N^ξ`; the exponential-moment control `e^{β‖ξ_m−ξ‖_∞√y}` you flagged; which Polish space for phases), and a bounded unit plan (≤ 5 units). Also: is there an independent-calculation check you would add to LXXXIV beyond the constant-phase value (e.g. the Euler-constant specialisation `B(0,1) = √π/(4√β)(log β + γ_E + 2 log 2)`), and is it worth a unit?
