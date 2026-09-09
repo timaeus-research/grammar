@@ -330,3 +330,5 @@ import Grammar.ConstantPhaseLeading
 import Grammar.ConstantPhaseCorrection
 import Grammar.ConstantPhaseRandom
 import Grammar.AssembledLaplace
+import Grammar.ConstantPhaseUniform
+import Grammar.ConstantPhaseMoving
