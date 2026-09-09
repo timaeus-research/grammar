@@ -382,3 +382,4 @@ import Grammar.RandomNextLogEvidence
 import Grammar.RandomNextLogPosterior
 import Grammar.DataSpaceSeparable
 import Grammar.DataTilt
+import Grammar.RandomNextLogLaplace
