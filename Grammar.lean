@@ -340,3 +340,4 @@ import Grammar.LaplaceContinuity
 import Grammar.PosteriorEnergyLaw
 import Grammar.PhaseLaplaceMoving
 import Grammar.PhaseLawStructure
+import Grammar.AssembledEnergyLaw
