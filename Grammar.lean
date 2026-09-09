@@ -336,3 +336,5 @@ import Grammar.PhaseLaplace
 import Grammar.PhaseLaplaceLaw
 import Grammar.PhaseMomentHierarchy
 import Grammar.ConstantPhaseFreeEnergy
+import Grammar.LaplaceContinuity
+import Grammar.PosteriorEnergyLaw
