@@ -361,3 +361,4 @@ import Grammar.DressedFamily
 import Grammar.SpatialSecondCoeffExplicit
 import Grammar.TransverseSensitivity
 import Grammar.SpatialEnergyCorrection
+import Grammar.SpatialJointConvergence
