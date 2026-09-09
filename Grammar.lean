@@ -315,3 +315,4 @@ import Grammar.EnergyCorrectionAssembled
 import Grammar.SecondOrderQuotient
 import Grammar.SecondOrderAssembled
 import Grammar.WallCrossing
+import Grammar.FreeEnergyCorrection
