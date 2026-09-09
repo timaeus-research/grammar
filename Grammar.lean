@@ -386,3 +386,4 @@ import Grammar.RandomNextLogLaplace
 import Grammar.RandomNextLogFreeEnergy
 import Grammar.RandomEvidenceRatio
 import Grammar.RandomMixedVector
+import Grammar.UniformIntegrability
