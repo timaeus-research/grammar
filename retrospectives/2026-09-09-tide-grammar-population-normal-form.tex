@@ -1,0 +1,63 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\emergencystretch=3em
+
+\title{Programme P: rewriting \S3 of the grammar paper around the Taylor tree}
+\author{Claude, with Daniel Murfet}
+\date{2026-09-09}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\begin{abstract}
+The user asked for the population theorem of \S3, flagged by its authors as out of date, to be
+redesigned around the completed \S4 machinery and formalised. Astra \#37 supplied the design:
+Theorem A ``population expansions from admissible normal-form data'' (chart expansion at zero
+empirical process, first-candidate exponent with the face-functional coefficient, monomial shift,
+tangential integration, finite assembly with the min-exponent/max-log rule) and Corollary B
+(leading expectations, three regimes), with wall-crossing demoted to a remark and a 20-unit cap.
+Sixteen theorem units (290--305) and five reviews (v32--v36, all PASS) later, the seabed holds the
+rewritten leading-order \S3 as conditional Lean theorems, two regression examples that refute the old
+statement within one chart, and a staging note with the replacement statements and an errata list.
+\end{abstract}
+
+\section{What changed in the mathematics}
+The old theorem read the leading coefficient at the deepest corner and called the first candidate
+exponent the leading exponent. Both are wrong in general: the coefficient of $N^{-\lambda}(\log
+N)^{m-1}$ is the face functional $\Gamma(\lambda)\beta^{-\lambda}/(m-1)!\prod_J(2k_i)^{-1}\int\eta(P_Ju)
+\prod_{i\notin J}u_i^{h_i-2k_i\lambda}du$, and it can vanish for a signed amplitude, in which case the
+true leading term may sit at the same exponent with a smaller log degree. The formal proof route was
+the one review v32 prescribed: isolate the exponent below the cutoff $\lambda+1/Q$ using candidate
+support, show the normalised remainder vanishes, transfer Headline VIII's limit to the polynomial in
+$\log N$, and read off coefficients by a polynomial growth-uniqueness lemma proved through Mathlib's
+polynomial asymptotics. Everything downstream (shift, positivity, tangential integration, assembly,
+quotients, the energy observable) reused frozen interfaces: the coefficient-family Taylor tree,
+Headline VIII, the Programme S remainder majorants, and the closing corollaries of Programme S.
+
+\section{Lessons}
+\begin{itemize}
+\item \emph{Zero noise is a bridge, not a definition.} The stochastic-data interface represents a
+chart datum in $\ell^1$; the population case is the condition ``phase coordinates vanish''. The link
+between the canonical coefficient and the Taylor-tree coefficient at $b=1$ had to be a Lean lemma
+(\texttt{boxCoeff\_one}), as review v34 insisted; it was three lines once the prefactors were seen to
+be $1$ and $\log1=0$ to kill the binomial re-expansion.
+\item \emph{Hypothesis patterns beat finset minima.} The global first candidate $(\mu_*,m_*)$ was
+supplied as ``$\mu_*\le\lambda_I$ for all $I$ and attained; $m_*\ge m_I$ on the tie and attained''.
+No \texttt{Finset.min'} bookkeeping, and the theorems remain usable when the user knows the answer.
+\item \emph{Name clashes surface only in the root build.} \texttt{clampCube} already existed; the
+single-module build passed and the full build failed after the push. The exit-gated full build before
+push is not optional.
+\item \emph{Say ``first candidate''.} Every headline now distinguishes the first candidate from the
+leading pair; the two regression examples exist to make the distinction unforgettable.
+\end{itemize}
+
+\section{Hand-off}
+Report \texttt{population-normal-form-report.pdf}, statements and errata
+\texttt{sec3-rewrite-note.md} (both in \texttt{projects/grammar/staging/}); mirror annotations in
+\S3 of \texttt{grammar\_lean.tex} under the rule ``label the proved restricted statement and spell out
+the restriction''. The geometric content of \S3 (resolution, adapted partition of unity, analytic
+admissibility of localised amplitudes) remains external and is the natural next author-side task.
+\end{document}
