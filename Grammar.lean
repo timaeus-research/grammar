@@ -302,3 +302,5 @@ import Grammar.PolyCoeffParam
 import Grammar.AnalyticFamilyData
 import Grammar.AnalyticFamilyBridge
 import Grammar.EnergyDerivative
+import Grammar.MomentRecurrence
+import Grammar.PowLogShift
