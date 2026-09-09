@@ -24,7 +24,10 @@ positive measure and the integral is positive (`setIntegral_pos_iff_support_of_n
 
 Consequence (`population_leadingCoeff_pos`): under the hypotheses of `population_leadingCoeff`,
 the `(λ, m−1)` coefficient of the population Taylor tree is positive; for the partition function
-(`η` = prior × Jacobian factor, positive) this is the denominator positivity of Corollary B.
+this is the chart-level denominator positivity of Corollary B, where `η` is the RESIDUAL amplitude
+(prior × smooth Jacobian factor) after the monomial Jacobian factors have been placed in `u^h`,
+and the hypotheses concern its values on the projected face (positivity merely in the open chart
+would not suffice).
 Zero `sorry`/`axiom`.
 -/
 

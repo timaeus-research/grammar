@@ -89,8 +89,9 @@ theorem amplitudeCoeff_ψEx : amplitudeCoeff hEx kEx (1 / 2) 1 ψEx = 0 := by
   rw [this, mixedConst_eq]
   ring
 
-/-- **Signed cancellation**: a nonzero deepest normal jet with a vanishing first-candidate
-coefficient, within a single chart. -/
+/-- **Signed cancellation**: a nonzero corner value (the zeroth normal restriction is not
+identically zero; a nonzero deepest normal jet is the interpretation, not a formalised jet
+predicate) with a vanishing first-candidate coefficient, within a single chart. -/
 theorem signed_cancellation : ψEx 0 ≠ 0 ∧ amplitudeCoeff hEx kEx (1 / 2) 1 ψEx = 0 :=
   ⟨by rw [ψEx_zero]; exact one_ne_zero, amplitudeCoeff_ψEx⟩
 

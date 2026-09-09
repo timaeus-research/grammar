@@ -13,8 +13,8 @@ its multiplicity, `A = amplitudeCoeff h k λ β η` the face functional,
 
 * there are no terms at exponents below `λ` (`population_coeff_eq_zero_of_lt`: candidates are
   `≥ λ`, and coefficients vanish off the candidate set);
-* at exponent `λ` there are no terms of log degree above `m − 1`, and the `(λ, m−1)` coefficient
-  is `A` (P1);
+* at exponent `λ` there are no terms of log degree above `m − 1` among the expansion's log
+  degrees `0, …, n`, and the `(λ, m−1)` coefficient is `A` (P1);
 * if `A ≠ 0` the population integral is asymptotically equivalent to `A N^{-λ}(log N)^{m−1}`
   (`population_isEquivalent`, directly from Headline VIII).
 
@@ -57,7 +57,8 @@ theorem population_isEquivalent (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : ∀ 
   rw [div_div, mul_comm]
 
 /-- **Theorem A(c) at chart level (`b = 1`)**: the population Taylor tree has no terms below
-`λ`, none at `λ` above log degree `m − 1`, its `(λ, m−1)` coefficient is the face functional
+`λ`, none at `λ` above log degree `m − 1` (among the degrees `0, …, n`), its `(λ, m−1)`
+coefficient is the face functional
 `A`, and when `A ≠ 0` the integral is asymptotically `A N^{-λ}(log N)^{m−1}`. -/
 theorem population_firstCandidate (n : ℕ) (h k : Fin (n + 1) → ℕ) (hk : ∀ i, 0 < k i) (β : ℝ)
     (hβ : 0 < β) {R : ℝ} (hR : 1 < R) {Fη : (Fin (n + 1) → ℂ) → ℂ}
