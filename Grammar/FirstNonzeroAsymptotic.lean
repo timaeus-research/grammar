@@ -20,9 +20,10 @@ and the pair is unique (`existsUnique_first_nonzero_isEquivalent`). Specialisati
   term (`population_first_nonzero_chart`);
 * **assembled**: for `𝒵_pop = ∑_I 𝒵^I + E` with `E` negligible at **every** admissible scale (in
   particular exponentially small), the assembled integral is asymptotically its first nonzero
-  assembled term (`population_first_nonzero_assembled`, `_exp`). The residual hypothesis is at all
-  scales because the selected pair is existential: negligibility at Programme P's first candidate is
-  not enough after a cancellation.
+  assembled term (`population_first_nonzero_assembled`, `_exp`). An all-scales residual hypothesis
+lets
+  this existential theorem supply negligibility at the selected pair without naming that pair in
+  advance; negligibility at Programme P's first candidate alone is not enough after a cancellation.
 
 Non-claims: the theorems presuppose SOME nonzero coefficient below some cutoff; the flat alternative
 is unit 308. Nothing is said about the size of the selected coefficient, and the selected exponent

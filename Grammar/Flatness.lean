@@ -9,7 +9,8 @@ import Grammar.FirstNonzeroAsymptotic
 
 The alternative to a first nonzero coefficient: if every admissible coefficient of a finite-cutoff
 expansion vanishes, then `Z(N) = o(N^{-L})` for every real `L` (`flat_of_cutoffExpansion`), because
-the expansion at cutoff `L+1` reduces to its remainder `O(N^{-(L+1)}(1+log N)^D)`. Assembled: the
+the expansion at the cutoff `max (L+1) 1` reduces to its remainder `O(N^{-L'}(1+log N)^D)`, `L' >
+L`. Assembled: the
 global integral of zero-noise (or any) joint data is a finite-cutoff expansion
 (`cutoffExpansion_gInt`, from the uniform assembled cutoff bound), so `𝒵_pop = ∑_I 𝒵^I + E` with all
 assembled coefficients zero and `E = o(N^{-L})` for all `L` is itself `o(N^{-L})` for all `L`
@@ -28,8 +29,7 @@ namespace Grammar
 theorem flat_of_cutoffExpansion {Q D : ℕ} (hQ : 0 < Q) {Z : ℝ → ℝ} {c : ℝ → ℕ → ℝ}
     (h : CutoffExpansion Q D Z c) (hzero : ∀ p ∈ admissible D Q, c p.1 p.2 = 0) (L : ℝ) :
     Tendsto (fun N => Z N / N ^ (-L)) atTop (𝓝 0) := by
-  have hL : 0 < L + 1 ∨ True := Or.inr trivial
-  -- use the cutoff `max (L+1) 1 > 0`
+  -- use the cutoff `max (L+1) 1 > 0` (`L` may be negative)
   set L' : ℝ := max (L + 1) 1 with hL'
   have hL'pos : 0 < L' := lt_of_lt_of_le one_pos (le_max_right _ _)
   have hLL' : L < L' := lt_of_lt_of_le (by linarith) (le_max_left _ _)
