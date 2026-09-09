@@ -349,3 +349,4 @@ import Grammar.SpatialPhaseLeading
 import Grammar.SpatialEnergyLaw
 import Grammar.SpatialLocationLaw
 import Grammar.SpatialMoments
+import Grammar.SpatialPhaseStability
