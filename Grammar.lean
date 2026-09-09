@@ -316,3 +316,5 @@ import Grammar.SecondOrderQuotient
 import Grammar.SecondOrderAssembled
 import Grammar.WallCrossing
 import Grammar.FreeEnergyCorrection
+import Grammar.EnergyHierarchy
+import Grammar.GammaLaplace
