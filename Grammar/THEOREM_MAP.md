@@ -1,0 +1,33 @@
+# Theorem map — the spatial-phase and random-data programme (Headlines LXXII–CIII)
+
+One page. What is proved, at which level of generality, under which hypotheses. Row numbers are
+the headline indices of `HEADLINES.md`; names are Lean theorems in `Grammar/`. Standing chart
+hypotheses throughout: normal-form chart `h, k` (`0 < k_i`), temperature `β > 0`, minimal ratio
+`λ = min_i (h_i+1)/(2k_i)` attained with multiplicity `m`, continuous amplitude `η ≥ 0` on the cube
+with positive face weight (or the coefficient-family analogue). The geometric bridge (resolution,
+partition of unity, standard-form identification) is external by instruction; nothing below claims
+the original-space posterior.
+
+| Layer | Public guarantee | Where |
+|---|---|---|
+| **Deterministic, leading** | For every continuous chart phase `ξ` the leading posterior of `(NK, u)` depends only on `ξ∘P_J`: `𝒵_N ~ N^{−λ}L^{m−1}F(ξ,η)`, energy law `→ ∫ρ_{ξ(v)} dν^ξ`, face law `ν^ξ = μ_P·J_λ(ξ)`, joint law `Q̃^ξ` with conditional energy law `ρ_{ξ(v)}`. | LXXII–LXXVI, LXXXII: `spatialPhase_tendsto`, `spatialEnergyLaw_tendsto`, `spatialJointLaw_tendsto`, `spatialJointFaceLaw_integral_disintegration` |
+| **Deterministic, next order** | Two-term expansion `𝒵_N/(N^{−λ}L^{m−1}) = F + B/L + o(1/L)` with the explicit finite-part `B` (log weight, `J̇_λ`, transverse `dt/t` integrals); transverse sensitivity at `1/L`; energy correction (`c₂(0) = −(m−1)/β`); the next-log dictionary (moments, Laplace transforms, evidence ratios); finite-chart assembly at next order; the 2-D regression `F = J/4`, `B = J̇/4`; temperature scaling `F_β = β^{−λ}F_1[√βξ]`, `B_β = β^{−λ}(B_1 + (m−1) log β F_1)`. | LXXVII–LXXXI, LXXXIII, LXXXIV, LXXXVII, XCIV: `spatialPhase_twoTerm_explicit`, `spatialSecondFace`, `spatialPhase_transverse_correction`, `spatialEnergyMean_twoTerm_explicit`, `spatialMoment_twoTerm`, `assembled_twoTerm`, `spatialSecondFace_temperature_scale` |
+| **Independence** | Energy ⊥ face location under `Q̃^ξ` **iff** the face phase is `ν^ξ`-essentially constant. | LXXXV, LXXXVI, XCII: `spatialJointFaceLaw_indep_iff` |
+| **Moving phases** | `‖ξ_m − ξ₀‖_∞ → 0`, `N_m → ∞` ⇒ `(N_mK,u)_#Q^{ξ_m}_{N_m} ⇒ Q̃^{ξ₀}`; `ξ ↦ Q̃^ξ` continuous in sup norm; fixed-`N` continuity in the phase; positivity of the normaliser for every `N`. | LXXXVIII, `PhaseSpace.lean`: `movingPhaseJointLaw_tendsto`, `continuous_phaseJointLawP`, `origPhaseIntegral_pos` |
+| **Transfer machinery** (generic) | Continuous convergence (product filter) ⇔ arbitrary-index sequential convergence on metric spaces; uniform on compacts to a continuous limit ⇒ continuous convergence; **graph-law transfer** `μ_n ⇒ μ₀`, `T_n → T` continuously ⇒ `(id,T_n)_#μ_n ⇒ (id,T)_#μ₀` (tight inputs; automatic on Polish spaces); **kernel-law transfer** `μ_n ⊗ Q_n ⇒ μ₀ ⊗ Q` for weakly continuous kernels. | `ContinuousConvergence.lean`, LXXXIX, XCI: `tendsto_graphLaw_of_polish`, `tendsto_jointKernelLaw` |
+| **Random phase fields** (external input: `X_m ⇒ X` in `C(K,ℝ)`) | `(X_m, (E_{Q_{N_m}(X_m)}[g_i])_i) ⇒ (X, (E_{Q̃(X)}[g_i])_i)` for bounded continuous tests; the environment jointly with a posterior draw `μ_m(dp)Q_{N_m}(p,dz) ⇒ μ₀(dp)Q̃(p,dz)`; quenched a.s. convergence; stable convergence to the random kernel under the full-environment sampling identity. | XC, XCI, XCIII: `randomField_graphLaw_tendsto`, `randomField_posteriorDraw_tendsto`, `posteriorMap_tendsto_ae`, `randomField_stable_tendsto` |
+| **Uniform (coefficient topology)** | On balls/compacts of the weighted-ℓ¹ data space: `L(𝒵_N(x)/(N^{−λ}L^{m−1}) − F(x)) → B(x)` uniformly, `F`, `B` continuous; `m = 1`: `L(N^λ𝒵_N − F) → 0`; uniform quotient and logarithmic lemmas with a positivity floor; the data space is Polish. | XCV, u387, C, XCVIII: `tendstoUniformlyOn_spatialTwoTerm`, `tendstoUniformlyOn_nextLog_div`, `tendstoUniformlyOn_nextLog_log`, `secondCountableTopology_lp_one` |
+| **Random data, next order** (external input: `X_m ⇒ X` on the data space) | Evidence: `(X_m, L(𝒵/… − F(X_m))) ⇒ (X, B(X))`; on the admissible domain `{F > 0}`: posterior energy mean `→ c₂(X)`, posterior Laplace transforms `→ C_s(X)`, free energy `→ −B(X)/F(X)`; evidence ratios under a joint pair law; **all of these jointly** in one vector under one weak-convergence hypothesis (no tightness hypothesis: Polish domain). | XCVI, XCVII, XCIX, C, CI, **CII**: `randomNextLog_graphLaw_tendsto'`, `randomEnergyMean_graphLaw_tendsto'`, `randomLaplace_graphLaw_tendsto`, `randomFreeEnergy_graphLaw_tendsto`, `randomEvidenceRatio_graphLaw_tendsto`, `randomMixed_graphLaw_tendsto` |
+| **Physical identifications** | The statistics are the posterior quantities: `energyStat_eq` (`E_{Q_N(x)}[NK]`), `laplaceStat_eq` (`E[e^{−sNK}]`), `freeEnergyStat_eq`, `evidenceRatio_eq`; the coefficients are the explicit deterministic ones (`dataBoxCoeff_spatialFace`, `dataBoxCoeff_spatialSecondFace`, `energyCorrection_eq`); nonnegative amplitude with positive face weight ⇒ admissible (`dataLead_pos_of_nonneg_of_faceWeight_pos`). | XCV, XCVII, XCIX, C, CI, `DataTilt.lean` |
+| **Expectations** | Only with an additional uniform-integrability hypothesis on the statistic laws: `E[stat_m] → E[limit(X)]` (energy and free-energy corrections); tightness is not UI. | CIII: `integrable_and_tendsto_integral_of_uniformIntegrable`, `randomEnergyMean_expectation_tendsto` |
+
+## Non-claims (recorded in the mirror `grammar_lean.tex`)
+Next-order corrections for observables not given by coefficient families; convergence in law of the
+phase field itself (a scalar CLT is not sufficient); stable convergence relative to an environment
+σ-algebra without the sampling identity; draw-level corrections from corrections of expectations;
+process convergence in the Laplace parameter `s`; any correction after cancellation of the face
+coefficient; all-orders division; the geometric bridge.
+
+## Reading order for an author
+`SpatialPhaseLeading` → `SpatialJointConvergence` → `SpatialSecondCoeffExplicit` →
+`UniformSpatialTwoTerm` → `GraphLawTransfer` → `RandomNextLogEvidence` → `RandomMixedVector`.
