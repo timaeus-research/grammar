@@ -288,3 +288,4 @@ import Grammar.PopulationPositivity
 import Grammar.PopulationEquivalent
 import Grammar.PopulationRegression
 import Grammar.PopulationDataBridge
+import Grammar.PopulationTangential
