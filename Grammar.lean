@@ -367,3 +367,4 @@ import Grammar.TwoDimRegression
 import Grammar.SpatialIndependence
 import Grammar.SpatialIndependenceConverse
 import Grammar.SpatialNextLogDictionary
+import Grammar.SpatialJointMoving
