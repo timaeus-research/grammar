@@ -62,6 +62,7 @@ theorem analyticDatum_inr {r R : ℝ} (hr : 0 < r) (hrR : r < R) (h1r : 1 < r)
   change polyRealCoeff d r (F x) γ * (1 : ℝ) ^ (∑ i, γ i) = _
   simp [polyRealCoeff]
 
+omit [TopologicalSpace X] in
 /-- **Zero noise.** -/
 theorem xiCoord_analyticDatum {r R : ℝ} (hr : 0 < r) (hrR : r < R) (h1r : 1 < r)
     (F : X → (Fin d → ℂ) → ℂ) (hF : ∀ x, DifferentiableOn ℂ (F x) (openPolydisc d R)) (x : X) :
@@ -69,6 +70,7 @@ theorem xiCoord_analyticDatum {r R : ℝ} (hr : 0 < r) (hrR : r < R) (h1r : 1 < 
   funext γ
   exact analyticDatum_inl hr hrR h1r F hF x γ
 
+omit [TopologicalSpace X] in
 theorem etaCoord_analyticDatum {r R : ℝ} (hr : 0 < r) (hrR : r < R) (h1r : 1 < r)
     (F : X → (Fin d → ℂ) → ℂ) (hF : ∀ x, DifferentiableOn ℂ (F x) (openPolydisc d R)) (x : X) :
     etaCoord (analyticDatum hr hrR h1r F hF x) = polyRealCoeff d r (F x) := by
