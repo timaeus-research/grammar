@@ -142,7 +142,7 @@ theorem spatialJointFaceLaw_tendsto_of_uniform (n : ℕ) (h k : Fin (n + 1) → 
   have hl0 : 0 < l := ratioExp_min_pos h k hk hatt
   have hηnn' : ∀ u ∈ unitBox (n + 1), 0 ≤ η u := fun u hu =>
     hηnn u (unitBox_subset_closedCube _ hu)
-  letI : MetricSpace (ProbabilityMeasure (ℝ × (Fin (n + 1) → ℝ))) :=
+  let _ : MetricSpace (ProbabilityMeasure (ℝ × (Fin (n + 1) → ℝ))) :=
     TopologicalSpace.metrizableSpaceMetric _
   -- thresholds beyond which both normalisers are positive
   have hev : ∀ m, ∃ N₀ : ℝ, ∀ N ≥ N₀, 0 < origPhaseIntegral n h k β N 1 (ξ m) η ∧
