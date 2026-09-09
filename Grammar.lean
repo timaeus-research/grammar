@@ -295,3 +295,5 @@ import Grammar.PopulationBounded
 import Grammar.PopulationEnergy
 import Grammar.PopulationEnergyAssembled
 import Grammar.FirstNonzero
+import Grammar.FirstNonzeroAsymptotic
+import Grammar.Flatness
