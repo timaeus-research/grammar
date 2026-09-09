@@ -166,6 +166,8 @@ theorem absPredSum_eq_zero_of_pred {Q D : ℕ} (c : ℝ → ℕ → ℝ) {μ : �
   unfold absTerm
   rw [hc p hprec, zero_mul]
 
+omit [∀ I, CompactSpace (K I)] [∀ I, T2Space (K I)] [∀ I, OpensMeasurableSpace (K I)]
+  [∀ I, IsFiniteMeasure (ν I)] in
 /-- The assembled predecessor sum at the global target vanishes identically. -/
 theorem absPredSum_population_eq_zero (hk : ∀ I i, 0 < k I i) (hβ : 0 < β) (x : JointData K n)
     (hx : ∀ I v, xiCoord (x.chart I v) = 0) (lam : Fin M → ℝ)
