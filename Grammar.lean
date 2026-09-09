@@ -394,3 +394,5 @@ import Grammar.Localisation
 import Grammar.ChartPresentation
 import Grammar.NormalJet
 import Grammar.MomentFunctional
+import Grammar.TaylorMoment
+import Grammar.ChartTaylorMoment
