@@ -312,3 +312,4 @@ import Grammar.BoxCoefficientTransport
 import Grammar.ZeroNoiseContinuity
 import Grammar.IsolatedRemainder
 import Grammar.EnergyCorrectionAssembled
+import Grammar.SecondOrderQuotient
