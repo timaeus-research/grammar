@@ -456,3 +456,4 @@ import Grammar.GaussianFieldFernique
 import Grammar.ExponentComparison
 import Grammar.FiniteWeightMoment
 import Grammar.BoxMomentBound
+import Grammar.CertifiedCoreAssembly
