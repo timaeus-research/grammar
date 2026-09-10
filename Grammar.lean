@@ -474,3 +474,4 @@ import Grammar.CoordFreeTaylorMoment
 import Grammar.ChartNormalFamily
 import Grammar.StrucDualNormalFamily
 import Grammar.NormalBundleOfFrames
+import Grammar.FrameAtlasOfCoframes
