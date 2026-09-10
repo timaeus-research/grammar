@@ -1,12 +1,12 @@
-# Theorem map — the spatial-phase and random-data programme (Headlines LXXII–CVI)
+# Theorem map — the spatial-phase, random-data and geometric-bridge programmes (Headlines LXXII–CXIII)
 
 One page. What is proved, at which level of generality, under which hypotheses. Row numbers are
 the headline indices of `HEADLINES.md`; names are Lean theorems in `Grammar/`. Standing chart
 hypotheses throughout: normal-form chart `h, k` (`0 < k_i`), temperature `β > 0`, minimal ratio
 `λ = min_i (h_i+1)/(2k_i)` attained with multiplicity `m`, continuous amplitude `η ≥ 0` on the cube
-with positive face weight (or the coefficient-family analogue). The geometric bridge (resolution,
-partition of unity, standard-form identification) is external by instruction; nothing below claims
-the original-space posterior.
+with positive face weight (or the coefficient-family analogue). The geometric bridge is formalised
+conditionally on a certified resolution presentation (last row); Hironaka and the existence of the
+presentation are external by instruction; nothing below claims the original-space posterior.
 
 | Layer | Public guarantee | Where |
 |---|---|---|
@@ -22,14 +22,21 @@ the original-space posterior.
 | **Assembled models** (finite charts, common datum) | Uniform scale separation and the compact-uniform assembled two-term theorem `L((∑Z_i)/(N^{−λ}L^{m−1}) − A) → D₁ = ∑_{I₀}B_i + ∑_{I₁}F_i`; first corrections to chart allocations `L(p_{i,N} − a_i/A) → (d_iA − a_iD₁)/A²` (jointly in `i`, summing to `0`); assembled quotients and chart marks; the joint random assembled law `(X_m, (L(G−A), −L(log G − log A), (L(p_i − p_i⁰))_i)) ⇒ (X, (D₁, −D₁/A, (h_i)_i))` on the Polish admissible domain `{A > 0}`. | CIV, CV, CVI: `tendstoUniformlyOn_assembled`, `tendstoUniformlyOn_chartAlloc_pi`, `tendstoUniformlyOn_assembledQuotient`, `randomAssembled_graphLaw_tendsto` |
 | **Expectations** | Only with an additional uniform-integrability hypothesis on the statistic laws: `E[stat_m] → E[limit(X)]` (energy and free-energy corrections); tightness is not UI. | CIII: `integrable_and_tendsto_integral_of_uniformIntegrable`, `randomEnergyMean_expectation_tendsto` |
 
+| **Geometric bridge** (conditional on a certified presentation) | A localisation datum `(μ, K, F, δ)` with `Z(N) = ∫ F e^{−NK} dμ`, a finite partition of `{K < δ}` and one weighted chart presentation per piece (measure-transport certificate `Φ_*((ν⊗du)u^h c) = (μ|_{U_δ})ρ`, exact normal form `K∘Φ = βu^{2k}`, amplitude realisation `η_{x(v)} = c·F∘Φ`) give: `Z_{<δ} = ∑_I 𝒵^I` with residual `≤ (∫|F|)e^{−δN}`; **`thm:expectation_expansion`**: `Z` is a `CutoffExpansion` with the assembled canonical coefficients `gCoeff` (every cutoff `L`, remainder `K N^{−L}(1+log N)^D`), first-nonzero asymptotics and flatness; normal jets `D^rF(0)` with fibre-linear covariance (`lem:normal_deriv`), moment functionals with invariant pairing, `τ_*Ω = C(v)dν` with normalised conditional fibre measures (`eq:pushforward_local`); the exact absolutely convergent Taylor–moment form of `eq:tubular_expansion`, `Z = ∑_I ∫ ∑_r (1/r!)⟨Moment_{|μ|_{v,N},r}, D^r(F∘Φ_v)(0)⟩ dν_I + tail`, carrying the same canonical coefficients. | CVII–CXIII: `localisation_bound`, `chart_integral_eq_tanIntegral`, `AdaptedStrataData.cutoffExpansion`, `AdaptedStrataData.first_nonzero`, `normalJet_comp_linear`, `moment_pairing_invariant`, `integral_omega_eq_condFibre`, `integral_eq_tsum_moment`, `dataBoxIntegral_eq_tsum_coeff_moment`, `expectation_expansion_of_adaptedStrataData` |
 ## Non-claims (recorded in the mirror `grammar_lean.tex`)
 Next-order corrections for observables not given by coefficient families; convergence in law of the
 phase field itself (a scalar CLT is not sufficient); stable convergence relative to an environment
 σ-algebra without the sampling identity; draw-level corrections from corrections of expectations;
 process convergence in the Laplace parameter `s`; any correction after cancellation of the face
 coefficient (or of the total assembled leading coefficient); variable-temperature or sharper
-lattice-order expansions; all-orders division; the geometric bridge.
+lattice-order expansions; all-orders division. Geometric bridge: Hironaka and the existence of the
+certified presentation (charts, adapted partition of unity, exact normal form — a positive unit
+`a(v,u)u^{2k}` is not removed); global tubular neighbourhoods; canonical normal derivatives beyond
+fibre-linear covariance; an asymptotic ordering by normal Taylor degree; the fluctuation term (population
+case only); the empirical-process CLT.
 
 ## Reading order for an author
 `SpatialPhaseLeading` → `SpatialJointConvergence` → `SpatialSecondCoeffExplicit` →
-`UniformSpatialTwoTerm` → `GraphLawTransfer` → `RandomNextLogEvidence` → `RandomMixedVector`.
+`UniformSpatialTwoTerm` → `GraphLawTransfer` → `RandomNextLogEvidence` → `RandomMixedVector`;
+geometric bridge: `Localisation` → `ChartPresentation` → `NormalJet` → `MomentFunctional` →
+`TaylorMoment` → `ChartTaylorMoment` → `GeometricMainTheorem`.
