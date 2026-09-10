@@ -445,3 +445,5 @@ import Grammar.CompactBaseKernel
 import Grammar.GaussianQuartetGeneral
 import Grammar.CompactBaseFinite
 import Grammar.CompactBaseGaussian
+import Grammar.FluctuationSharpBounds
+import Grammar.GaussianPMoment
