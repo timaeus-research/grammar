@@ -430,3 +430,4 @@ import Grammar.GaussianTilted
 import Grammar.GaussianInsertion
 import Grammar.BilocalGaussian
 import Grammar.BilocalSeries
+import Grammar.BilocalDivergence
