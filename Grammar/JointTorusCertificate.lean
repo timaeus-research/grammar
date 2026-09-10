@@ -214,14 +214,16 @@ theorem assembled_expansion_of_jointTorus (ν : (I : Fin M) → Measure (K I))
     (hN0 : ∀ i, 0 ≤ Nseq i) (hN : Tendsto Nseq atTop atTop) (Zg E : ℕ → Ω → ℝ)
     (hZm : ∀ i, Measurable (Zg i))
     (hdecomp : ∀ i ω, Zg i ω = gInt ν h k β b (jointTanReconstruct Tc
-      (empiricalSum (fun i ω => jointTanObs (fun I => (C I).toTanCertificate) Tc b hb hbR hρR (X i ω)) P i ω) + A) (Nseq i) + E i ω)
+      (empiricalSum (fun i ω => jointTanObs
+        (fun I => (C I).toTanCertificate) Tc b hb hbR hρR (X i ω)) P i ω) + A) (Nseq i) + E i ω)
     (hE : TendstoInMeasure P (fun i ω => E i ω / (Nseq i ^ (-μ₀) * Real.log (Nseq i) ^ j)) atTop
       (fun _ => 0)) :
     ∃ Λ : ProbabilityMeasure (L1Seq (JointTanIdx m n)),
       TendstoInDistribution (fun i ω =>
         (Zg i ω - absPredSum (commonQ k) (commonD n)
           (gCoeff ν h k β b (jointTanReconstruct Tc
-            (empiricalSum (fun i ω => jointTanObs (fun I => (C I).toTanCertificate) Tc b hb hbR hρR (X i ω)) P i ω) + A)) μ₀ j
+            (empiricalSum (fun i ω => jointTanObs
+              (fun I => (C I).toTanCertificate) Tc b hb hbR hρR (X i ω)) P i ω) + A)) μ₀ j
             (Nseq i)) / (Nseq i ^ (-μ₀) * Real.log (Nseq i) ^ j)) atTop
         (fun z => gCoeff ν h k β b (jointTanReconstruct Tc z + A) μ₀ j) (fun _ => P)
         (Λ : Measure (L1Seq (JointTanIdx m n))) :=
