@@ -450,3 +450,5 @@ import Grammar.GaussianPMoment
 import Grammar.ScaledAssembly
 import Grammar.UniformMomentSubgaussian
 import Grammar.CompactBaseFirstMoment
+import Grammar.FluctuationSharpUpper
+import Grammar.GaussianCriticalMoment
