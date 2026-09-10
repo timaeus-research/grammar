@@ -416,3 +416,5 @@ import Grammar.LaplaceExponentBounds
 import Grammar.DominantExponentPair
 import Grammar.ResolutionTransport
 import Grammar.LocalisationObstruction
+import Grammar.HironakaAdapter
+import Grammar.OrthantReflection

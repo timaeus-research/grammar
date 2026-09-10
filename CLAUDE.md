@@ -69,8 +69,10 @@ Gate every commit on `lake build > log 2>&1; echo $?` (exit 0, last line
 
 ## Lean / Mathlib conventions
 
-- Toolchain pinned to `v4.29.0` in `lean-toolchain`; Mathlib pinned to the
-  matching `v4.29.0` tag in `lakefile.toml`.
+- Toolchain pinned to `v4.33.1` in `lean-toolchain`; Mathlib pinned to the
+  matching `v4.33.1` tag in `lakefile.toml`. `timaeus-research/hironaka` (resolution of
+  singularities, chart form) is a pinned lake dependency, consumed only through its axiom-clean
+  declarations (`Q n` stays an explicit hypothesis); `Grammar/HironakaAdapter.lean` is the adapter.
 - Use `↦` (not `=>`) for lambda arrows: `fun x ↦ ...`
 - Avoid `native_decide` — sidesteps the kernel's trust boundary. Prefer
   `decide +kernel`. We have no certificates here so this should not come up.

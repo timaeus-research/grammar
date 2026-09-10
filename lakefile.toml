@@ -13,7 +13,12 @@ maxSynthPendingDepth = 3
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.33.0"
+rev = "v4.33.1"
+
+[[require]]
+name = "hironaka"
+git = "https://github.com/timaeus-research/hironaka"
+rev = "aa4087ede4169735400431486543f1391734bcae"
 
 [[lean_lib]]
 name = "Grammar"
