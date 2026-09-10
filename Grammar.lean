@@ -443,3 +443,4 @@ import Grammar.ExactCoreAdapter
 import Grammar.CompactBaseQuantise
 import Grammar.CompactBaseKernel
 import Grammar.GaussianQuartetGeneral
+import Grammar.CompactBaseFinite
