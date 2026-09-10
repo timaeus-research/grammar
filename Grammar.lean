@@ -448,3 +448,4 @@ import Grammar.CompactBaseGaussian
 import Grammar.FluctuationSharpBounds
 import Grammar.GaussianPMoment
 import Grammar.ScaledAssembly
+import Grammar.UniformMomentSubgaussian
