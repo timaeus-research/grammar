@@ -63,7 +63,8 @@ theorem iIndepFun_finiteCoords_comp (hindep : iIndepFun Y P) (F : Finset ι) :
   hindep.comp (fun _ => finiteCoords F) fun _ => (finiteCoords F).continuous.measurable
 
 theorem identDistrib_finiteCoords_comp (hident : ∀ i, IdentDistrib (Y i) (Y 0) P P)
-    (F : Finset ι) (i : ℕ) : IdentDistrib (fun ω => finiteCoords F (Y i ω)) (fun ω => finiteCoords F (Y 0 ω)) P P :=
+    (F : Finset ι) (i : ℕ) :
+    IdentDistrib (fun ω => finiteCoords F (Y i ω)) (fun ω => finiteCoords F (Y 0 ω)) P P :=
   (hident i).comp (finiteCoords F).continuous.measurable
 
 end Projection
@@ -110,7 +111,6 @@ theorem isTightMeasureSet_empiricalLaw :
   · rintro ⟨n, rfl⟩; exact ⟨empiricalLaw hY hYm n, ⟨n, rfl⟩, rfl⟩
 
 omit [DecidableEq ι] in
-set_option maxHeartbeats 800000 in
 include hindep hident in
 /-- **Prokhorov**: a subsequence of the empirical laws converges weakly to some `ν`. -/
 theorem exists_subseq_tendsto_empiricalLaw :
@@ -219,6 +219,7 @@ theorem iSup_ofReal_min_natCast (a : ℝ) :
   refine le_iSup_of_le ⌈a⌉₊ ?_
   rw [min_eq_left (Nat.le_ceil a)]
 
+omit [Countable ι] in
 /-- **Tails pass to weak limits**: a uniform `L¹` tail bound along a weakly convergent sequence of
 laws holds for the limit. -/
 theorem lintegral_enorm_sub_truncate_le_of_tendsto {μs : ℕ → ProbabilityMeasure (L1Seq ι)}
