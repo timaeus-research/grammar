@@ -70,7 +70,9 @@ Gate every commit on `lake build > log 2>&1; echo $?` (exit 0, last line
 ## Lean / Mathlib conventions
 
 - Toolchain pinned to `v4.33.1` in `lean-toolchain`; Mathlib pinned to the
-  matching `v4.33.1` tag in `lakefile.toml`. `timaeus-research/hironaka` (resolution of
+  matching `v4.33.1` tag in `lakefile.toml`. `timaeus-research/strucdual` (ambient-Euclidean tubular
+  neighbourhoods, `StrucDual/Geometry`, Mathlib v4.33.1) is a pinned lake dependency consumed by
+  `Grammar/StrucDualNormalFamily.lean`; `timaeus-research/hironaka` (resolution of
   singularities, chart form) is a pinned lake dependency, consumed only through its axiom-clean
   declarations (`Q n` stays an explicit hypothesis); `Grammar/HironakaAdapter.lean` is the adapter.
 - Use `↦` (not `=>`) for lambda arrows: `fun x ↦ ...`
