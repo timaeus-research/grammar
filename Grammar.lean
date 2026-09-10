@@ -410,3 +410,5 @@ import Grammar.PolyCoeffMeasurable
 import Grammar.TorusCertificate
 import Grammar.AnalyticCertificate
 import Grammar.JointSample
+import Grammar.TangentialReconstruct
+import Grammar.TangentialCertificate
