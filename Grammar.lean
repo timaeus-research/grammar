@@ -401,3 +401,4 @@ import Grammar.L1Seq
 import Grammar.L1SeqUpgrade
 import Grammar.CLTFiniteDim
 import Grammar.EmpiricalTail
+import Grammar.L1SeqTight
