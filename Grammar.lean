@@ -452,3 +452,4 @@ import Grammar.UniformMomentSubgaussian
 import Grammar.CompactBaseFirstMoment
 import Grammar.FluctuationSharpUpper
 import Grammar.GaussianCriticalMoment
+import Grammar.GaussianFieldFernique
