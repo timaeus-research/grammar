@@ -23,7 +23,7 @@ presentation are external by instruction; nothing below claims the original-spac
 | **Expectations** | Only with an additional uniform-integrability hypothesis on the statistic laws: `E[stat_m] → E[limit(X)]` (energy and free-energy corrections); tightness is not UI. | CIII: `integrable_and_tendsto_integral_of_uniformIntegrable`, `randomEnergyMean_expectation_tendsto` |
 
 | **Geometric bridge** (conditional on a certified presentation) | A localisation datum `(μ, K, F, δ)` with `Z(N) = ∫ F e^{−NK} dμ`, a finite partition of `{K < δ}` and one weighted chart presentation per piece (measure-transport certificate `Φ_*((ν⊗du)u^h c) = (μ|_{U_δ})ρ`, exact normal form `K∘Φ = βu^{2k}`, amplitude realisation `η_{x(v)} = c·F∘Φ`) give: `Z_{<δ} = ∑_I 𝒵^I` with residual `≤ (∫|F|)e^{−δN}`; **`thm:expectation_expansion`**: `Z` is a `CutoffExpansion` with the assembled canonical coefficients `gCoeff` (every cutoff `L`, remainder `K N^{−L}(1+log N)^D`), first-nonzero asymptotics and flatness; normal jets `D^rF(0)` with fibre-linear covariance (`lem:normal_deriv`), moment functionals with invariant pairing, `τ_*Ω = C(v)dν` with normalised conditional fibre measures (`eq:pushforward_local`); the exact absolutely convergent Taylor–moment form of `eq:tubular_expansion`, `Z = ∑_I ∫ ∑_r (1/r!)⟨Moment_{|μ|_{v,N},r}, D^r(F∘Φ_v)(0)⟩ dν_I + tail`, carrying the same canonical coefficients. | CVII–CXIII: `localisation_bound`, `chart_integral_eq_tanIntegral`, `AdaptedStrataData.cutoffExpansion`, `AdaptedStrataData.first_nonzero`, `normalJet_comp_linear`, `moment_pairing_invariant`, `integral_omega_eq_condFibre`, `integral_eq_tsum_moment`, `dataBoxIntegral_eq_tsum_coeff_moment`, `expectation_expansion_of_adaptedStrataData` |
-| **Empirical-process CLT** (chart level; external input: an i.i.d. sampling law and the chart moment certificate) | The sample datum  has the paper's empirical Taylor coefficients  as phase coordinates; under  (implied by a Cauchy envelope , ) the **CLT in ** holds:  with centred Gaussian finite marginals of the sample covariance and tails  (finite-dimensional Cramér–Wold CLT + uniform empirical tails +  upgrade + Gaussian limit by tightness/Prokhorov); hence ** with the data premise discharged**: canonical coefficients and ordered normalised remainders at the sample datum converge in distribution to those at the Gaussian limit. | CXIV–CXVIII (+ u409, u410, u412, u413): , , , , , , ,  |
+| **Empirical-process CLT** (chart level; external input: an i.i.d. sampling law and the chart moment certificate) | The sample datum `n^{−1/2}∑_{i<n}(Y_i − EY_0) + A` has the paper's empirical Taylor coefficients `ξ_n` as phase coordinates; under `∑_γ b^{|γ|}‖c_γ(X)‖_{L²} < ∞` (implied by a Cauchy envelope `‖c_γ(X)‖_{L²} ≤ MR^{−|γ|}`, `b < R`) the **CLT in `ℓ¹`** holds: `S_n ⇒ ν` with centred Gaussian finite marginals of the sample covariance and tails `∫‖x − T_Fx‖dν ≤ ∑_{j∉F}σ_j` (finite-dimensional Cramér–Wold CLT + uniform empirical tails + `ℓ¹` upgrade + Gaussian limit by tightness/Prokhorov); hence **`thm:strataempiricalexpansion` with the data premise discharged**: canonical coefficients and ordered normalised remainders at the sample datum converge in distribution to those at the Gaussian limit. | CXIV–CXVIII (+ u409, u410, u412, u413): `tendstoInDistribution_normalisedSum_gaussian`, `tendstoInDistribution_of_finiteCoords`, `lintegral_enorm_sub_truncate_empirical_le`, `isTightMeasureSet_of_tails`, `exists_gaussianLimit`, `clt_l1`, `sampleDatum_tendstoInDistribution`, `sample_stochastic_expansion` |
 ## Non-claims (recorded in the mirror `grammar_lean.tex`)
 Next-order corrections for observables not given by coefficient families; convergence in law of the
 phase field itself (a scalar CLT is not sufficient); stable convergence relative to an environment
@@ -35,11 +35,13 @@ certified presentation (charts, adapted partition of unity, exact normal form �
 `a(v,u)u^{2k}` is not removed); global tubular neighbourhoods; canonical normal derivatives beyond
 fibre-linear covariance; an asymptotic ordering by normal Taylor degree; the fluctuation term (population
 case only). Empirical CLT: the derivation of the chart moment certificate from Hypothesis I for the
-resolved chart function; an  CLT under  alone ( is not of type 2); the joint-chart
-statement; the identification .
+resolved chart function; an `ℓ¹` CLT under `MemLp Y 2` alone (`ℓ¹` is not of type 2); the joint-chart
+statement; the identification `N = n`.
 
 ## Reading order for an author
 `SpatialPhaseLeading` → `SpatialJointConvergence` → `SpatialSecondCoeffExplicit` →
 `UniformSpatialTwoTerm` → `GraphLawTransfer` → `RandomNextLogEvidence` → `RandomMixedVector`;
 geometric bridge: `Localisation` → `ChartPresentation` → `NormalJet` → `MomentFunctional` →
-`TaylorMoment` → `ChartTaylorMoment` → `GeometricMainTheorem`.
+`TaylorMoment` → `ChartTaylorMoment` → `GeometricMainTheorem`; empirical CLT: `L1Seq` →
+`L1SeqUpgrade` → `CLTFiniteDim` → `EmpiricalTail` → `L1SeqTight` → `L1SeqGaussianLimit` →
+`L1SeqCLT` → `SampleDatum` → `SampleExpansion`.

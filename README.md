@@ -12,10 +12,13 @@ in every positive dimension (under the paper's holomorphic-polydisc hypothesis a
 with the paper's coefficient data `Re(∂^γ F(0)/γ!)`), the population expansion of §3
 with its first-nonzero selection and flatness, the spatial-phase and random-data
 programme (leading and next-logarithmic order, posterior laws, random fields,
-uniform finite-chart assembly), and the geometric bridge to the paper's main theorem
-`thm:expectation_expansion`, conditional on a certified resolution presentation.
+uniform finite-chart assembly), the geometric bridge to the paper's main theorem
+`thm:expectation_expansion`, conditional on a certified resolution presentation, and
+the central limit theorem in `ℓ¹` for the empirical fluctuation data that discharges
+the data premise of the stochastic theorem `thm:strataempiricalexpansion` at chart
+level under a chart moment certificate.
 
-The library `Grammar` has 402 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 408 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -27,8 +30,8 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
-| CXVIII | **stochastic expansion with the data premise discharged**: for an i.i.d. sample whose chart Taylor coefficients satisfy the chart moment certificate, the canonical coefficients and ordered normalised remainders at the sample datum converge in distribution to those at the  Gaussian limit |  () |
-| CXIV–CXVII | **the CLT in ** under summable coordinate  norms (finite-dimensional Cramér–Wold CLT with the explicit Gaussian target, uniform empirical tails, compactness and tightness in , Gaussian limit by Prokhorov, the  upgrade), and the sample datum with the paper's empirical Taylor coefficients | , , , ,  (),  |
+| CXVIII | **stochastic expansion with the data premise discharged**: for an i.i.d. sample whose chart Taylor coefficients satisfy the chart moment certificate, the canonical coefficients and ordered normalised remainders at the sample datum converge in distribution to those at the `ℓ¹` Gaussian limit | `Grammar/SampleExpansion.lean` (`sample_stochastic_expansion`) |
+| CXIV–CXVII | **the CLT in `ℓ¹`** under summable coordinate `L²` norms (finite-dimensional Cramér–Wold CLT with the explicit Gaussian target, uniform empirical tails, compactness and tightness in `ℓ¹`, Gaussian limit by Prokhorov, the `ℓ¹` upgrade), and the sample datum with the paper's empirical Taylor coefficients | `Grammar/CLTFiniteDim.lean`, `EmpiricalTail.lean`, `L1SeqTight.lean`, `L1SeqGaussianLimit.lean`, `L1SeqCLT.lean` (`clt_l1`), `SampleDatum.lean` |
 | CXIII | **conditional geometric main theorem**: the resolved population integral `∫ F e^{−NK} dμ` of a localisation datum with adapted strata data is a cutoff expansion with the assembled canonical coefficients (`thm:expectation_expansion`), with an exponentially small residual, the Taylor–moment form of the tubular expansion, and fibre-linear invariance of the moment–jet contractions | `Grammar/GeometricMainTheorem.lean` (`expectation_expansion_of_adaptedStrataData`) |
 | CVII–CXII | measured localisation, weighted chart presentations with measure-transport certificates (`chart_integral_eq_tanIntegral`), normal jets and `lem:normal_deriv`, moment functionals and `eq:pushforward_local`, the absolutely convergent Taylor–moment representation and `eq:tubular_expansion` | `Grammar/Localisation.lean`, `ChartPresentation.lean`, `NormalJet.lean`, `MomentFunctional.lean`, `TaylorMoment.lean`, `ChartTaylorMoment.lean` |
 | CIV–CVI | uniform finite-chart assembly at the next logarithmic order, chart-allocation corrections, the joint random assembled law | `Grammar/UniformAssembly.lean`, `ChartAllocation.lean`, `RandomAssembled.lean` |
