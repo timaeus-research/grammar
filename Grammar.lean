@@ -426,3 +426,5 @@ import Grammar.GaussianQuartet
 import Grammar.SamplingIdentity
 import Grammar.DivisorVariance
 import Grammar.AnnealedIdentity
+import Grammar.GaussianTilted
+import Grammar.GaussianInsertion
