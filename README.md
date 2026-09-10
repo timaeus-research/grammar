@@ -27,6 +27,8 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CXVIII | **stochastic expansion with the data premise discharged**: for an i.i.d. sample whose chart Taylor coefficients satisfy the chart moment certificate, the canonical coefficients and ordered normalised remainders at the sample datum converge in distribution to those at the  Gaussian limit |  () |
+| CXIV–CXVII | **the CLT in ** under summable coordinate  norms (finite-dimensional Cramér–Wold CLT with the explicit Gaussian target, uniform empirical tails, compactness and tightness in , Gaussian limit by Prokhorov, the  upgrade), and the sample datum with the paper's empirical Taylor coefficients | , , , ,  (),  |
 | CXIII | **conditional geometric main theorem**: the resolved population integral `∫ F e^{−NK} dμ` of a localisation datum with adapted strata data is a cutoff expansion with the assembled canonical coefficients (`thm:expectation_expansion`), with an exponentially small residual, the Taylor–moment form of the tubular expansion, and fibre-linear invariance of the moment–jet contractions | `Grammar/GeometricMainTheorem.lean` (`expectation_expansion_of_adaptedStrataData`) |
 | CVII–CXII | measured localisation, weighted chart presentations with measure-transport certificates (`chart_integral_eq_tanIntegral`), normal jets and `lem:normal_deriv`, moment functionals and `eq:pushforward_local`, the absolutely convergent Taylor–moment representation and `eq:tubular_expansion` | `Grammar/Localisation.lean`, `ChartPresentation.lean`, `NormalJet.lean`, `MomentFunctional.lean`, `TaylorMoment.lean`, `ChartTaylorMoment.lean` |
 | CIV–CVI | uniform finite-chart assembly at the next logarithmic order, chart-allocation corrections, the joint random assembled law | `Grammar/UniformAssembly.lean`, `ChartAllocation.lean`, `RandomAssembled.lean` |
@@ -40,15 +42,10 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 | XX–XXI | normal-crossing model `N(x₀x₁,1)`: posterior MGF of `√n x₀x₁` converges to `e^{zθ+θ²/2}`; leading Mellin (zeta) coefficient as a real-axis Abelian limit | `Grammar/NormalCrossingModel.lean`, `NormalCrossingLaw.lean`, `MellinCoefficient.lean` |
 | I–XIX | fluctuation ladder, state densities, chart assembly, stochastic posterior quotients | see `HEADLINES.md` |
 
-In progress (Astra #53): the central limit theorem in `ℓ¹` for the empirical fluctuation
-data — `ℓ¹` coordinate infrastructure and the summable-coordinate-`L²` moment hypothesis
-(`Grammar/L1Seq.lean`), and the `ℓ¹` upgrade from finite-dimensional convergence with
-uniform tails (`Grammar/L1SeqUpgrade.lean`).
-
 What is **not** formalised: resolution of singularities (Hironaka) and the existence of
-the certified chart presentation and adapted partition of unity; the empirical-process
-CLT bridge from the paper's Hypothesis I to the data-space convergence assumed by the
-stochastic theorems (in progress); all-orders division of asymptotic expansions. The
+the certified chart presentation and adapted partition of unity; the derivation of the
+chart moment certificate from the paper's Hypothesis I for the resolved chart function;
+the joint-chart stochastic statement; all-orders division of asymptotic expansions. The
 mirror `grammar_lean.tex` (Overleaf) records every formalised statement with a dot and
 the non-claims in Lean remarks.
 
