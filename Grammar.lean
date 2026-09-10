@@ -444,3 +444,4 @@ import Grammar.CompactBaseQuantise
 import Grammar.CompactBaseKernel
 import Grammar.GaussianQuartetGeneral
 import Grammar.CompactBaseFinite
+import Grammar.CompactBaseGaussian

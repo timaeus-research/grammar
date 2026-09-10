@@ -260,22 +260,15 @@ theorem integral_compactH_map_eq :
     Γ.integral_eval _ A hA (continuous_quartetVgen hβ hlam hw _).measurable, ← hAB]
   exact integral_quartetH_eq_gen hβ hlam hw A
 
-/-- **The interpolation identity on a quantised base**:
-`E log D_{ρ∘q⁻¹}(G) = log D(0) + (β²/2) ∫₀¹ E V_{ρ∘q⁻¹}(√s G) ds`. -/
-theorem integral_log_compactD_map_eq :
-    ∫ ω, Real.log (compactD β lam (ρ.map q) (Γ.G ω)) ∂P =
-      Real.log (β ^ (-lam) * Real.Gamma lam * ρ.real univ) +
-        ∫ s in (0 : ℝ)..1, β ^ 2 / 2 *
-          ∫ ω, compactV (ρ.map q) β lam 𝒞 (Real.sqrt s • Γ.G ω : C(K, ℝ)) ∂P := by
+/-- `E V_{ρ∘q⁻¹}(√s G)` is the finite `interpVgen` of the law matrix. -/
+theorem integral_compactV_map_smul_eq {n : ℕ}
+    (A : Matrix (Fin (posAtoms ρ hfin).card) (Fin (n + 1)) ℝ)
+    (hAB : A * A.transpose = 𝒞.kernelMatrix (atomPt ρ hfin))
+    (hA : P.map (fun ω => fun i => Γ.G ω (atomPt ρ hfin i)) = gaussianVector A) (s : ℝ) :
+    ∫ ω, compactV (ρ.map q) β lam 𝒞 (Real.sqrt s • Γ.G ω : C(K, ℝ)) ∂P =
+      interpVgen β lam (atomWt ρ hfin) A s := by
   have := nonempty_atoms ρ hq hfin hρ
-  obtain ⟨n, A, hAB, hA⟩ := Γ.law _ (atomPt ρ hfin)
   have hw := atomWt_pos ρ hfin
-  simp_rw [compactD_map_eq ρ hβ hlam (Γ.G _) hq hfin]
-  rw [Γ.integral_eval _ A hA (measurable_log_quartetD hβ hlam), integral_log_quartetD_eq_gen A hβ
-    hlam hw, sum_atomWt ρ hq hfin]
-  congr 1
-  refine intervalIntegral.integral_congr fun s _ => ?_
-  congr 1
   have hV : ∀ ω, compactV (ρ.map q) β lam 𝒞 (Real.sqrt s • Γ.G ω : C(K, ℝ)) =
       quartetVgen β lam (atomWt ρ hfin) (A * A.transpose)
         (Real.sqrt s • fun i => Γ.G ω (atomPt ρ hfin i)) := by
@@ -290,6 +283,30 @@ theorem integral_log_compactD_map_eq :
   rw [Γ.integral_eval _ A hA hsm, integral_gaussianVector _ _ hsm]
   unfold interpVgen
   rfl
+
+/-- `s ↦ E V_{ρ∘q⁻¹}(√s G)` is continuous on `[0,1]`. -/
+theorem continuousOn_integral_compactV_map_smul :
+    ContinuousOn (fun s => ∫ ω, compactV (ρ.map q) β lam 𝒞 (Real.sqrt s • Γ.G ω : C(K, ℝ)) ∂P)
+      (Icc 0 1) := by
+  have := nonempty_atoms ρ hq hfin hρ
+  obtain ⟨n, A, hAB, hA⟩ := Γ.law _ (atomPt ρ hfin)
+  simp_rw [Γ.integral_compactV_map_smul_eq ρ hβ hlam hρ hq hfin A hAB hA]
+  exact continuousOn_interpVgen A hβ hlam (atomWt_pos ρ hfin)
+
+/-- **The interpolation identity on a quantised base**:
+`E log D_{ρ∘q⁻¹}(G) = log D(0) + (β²/2) ∫₀¹ E V_{ρ∘q⁻¹}(√s G) ds`. -/
+theorem integral_log_compactD_map_eq :
+    ∫ ω, Real.log (compactD β lam (ρ.map q) (Γ.G ω)) ∂P =
+      Real.log (β ^ (-lam) * Real.Gamma lam * ρ.real univ) +
+        ∫ s in (0 : ℝ)..1, β ^ 2 / 2 *
+          ∫ ω, compactV (ρ.map q) β lam 𝒞 (Real.sqrt s • Γ.G ω : C(K, ℝ)) ∂P := by
+  have := nonempty_atoms ρ hq hfin hρ
+  obtain ⟨n, A, hAB, hA⟩ := Γ.law _ (atomPt ρ hfin)
+  have hw := atomWt_pos ρ hfin
+  simp_rw [compactD_map_eq ρ hβ hlam (Γ.G _) hq hfin,
+    Γ.integral_compactV_map_smul_eq ρ hβ hlam hρ hq hfin A hAB hA]
+  rw [Γ.integral_eval _ A hA (measurable_log_quartetD hβ hlam), integral_log_quartetD_eq_gen A hβ
+    hlam hw, sum_atomWt ρ hq hfin]
 
 /-- **`E log D_{ρ∘q⁻¹}(G) ≥ log D(0)`**. -/
 theorem log_compactD_zero_le_integral_map :
