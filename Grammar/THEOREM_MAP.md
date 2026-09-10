@@ -40,8 +40,12 @@ certified presentation (charts, adapted partition of unity, exact normal form �
 fibre-linear covariance; an asymptotic ordering by normal Taylor degree; the fluctuation term (population
 case only). Empirical CLT: an `ℓ¹` CLT under `MemLp Y 2` alone (`ℓ¹` is not of type 2); the existence
 of the complexified resolution presentation (torus inclusion in the Hypothesis-I neighbourhood, analytic
-divisibility, the joint product-polydisc Cauchy estimate behind the tangential certificates); analytic units and a compatible localisation for the exact bridge from hironaka's chart form (its record has continuous units and a chart cover, not a chart-exact analytic partition); the tangential/normal split; the identification
-`N = n`.
+divisibility; the joint product-polydisc Cauchy estimate is now a theorem GIVEN a joint torus envelope — CXXXVII — but the envelope itself
+comes from the presentation); analytic units and a compatible localisation for the exact bridge from hironaka's chart form (its record has
+continuous units and a chart cover, not a chart-exact analytic partition); the identification of a chart core with a weighted box in
+adapted coordinates carrying certified data (the cover assembly CXXXVIII stops at the pulled-back core integrals); an exponentially small
+*expected* remainder (the pathwise bound `sup|ξ_n| ≤ ½√(nκ)` is not a tail estimate on the exceptional datasets). Landed since this list
+was first written: the tangential/normal split (CXXXVI), the identification `N = n` (CXXVII), the empirical exponential remainder (CXXXV).
 
 ## Reading order for an author
 `SpatialPhaseLeading` → `SpatialJointConvergence` → `SpatialSecondCoeffExplicit` →
