@@ -469,3 +469,4 @@ import Grammar.NormalTaylorForm
 import Grammar.ConormalSplitting
 import Grammar.SymmetricWeights
 import Grammar.NormalFibreMoment
+import Grammar.WeightedFibreIntegration
