@@ -115,12 +115,13 @@ theorem integrableOn_popBoxIntegrand (α N' : ℝ) :
     (unitBox_subset_closedCube _)
 
 /-- **Uniform `p`-th moment of the scaled box integral from the population mass at the reduced
-temperature**: with `‖x ω‖ ≤ M`, the pointwise exponential-moment bound on the phase field over
+temperature**: with amplitude mass `mass (etaCoord (x ω)) ≤ M` (e.g. `‖x ω‖ ≤ M`), the
+pointwise exponential-moment bound on the phase field over
 the unit box, `p ≥ 1`, `pβc < 2` and `α = β(1 − pβc/2)`,
 `E|A · dataBoxIntegral(β,N,b)(x)|^p ≤ (M · A b^{|h|+d} · popBoxMass α (N b^{2|k|}))^p`. -/
 theorem moment_scaled_dataBoxIntegral_le {β c p A M N b : ℝ} (hβ : 0 < β) (hp : 1 ≤ p)
     (hc : p * β * c < 2) (hA : 0 ≤ A) (hM : 0 ≤ M) (hN : 0 ≤ N) (hb : 0 < b)
-    (x : Ω → DataSpace (n + 1)) (hx : Measurable x) (hxM : ∀ ω, ‖x ω‖ ≤ M)
+    (x : Ω → DataSpace (n + 1)) (hx : Measurable x) (hxM : ∀ ω, mass (etaCoord (x ω)) ≤ M)
     (hmgf : ∀ u ∈ unitBox (n + 1), ∀ t : ℝ, 0 ≤ t →
       ∫⁻ ω, ENNReal.ofReal (Real.exp (t * evalF (xiCoord (x ω)) u)) ∂P ≤
         ENNReal.ofReal (Real.exp (c * t ^ 2 / 2))) :
@@ -171,8 +172,7 @@ theorem moment_scaled_dataBoxIntegral_le {β c p A M N b : ℝ} (hβ : 0 < β) (
     intro ω
     rw [hμ]
     refine ae_restrict_of_forall_mem (measurableSet_unitBox _) fun u hu => ?_
-    exact (abs_evalF_le (absSummable_etaCoord (x ω)) (hbox u hu)).trans
-      ((mass_etaCoord_le _).trans (hxM ω))
+    exact (abs_evalF_le (absSummable_etaCoord (x ω)) (hbox u hu)).trans (hxM ω)
   have hξm : Measurable (Function.uncurry ξ) := measurable_uncurry_xiField hx
   have hmgf' : ∀ᵐ u ∂μ, ∀ t : ℝ, 0 ≤ t →
       ∫⁻ ω, ENNReal.ofReal (Real.exp (t * ξ ω u)) ∂P ≤
@@ -195,7 +195,7 @@ reduced temperature, `sup_{n ≥ n₀} E|A_n Z_n|^p ≤ (M b^{|h|+d} C_α)^p`. -
 theorem uniform_moment_scaled_dataBoxIntegral {β c p M b : ℝ} (hβ : 0 < β) (hp : 1 ≤ p)
     (hc : p * β * c < 2) (hM : 0 ≤ M) (hb : 0 < b) {A Nn : ℕ → ℝ} (hA : ∀ m, 0 ≤ A m)
     (hNn : ∀ m, 0 ≤ Nn m) (x : ℕ → Ω → DataSpace (n + 1)) (hx : ∀ m, Measurable (x m))
-    (hxM : ∀ m ω, ‖x m ω‖ ≤ M)
+    (hxM : ∀ m ω, mass (etaCoord (x m ω)) ≤ M)
     (hmgf : ∀ m, ∀ u ∈ unitBox (n + 1), ∀ t : ℝ, 0 ≤ t →
       ∫⁻ ω, ENNReal.ofReal (Real.exp (t * evalF (xiCoord (x m ω)) u)) ∂P ≤
         ENNReal.ofReal (Real.exp (c * t ^ 2 / 2)))

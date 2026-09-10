@@ -101,7 +101,7 @@ reduced temperature. -/
 theorem uniform_moment_coreSum {β c p M : ℝ} (hβ : 0 < β) (hp : 1 ≤ p) (hc : p * β * c < 2)
     (hM : 0 ≤ M) (hb : ∀ j, 0 < b j) {A Nn : ℕ → ℝ} (hA : ∀ m, 0 ≤ A m) (hNn : ∀ m, 0 ≤ Nn m)
     (x : Fin J → ℕ → Ω → DataSpace (n + 1)) (hx : ∀ j m, Measurable (x j m))
-    (hxM : ∀ j m ω, ‖x j m ω‖ ≤ M)
+    (hxM : ∀ j m ω, CoeffFamily.mass (etaCoord (x j m ω)) ≤ M)
     (hmgf : ∀ j m, ∀ u ∈ unitBox (n + 1), ∀ t : ℝ, 0 ≤ t →
       ∫⁻ ω, ENNReal.ofReal (Real.exp (t * CoeffFamily.evalF (xiCoord (x j m ω)) u)) ∂P ≤
         ENNReal.ofReal (Real.exp (c * t ^ 2 / 2)))
@@ -188,7 +188,7 @@ theorem tendsto_integral_scaled_assembly_of_certified_subgaussian_cores {β c p 
     (hβ : 0 < β) (hp : 1 < p) (hc : p * β * c < 2) (hM : 0 ≤ M) (hb : ∀ j, 0 < b j)
     {A Nn : ℕ → ℝ} (hA : ∀ m, 0 ≤ A m) (hNn : ∀ m, 0 ≤ Nn m)
     (x : Fin J → ℕ → Ω → DataSpace (n + 1)) (hx : ∀ j m, Measurable (x j m))
-    (hxM : ∀ j m ω, ‖x j m ω‖ ≤ M)
+    (hxM : ∀ j m ω, CoeffFamily.mass (etaCoord (x j m ω)) ≤ M)
     (hmgf : ∀ j m, ∀ u ∈ unitBox (n + 1), ∀ t : ℝ, 0 ≤ t →
       ∫⁻ ω, ENNReal.ofReal (Real.exp (t * CoeffFamily.evalF (xiCoord (x j m ω)) u)) ∂P ≤
         ENNReal.ofReal (Real.exp (c * t ^ 2 / 2)))

@@ -460,3 +460,4 @@ import Grammar.CertifiedCoreAssembly
 import Grammar.BilocalCriticalBoundary
 import Grammar.GaussianLinearCombination
 import Grammar.PopulationBoundDischarge
+import Grammar.SampleDatumMGF

@@ -161,7 +161,8 @@ theorem uniform_moment_scaled_dataBoxIntegral_of_dominated (n : ℕ) (h k : Fin 
     (hM : 0 ≤ M) (hb : 0 < b) {lam : ℝ} {mult : ℕ}
     (hdom : lam < minRatio h k ∨
       (lam = minRatio h k ∧ multCount (ratioExp h k) (minRatio h k) - 1 ≤ mult - 1))
-    (x : ℕ → Ω → DataSpace (n + 1)) (hx : ∀ m, Measurable (x m)) (hxM : ∀ m ω, ‖x m ω‖ ≤ M)
+    (x : ℕ → Ω → DataSpace (n + 1)) (hx : ∀ m, Measurable (x m))
+    (hxM : ∀ m ω, CoeffFamily.mass (etaCoord (x m ω)) ≤ M)
     (hmgf : ∀ m, ∀ u ∈ unitBox (n + 1), ∀ t : ℝ, 0 ≤ t →
       ∫⁻ ω, ENNReal.ofReal (Real.exp (t * CoeffFamily.evalF (xiCoord (x m ω)) u)) ∂P ≤
         ENNReal.ofReal (Real.exp (c * t ^ 2 / 2))) :
@@ -205,7 +206,7 @@ theorem tendsto_integral_scaled_assembly_of_dominated_cores (hk : ∀ j i, 0 < k
       (lam = minRatio (h j) (k j) ∧
         multCount (ratioExp (h j) (k j)) (minRatio (h j) (k j)) - 1 ≤ mult - 1))
     (x : Fin J → ℕ → Ω → DataSpace (n + 1)) (hx : ∀ j m, Measurable (x j m))
-    (hxM : ∀ j m ω, ‖x j m ω‖ ≤ M)
+    (hxM : ∀ j m ω, CoeffFamily.mass (etaCoord (x j m ω)) ≤ M)
     (hmgf : ∀ j m, ∀ u ∈ unitBox (n + 1), ∀ t : ℝ, 0 ≤ t →
       ∫⁻ ω, ENNReal.ofReal (Real.exp (t * CoeffFamily.evalF (xiCoord (x j m ω)) u)) ∂P ≤
         ENNReal.ofReal (Real.exp (c * t ^ 2 / 2)))
