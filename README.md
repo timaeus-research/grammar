@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 436 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 438 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CXXXV–CXXXVI | **paper-facing bookkeeping after Astra #57**: the positive-gap remainder for the empirical phase (`−βNφ² + β√Nφξ ≤ −βNκ/2` when `K = φ² ≥ κ` and `sup|ξ| ≤ ½√(Nκ)`; `‖∫_S a e^{phase}‖ ≤ e^{−βNκ/2}∫_S g`, also for the sampling exponent via `N = n`) and the tangential/normal split of the weighted box (product box measure along `piEquivPiSubtypeProd`, phase depends only on normal coordinates, `∫ u^h e^{…} = (∏_{i∈T} b^{hᵢ+1}/(hᵢ+1)) ∫_{(0,b]^N} w^h e^{…}`) | `Grammar/EmpiricalExpGap.lean` (`norm_setIntegral_empirical_exp_gap_le`), `BoxTangentialSplit.lean` (`boxIntegralFin_split_eq`) |
 | CXXXIV | **the Gaussian-limit denominator and the dataset expectation bridge** (companion note): `E D(G) = Γ(λ)(βδ)^{−λ}∑ρᵢ` with integrability for `δ = 1 − βc/2 > 0`, `E₊D(G) = +∞` for `βc ≥ 2`; if `X_n ⇒ Z` with `sup_n E|X_n|^p ≤ M`, `p > 1`, then `E X_n → E Z` (clipping), and if `X_n ≥ 0`, `X_n ⇒ Z`, `E₊Z = +∞` then `E₊X_n → +∞`; applied to `D(G)` on both sides of the threshold | `Grammar/GaussianDenominator.lean` (`integral_quartetD`, `lintegral_quartetD_eq_top`), `ExpectationBridge.lean` (`tendsto_integral_of_tendstoInDistribution_of_moment`, `tendsto_lintegral_top_of_tendstoInDistribution`) |
 | CXXXIII | **covariance interpolation for the expected log-evidence** (companion note): with `L(s) = E log D(√s G)`, `L` is continuous on `[0,1]`, differentiable on `(0,1)` with `L'(s) = (β²/2) E[V_s(G)] ≥ 0` (differentiation under the integral with polynomial domination; Gaussian integration by parts at scale `√s`), hence `E log D(G) = log(β^{−λ}Γ(λ)∑ρᵢ) + (β²/2)∫₀¹ E[V_s(G)] ds ≥ log D(0)` for every `β > 0` | `Grammar/CovarianceInterpolation.lean` (`integral_log_quartetD_eq`, `hasDerivAt_interpL`, `log_quartetD_zero_le_integral`) |
 | CXXX–CXXXII | **the bilocal two-point function** (companion note): in `ℝ≥0∞`, `E₊[S_λ(G_i)S_λ(G_j)] = ∫₀^∞∫₀^∞ t^{λ−1}s^{λ−1} e^{−at−bs+h√(ts)}` with `a = β(1−βB_ii/2)`, `b = β(1−βB_jj/2)`, `h = β²B_ij`; finite for `a,b > 0`, `h < 2√(ab)` (AM–GM), infinite for `h > 2√(ab)` (cone around the ray `s = (a/b)t`); for `|h| < 2√(ab)` the absolutely convergent cross-pairing series `E[S_λ(G_i)S_λ(G_j)] = Σ_r (h^r/r!) Γ(λ+r/2)² (ab)^{−(λ+r/2)}`, the covariance as `Σ_{r≥1}` and as `∬ t^{λ−1}s^{λ−1}e^{−at−bs}(e^{h√(ts)} − 1)` | `Grammar/BilocalGaussian.lean` (`lintegral_fluctuation_mul_fluctuation`, `lintegral_bilocalIntegrand_lt_top`), `BilocalSeries.lean` (`integral_fluctuation_mul_fluctuation_eq_tsum`, `summable_bilocalCoeff`), `BilocalDivergence.lean` (`lintegral_bilocalIntegrand_eq_top`) |
