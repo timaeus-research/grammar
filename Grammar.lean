@@ -447,3 +447,4 @@ import Grammar.CompactBaseFinite
 import Grammar.CompactBaseGaussian
 import Grammar.FluctuationSharpBounds
 import Grammar.GaussianPMoment
+import Grammar.ScaledAssembly
