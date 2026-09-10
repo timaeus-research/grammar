@@ -468,3 +468,4 @@ import Grammar.LeadingCoeffGaussianMoment
 import Grammar.NormalTaylorForm
 import Grammar.ConormalSplitting
 import Grammar.SymmetricWeights
+import Grammar.NormalFibreMoment
