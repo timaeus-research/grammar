@@ -432,3 +432,5 @@ import Grammar.BilocalGaussian
 import Grammar.BilocalSeries
 import Grammar.BilocalDivergence
 import Grammar.CovarianceInterpolation
+import Grammar.GaussianDenominator
+import Grammar.ExpectationBridge
