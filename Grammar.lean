@@ -418,3 +418,8 @@ import Grammar.ResolutionTransport
 import Grammar.LocalisationObstruction
 import Grammar.HironakaAdapter
 import Grammar.OrthantReflection
+import Grammar.FluctuationSelfNormalised
+import Grammar.GaussianStein
+import Grammar.GaussianSteinVector
+import Grammar.GaussianQuartetDet
+import Grammar.GaussianQuartet
