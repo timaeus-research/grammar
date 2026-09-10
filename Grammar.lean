@@ -437,3 +437,4 @@ import Grammar.ExpectationBridge
 import Grammar.EmpiricalExpGap
 import Grammar.BoxTangentialSplit
 import Grammar.JointTorusCertificate
+import Grammar.CoverAssembly
