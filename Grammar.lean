@@ -442,3 +442,4 @@ import Grammar.AnnealedRemainder
 import Grammar.ExactCoreAdapter
 import Grammar.CompactBaseQuantise
 import Grammar.CompactBaseKernel
+import Grammar.GaussianQuartetGeneral
