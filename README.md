@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 414 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 418 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CXXIII–CXXIV | **what the resolution input available today determines** (the chart form of `timaeus-research/hironaka`, continuous units): two-sided sublevel growth `μ{K ≤ t} ≍ t^λ(−log t)^q` implies two-sided Laplace growth `∫ e^{−NK} dμ ≍ N^{−λ}(log N)^q`, weighted and for the population integral; the dominant exponent pair of a finite positive family; the exact chart transport of a partial-resolution chart and the normalised-indicator partition, assembling to the restricted measure; the localisation obstruction (a chart-exact analytic amplitude cannot absorb an exact sublevel cutoff) | `Grammar/LaplaceExponentBounds.lean`, `DominantExponentPair.lean`, `ResolutionTransport.lean`, `LocalisationObstruction.lean` |
 | CXXII | **the concrete tangential reconstruction**: `(T z)(v)_j = ∑_α z_{(j,α)} (θ(v)/ρ)^α` is a continuous linear map of norm `≤ 1` from `ℓ¹` over the latent index into `C(K, DataSpace d)`, joint version into `JointData K n`; tangential certificates (bi-indexed joint Cauchy envelope) give the weighted `ℓ¹` datum, the chart moment certificate and the identification with the tangential power series; the assembled stochastic expansion with concrete tangential data | `Grammar/TangentialReconstruct.lean`, `TangentialCertificate.lean` (`assembled_expansion_of_tangential`) |
 | CXIX–CXXI | **Hypothesis I and joint charts**: measurable Cauchy coefficients in the sample point, the torus `L²` certificate and the division bridge `f(x,π_ℂw) = w^k a(x,w)` giving the chart moment certificate from Hypothesis I's order-zero envelope, the phase of the sample datum identified with the empirical process `ξ_n`, and joint convergence of all chart data from one sample with the cross-chart covariance | `Grammar/PolyCoeffMeasurable.lean`, `TorusCertificate.lean`, `AnalyticCertificate.lean`, `JointSample.lean` |
 | CXVIII | **stochastic expansion with the data premise discharged**: for an i.i.d. sample whose chart Taylor coefficients satisfy the chart moment certificate, the canonical coefficients and ordered normalised remainders at the sample datum converge in distribution to those at the `ℓ¹` Gaussian limit | `Grammar/SampleExpansion.lean` (`sample_stochastic_expansion`) |
@@ -48,7 +49,9 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 | XX–XXI | normal-crossing model `N(x₀x₁,1)`: posterior MGF of `√n x₀x₁` converges to `e^{zθ+θ²/2}`; leading Mellin (zeta) coefficient as a real-axis Abelian limit | `Grammar/NormalCrossingModel.lean`, `NormalCrossingLaw.lean`, `MellinCoefficient.lean` |
 | I–XIX | fluctuation ladder, state densities, chart assembly, stochastic posterior quotients | see `HEADLINES.md` |
 
-What is **not** formalised: resolution of singularities (Hironaka) and the existence of
+What is **not** formalised: resolution of singularities (Hironaka — proved separately in
+`timaeus-research/hironaka`, whose chart form with two-sided monomial bounds and continuous units
+feeds CXXIII–CXXIV through an adapter not yet in this repo) and the existence of
 the certified chart presentation and adapted partition of unity, including the
 complexified chart, its torus inclusion in the Hypothesis-I neighbourhood and the
 analytic divisibility of the pulled-back log-likelihood ratio, and the joint product-polydisc
