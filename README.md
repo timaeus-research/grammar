@@ -15,10 +15,11 @@ programme (leading and next-logarithmic order, posterior laws, random fields,
 uniform finite-chart assembly), the geometric bridge to the paper's main theorem
 `thm:expectation_expansion`, conditional on a certified resolution presentation, and
 the central limit theorem in `ℓ¹` for the empirical fluctuation data that discharges
-the data premise of the stochastic theorem `thm:strataempiricalexpansion` at chart
-level under a chart moment certificate.
+the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with the
+chart moment certificate derived from the order-zero envelope of the paper's
+Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 408 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 412 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -30,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CXIX–CXXI | **Hypothesis I and joint charts**: measurable Cauchy coefficients in the sample point, the torus `L²` certificate and the division bridge `f(x,π_ℂw) = w^k a(x,w)` giving the chart moment certificate from Hypothesis I's order-zero envelope, the phase of the sample datum identified with the empirical process `ξ_n`, and joint convergence of all chart data from one sample with the cross-chart covariance | `Grammar/PolyCoeffMeasurable.lean`, `TorusCertificate.lean`, `AnalyticCertificate.lean`, `JointSample.lean` |
 | CXVIII | **stochastic expansion with the data premise discharged**: for an i.i.d. sample whose chart Taylor coefficients satisfy the chart moment certificate, the canonical coefficients and ordered normalised remainders at the sample datum converge in distribution to those at the `ℓ¹` Gaussian limit | `Grammar/SampleExpansion.lean` (`sample_stochastic_expansion`) |
 | CXIV–CXVII | **the CLT in `ℓ¹`** under summable coordinate `L²` norms (finite-dimensional Cramér–Wold CLT with the explicit Gaussian target, uniform empirical tails, compactness and tightness in `ℓ¹`, Gaussian limit by Prokhorov, the `ℓ¹` upgrade), and the sample datum with the paper's empirical Taylor coefficients | `Grammar/CLTFiniteDim.lean`, `EmpiricalTail.lean`, `L1SeqTight.lean`, `L1SeqGaussianLimit.lean`, `L1SeqCLT.lean` (`clt_l1`), `SampleDatum.lean` |
 | CXIII | **conditional geometric main theorem**: the resolved population integral `∫ F e^{−NK} dμ` of a localisation datum with adapted strata data is a cutoff expansion with the assembled canonical coefficients (`thm:expectation_expansion`), with an exponentially small residual, the Taylor–moment form of the tubular expansion, and fibre-linear invariance of the moment–jet contractions | `Grammar/GeometricMainTheorem.lean` (`expectation_expansion_of_adaptedStrataData`) |
@@ -46,9 +48,11 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 | I–XIX | fluctuation ladder, state densities, chart assembly, stochastic posterior quotients | see `HEADLINES.md` |
 
 What is **not** formalised: resolution of singularities (Hironaka) and the existence of
-the certified chart presentation and adapted partition of unity; the derivation of the
-chart moment certificate from the paper's Hypothesis I for the resolved chart function;
-the joint-chart stochastic statement; all-orders division of asymptotic expansions. The
+the certified chart presentation and adapted partition of unity, including the
+complexified chart, its torus inclusion in the Hypothesis-I neighbourhood and the
+analytic divisibility of the pulled-back log-likelihood ratio; a concrete tangential
+reconstruction of joint chart data from tangential analyticity; all-orders division of
+asymptotic expansions. The
 mirror `grammar_lean.tex` (Overleaf) records every formalised statement with a dot and
 the non-claims in Lean remarks.
 
