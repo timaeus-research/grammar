@@ -476,3 +476,4 @@ import Grammar.StrucDualNormalFamily
 import Grammar.NormalBundleOfFrames
 import Grammar.FrameAtlasOfCoframes
 import Grammar.LabelledNormalBundle
+import Grammar.GlobalNormalSections
