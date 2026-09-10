@@ -431,3 +431,4 @@ import Grammar.GaussianInsertion
 import Grammar.BilocalGaussian
 import Grammar.BilocalSeries
 import Grammar.BilocalDivergence
+import Grammar.CovarianceInterpolation
