@@ -467,3 +467,4 @@ import Grammar.L1GaussianFunctional
 import Grammar.LeadingCoeffGaussianMoment
 import Grammar.NormalTaylorForm
 import Grammar.ConormalSplitting
+import Grammar.SymmetricWeights
