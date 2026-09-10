@@ -412,3 +412,5 @@ import Grammar.AnalyticCertificate
 import Grammar.JointSample
 import Grammar.TangentialReconstruct
 import Grammar.TangentialCertificate
+import Grammar.LaplaceExponentBounds
+import Grammar.DominantExponentPair
