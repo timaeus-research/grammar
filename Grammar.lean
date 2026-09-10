@@ -470,3 +470,4 @@ import Grammar.ConormalSplitting
 import Grammar.SymmetricWeights
 import Grammar.NormalFibreMoment
 import Grammar.WeightedFibreIntegration
+import Grammar.CoordFreeTaylorMoment
