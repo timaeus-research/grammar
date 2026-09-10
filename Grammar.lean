@@ -398,3 +398,4 @@ import Grammar.TaylorMoment
 import Grammar.ChartTaylorMoment
 import Grammar.GeometricMainTheorem
 import Grammar.L1Seq
+import Grammar.L1SeqUpgrade
