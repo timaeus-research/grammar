@@ -428,3 +428,4 @@ import Grammar.DivisorVariance
 import Grammar.AnnealedIdentity
 import Grammar.GaussianTilted
 import Grammar.GaussianInsertion
+import Grammar.BilocalGaussian
