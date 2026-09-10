@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 412 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 414 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CXXII | **the concrete tangential reconstruction**: `(T z)(v)_j = ∑_α z_{(j,α)} (θ(v)/ρ)^α` is a continuous linear map of norm `≤ 1` from `ℓ¹` over the latent index into `C(K, DataSpace d)`, joint version into `JointData K n`; tangential certificates (bi-indexed joint Cauchy envelope) give the weighted `ℓ¹` datum, the chart moment certificate and the identification with the tangential power series; the assembled stochastic expansion with concrete tangential data | `Grammar/TangentialReconstruct.lean`, `TangentialCertificate.lean` (`assembled_expansion_of_tangential`) |
 | CXIX–CXXI | **Hypothesis I and joint charts**: measurable Cauchy coefficients in the sample point, the torus `L²` certificate and the division bridge `f(x,π_ℂw) = w^k a(x,w)` giving the chart moment certificate from Hypothesis I's order-zero envelope, the phase of the sample datum identified with the empirical process `ξ_n`, and joint convergence of all chart data from one sample with the cross-chart covariance | `Grammar/PolyCoeffMeasurable.lean`, `TorusCertificate.lean`, `AnalyticCertificate.lean`, `JointSample.lean` |
 | CXVIII | **stochastic expansion with the data premise discharged**: for an i.i.d. sample whose chart Taylor coefficients satisfy the chart moment certificate, the canonical coefficients and ordered normalised remainders at the sample datum converge in distribution to those at the `ℓ¹` Gaussian limit | `Grammar/SampleExpansion.lean` (`sample_stochastic_expansion`) |
 | CXIV–CXVII | **the CLT in `ℓ¹`** under summable coordinate `L²` norms (finite-dimensional Cramér–Wold CLT with the explicit Gaussian target, uniform empirical tails, compactness and tightness in `ℓ¹`, Gaussian limit by Prokhorov, the `ℓ¹` upgrade), and the sample datum with the paper's empirical Taylor coefficients | `Grammar/CLTFiniteDim.lean`, `EmpiricalTail.lean`, `L1SeqTight.lean`, `L1SeqGaussianLimit.lean`, `L1SeqCLT.lean` (`clt_l1`), `SampleDatum.lean` |
@@ -50,9 +51,9 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 What is **not** formalised: resolution of singularities (Hironaka) and the existence of
 the certified chart presentation and adapted partition of unity, including the
 complexified chart, its torus inclusion in the Hypothesis-I neighbourhood and the
-analytic divisibility of the pulled-back log-likelihood ratio; a concrete tangential
-reconstruction of joint chart data from tangential analyticity; all-orders division of
-asymptotic expansions. The
+analytic divisibility of the pulled-back log-likelihood ratio, and the joint product-polydisc
+Cauchy estimate behind the tangential certificates; all-orders division of asymptotic
+expansions. The
 mirror `grammar_lean.tex` (Overleaf) records every formalised statement with a dot and
 the non-claims in Lean remarks.
 
