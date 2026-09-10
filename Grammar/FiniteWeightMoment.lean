@@ -108,15 +108,13 @@ noncomputable def reducedWeight (A α : ℝ) (w r : U → ℝ) : Measure U :=
   μ.withDensity fun u => ENNReal.ofReal (A * w u * Real.exp (-α * r u ^ 2))
 
 omit [IsFiniteMeasure μ] in
-theorem reducedWeight_univ (A α : ℝ) {w r : U → ℝ} (hA : 0 ≤ A) (hw0 : ∀ u, 0 ≤ w u)
+theorem reducedWeight_univ (A α : ℝ) {w r : U → ℝ} (hA : 0 ≤ A) (hw0 : ∀ᵐ u ∂μ, 0 ≤ w u)
     (hint : Integrable (fun u => w u * Real.exp (-α * r u ^ 2)) μ) :
     reducedWeight μ A α w r univ =
       ENNReal.ofReal (A * ∫ u, w u * Real.exp (-α * r u ^ 2) ∂μ) := by
   rw [reducedWeight, withDensity_apply _ MeasurableSet.univ, Measure.restrict_univ,
     ← integral_const_mul, ofReal_integral_eq_lintegral_ofReal (hint.const_mul A)
-      (Filter.Eventually.of_forall fun u => by
-        have := hw0 u
-        positivity)]
+      (hw0.mono fun u hu => by positivity)]
   refine lintegral_congr fun u => ?_
   rw [mul_assoc]
 
@@ -127,9 +125,10 @@ reduced temperature**: with `w ≥ 0`, `|a| ≤ M`, `r ≥ 0`, the full-domain b
 `E |A ∫ w a e^{−βr² + βrξ} dμ|^p ≤ (M · A ∫ w e^{−αr²} dμ)^p`. -/
 theorem moment_scaled_integral_le_population_mass {β c p A M : ℝ} (hβ : 0 < β) (hp : 1 ≤ p)
     (h : p * β * c < 2) (hA : 0 ≤ A) (hM : 0 ≤ M) {w r : U → ℝ} {a : Ω → U → ℝ}
-    (hw : Measurable w) (hr : Measurable r) (hw0 : ∀ u, 0 ≤ w u) (haM : ∀ ω u, |a ω u| ≤ M)
-    (hr0 : ∀ u, 0 ≤ r u) (ξ : Ω → U → ℝ) (hξ : Measurable (Function.uncurry ξ))
-    (hmgf : ∀ u, ∀ t : ℝ, 0 ≤ t →
+    (hw : Measurable w) (hr : Measurable r) (hw0 : ∀ᵐ u ∂μ, 0 ≤ w u)
+    (haM : ∀ ω, ∀ᵐ u ∂μ, |a ω u| ≤ M) (hr0 : ∀ᵐ u ∂μ, 0 ≤ r u) (ξ : Ω → U → ℝ)
+    (hξ : Measurable (Function.uncurry ξ))
+    (hmgf : ∀ᵐ u ∂μ, ∀ t : ℝ, 0 ≤ t →
       ∫⁻ ω, ENNReal.ofReal (Real.exp (t * ξ ω u)) ∂P ≤ ENNReal.ofReal (Real.exp (c * t ^ 2 / 2)))
     (hint : Integrable (fun u => w u * Real.exp (-(β * (1 - p * β * c / 2)) * r u ^ 2)) μ) :
     ∫⁻ ω, ENNReal.ofReal (|A * ∫ u, w u * a ω u *
@@ -152,8 +151,10 @@ theorem moment_scaled_integral_le_population_mass {β c p A M : ℝ} (hβ : 0 < 
     refine Measurable.add ?_ ?_
     · exact (measurable_const.mul ((hr.comp measurable_snd).pow_const 2))
     · exact (measurable_const.mul (hr.comp measurable_snd)).mul hξ
+  have hνμ : ν ≪ μ := by rw [hν, reducedWeight]; exact withDensity_absolutelyContinuous _ _
   have hmgfH : ∀ᵐ u ∂ν, ∫⁻ ω, ENNReal.ofReal (Real.exp (p * H ω u)) ∂P ≤ 1 := by
-    refine Filter.Eventually.of_forall fun u => ?_
+    refine ((hmgf.and hr0).filter_mono hνμ.ae_le).mono fun u hu => ?_
+    obtain ⟨hmgfu, hr0u⟩ := hu
     have hrew : ∀ ω, ENNReal.ofReal (Real.exp (p * H ω u)) =
         ENNReal.ofReal (Real.exp (-(p * (β - α)) * r u ^ 2)) *
           ENNReal.ofReal (Real.exp ((p * β * r u) * ξ ω u)) := by
@@ -170,7 +171,7 @@ theorem moment_scaled_integral_le_population_mass {β c p A M : ℝ} (hβ : 0 < 
           ∫⁻ ω, ENNReal.ofReal (Real.exp ((p * β * r u) * ξ ω u)) ∂P
         ≤ ENNReal.ofReal (Real.exp (-(p * (β - α)) * r u ^ 2)) *
           ENNReal.ofReal (Real.exp (c * (p * β * r u) ^ 2 / 2)) :=
-          mul_le_mul' le_rfl (hmgf u _ (by have := hr0 u; positivity))
+          mul_le_mul' le_rfl (hmgfu _ (by positivity))
       _ = ENNReal.ofReal (Real.exp (-(p * (β - α)) * r u ^ 2 + c * (p * β * r u) ^ 2 / 2)) := by
           rw [← ENNReal.ofReal_mul (Real.exp_pos _).le, ← Real.exp_add]
       _ = 1 := by
@@ -195,8 +196,9 @@ theorem moment_scaled_integral_le_population_mass {β c p A M : ℝ} (hβ : 0 < 
       refine mul_le_mul' le_rfl ?_
       rw [← Real.norm_eq_abs, ofReal_norm]
       refine (enorm_integral_le_lintegral_enorm _).trans (le_of_eq ?_)
-      refine lintegral_congr fun u => ?_
-      rw [← ofReal_norm, Real.norm_eq_abs, abs_mul, abs_mul, abs_of_nonneg (hw0 u),
+      refine lintegral_congr_ae (hw0.mono fun u hw0u => ?_)
+      beta_reduce
+      rw [← ofReal_norm, Real.norm_eq_abs, abs_mul, abs_mul, abs_of_nonneg hw0u,
         abs_of_pos (Real.exp_pos _)]
     have hdens : ∫⁻ u, ENNReal.ofReal (Real.exp (H ω u)) ∂ν =
         ∫⁻ u, ENNReal.ofReal (A * w u * Real.exp (-β * r u ^ 2 + β * r u * ξ ω u)) ∂μ := by
@@ -207,9 +209,10 @@ theorem moment_scaled_integral_le_population_mass {β c p A M : ℝ} (hβ : 0 < 
         ENNReal.measurable_ofReal.comp (Real.measurable_exp.comp
           (hHm.comp (measurable_const.prodMk measurable_id)))
       rw [hν, reducedWeight, lintegral_withDensity_eq_lintegral_mul _ hf hg]
-      refine lintegral_congr fun u => ?_
+      refine lintegral_congr_ae (hw0.mono fun u hw0u => ?_)
+      beta_reduce
       simp only [Pi.mul_apply]
-      rw [← ENNReal.ofReal_mul (by have := hw0 u; positivity)]
+      rw [← ENNReal.ofReal_mul (by positivity)]
       congr 1
       rw [hH]
       simp only
@@ -222,11 +225,11 @@ theorem moment_scaled_integral_le_population_mass {β c p A M : ℝ} (hβ : 0 < 
             Real.exp (-β * r u ^ 2 + β * r u * ξ ω u)) ∂μ := hJ
       _ ≤ ENNReal.ofReal A * ∫⁻ u, ENNReal.ofReal (M * (w u *
             Real.exp (-β * r u ^ 2 + β * r u * ξ ω u))) ∂μ := by
-          refine mul_le_mul' le_rfl (lintegral_mono fun u => ENNReal.ofReal_le_ofReal ?_)
-          have := haM ω u
-          have := hw0 u
+          refine mul_le_mul' le_rfl (lintegral_mono_ae (((haM ω).and hw0).mono fun u hu => ?_))
+          obtain ⟨haMu, hw0u⟩ := hu
+          refine ENNReal.ofReal_le_ofReal ?_
           have := Real.exp_pos (-β * r u ^ 2 + β * r u * ξ ω u)
-          nlinarith [mul_le_mul_of_nonneg_left (haM ω u) (hw0 u)]
+          nlinarith [mul_le_mul_of_nonneg_left haMu hw0u]
       _ = ENNReal.ofReal M * ∫⁻ u, ENNReal.ofReal (Real.exp (H ω u)) ∂ν := by
           rw [hdens]
           have hmw : Measurable fun u => ENNReal.ofReal (w u *

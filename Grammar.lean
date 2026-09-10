@@ -455,3 +455,4 @@ import Grammar.GaussianCriticalMoment
 import Grammar.GaussianFieldFernique
 import Grammar.ExponentComparison
 import Grammar.FiniteWeightMoment
+import Grammar.BoxMomentBound
