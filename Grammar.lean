@@ -441,3 +441,4 @@ import Grammar.CoverAssembly
 import Grammar.AnnealedRemainder
 import Grammar.ExactCoreAdapter
 import Grammar.CompactBaseQuantise
+import Grammar.CompactBaseKernel
