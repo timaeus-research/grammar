@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 440 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 441 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CXXXIX | **the expected positive-gap remainder from annealed exponential moments**: pointwise `E e^{β√Nφ(y)ξ(·,y)} ≤ e^{θβNφ(y)²}` on the gap gives `E‖∫_S a e^{−βNφ²+β√Nφξ}‖ ≤ e^{−(1−θ)βNκ}∫_S g` (no supremum tail); sub-Gaussian `ξ` gives `θ = cβ/2`, decay iff `βc < 2`; Hoeffding for bounded i.i.d. coefficients uniformly in `n`; the generic good/bad-event bound | `Grammar/AnnealedRemainder.lean` (`lintegral_enorm_annealedRemainder_le`, `lintegral_enorm_annealedRemainder_le_of_bounded`) |
 | CXXXVIII | **cover assembly modulo a positive-gap remainder**: the assembled transport turns `∫_{⋃ images} F e^{E}` into the exact sum of the chart pullbacks; each chart splits over a core and the gap `domᵢ∖coreᵢ`; with `κ ≤ K∘Φᵢ` on the gaps, `Z(N) = ∑ᵢ Zᵢ^{core}(N) + Rem(N)`, `‖Rem(N)‖ ≤ e^{−Nκ} ∑ᵢ ∫_{gapᵢ} |F∘Φᵢ|`, and for the empirical phase under a fluctuation bound with rate `e^{−Nκ/2}` | `Grammar/CoverAssembly.lean` (`ResolutionCover.coverIntegral_core_assembly`, `coverIntegral_core_assembly_empirical`) |
 | CXXXVII | **tangential certificates from a joint torus envelope; the reconstructed amplitude is the chart function**: a torus envelope in all `d + m` chart variables gives the bi-indexed `TanCertificate` with joint envelope `M R^{−|γ|}R^{−|α|}`, so the assembled stochastic expansion with concrete tangential data follows from joint torus envelopes; for a joint analytic certificate the phase of the reconstructed datum is `Re a(x, b·u ⧺ θ(v))` | `Grammar/JointTorusCertificate.lean` (`TorusCertificate.toTanCertificate`, `assembled_expansion_of_jointTorus`, `AnalyticCertificate.dataPhase_tanReconstruct_eq_re`) |
 | CXXXV–CXXXVI | **paper-facing bookkeeping after Astra #57**: the positive-gap remainder for the empirical phase (`−βNφ² + β√Nφξ ≤ −βNκ/2` when `K = φ² ≥ κ` and `sup|ξ| ≤ ½√(Nκ)`; `‖∫_S a e^{phase}‖ ≤ e^{−βNκ/2}∫_S g`, also for the sampling exponent via `N = n`) and the tangential/normal split of the weighted box (product box measure along `piEquivPiSubtypeProd`, phase depends only on normal coordinates, `∫ u^h e^{…} = (∏_{i∈T} b^{hᵢ+1}/(hᵢ+1)) ∫_{(0,b]^N} w^h e^{…}`) | `Grammar/EmpiricalExpGap.lean` (`norm_setIntegral_empirical_exp_gap_le`), `BoxTangentialSplit.lean` (`boxIntegralFin_split_eq`) |
