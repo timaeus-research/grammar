@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 438 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 439 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CXXXVII | **tangential certificates from a joint torus envelope; the reconstructed amplitude is the chart function**: a torus envelope in all `d + m` chart variables gives the bi-indexed `TanCertificate` with joint envelope `M R^{−|γ|}R^{−|α|}`, so the assembled stochastic expansion with concrete tangential data follows from joint torus envelopes; for a joint analytic certificate the phase of the reconstructed datum is `Re a(x, b·u ⧺ θ(v))` | `Grammar/JointTorusCertificate.lean` (`TorusCertificate.toTanCertificate`, `assembled_expansion_of_jointTorus`, `AnalyticCertificate.dataPhase_tanReconstruct_eq_re`) |
 | CXXXV–CXXXVI | **paper-facing bookkeeping after Astra #57**: the positive-gap remainder for the empirical phase (`−βNφ² + β√Nφξ ≤ −βNκ/2` when `K = φ² ≥ κ` and `sup|ξ| ≤ ½√(Nκ)`; `‖∫_S a e^{phase}‖ ≤ e^{−βNκ/2}∫_S g`, also for the sampling exponent via `N = n`) and the tangential/normal split of the weighted box (product box measure along `piEquivPiSubtypeProd`, phase depends only on normal coordinates, `∫ u^h e^{…} = (∏_{i∈T} b^{hᵢ+1}/(hᵢ+1)) ∫_{(0,b]^N} w^h e^{…}`) | `Grammar/EmpiricalExpGap.lean` (`norm_setIntegral_empirical_exp_gap_le`), `BoxTangentialSplit.lean` (`boxIntegralFin_split_eq`) |
 | CXXXIV | **the Gaussian-limit denominator and the dataset expectation bridge** (companion note): `E D(G) = Γ(λ)(βδ)^{−λ}∑ρᵢ` with integrability for `δ = 1 − βc/2 > 0`, `E₊D(G) = +∞` for `βc ≥ 2`; if `X_n ⇒ Z` with `sup_n E|X_n|^p ≤ M`, `p > 1`, then `E X_n → E Z` (clipping), and if `X_n ≥ 0`, `X_n ⇒ Z`, `E₊Z = +∞` then `E₊X_n → +∞`; applied to `D(G)` on both sides of the threshold | `Grammar/GaussianDenominator.lean` (`integral_quartetD`, `lintegral_quartetD_eq_top`), `ExpectationBridge.lean` (`tendsto_integral_of_tendstoInDistribution_of_moment`, `tendsto_lintegral_top_of_tendstoInDistribution`) |
 | CXXXIII | **covariance interpolation for the expected log-evidence** (companion note): with `L(s) = E log D(√s G)`, `L` is continuous on `[0,1]`, differentiable on `(0,1)` with `L'(s) = (β²/2) E[V_s(G)] ≥ 0` (differentiation under the integral with polynomial domination; Gaussian integration by parts at scale `√s`), hence `E log D(G) = log(β^{−λ}Γ(λ)∑ρᵢ) + (β²/2)∫₀¹ E[V_s(G)] ds ≥ log D(0)` for every `β > 0` | `Grammar/CovarianceInterpolation.lean` (`integral_log_quartetD_eq`, `hasDerivAt_interpL`, `log_quartetD_zero_le_integral`) |
