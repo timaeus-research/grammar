@@ -473,3 +473,4 @@ import Grammar.WeightedFibreIntegration
 import Grammar.CoordFreeTaylorMoment
 import Grammar.ChartNormalFamily
 import Grammar.StrucDualNormalFamily
+import Grammar.NormalBundleOfFrames
