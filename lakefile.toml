@@ -20,5 +20,10 @@ name = "hironaka"
 git = "https://github.com/timaeus-research/hironaka"
 rev = "aa4087ede4169735400431486543f1391734bcae"
 
+[[require]]
+name = "strucdual"
+git = "https://github.com/timaeus-research/strucdual"
+rev = "4f317b3f66701f58c6af08f1dddd9483541b8a09"
+
 [[lean_lib]]
 name = "Grammar"
