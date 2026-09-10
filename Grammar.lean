@@ -396,3 +396,4 @@ import Grammar.NormalJet
 import Grammar.MomentFunctional
 import Grammar.TaylorMoment
 import Grammar.ChartTaylorMoment
+import Grammar.GeometricMainTheorem
