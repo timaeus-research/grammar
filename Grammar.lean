@@ -449,3 +449,4 @@ import Grammar.FluctuationSharpBounds
 import Grammar.GaussianPMoment
 import Grammar.ScaledAssembly
 import Grammar.UniformMomentSubgaussian
+import Grammar.CompactBaseFirstMoment
