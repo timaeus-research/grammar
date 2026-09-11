@@ -541,3 +541,4 @@ import Grammar.PositiveScalarCoefficient
 import Grammar.LogRatioSymmetricMoments
 import Grammar.ProductChartHypotheses
 import Grammar.ProductChartPieceData
+import Grammar.ProductChartExtremalPair
