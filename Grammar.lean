@@ -535,3 +535,4 @@ import Grammar.AdaptedPieceAtlas
 import Grammar.FaceCoefficient
 import Grammar.MomentKernel
 import Grammar.ScalarChartNormalForm
+import Grammar.CompactProductChartDensity
