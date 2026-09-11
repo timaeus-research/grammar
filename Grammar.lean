@@ -478,3 +478,4 @@ import Grammar.FrameAtlasOfCoframes
 import Grammar.LabelledNormalBundle
 import Grammar.GlobalNormalSections
 import Grammar.CoordinateStratumBundle
+import Grammar.LabelledConormalBridge
