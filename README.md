@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 489 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 490 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CLXXXVI | **Analytic core presentations**: exact box transport onto an arbitrary core measure (no sublevel cutoff), core decompositions `μ = ∑ core_I + tail` with a positive phase gap on the tail, and the population expansion theorems from such a decomposition; the compatible divisor localisation statement recorded as the target of the geometric programme | `Grammar/AnalyticCorePresentation.lean` (`CorePresentation`, `AnalyticCoreDecomposition`, `AnalyticCoreDecomposition.cutoffExpansion`, `HasAnalyticCoreDecomposition`, `CompatibleDivisorLocalisation`) |
 | CLXXXV | **The population Laplace exponent pair, unconditionally**: with hironaka's chart-form theorem `Q_all` (356/356 leaves, axiom-clean) the exponent pair `(λ_H, θ_H)` of a real-analytic nonnegative phase near a zero, the identification `(λ, m) = (λ_H, θ_H)` of any certified population core limit, and the empirical exponent `log Z_n/log n → −λ_H` no longer carry `Q n` as a hypothesis | `Grammar/HironakaUnconditional.lean` (`laplaceTheta_of_analyticOnNhd_nonneg`, `exists_exponentPair`, `tendstoInMeasure_log_div_log_of_analyticOnNhd_nonneg`) |
 | CLXXXIV | **Closure endpoints for the empirical chain**: Banach `L²` from the `ℓ¹` coordinate certificate (Minkowski + Fatou), the scaled-core limit with the tail certificate exposed, and the identified single-chart annealed endpoint — one `ν` for the limit `E[A_n(Z_n + Rem_n)] → E_ν[C(Z + A)]` and its first moment (covariance-modified face integral; population coefficient at `β(1 − βv₀/2)` at constant face variance); `βκ < 2` alone suffices | `Grammar/ClosureEndpoint.lean` (`memLp_two_of_summableCoordL2`, `tendstoInDistribution_scaled_dataBoxIntegral_sampleDatum_tail`, `annealed_sampleDatum_single_identified`, `annealed_sampleDatum_single_effectiveTemperature`) |
 | CLXXXIII | **The effective-temperature corollary and the normal-location check**: a.e. constant face variance `σ² = v₀` (`βv₀ < 2`) makes the limiting expectation of the leading coefficient the zero-phase population coefficient at `β_eff = β(1 − βv₀/2)`; for `g_a(x) = a²/2 − ax` the sampling phase is `√2 n^{−1/2}∑X_i` with variance `2` | `Grammar/EffectiveTemperature.lean` (`dataBoxCoeff_leading_zero_phase`, `integral_dataBoxCoeff_leading_eq_population_of_const_faceVariance`, `variance_phase_normalLocation`) |
