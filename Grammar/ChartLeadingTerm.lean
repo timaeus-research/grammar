@@ -304,7 +304,7 @@ theorem chart_local_leading_term (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Analyti
     (h0 : (0 : Fin C.t → ℝ) ∈ A) (hAvol : ∀ r : ℝ, 0 < r → 0 < volume (A ∩ Metric.closedBall 0 r))
     (hb₁ : 0 < b₁) {U' : Set (Fin d → ℝ)} (hU' : IsOpen U') (hy₀U' : φ y₀ ∈ U')
     (hFU' : ∀ x ∈ U', 0 < F x) :
-    ∃ (B b' : ℝ), 0 < B ∧ 0 < b' ∧
+    ∃ (B b' : ℝ), 0 < B ∧ 0 < b' ∧ b' ≤ b₁ ∧ b' ≤ SD.b ∧
       IsCompact (localRegion C SD (A ∩ Metric.closedBall 0 B) b') ∧
       φ y₀ ∈ localRegion C SD (A ∩ Metric.closedBall 0 B) b' ∧
       localRegion C SD (A ∩ Metric.closedBall 0 B) b' ⊆ translated φ y₀ '' C.V₀ ∧
@@ -434,7 +434,7 @@ theorem chart_local_leading_term (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Analyti
   have hgpos : 0 < gCoeff Ad.ν Ad.h Ad.k β Ad.b Ad.x C.lam (C.mult - 1) := by
     rw [gCoeff_uniform_leading Ad hβ hmin hatt hm]
     exact Finset.sum_pos (fun I _ => hpos I) ⟨(signIdx C) (fun _ => true), Finset.mem_univ _⟩
-  refine ⟨B, b', hB, hb', hΩc, hmem, hsub, hΩU', hgeq ▸ hgpos, ?_⟩
+  refine ⟨B, b', hB, hb', hb'b₁, hb'SD, hΩc, hmem, hsub, hΩU', hgeq ▸ hgpos, ?_⟩
   rw [← hgeq]
   exact Ad.isEquivalent_uniform hβ hmin hatt hm hgpos.ne'
 
@@ -449,7 +449,8 @@ theorem IsMonomialChart.local_leading_term {dom : Set (Fin d → ℝ)} {e : Fin 
     (hhe : ∀ j, 0 < h j → 0 < e j) (hy₀W : y₀ ∈ W) (hy₀U : φ y₀ ∈ U) (hKy₀ : K (φ y₀) = 0)
     {F : (Fin d → ℝ) → ℝ} (hF : AnalyticOnNhd ℝ F U) (hFpos : 0 < F (φ y₀)) :
     ∃ C : CentredChartData K φ h y₀, ∃ Ω : Set (Fin d → ℝ), IsCompact Ω ∧ φ y₀ ∈ Ω ∧
-      Ω ⊆ φ '' W ∧ Ω ⊆ U ∧ ∃ c : ℝ, 0 < c ∧
+      Ω ⊆ φ '' W ∧ Ω ⊆ U ∧ (∃ V : Set (Fin d → ℝ), IsOpen V ∧ y₀ ∈ V ∧ ∀ y ∈ V, φ y ∈ Ω) ∧
+      ∃ c : ℝ, 0 < c ∧
         (fun N => ∫ x in Ω, F x * Real.exp (-N * K x)) ~[atTop]
           fun N => c * (N ^ (-C.lam) * Real.log N ^ (C.mult - 1)) := by
   obtain ⟨C, hC⟩ := exists_centredChartData hc hU hK hK0 hhe hy₀W hy₀U hKy₀
@@ -484,11 +485,17 @@ theorem IsMonomialChart.local_leading_term {dom : Set (Fin d → ℝ)} {e : Fin 
     refine measure_mono fun v hv => ⟨?_, ?_⟩
     · exact Metric.closedBall_subset_closedBall (min_le_left _ _) hv
     · exact Metric.closedBall_subset_closedBall (min_le_right _ _) hv
-  obtain ⟨B, b', -, -, hΩc, hmem, hsub, -, hc0, hequiv⟩ :=
+  obtain ⟨B, b', hB, hb', hb'b₁, hb'SD, hΩc, hmem, hsub, -, hc0, hequiv⟩ :=
     chart_local_leading_term C SD one_pos hφ hinj hKm (fun w hw => hK0 _ (hC w hw).2)
       (fun w hw => hF _ (hC w hw).2) (isCompact_closedBall _ _) (by simp [hA, hε'pos.le]) hAvol
       hε'pos hU'o ⟨hy₀U, hFpos⟩ (fun x hx => hx.2)
-  refine ⟨C, _, hΩc, hmem, ?_, ?_, _, hc0, hequiv⟩
+  have hrA : Metric.ball (0 : Fin C.t → ℝ) (min ε' B) ⊆ A ∩ Metric.closedBall 0 B := by
+    intro v hv
+    exact ⟨Metric.ball_subset_closedBall (Metric.ball_subset_ball (min_le_left _ _) hv),
+      Metric.ball_subset_closedBall (Metric.ball_subset_ball (min_le_right _ _) hv)⟩
+  refine ⟨C, _, hΩc, hmem, ?_, ?_, exists_isOpen_subset_localRegion C SD one_pos
+    (lt_min hε'pos hB) hrA inter_subset_left hb' hb'b₁ hb'SD (by simp [hA, hε'pos.le]) hε'pos.le,
+    _, hc0, hequiv⟩
   · intro x hx
     obtain ⟨w, hw, rfl⟩ := hsub hx
     exact ⟨w + y₀, (hC w hw).1, rfl⟩

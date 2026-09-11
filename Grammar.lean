@@ -508,3 +508,4 @@ import Grammar.ChartOrthantCore
 import Grammar.ChartOrthantTiling
 import Grammar.ChartLeadingTerm
 import Grammar.GlobalExponentBound
+import Grammar.GlobalExponentHironaka

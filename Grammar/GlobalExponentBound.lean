@@ -11,8 +11,8 @@ import Grammar.ExpGapLocalisation
 
 For a nonnegative observable the exponent pair of a region integral is determined by finitely many
 local regions with identified leading terms, with **no ownership and no intersection expansions**:
-if the regions `Ω_i ⊆ R` cover `R` up to a set on which the phase is at least `δ₀ > 0`, and each
-local integral satisfies `∫_{Ω_i} F e^{−NK} ~ c_i N^{−λ_i}(log N)^{m_i−1}` with `c_i > 0`, then
+if the regions `Ω_i ⊆ R` cover `R` up to a set on which the phase is a.e. at least `δ₀ > 0`, and
+each local integral satisfies `∫_{Ω_i} F e^{−NK} ~ c_i N^{−λ_i}(log N)^{m_i−1}` with `c_i > 0`, then
 `∫_R F e^{−NK} = Θ(N^{−λ_*}(log N)^{m_*−1})` with `λ_* = min_i λ_i` and `m_* = max{m_i : λ_i = λ_*}`
 (`isTheta_of_local_leading_terms`): the lower bound is one piece, the upper bound is the sum of
 the pieces plus the exponentially small tail. In logarithmic form the free energy is
@@ -69,7 +69,7 @@ include hR hF0 hFint hK0 hKm in
 exponentially small tail `e^{−Nδ₀} ∫_R F`. -/
 theorem regionIntegral_le_sum_add_tail {ι : Type*} [Fintype ι] (Ω : ι → Set X)
     (hΩm : ∀ i, MeasurableSet (Ω i)) (hΩR : ∀ i, Ω i ⊆ R) {δ₀ : ℝ}
-    (hgap : ∀ x ∈ R, x ∉ ⋃ i, Ω i → δ₀ ≤ K x) {N : ℝ} (hN : 0 ≤ N) :
+    (hgap : ∀ᵐ x ∂μ, x ∈ R → x ∉ ⋃ i, Ω i → δ₀ ≤ K x) {N : ℝ} (hN : 0 ≤ N) :
     regionIntegral μ R F K N ≤
       (∑ i, ∫ x in Ω i, F x * Real.exp (-N * K x) ∂μ) +
         Real.exp (-N * δ₀) * ∫ x in R, F x ∂μ := by
@@ -110,11 +110,12 @@ theorem regionIntegral_le_sum_add_tail {ι : Type*} [Fintype ι] (Ω : ι → Se
     have hRU : MeasurableSet (R \ U) := hR.diff hUm
     have hsub : R \ U ⊆ R := sdiff_subset
     calc ∫ x in R \ U, f x ∂μ ≤ ∫ x in R \ U, F x * Real.exp (-N * δ₀) ∂μ := by
-          refine setIntegral_mono_on (hfR.mono_set hsub) ((hFint.mono_set hsub).mul_const _) hRU
-            fun x hx => ?_
+          refine setIntegral_mono_ae_restrict (hfR.mono_set hsub)
+            ((hFint.mono_set hsub).mul_const _) ?_
+          filter_upwards [ae_restrict_mem hRU, ae_restrict_of_ae hgap] with x hx hgx
           refine mul_le_mul_of_nonneg_left ?_ (hF0 x hx.1)
           rw [Real.exp_le_exp]
-          have := hgap x hx.1 hx.2
+          have := hgx hx.1 hx.2
           nlinarith
       _ = Real.exp (-N * δ₀) * ∫ x in R \ U, F x ∂μ := by
           rw [integral_mul_const, mul_comm]
@@ -198,7 +199,8 @@ variable {X : Type*} [MeasurableSpace X] {μ : Measure X} {R : Set X} (hR : Meas
   {F K : X → ℝ} (hF0 : ∀ x ∈ R, 0 ≤ F x) (hFint : IntegrableOn F R μ) (hK0 : ∀ x ∈ R, 0 ≤ K x)
   (hKm : Measurable K) {ι : Type*} (Ω : ι → Set X)
   (hΩm : ∀ i, MeasurableSet (Ω i)) (hΩR : ∀ i, Ω i ⊆ R) {δ₀ : ℝ} (hδ₀ : 0 < δ₀)
-  (hgap : ∀ x ∈ R, x ∉ ⋃ i, Ω i → δ₀ ≤ K x) (c lam : ι → ℝ) (m : ι → ℕ) (hc : ∀ i, 0 < c i)
+  (hgap : ∀ᵐ x ∂μ, x ∈ R → x ∉ ⋃ i, Ω i → δ₀ ≤ K x) (c lam : ι → ℝ) (m : ι → ℕ)
+  (hc : ∀ i, 0 < c i)
   (hI : ∀ i, (fun N : ℝ => ∫ x in Ω i, F x * Real.exp (-N * K x) ∂μ) ~[atTop]
     fun N => c i * powLogScale (lam i) (m i - 1) N)
 

@@ -208,6 +208,65 @@ theorem mem_localRegion_zero {A' : Set (Fin C.t → ℝ)} (h0' : (0 : Fin C.t �
       rfl
   · rw [stripChart, inv_zero C SD h0 hb₁, translated, zero_add]
 
+/-- **The local region contains the chart image of an open source neighbourhood of `y₀`**: the
+open coordinate box `{|ζ_{t_i}| < r, |ζ_{n_j}| < b'}` lies in the strip box, its inverse image
+under the strip normalisation is open, and translating by `y₀` gives the neighbourhood. -/
+theorem exists_isOpen_subset_localRegion (hβ : 0 < β) {A' : Set (Fin C.t → ℝ)} {r : ℝ} (hr : 0 < r)
+    (hrA : Metric.ball (0 : Fin C.t → ℝ) r ⊆ A') (hA'A : A' ⊆ A) {b' : ℝ} (hb' : 0 < b')
+    (hb'b₁ : b' ≤ b₁) (hb'SD : b' ≤ SD.b) (h0 : (0 : Fin C.t → ℝ) ∈ A) (hb₁ : 0 ≤ b₁) :
+    ∃ V : Set (Fin d → ℝ), IsOpen V ∧ y₀ ∈ V ∧ ∀ y ∈ V, φ y ∈ localRegion C SD A' b' := by
+  -- the open coordinate box
+  set O : Set (Fin d → ℝ) :=
+    (⋂ i, {ζ | |ζ (tIdx C.σ i)| < r}) ∩ ⋂ j, {ζ | |ζ (nIdx C.σ j)| < b'} with hO
+  have hOopen : IsOpen O := by
+    refine IsOpen.inter ?_ ?_
+    · exact isOpen_iInter_of_finite fun i =>
+        isOpen_lt (continuous_abs.comp (continuous_apply (tIdx C.σ i))) continuous_const
+    · exact isOpen_iInter_of_finite fun j =>
+        isOpen_lt (continuous_abs.comp (continuous_apply (nIdx C.σ j))) continuous_const
+  have hOz : O ⊆ zBox C.σ A' b' := by
+    intro ζ hζ
+    refine ⟨((fun i => ζ (tIdx C.σ i)), fun j => ζ (nIdx C.σ j)), ⟨hrA ?_, fun j _ => ?_⟩, ?_⟩
+    · rw [Metric.mem_ball, dist_zero_right, pi_norm_lt_iff hr]
+      intro i
+      rw [Real.norm_eq_abs]
+      exact mem_iInter.1 hζ.1 i
+    · exact mem_Icc.2 (abs_le.1 (mem_iInter.1 hζ.2 j).le)
+    · funext x
+      obtain ⟨z, rfl⟩ := C.σ.surjective x
+      rcases z with i | j
+      · rw [show C.σ (Sum.inl i) = tIdx C.σ i from rfl, prodToPi_apply_tIdx]
+      · rw [show C.σ (Sum.inr j) = nIdx C.σ j from rfl, prodToPi_apply_nIdx]
+  have hOS : O ⊆ stripImage C SD := hOz.trans (zBox_subset_stripImage C SD hA'A hb'b₁ hb'SD)
+  have h0O : (0 : Fin d → ℝ) ∈ O :=
+    ⟨mem_iInter.2 fun i => by simpa using hr, mem_iInter.2 fun j => by simpa using hb'⟩
+  -- the inverse image of the box is open
+  have hρ : AnalyticOnNhd ℝ (unitRoot β (2 * C.k j₀) C.unit₀) C.V₀ := fun w hw =>
+    analyticAt_unitRoot hβ (by have := C.k_pos j₀; omega) (C.unit₀_analytic w hw)
+      (C.unit₀_pos w hw)
+  have hinvO : SD.inv '' O =
+      SD.S ∩ rescale (nIdx C.σ j₀) (unitRoot β (2 * C.k j₀) C.unit₀) ⁻¹' O := by
+    ext y
+    constructor
+    · rintro ⟨ζ, hζ, rfl⟩
+      exact ⟨SD.inv_mem (hOS hζ), by rw [mem_preimage, SD.apply_inv (hOS hζ)]; exact hζ⟩
+    · rintro ⟨hyS, hy⟩
+      exact ⟨_, hy, SD.inv_apply hyS⟩
+  have hcont : ContinuousOn (rescale (nIdx C.σ j₀) (unitRoot β (2 * C.k j₀) C.unit₀)) SD.S :=
+    fun y hy => (analyticAt_rescale _ (hρ y (SD.S_sub hy))).continuousAt.continuousWithinAt
+  have hVopen : IsOpen (SD.inv '' O) := by
+    rw [hinvO]
+    exact hcont.isOpen_inter_preimage SD.S_open hOopen
+  refine ⟨(fun y => y - y₀) ⁻¹' (SD.inv '' O), hVopen.preimage (continuous_id.sub continuous_const),
+    ?_, ?_⟩
+  · change y₀ - y₀ ∈ SD.inv '' O
+    rw [sub_self]
+    exact ⟨0, h0O, inv_zero C SD h0 hb₁⟩
+  · rintro y ⟨ζ, hζ, hy⟩
+    refine ⟨ζ, hOz hζ, ?_⟩
+    change translated φ y₀ (SD.inv ζ) = φ y
+    rw [translated, hy, sub_add_cancel]
+
 /-- The part of the local region off the orthant images lies in the image of the null set of the
 strip box on the normal hyperplanes. -/
 theorem localRegion_sdiff_subset {A' : Set (Fin C.t → ℝ)} {b' : ℝ} :
