@@ -547,3 +547,4 @@ import Grammar.ProductChartPositivity
 import Grammar.PosteriorTransfer
 import Grammar.ProductChartPosterior
 import Grammar.ProductChartTiedStrata
+import Grammar.OneChartProductExample
