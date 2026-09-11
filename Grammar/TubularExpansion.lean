@@ -42,7 +42,7 @@ namespace Grammar
 section Fibre
 
 variable {d r : ℕ} {S : Set (Fin d → ℝ)} {A : CompatibleAnalyticLCIAtlas r S} {s : Fin d → ℝ}
-  (T : NormalTubularChart A.normal S) (C : ModelGraphChart A s)
+  (T : NormalTubularChart A.normal S) (C : ModelGraphChart A s) (wt : TubeWeight d)
 
 /-- The fibres of the certified domain are bounded: `‖n‖ ≤ ‖(J Jᵀ)⁻¹J‖ · ε`. -/
 theorem norm_le_of_mem_tubeChartDom {z : Fin (d - r) → ℝ} (hz : z ∈ C.W) {n : Fin r → ℝ}
@@ -67,26 +67,26 @@ theorem continuous_tubeJac_fibre {z : Fin (d - r) → ℝ} (hz : z ∈ C.W) :
   exact (continuous_abs.comp ContinuousLinearMap.continuous_det).continuousAt.comp h2
 
 theorem tubeDensity_eq_zero_of_notMem {z : Fin (d - r) → ℝ} (hz : z ∉ C.W) (n : Fin r → ℝ) :
-    tubeDensity T C (z, n) = 0 :=
-  indicator_of_notMem (fun h => hz h.1) _
+    tubeDensity T C wt (z, n) = 0 :=
+  tubeDensity_of_notMem T C wt (fun h => hz h.1)
 
 /-- The fibre measures vanish off `W`. -/
 theorem fibreMeasure_eq_zero_of_notMem {z : Fin (d - r) → ℝ} (hz : z ∉ C.W) :
-    fibreMeasure volume (tubeDensity T C) z = 0 := by
+    fibreMeasure volume (tubeDensity T C wt) z = 0 := by
   unfold fibreMeasure
-  have : (fun n => ENNReal.ofReal (tubeDensity T C (z, n))) = 0 := funext fun n => by
-    simp [tubeDensity_eq_zero_of_notMem T C hz n]
+  have : (fun n => ENNReal.ofReal (tubeDensity T C wt (z, n))) = 0 := funext fun n => by
+    simp [tubeDensity_eq_zero_of_notMem T C wt hz n]
   rw [this, withDensity_zero]
 
 /-- **Every fibre measure of the tube has finite moments of all orders.** -/
 theorem integrable_norm_pow_tubeFibre (z : Fin (d - r) → ℝ) (k : ℕ) :
-    Integrable (fun n : Fin r → ℝ => ‖n‖ ^ k) (fibreMeasure volume (tubeDensity T C) z) := by
+    Integrable (fun n : Fin r → ℝ => ‖n‖ ^ k) (fibreMeasure volume (tubeDensity T C wt) z) := by
   by_cases hz : z ∈ C.W
   · unfold fibreMeasure
-    have hmeas : AEMeasurable (fun n : Fin r → ℝ => (tubeDensity T C (z, n)).toNNReal) volume :=
-      ((measurable_tubeDensity T C).comp measurable_prodMk_left).real_toNNReal.aemeasurable
-    rw [show (fun n : Fin r → ℝ => ENNReal.ofReal (tubeDensity T C (z, n))) =
-        fun n => ((tubeDensity T C (z, n)).toNNReal : ℝ≥0∞) from rfl,
+    have hmeas : AEMeasurable (fun n : Fin r → ℝ => (tubeDensity T C wt (z, n)).toNNReal) volume :=
+      ((measurable_tubeDensity T C wt).comp measurable_prodMk_left).real_toNNReal.aemeasurable
+    rw [show (fun n : Fin r → ℝ => ENNReal.ofReal (tubeDensity T C wt (z, n))) =
+        fun n => ((tubeDensity T C wt (z, n)).toNNReal : ℝ≥0∞) from rfl,
       integrable_withDensity_iff_integrable_coe_smul₀ hmeas]
     set M := ‖rowCoframe A C.i (C.emb z)‖ * T.eps with hM
     obtain ⟨B, hB⟩ := (isCompact_closedBall (0 : Fin r → ℝ) M).exists_bound_of_continuousOn
@@ -96,23 +96,23 @@ theorem integrable_norm_pow_tubeFibre (z : Fin (d - r) → ℝ) (k : ℕ) :
         rw [Metric.mem_closedBall, dist_zero_right]
         exact norm_le_of_mem_tubeChartDom T C hz h)
     have hgm : AEStronglyMeasurable
-        (fun n : Fin r → ℝ => ((tubeDensity T C (z, n)).toNNReal : ℝ≥0) • ‖n‖ ^ k) volume :=
+        (fun n : Fin r → ℝ => ((tubeDensity T C wt (z, n)).toNNReal : ℝ≥0) • ‖n‖ ^ k) volume :=
       (hmeas.coe_nnreal_real.smul
         (continuous_norm.pow k).measurable.aemeasurable).aestronglyMeasurable
     have key : ∀ n ∈ Metric.closedBall (0 : Fin r → ℝ) M,
-        ‖((tubeDensity T C (z, n)).toNNReal : ℝ≥0) • ‖n‖ ^ k‖ ≤ B * M ^ k := by
+        ‖((tubeDensity T C wt (z, n)).toNNReal : ℝ≥0) • ‖n‖ ^ k‖ ≤ B * wt.bound * M ^ k := by
       intro n hn
       have hn' : ‖n‖ ≤ M := by rwa [Metric.mem_closedBall, dist_zero_right] at hn
-      have hc : 0 ≤ tubeDensity T C (z, n) := tubeDensity_nonneg T C _
-      have hcB : tubeDensity T C (z, n) ≤ B :=
-        (indicator_le_self' (fun q _ => tubeJac_nonneg C q) _).trans
-          ((le_abs_self _).trans (hB n hn))
+      have hc : 0 ≤ tubeDensity T C wt (z, n) := tubeDensity_nonneg T C wt _
+      have hcB : tubeDensity T C wt (z, n) ≤ B * wt.bound :=
+        (tubeDensity_le T C wt _).trans (mul_le_mul_of_nonneg_right
+          ((le_abs_self _).trans (hB n hn)) wt.bound_nonneg)
       rw [NNReal.smul_def, Real.coe_toNNReal _ hc, smul_eq_mul, Real.norm_eq_abs,
         abs_of_nonneg (mul_nonneg hc (pow_nonneg (norm_nonneg _) _))]
       exact mul_le_mul hcB (pow_le_pow_left₀ (norm_nonneg _) hn' k)
         (pow_nonneg (norm_nonneg _) _) (hc.trans hcB)
     have hbound : IntegrableOn
-        (fun n : Fin r → ℝ => ((tubeDensity T C (z, n)).toNNReal : ℝ≥0) • ‖n‖ ^ k)
+        (fun n : Fin r → ℝ => ((tubeDensity T C wt (z, n)).toNNReal : ℝ≥0) • ‖n‖ ^ k)
         (Metric.closedBall (0 : Fin r → ℝ) M) :=
       Measure.integrableOn_of_bounded measure_closedBall_lt_top.ne hgm
         (ae_restrict_of_forall_mem measurableSet_closedBall key)
@@ -122,8 +122,8 @@ theorem integrable_norm_pow_tubeFibre (z : Fin (d - r) → ℝ) (k : ℕ) :
     · rw [indicator_of_mem hn]
       rfl
     · rw [indicator_of_notMem hn]
-      simp [tubeDensity, indicator_of_notMem (hnot n hn)]
-  · rw [fibreMeasure_eq_zero_of_notMem T C hz]
+      simp [tubeDensity_of_notMem T C wt (hnot n hn)]
+  · rw [fibreMeasure_eq_zero_of_notMem T C wt hz]
     exact integrable_zero_measure
 
 end Fibre
@@ -131,61 +131,61 @@ end Fibre
 section Expansion
 
 variable {d r : ℕ} {S : Set (Fin d → ℝ)} {A : CompatibleAnalyticLCIAtlas r S} {s : Fin d → ℝ}
-  (T : NormalTubularChart A.normal S) (C : ModelGraphChart A s)
+  (T : NormalTubularChart A.normal S) (C : ModelGraphChart A s) (wt : TubeWeight d)
 
 /-- **The Taylor–moment expansion of the tube integral**: for `F` integrable on the tube piece
 whose fibre restrictions `F ∘ ψ_z` have power series at `0` carrying the fibre measures and
 dominating their moments, `∫_{U ∩ proj⁻¹V'} F dy = ∫_z ∑_k (k!)⁻¹ ⟨D^k(F∘ψ_z)(0), 𝖬_k(z)⟩ dz`. -/
 theorem integral_tube_piece_eq_tsum_moment {F : (Fin d → ℝ) → ℝ}
-    (hF : IntegrableOn F (T.U ∩ T.proj ⁻¹' C.V'))
+    (hF : IntegrableOn (fun y => wt.w y * F y) (T.U ∩ T.proj ⁻¹' C.V'))
     {q : (Fin (d - r) → ℝ) → FormalMultilinearSeries ℝ (Fin r → ℝ) ℝ}
     {Rad : (Fin (d - r) → ℝ) → ℝ≥0∞}
     (hq : ∀ z ∈ C.W, HasFPowerSeriesOnBall (fun n => F (tubeChart C (z, n))) (q z) 0 (Rad z))
-    (hη : ∀ z ∈ C.W, ∀ᵐ n ∂fibreMeasure volume (tubeDensity T C) z,
+    (hη : ∀ z ∈ C.W, ∀ᵐ n ∂fibreMeasure volume (tubeDensity T C wt) z,
       n ∈ Metric.eball (0 : Fin r → ℝ) (Rad z))
     (hdom : ∀ z ∈ C.W, Summable fun k =>
-      ‖q z k‖ * ∫ n, ‖n‖ ^ k ∂fibreMeasure volume (tubeDensity T C) z) :
-    ∫ y in T.U ∩ T.proj ⁻¹' C.V', F y =
+      ‖q z k‖ * ∫ n, ‖n‖ ^ k ∂fibreMeasure volume (tubeDensity T C wt) z) :
+    ∫ y in T.U ∩ T.proj ⁻¹' C.V', wt.w y * F y =
       ∫ z, (C.W : Set (Fin (d - r) → ℝ)).indicator (fun z => ∑' k, (k.factorial : ℝ)⁻¹ *
-        momentFunctional (fibreMeasure volume (tubeDensity T C) z)
-          (integrable_norm_pow_tubeFibre T C z k)
+        momentFunctional (fibreMeasure volume (tubeDensity T C wt) z)
+          (integrable_norm_pow_tubeFibre T C wt z k)
           (normalJet (fun n => F (tubeChart C (z, n))) k)) z := by
-  rw [integral_tube_piece_fibreMeasure T C hF]
+  rw [integral_tube_piece_fibreMeasure T C wt hF]
   refine integral_congr_ae (Eventually.of_forall fun z => ?_)
   by_cases hz : z ∈ C.W
   · rw [indicator_of_mem hz]
     exact integral_eq_tsum_moment (hq z hz) _ (hη z hz)
-      (fun k => integrable_norm_pow_tubeFibre T C z k) (hdom z hz)
+      (fun k => integrable_norm_pow_tubeFibre T C wt z k) (hdom z hz)
   · rw [indicator_of_notMem hz]
-    change ∫ n, F (tubeChart C (z, n)) ∂fibreMeasure volume (tubeDensity T C) z = 0
-    rw [fibreMeasure_eq_zero_of_notMem T C hz, integral_zero_measure]
+    change ∫ n, F (tubeChart C (z, n)) ∂fibreMeasure volume (tubeDensity T C wt) z = 0
+    rw [fibreMeasure_eq_zero_of_notMem T C wt hz, integral_zero_measure]
 
 /-- **The multi-index form**:
 `∫_{U ∩ proj⁻¹V'} F dy = ∫_z ∑_k ∑_{|b|=k} (∂^b(F∘ψ_z)(0)/b!) M̃_b(z) dz` with the dressed
 moments `M̃_b(z) = ∫ n^b dη_z`. -/
 theorem integral_tube_piece_eq_tsum_multiIndex {F : (Fin d → ℝ) → ℝ}
-    (hF : IntegrableOn F (T.U ∩ T.proj ⁻¹' C.V'))
+    (hF : IntegrableOn (fun y => wt.w y * F y) (T.U ∩ T.proj ⁻¹' C.V'))
     {q : (Fin (d - r) → ℝ) → FormalMultilinearSeries ℝ (Fin r → ℝ) ℝ}
     {Rad : (Fin (d - r) → ℝ) → ℝ≥0∞}
     (hq : ∀ z ∈ C.W, HasFPowerSeriesOnBall (fun n => F (tubeChart C (z, n))) (q z) 0 (Rad z))
-    (hη : ∀ z ∈ C.W, ∀ᵐ n ∂fibreMeasure volume (tubeDensity T C) z,
+    (hη : ∀ z ∈ C.W, ∀ᵐ n ∂fibreMeasure volume (tubeDensity T C wt) z,
       n ∈ Metric.eball (0 : Fin r → ℝ) (Rad z))
     (hdom : ∀ z ∈ C.W, Summable fun k =>
-      ‖q z k‖ * ∫ n, ‖n‖ ^ k ∂fibreMeasure volume (tubeDensity T C) z) :
-    ∫ y in T.U ∩ T.proj ⁻¹' C.V', F y =
+      ‖q z k‖ * ∫ n, ‖n‖ ^ k ∂fibreMeasure volume (tubeDensity T C wt) z) :
+    ∫ y in T.U ∩ T.proj ⁻¹' C.V', wt.w y * F y =
       ∫ z, (C.W : Set (Fin (d - r) → ℝ)).indicator (fun z => ∑' k,
         ∑ b ∈ Finset.Nat.antidiagonalTuple r k, (∏ i, ((b i).factorial : ℝ))⁻¹ *
           weightComponent (normalJet (fun n => F (tubeChart C (z, n))) k) b *
-          dressedMoment (fibreMeasure volume (tubeDensity T C) z) b) z := by
-  rw [integral_tube_piece_fibreMeasure T C hF]
+          dressedMoment (fibreMeasure volume (tubeDensity T C wt) z) b) z := by
+  rw [integral_tube_piece_fibreMeasure T C wt hF]
   refine integral_congr_ae (Eventually.of_forall fun z => ?_)
   by_cases hz : z ∈ C.W
   · rw [indicator_of_mem hz]
     exact integral_eq_tsum_multiIndex (hq z hz) _ (hη z hz)
-      (fun k => integrable_norm_pow_tubeFibre T C z k) (hdom z hz)
+      (fun k => integrable_norm_pow_tubeFibre T C wt z k) (hdom z hz)
   · rw [indicator_of_notMem hz]
-    change ∫ n, F (tubeChart C (z, n)) ∂fibreMeasure volume (tubeDensity T C) z = 0
-    rw [fibreMeasure_eq_zero_of_notMem T C hz, integral_zero_measure]
+    change ∫ n, F (tubeChart C (z, n)) ∂fibreMeasure volume (tubeDensity T C wt) z = 0
+    rw [fibreMeasure_eq_zero_of_notMem T C wt hz, integral_zero_measure]
 
 end Expansion
 

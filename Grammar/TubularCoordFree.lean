@@ -57,7 +57,7 @@ end FrameEquiv
 section NormalMeasure
 
 variable {d r : ℕ} {S : Set (Fin d → ℝ)} {A : CompatibleAnalyticLCIAtlas r S} {s : Fin d → ℝ}
-  (T : NormalTubularChart A.normal S) (C : ModelGraphChart A s)
+  (T : NormalTubularChart A.normal S) (C : ModelGraphChart A s) (wt : TubeWeight d)
 
 theorem ModelGraphChart.mem_V_of_mem (C : ModelGraphChart A s) {x : Fin d → ℝ}
     (hx : x ∈ S ∩ C.V') : x ∈ A.V C.i := C.V'_subset hx.2
@@ -67,22 +67,22 @@ open Classical in
 pulled-back Lebesgue density over `z = ft x`, pushed forward by the row frame to `N_x`. -/
 noncomputable def tubeNormalMeasure (x : Fin d → ℝ) : Measure ↥(A.normal x) :=
   if hx : x ∈ S ∩ C.V' then
-    (fibreMeasure volume (tubeDensity T C) (C.ft x)).map
+    (fibreMeasure volume (tubeDensity T C wt) (C.ft x)).map
       (rowFrameEquiv A C.i hx.1 (C.mem_V_of_mem hx))
   else 0
 
 theorem tubeNormalMeasure_of_mem {x : Fin d → ℝ} (hx : x ∈ S ∩ C.V') :
-    tubeNormalMeasure T C x = (fibreMeasure volume (tubeDensity T C) (C.ft x)).map
+    tubeNormalMeasure T C wt x = (fibreMeasure volume (tubeDensity T C wt) (C.ft x)).map
       (rowFrameEquiv A C.i hx.1 (C.mem_V_of_mem hx)) := by
   rw [tubeNormalMeasure, dif_pos hx]
 
 /-- The pushed-forward fibre measures have finite moments of all orders. -/
 theorem integrable_norm_pow_tubeNormalMeasure (k : ℕ) (x : Fin d → ℝ) :
-    Integrable (fun ξ : ↥(A.normal x) => ‖ξ‖ ^ k) (tubeNormalMeasure T C x) := by
+    Integrable (fun ξ : ↥(A.normal x) => ‖ξ‖ ^ k) (tubeNormalMeasure T C wt x) := by
   unfold tubeNormalMeasure
   split_ifs with hx
   · exact integrable_norm_pow_map' (rowFrameEquiv A C.i hx.1 (C.mem_V_of_mem hx) :
-      (Fin r → ℝ) →L[ℝ] ↥(A.normal x)) (integrable_norm_pow_tubeFibre T C (C.ft x) k)
+      (Fin r → ℝ) →L[ℝ] ↥(A.normal x)) (integrable_norm_pow_tubeFibre T C wt (C.ft x) k)
   · exact integrable_zero_measure
 
 theorem momentFunctional_congr_measure {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -96,19 +96,21 @@ theorem momentFunctional_congr_measure {E : Type*} [NormedAddCommGroup E] [Norme
 `k`-th Taylor–moment term of the fibre restriction `F ∘ ψ_z`. -/
 theorem normalContraction_tube (F : (Fin d → ℝ) → ℝ) {z : Fin (d - r) → ℝ} (hz : z ∈ C.W)
     (k : ℕ) :
-    normalContraction A.normal (tubeNormalMeasure T C)
-        (integrable_norm_pow_tubeNormalMeasure T C k) (additiveFamily A.normal) F (C.emb z) =
-      (k.factorial : ℝ)⁻¹ * momentFunctional (fibreMeasure volume (tubeDensity T C) z)
-        (integrable_norm_pow_tubeFibre T C z k) (normalJet (fun n => F (tubeChart C (z, n))) k) :=
+    normalContraction A.normal (tubeNormalMeasure T C wt)
+        (integrable_norm_pow_tubeNormalMeasure T C wt k) (additiveFamily A.normal) F (C.emb z) =
+      (k.factorial : ℝ)⁻¹ * momentFunctional (fibreMeasure volume (tubeDensity T C wt) z)
+        (integrable_norm_pow_tubeFibre T C wt z k) (normalJet (fun n => F (tubeChart C (z, n))) k)
+          :=
           by
   have hx : C.emb z ∈ S ∩ C.V' := C.emb_mem z hz
   set e := rowFrameEquiv A C.i hx.1 (C.mem_V_of_mem hx) with he
   rw [normalContraction_frame' A.normal (additiveFamily A.normal) F (C.emb z)
-    (tubeNormalMeasure T C) (integrable_norm_pow_tubeNormalMeasure T C k) e]
-  have hmeas : (tubeNormalMeasure T C (C.emb z)).map (e.symm : ↥(A.normal (C.emb z)) →L[ℝ] (Fin r →
+    (tubeNormalMeasure T C wt) (integrable_norm_pow_tubeNormalMeasure T C wt k) e]
+  have hmeas : (tubeNormalMeasure T C wt (C.emb z)).map (e.symm : ↥(A.normal (C.emb z)) →L[ℝ] (Fin
+    r →
     ℝ)) =
-      fibreMeasure volume (tubeDensity T C) z := by
-    rw [tubeNormalMeasure_of_mem T C hx, C.ft_emb _ hz, ← he, Measure.map_map
+      fibreMeasure volume (tubeDensity T C wt) z := by
+    rw [tubeNormalMeasure_of_mem T C wt hx, C.ft_emb _ hz, ← he, Measure.map_map
       (e.symm : ↥(A.normal (C.emb z)) →L[ℝ] (Fin r → ℝ)).continuous.measurable
         e.continuous.measurable]
     have : ⇑(e.symm : ↥(A.normal (C.emb z)) →L[ℝ] (Fin r → ℝ)) ∘ ⇑e = id := e.symm_comp_self
@@ -118,7 +120,7 @@ theorem normalContraction_tube (F : (Fin d → ℝ) → ℝ) {z : Fin (d - r) �
     funext v
     rw [additiveFamily_apply, he, rowFrameEquiv_apply_coe]
     rfl
-  rw [momentFunctional_congr_measure hmeas _ (integrable_norm_pow_tubeFibre T C z k), hfun,
+  rw [momentFunctional_congr_measure hmeas _ (integrable_norm_pow_tubeFibre T C wt z k), hfun,
     map_smul, smul_eq_mul]
   rfl
 
@@ -129,24 +131,24 @@ dominating their moments,
 normal Taylor form of the additive family (the restricted ambient jet) and `𝖬_k` the moments of
 the pulled-back Lebesgue density on the ambient normal spaces. -/
 theorem integral_tube_piece_eq_tsum_normalContraction {F : (Fin d → ℝ) → ℝ}
-    (hF : IntegrableOn F (T.U ∩ T.proj ⁻¹' C.V'))
+    (hF : IntegrableOn (fun y => wt.w y * F y) (T.U ∩ T.proj ⁻¹' C.V'))
     {q : (Fin (d - r) → ℝ) → FormalMultilinearSeries ℝ (Fin r → ℝ) ℝ}
     {Rad : (Fin (d - r) → ℝ) → ℝ≥0∞}
     (hq : ∀ z ∈ C.W, HasFPowerSeriesOnBall (fun n => F (tubeChart C (z, n))) (q z) 0 (Rad z))
-    (hη : ∀ z ∈ C.W, ∀ᵐ n ∂fibreMeasure volume (tubeDensity T C) z,
+    (hη : ∀ z ∈ C.W, ∀ᵐ n ∂fibreMeasure volume (tubeDensity T C wt) z,
       n ∈ Metric.eball (0 : Fin r → ℝ) (Rad z))
     (hdom : ∀ z ∈ C.W, Summable fun k =>
-      ‖q z k‖ * ∫ n, ‖n‖ ^ k ∂fibreMeasure volume (tubeDensity T C) z) :
-    ∫ y in T.U ∩ T.proj ⁻¹' C.V', F y =
+      ‖q z k‖ * ∫ n, ‖n‖ ^ k ∂fibreMeasure volume (tubeDensity T C wt) z) :
+    ∫ y in T.U ∩ T.proj ⁻¹' C.V', wt.w y * F y =
       ∫ z, (C.W : Set (Fin (d - r) → ℝ)).indicator (fun z => ∑' k,
-        normalContraction A.normal (tubeNormalMeasure T C)
-          (integrable_norm_pow_tubeNormalMeasure T C k) (additiveFamily A.normal) F
+        normalContraction A.normal (tubeNormalMeasure T C wt)
+          (integrable_norm_pow_tubeNormalMeasure T C wt k) (additiveFamily A.normal) F
           (C.emb z)) z := by
-  rw [integral_tube_piece_eq_tsum_moment T C hF hq hη hdom]
+  rw [integral_tube_piece_eq_tsum_moment T C wt hF hq hη hdom]
   refine integral_congr_ae (Eventually.of_forall fun z => ?_)
   by_cases hz : z ∈ C.W
   · rw [indicator_of_mem hz, indicator_of_mem hz]
-    exact tsum_congr fun k => (normalContraction_tube T C F hz k).symm
+    exact tsum_congr fun k => (normalContraction_tube T C wt F hz k).symm
   · rw [indicator_of_notMem hz, indicator_of_notMem hz]
 
 end NormalMeasure

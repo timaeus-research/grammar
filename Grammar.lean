@@ -519,3 +519,4 @@ import Grammar.TubularExpansion
 import Grammar.TubularCoordFree
 import Grammar.TubularPushforward
 import Grammar.TubularGlobalExpansion
+import Grammar.CoordStratumAtlas
