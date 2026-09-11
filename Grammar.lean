@@ -500,3 +500,4 @@ import Grammar.MonomialBoxExpansion
 import Grammar.ReflectedBoxExpansion
 import Grammar.StripBoxExpansion
 import Grammar.StripLocalExpansion
+import Grammar.AnalyticJacobian
