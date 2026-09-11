@@ -515,3 +515,4 @@ import Grammar.TubularLocalInstance
 import Grammar.TubularGlobalInstance
 import Grammar.TubularJacobian
 import Grammar.TubularFibreIntegration
+import Grammar.TubularExpansion
