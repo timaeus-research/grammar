@@ -253,7 +253,6 @@ noncomputable def coordPlaneChart {s : Fin d → ℝ} (hs : s ∈ coordPlane τ)
     ((ContinuousLinearMap.fst ℝ (Fin m → ℝ) (Fin r → ℝ)).contDiff.comp (coordCLE τ).symm.contDiff)
   ft_mem _ _ := by simp
   emb_ft x hx := by
-    change coordCLE τ (planeReindex τ ((planeReindex τ).symm ((coordCLE τ).symm x).1), 0) = x
     rw [ContinuousLinearEquiv.apply_symm_apply]
     have h2 : ((coordCLE τ).symm x).2 = 0 := by
       funext j
@@ -262,7 +261,6 @@ noncomputable def coordPlaneChart {s : Fin d → ℝ} (hs : s ∈ coordPlane τ)
     conv_rhs => rw [← (coordCLE τ).apply_symm_apply x]
     rw [← h2]
   ft_emb z _ := by
-    change (planeReindex τ).symm ((coordCLE τ).symm (coordCLE τ (planeReindex τ z, 0))).1 = z
     rw [ContinuousLinearEquiv.symm_apply_apply, ContinuousLinearEquiv.symm_apply_apply]
 
 /-- The linear tube chart of the coordinate plane: `(z, n) ↦ coordCLE τ (reindex z, n)`. -/

@@ -26,7 +26,7 @@ section CoordStratum
 variable (m k : ℕ)
 
 /-- The model coordinate plane `{x : stratumProj x = 0} ⊆ ℝ^{m+k}`. -/
-def coordPlane : Set (Fin (m + k) → ℝ) := {x | stratumProj m k x = 0}
+def coordPlaneModel : Set (Fin (m + k) → ℝ) := {x | stratumProj m k x = 0}
 
 /-- `stratumProj` as a continuous linear map. -/
 noncomputable def stratumProjCLM : (Fin (m + k) → ℝ) →L[ℝ] (Fin k → ℝ) :=
@@ -39,7 +39,7 @@ theorem stratumProjCLM_apply (x : Fin (m + k) → ℝ) : stratumProjCLM m k x = 
 
 /-- **The coordinate plane as an analytic LCI stratum**: one chart, `G = stratumProj`,
 `J = stratumJ`. -/
-noncomputable def coordStratumAtlas : CompatibleAnalyticLCIAtlas k (coordPlane m k) where
+noncomputable def coordStratumAtlas : CompatibleAnalyticLCIAtlas k (coordPlaneModel m k) where
   ι := Unit
   V _ := univ
   isOpen_V _ := isOpen_univ
@@ -64,7 +64,7 @@ theorem coordStratumAtlas_normal (x : Fin (m + k) → ℝ) :
 
 /-- **strucdual's analytic tube of every radius**, for the atlas normal field. -/
 theorem coordStratumTube (ε : ℝ) (hε : 0 < ε) :
-    Nonempty (AnalyticNormalTubularChart (coordStratumAtlas m k).normal (coordPlane m k)) := by
+    Nonempty (AnalyticNormalTubularChart (coordStratumAtlas m k).normal (coordPlaneModel m k)) := by
   have hN : (fun _ : Fin (m + k) → ℝ => normalSpaceOf (stratumJ m k)) =
       (coordStratumAtlas m k).normal := funext fun x => (coordStratumAtlas_normal m k x).symm
   have := stratum_tube m k ε hε
