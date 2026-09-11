@@ -490,3 +490,4 @@ import Grammar.HironakaUnconditional
 import Grammar.AnalyticCorePresentation
 import Grammar.MonomialUnitRemoval
 import Grammar.MonomialParity
+import Grammar.StripNormalisation
