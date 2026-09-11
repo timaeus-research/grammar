@@ -496,3 +496,4 @@ import Grammar.MonomialCoefficients
 import Grammar.JointAmplitude
 import Grammar.PositiveBoxCore
 import Grammar.ExactNormalTiling
+import Grammar.MonomialBoxExpansion

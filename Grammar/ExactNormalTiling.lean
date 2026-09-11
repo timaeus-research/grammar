@@ -94,17 +94,17 @@ end Equiv
 
 /-! ### Tiling pieces -/
 
-variable {d : ℕ}
+variable {U : Type*} [MeasureSpace U]
 
 /-- **A tiling piece**: a positive box chart in product coordinates over a compact tangential
 base, carried into the resolved space by a volume-preserving measurable equivalence. -/
-structure TilingPiece (D : LocalisationData (Fin d → ℝ)) (β : ℝ) where
+structure TilingPiece (D : LocalisationData U) (β : ℝ) where
   /-- the tangential dimension -/
   t : ℕ
   /-- the normal dimension minus one -/
   n : ℕ
   /-- the product coordinates -/
-  e : ((Fin t → ℝ) × (Fin (n + 1) → ℝ)) ≃ᵐ (Fin d → ℝ)
+  e : ((Fin t → ℝ) × (Fin (n + 1) → ℝ)) ≃ᵐ U
   e_vol : MeasurePreserving e volume volume
   /-- the tangential base -/
   A : Set (Fin t → ℝ)
@@ -117,13 +117,13 @@ structure TilingPiece (D : LocalisationData (Fin d → ℝ)) (β : ℝ) where
 
 namespace TilingPiece
 
-variable {D : LocalisationData (Fin d → ℝ)} {β : ℝ} (P : TilingPiece D β)
+variable {D : LocalisationData U} {β : ℝ} (P : TilingPiece D β)
 
 /-- The box in product coordinates. -/
 def box : Set ((Fin P.t → ℝ) × (Fin (P.n + 1) → ℝ)) := P.A ×ˢ piBox (P.n + 1) (Ioc 0 P.b)
 
 /-- The image of the piece in the resolved space. -/
-def image : Set (Fin d → ℝ) := P.e '' (P.chart.Ψ '' P.box)
+def image : Set U := P.e '' (P.chart.Ψ '' P.box)
 
 theorem measurableSet_box : MeasurableSet P.box :=
   P.A_compact.isClosed.measurableSet.prod (measurableSet_piBox _ _ measurableSet_Ioc)
@@ -154,9 +154,9 @@ end TilingPiece
 /-- **An exact-normal tiling** of a Laplace integral on the region `Ω`: finitely many tiling
 pieces with images inside `Ω`, pairwise disjoint up to null sets, and a positive phase gap off
 their union. -/
-structure ExactNormalTiling (D : LocalisationData (Fin d → ℝ)) (β : ℝ) where
+structure ExactNormalTiling (D : LocalisationData U) (β : ℝ) where
   /-- the integration region -/
-  Ω : Set (Fin d → ℝ)
+  Ω : Set U
   μ_eq : D.μ = volume.restrict Ω
   /-- the number of pieces -/
   M : ℕ
@@ -171,7 +171,7 @@ structure ExactNormalTiling (D : LocalisationData (Fin d → ℝ)) (β : ℝ) wh
 
 namespace ExactNormalTiling
 
-variable {D : LocalisationData (Fin d → ℝ)} {β : ℝ}
+variable {D : LocalisationData U} {β : ℝ}
 
 /-- **The bridge**: an exact-normal tiling is an analytic core decomposition. -/
 theorem hasAnalyticCoreDecomposition (T : ExactNormalTiling D β) :
