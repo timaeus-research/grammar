@@ -530,3 +530,4 @@ import Grammar.AdaptedPieceDensity
 import Grammar.ConstantUnitKernel
 import Grammar.ConstantUnitAtlas
 import Grammar.ScalarUnitKernel
+import Grammar.SymmetricScalarUnitCells
