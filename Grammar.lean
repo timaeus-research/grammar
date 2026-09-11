@@ -524,3 +524,4 @@ import Grammar.CoordPlaneStratum
 import Grammar.ChartStratumPieces
 import Grammar.ResolvedChartExpansion
 import Grammar.LeadingTermInterface
+import Grammar.DivisorFreePieces
