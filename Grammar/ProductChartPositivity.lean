@@ -200,6 +200,7 @@ def IsPieceAtlasData
       ∀ n ∈ Metric.ball (0 : Fin (I.card - 1 + 1) → ℝ) ε,
         K ((R.chart i).Φ (planeSplit (stratumSplit I hne) (z, n))) =
           q' z * ∏ a, n a ^ (2 * normalHalfExp I hne P.e a)),
+    (∀ z ∈ (P.pieceDensity hε hεb hD I hI hne p).base, q' z = scalarPhase I hne P.u P.e z) ∧
     (∀ z ∈ (P.pieceDensity hε hεb hD I hI hne p).base,
       ∀ n ∈ Metric.closedBall (0 : Fin (I.card - 1 + 1) → ℝ) ε,
         A' z n = R.pieceAmp i I hne P.h P.v (F := F) (p := p) z n) ∧
@@ -221,7 +222,7 @@ theorem exists_pieceAtlas_data :
   have hy₀ : ∃ y₀ ∈ P.W, ∀ j ∈ I, y₀ j = 0 := by
     obtain ⟨y₀, hy₀, hz⟩ := exists_zeroPoint P.e.support P.T P.b P.T_nonempty P.T_zero P.b_pos.le
     exact ⟨y₀, P.dom_subset (P.mem_dom_of_mem_productDom hy₀), fun j hj => hz j (hI hj)⟩
-  obtain ⟨At, hlam, hmult, q', A', hq'c, hq'pos, hA'c, hk, hbase, hβ, hamp', hphase', -, hA',
+  obtain ⟨At, hlam, hmult, q', A', hq'c, hq'pos, hA'c, hk, hbase, hβ, hamp', hphase', hq', hA',
       hAt⟩ :=
     R.exists_pieceAtlas_of_chart_data i D hε I hne P.e P.h hD hI hK0 P.W_open P.dom_subset P.u P.v
       P.u_cont P.u_ne P.phase_eq P.v_cont P.det_eq hind (P.pieceFootSet I)
@@ -230,7 +231,7 @@ theorem exists_pieceAtlas_data :
       (P.piece_dom_iff hεb hD I hI hne) (P.piece_weight_eq I hI hne) hFc hpc hFm hF hK hy₀
   exact ⟨At, fun σ => (hlam σ).trans (P.pieceLam_eq hK0 I hI hne),
     fun σ => (hmult σ).trans (P.pieceMult_eq hK0 I hI hne),
-    q', A', hq'c, hq'pos, hA'c, hk, hbase, hβ, hamp', hphase', hA', hAt⟩
+    q', A', hq'c, hq'pos, hA'c, hk, hbase, hβ, hamp', hphase', hq', hA', hAt⟩
 
 /-- **The chosen piece atlas with exposed cells** (classical choice, once). -/
 noncomputable def pieceAtlasD :
@@ -261,7 +262,7 @@ theorem cell_coeff_nonneg_of_data (hF0 : ∀ x, 0 ≤ F x) (hp0 : ∀ x, 0 ≤ p
     {At : FiniteScalarUnitAtlas (d - (I.card - 1 + 1)) (R.pieceIntegral D ε i I F K p)}
     (hAt : P.IsPieceAtlasData hK0 hε hεb hD hFm hF hK I hI hne At) (σ : At.ι) :
     0 ≤ (At.cell σ).coeff := by
-  obtain ⟨q', A', hq'c, hq'pos, hA'c, hk, hbase, hβ, hamp', hphase', hA', rfl⟩ := hAt
+  obtain ⟨q', A', hq'c, hq'pos, hA'c, hk, hbase, hβ, hamp', hphase', -, hA', rfl⟩ := hAt
   exact ScalarUnitCell.reflected_coeff_nonneg
     (R.pieceCell i D hε I hne (P.pieceDensity hε hεb hD I hI hne p) hbase hβ (normalExp I hne P.h)
       (normalHalfExp I hne P.e) hk q' hq'c hq'pos A' hA'c)
@@ -279,7 +280,7 @@ theorem exists_cell_coeff_pos_of_data (hF0 : ∀ x, 0 ≤ F x) (hp0 : ∀ x, 0 �
     {At : FiniteScalarUnitAtlas (d - (I.card - 1 + 1)) (R.pieceIntegral D ε i I F K p)}
     (hAt : P.IsPieceAtlasData hK0 hε hεb hD hFm hF hK I hI hne At) :
     ∃ σ, 0 < (At.cell σ).coeff := by
-  obtain ⟨q', A', hq'c, hq'pos, hA'c, hk, hbase, hβ, hamp', hphase', hA', rfl⟩ := hAt
+  obtain ⟨q', A', hq'c, hq'pos, hA'c, hk, hbase, hβ, hamp', hphase', -, hA', rfl⟩ := hAt
   have hallc : ∀ a, ratioExp (normalExp I hne P.h) (normalHalfExp I hne P.e) a =
       minRatio (normalExp I hne P.h) (normalHalfExp I hne P.e) := fun a => by
     rw [ratioExp_normal_eq I hne P.e P.h (P.normalExp_eq_two_mul hK0 I hI hne) a,
