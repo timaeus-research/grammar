@@ -44,9 +44,9 @@ open CoeffFamily
 section BanachL2
 
 variable {ι : Type*} [Countable ι] [DecidableEq ι] {Ω : Type*} [MeasurableSpace Ω]
-  {P : Measure Ω} [IsProbabilityMeasure P]
+  {P : Measure Ω}
 
-omit [Countable ι] [DecidableEq ι] [IsProbabilityMeasure P] in
+omit [Countable ι] [DecidableEq ι] in
 /-- The `L²` seminorm of a coordinate is the coordinate `L²` norm of the certificate. -/
 theorem eLpNorm_coord_eq {Y : Ω → L1Seq ι} (hY : SummableCoordL2 P Y) (j : ι) :
     eLpNorm (fun ω => Y ω j) 2 P = ENNReal.ofReal (coordL2 P Y j) := by
