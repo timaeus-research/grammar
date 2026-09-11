@@ -528,3 +528,4 @@ import Grammar.DivisorFreePieces
 import Grammar.IntegratedLeadingTerm
 import Grammar.AdaptedPieceDensity
 import Grammar.ConstantUnitKernel
+import Grammar.ConstantUnitAtlas
