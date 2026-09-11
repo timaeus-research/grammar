@@ -513,3 +513,4 @@ import Grammar.GlobalExponentHironaka
 import Grammar.ExponentIdentification
 import Grammar.TubularLocalInstance
 import Grammar.TubularGlobalInstance
+import Grammar.TubularJacobian

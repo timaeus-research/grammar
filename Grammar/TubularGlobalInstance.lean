@@ -55,12 +55,15 @@ theorem finrank_tangentSpaceOf (i : A.ι) {s : Fin d → ℝ} (hs : s ∈ S) (hs
 /-- **A model graph chart** of the stratum at `s`: a tangent-graph chart transported to the fixed
 model `ℝ^{d−r}` — an open `W ⊆ ℝ^{d−r}`, an open ambient `V'` around `s`, the analytic graph
 parametrisation `emb : W → S ∩ V'` and its analytic two-sided inverse `ft` on `S ∩ V'`. -/
-structure ModelGraphChart (r : ℕ) (S : Set (Fin d → ℝ)) (s : Fin d → ℝ) where
+structure ModelGraphChart (A : CompatibleAnalyticLCIAtlas r S) (s : Fin d → ℝ) where
+  /-- The atlas chart containing the piece. -/
+  i : A.ι
   /-- The parameter domain in the model. -/
   W : Opens (Fin (d - r) → ℝ)
   /-- The ambient neighbourhood of `s` on which the graph description holds. -/
   V' : Set (Fin d → ℝ)
   isOpen_V' : IsOpen V'
+  V'_subset : V' ⊆ A.V i
   s_mem : s ∈ S ∩ V'
   /-- The graph parametrisation. -/
   emb : (Fin (d - r) → ℝ) → Fin d → ℝ
@@ -73,10 +76,9 @@ structure ModelGraphChart (r : ℕ) (S : Set (Fin d → ℝ)) (s : Fin d → ℝ
   emb_ft : ∀ x ∈ S ∩ V', emb (ft x) = x
   ft_emb : ∀ z ∈ W, ft (emb z) = z
 
-include A in
 /-- Every point of the stratum has a model graph chart. -/
 theorem exists_modelGraphChart {s : Fin d → ℝ} (hs : s ∈ S) :
-    Nonempty (ModelGraphChart r S s) := by
+    Nonempty (ModelGraphChart A s) := by
   obtain ⟨i, hsi⟩ := A.cover hs
   obtain ⟨C⟩ := exists_tangentGraphChart A i hs hsi
   have hfin : Module.finrank ℝ ↥(tangentSpaceOf (A.J i s)) =
@@ -88,8 +90,9 @@ theorem exists_modelGraphChart {s : Fin d → ℝ} (hs : s ∈ S) :
     intro w hw
     have hmem := C.emb_mem w hw
     exact C.emb_injOn (C.ft_mem _ hmem) hw (C.emb_ft _ hmem)
-  refine ⟨⟨⟨e.symm ⁻¹' (C.W : Set _), C.W.isOpen.preimage e.symm.continuous⟩, C.V', C.isOpen_V',
-    C.s_mem, fun z => C.emb (e.symm z), ?_, fun z hz => C.emb_mem _ hz, fun x => e (C.ft x),
+  refine ⟨⟨i, ⟨e.symm ⁻¹' (C.W : Set _), C.W.isOpen.preimage e.symm.continuous⟩, C.V', C.isOpen_V',
+    C.V'_subset, C.s_mem, fun z => C.emb (e.symm z), ?_, fun z hz => C.emb_mem _ hz,
+    fun x => e (C.ft x),
     e.contDiff.comp C.contDiff_ft, ?_, ?_, ?_⟩⟩
   · exact C.contDiffOn_emb.comp e.symm.contDiff.contDiffOn (mapsTo_preimage _ _)
   · intro x hx
@@ -136,7 +139,7 @@ theorem Stratum.continuous_val : Continuous (Stratum.val (A := A)) := continuous
 theorem Stratum.isInducing_val : IsInducing (Stratum.val (A := A)) := IsInducing.subtypeVal
 
 /-- A chosen model graph chart at each point of the stratum. -/
-noncomputable def chartData (x : Stratum A) : ModelGraphChart r S x.val :=
+noncomputable def chartData (x : Stratum A) : ModelGraphChart A x.val :=
   Classical.choice (exists_modelGraphChart A x.val_mem)
 
 open Classical in
