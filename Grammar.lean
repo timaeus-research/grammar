@@ -537,3 +537,4 @@ import Grammar.MomentKernel
 import Grammar.ScalarChartNormalForm
 import Grammar.CompactProductChartDensity
 import Grammar.SingleChartScalarAtlas
+import Grammar.PositiveScalarCoefficient
