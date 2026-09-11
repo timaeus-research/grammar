@@ -215,4 +215,47 @@ theorem resolution_pair_of_population_comparison {U : Set (Fin d → ℝ)} (hU :
   intro Ω _ μ _ Ω' _ μ' _ Z L hdist hZpos hLpos
   exact tendstoInMeasure_log_div_log_of_population_comparison m' hlam' hdist hZpos hLpos
 
+/-! ### The free energy of the region integral -/
+
+/-- The region integral of a positive continuous observable over a compact neighbourhood is
+positive. -/
+theorem regionIntegral_pos_of_mem_nhds {U : Set (Fin d → ℝ)} {K : (Fin d → ℝ) → ℝ}
+    (hK : AnalyticOnNhd ℝ K U) {w : Fin d → ℝ} {F : (Fin d → ℝ) → ℝ} (hF : AnalyticOnNhd ℝ F U)
+    (hFpos : ∀ x ∈ U, 0 < F x) {Rg : Set (Fin d → ℝ)} (hRgc : IsCompact Rg) (hRgn : Rg ∈ 𝓝 w)
+    (hRgU : Rg ⊆ U) (N : ℝ) : 0 < regionIntegral volume Rg F K N := by
+  have hint : IntegrableOn (fun x => F x * Real.exp (-N * K x)) Rg :=
+    ((hF.continuousOn.mono hRgU).mul (Real.continuous_exp.comp_continuousOn
+      ((hK.continuousOn.mono hRgU).const_smul (-N)))).integrableOn_compact hRgc
+  have hnn : 0 ≤ᵐ[(volume : Measure (Fin d → ℝ)).restrict Rg]
+      fun x => F x * Real.exp (-N * K x) :=
+    ae_restrict_of_forall_mem hRgc.isClosed.measurableSet fun x hx =>
+      mul_nonneg (hFpos x (hRgU hx)).le (Real.exp_pos _).le
+  rw [regionIntegral, setIntegral_pos_iff_support_of_nonneg_ae hnn hint]
+  obtain ⟨ρ, hρ, hball⟩ := Metric.mem_nhds_iff.1 hRgn
+  refine lt_of_lt_of_le (Metric.measure_ball_pos volume w hρ) (measure_mono fun x hx => ?_)
+  exact ⟨(mul_pos (hFpos x (hRgU (hball hx))) (Real.exp_pos _)).ne', hball hx⟩
+
+/-- **The free energy of the Laplace integral near a zero, unconditionally**:
+`−log ∫_Ω F e^{−NK} = λ_* log N − (m_* − 1) log log N + O(1)` with `(λ_*, m_*)` the resolution
+pair (the extremal divisor-point chart pair, equal to hironaka's small-ball pair). -/
+theorem freeEnergy_of_analytic {U : Set (Fin d → ℝ)} (hU : IsOpen U) {K : (Fin d → ℝ) → ℝ}
+    (hK : AnalyticOnNhd ℝ K U) (hK0 : ∀ x ∈ U, 0 ≤ K x) (hKm : Measurable K) {w : Fin d → ℝ}
+    (hw : w ∈ U) (hKw : K w = 0) (hne : ¬ K =ᶠ[𝓝 w] 0) {F : (Fin d → ℝ) → ℝ}
+    (hF : AnalyticOnNhd ℝ F U) (hFpos : ∀ x ∈ U, 0 < F x) {ρ₀ : ℝ} (hρ₀ : 0 < ρ₀) :
+    ∃ (N : Set (Fin d → ℝ)) (R : PartialResolution d K N), R.IsMonomial ∧
+      ∃ Rg : Set (Fin d → ℝ), IsCompact Rg ∧ Rg ∈ 𝓝 w ∧ Rg ⊆ Metric.closedBall w ρ₀ ∧ Rg ⊆ U ∧
+        ∃ (ι : Type) (_ : Fintype ι) (lam : ι → ℝ) (m : ι → ℕ) (i₀ : ι),
+          (∀ p, ∃ (i : R.ι) (y₀ : Fin d → ℝ) (h : Fin d →₀ ℕ)
+            (C : CentredChartData K (R.φ i) h y₀),
+            y₀ ∈ R.dom i ∧ K (R.φ i y₀) = 0 ∧ lam p = C.lam ∧ m p = C.mult) ∧
+          (∀ p, lam i₀ ≤ lam p) ∧ (∀ p, lam p = lam i₀ → m p ≤ m i₀) ∧
+          (fun N => -Real.log (regionIntegral volume Rg F K N) -
+            (lam i₀ * Real.log N - ((m i₀ - 1 : ℕ) : ℝ) * Real.log (Real.log N))) =O[atTop]
+            fun _ : ℝ => (1 : ℝ) := by
+  obtain ⟨N, R, hR, Rg, hRgc, hRgn, hRgball, hRgU, ι, hι, lam, m, i₀, hpieces, hmin, hmax, hΘ⟩ :=
+    exponent_of_analytic hU hK hK0 hKm hw hKw hne hF hFpos hρ₀
+  refine ⟨N, R, hR, Rg, hRgc, hRgn, hRgball, hRgU, ι, hι, lam, m, i₀, hpieces, hmin, hmax, ?_⟩
+  exact freeEnergy_asymptotic (Eventually.of_forall fun N =>
+    regionIntegral_pos_of_mem_nhds hK hF hFpos hRgc hRgn hRgU N) hΘ
+
 end Grammar
