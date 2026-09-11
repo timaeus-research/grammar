@@ -294,7 +294,8 @@ theorem exists_splitBoxChart_orthant (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Ana
     rw [splitReflect_apply]
     exact mul_ne_zero (splitSgn_ne_zero _ _ _) (prodToPi_apply_nIdx_pos C hp j).ne'
   refine ⟨⟨fun j => h (nIdx C.σ j), C.k, C.k_pos, orthantChart C SD s, orthantDomain C SD s,
-    isOpen_orthantDomain C SD s, hbox, ?_, ?_, orthantJac C SD s, measurable_orthantJac C SD hβ s,
+    isOpen_orthantDomain C SD s, hbox, ?_, ∅, MeasurableSet.empty, measure_empty, ?_,
+    orthantJac C SD s, measurable_orthantJac C SD hβ s,
     ?_, ?_, ?_, x, fun v => xiCoord_jointTangentialData P B hb hbB hB hW A' hAB v, ?_⟩,
     rfl, rfl, rfl, rfl, fun v u hu => ?_⟩
   · -- `C¹` on the orthant domain
@@ -303,8 +304,8 @@ theorem exists_splitBoxChart_orthant (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Ana
     exact han.contDiffOn (isOpen_orthantDomain C SD s).uniqueDiffOn
   · -- injectivity on the positive box
     intro y₁ hy₁ y₂ hy₂ heq
-    obtain ⟨p₁, hp₁, rfl⟩ := hy₁
-    obtain ⟨p₂, hp₂, rfl⟩ := hy₂
+    obtain ⟨p₁, hp₁, rfl⟩ := hy₁.1
+    obtain ⟨p₂, hp₂, rfl⟩ := hy₂.1
     have hd₁ := hbox ⟨p₁, hp₁, rfl⟩
     have hd₂ := hbox ⟨p₂, hp₂, rfl⟩
     have hw₁ := inv_reflect_mem_V₀ C SD s hd₁

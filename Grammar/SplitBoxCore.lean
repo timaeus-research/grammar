@@ -66,7 +66,11 @@ structure SplitBoxChart (σ : Fin t ⊕ Fin (n + 1) ≃ Fin d) (D : Localisation
   V_open : IsOpen V
   box_subset : splitPosBox σ A b ⊆ V
   contDiffOn : ContDiffOn ℝ 1 Ψ V
-  injOn : InjOn Ψ (splitPosBox σ A b)
+  /-- the null exceptional set of the box off which the chart is injective -/
+  N₀ : Set (Fin d → ℝ)
+  N₀_meas : MeasurableSet N₀
+  N₀_null : volume N₀ = 0
+  injOn : InjOn Ψ (splitPosBox σ A b \ N₀)
   /-- the Jacobian unit -/
   jac : (Fin d → ℝ) → ℝ
   measurable_jac : Measurable jac
@@ -167,12 +171,31 @@ noncomputable def corePresentation (hA : MeasurableSet A) (hAfin : volume A < �
     refine (withDensity_absolutelyContinuous _ _).ae_eq ?_
     rw [Filter.EventuallyEq, ae_restrict_iff' hSm]
     exact Eventually.of_forall fun y hy => hΨ'eq hy
+  -- the null exceptional set: the box and its image are unchanged up to null sets
+  set S' := S \ C.N₀ with hS'
+  have hS'm : MeasurableSet S' := hSm.diff C.N₀_meas
+  have hSS' : volume.restrict S = volume.restrict S' :=
+    (Measure.restrict_congr_set
+      ((sdiff_ae_eq_self.2 (measure_mono_null inter_subset_right C.N₀_null)))).symm
+  have himg : volume.restrict (C.Ψ '' S) = volume.restrict (C.Ψ '' S') := by
+    refine Measure.restrict_congr_set ?_
+    have hdec : C.Ψ '' S = C.Ψ '' S' ∪ C.Ψ '' (S ∩ C.N₀) := by
+      rw [← image_union, hS', sdiff_union_inter]
+    have hnull : volume (C.Ψ '' (S ∩ C.N₀)) = 0 := by
+      refine addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero volume ?_
+        (measure_mono_null inter_subset_right C.N₀_null)
+      exact ((C.contDiffOn.differentiableOn one_ne_zero).mono
+        (inter_subset_left.trans C.box_subset))
+    rw [hdec]
+    exact union_ae_eq_left_of_ae_eq_empty (ae_eq_empty.2 hnull)
+  have hderiv' : ∀ y ∈ S', HasFDerivWithinAt C.Ψ (fderiv ℝ C.Ψ y) S' y := fun y hy =>
+    (hderiv y hy.1).mono sdiff_subset
   have htransport : ((chartMeasure ν n b).withDensity fun p =>
       ((chartDensity C.h (fun p => C.jac (j p)) p).toNNReal : ℝ≥0∞)).map (Ψ' ∘ j) =
       volume.restrict (C.Ψ '' S) := by
     rw [hdens, ← Measure.map_map hΨ'm hjm, map_withDensity_comp _ hjm hgm, hmapj,
-      Measure.map_congr hΨ'ae, withDensity_congr_ae hgdet]
-    exact map_withDensity_abs_det_fderiv_eq_addHaar volume hSm.nullMeasurableSet hderiv C.injOn
+      Measure.map_congr hΨ'ae, withDensity_congr_ae hgdet, hSS', himg]
+    exact map_withDensity_abs_det_fderiv_eq_addHaar volume hS'm.nullMeasurableSet hderiv' C.injOn
   refine ⟨ν, C.h, C.k, C.k_pos, b, hb, Ψ' ∘ j, hΨ'm.comp hjm, fun p => C.jac (j p),
     C.measurable_jac.comp hjm, ?_, C.amp, htransport, ?_, ?_, C.amp_xi⟩
   · filter_upwards [ae_snd_mem_box ν n b] with p hp
@@ -226,7 +249,7 @@ structure CorePiece (D : LocalisationData U) (β : ℝ) where
   n : ℕ
   /-- the image -/
   image : Set U
-  measurableSet_image : MeasurableSet image
+  nullMeasurableSet_image : NullMeasurableSet image volume
   /-- the core presentation -/
   pres : CorePresentation D (volume.restrict image) K n β
 
@@ -240,7 +263,7 @@ noncomputable def TilingPiece.toCorePiece {D : LocalisationData U} {β : ℝ} (P
   instCompact := isCompact_iff_compactSpace.1 P.A_compact
   n := P.n
   image := P.image
-  measurableSet_image := P.measurableSet_image
+  nullMeasurableSet_image := P.measurableSet_image.nullMeasurableSet
   pres := P.exists_corePresentation.some
 
 /-- A split box chart over a compact base is a core piece. -/
@@ -251,9 +274,21 @@ noncomputable def SplitBoxChart.toCorePiece {σ : Fin t ⊕ Fin (n + 1) ≃ Fin 
   instCompact := isCompact_iff_compactSpace.1 hA
   n := n
   image := C.Ψ '' splitPosBox σ A b
-  measurableSet_image :=
-    (measurableSet_splitPosBox σ hA.isClosed.measurableSet b).image_of_continuousOn_injOn
-      (C.contDiffOn.continuousOn.mono C.box_subset) C.injOn
+  nullMeasurableSet_image := by
+    have hSm : MeasurableSet (splitPosBox σ A b) :=
+      measurableSet_splitPosBox σ hA.isClosed.measurableSet b
+    have hdec : C.Ψ '' splitPosBox σ A b =
+        C.Ψ '' (splitPosBox σ A b \ C.N₀) ∪ C.Ψ '' (splitPosBox σ A b ∩ C.N₀) := by
+      rw [← image_union, sdiff_union_inter]
+    rw [hdec]
+    refine NullMeasurableSet.union ?_ (NullMeasurableSet.of_null ?_)
+    · exact ((hSm.diff C.N₀_meas).image_of_continuousOn_injOn
+        (C.contDiffOn.continuousOn.mono (sdiff_subset.trans C.box_subset))
+        C.injOn).nullMeasurableSet
+    · refine addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero volume ?_
+        (measure_mono_null inter_subset_right C.N₀_null)
+      exact ((C.contDiffOn.differentiableOn one_ne_zero).mono
+        (inter_subset_left.trans C.box_subset))
   pres := C.corePresentation hA.isClosed.measurableSet hA.measure_lt_top hb
 
 /-- **A core tiling**: finitely many core pieces inside the region, pairwise disjoint up to null
@@ -281,39 +316,58 @@ theorem restrict_iUnion_image_eq (T : CoreTiling D β) :
     (volume.restrict T.Ω).restrict (⋃ I, (T.piece I).image) =
       ∑ I, volume.restrict (T.piece I).image := by
   classical
-  have hmeas : ∀ I, MeasurableSet (T.piece I).image := fun I => (T.piece I).measurableSet_image
-  have hU : MeasurableSet (⋃ I, (T.piece I).image) := MeasurableSet.iUnion hmeas
+  have hmeas : ∀ I, NullMeasurableSet (T.piece I).image volume := fun I =>
+    (T.piece I).nullMeasurableSet_image
+  have hU : NullMeasurableSet (⋃ I, (T.piece I).image) volume := NullMeasurableSet.iUnion hmeas
   have hsub : (⋃ I, (T.piece I).image) ⊆ T.Ω := iUnion_subset T.image_subset
-  rw [Measure.restrict_restrict hU, inter_eq_left.2 hsub,
-    Measure.restrict_iUnion_ae (fun I J hIJ => T.aedisjoint I J hIJ)
-      (fun I => (hmeas I).nullMeasurableSet), Measure.sum_fintype]
+  rw [Measure.restrict_restrict₀
+      (hU.mono_ac (Measure.absolutelyContinuous_of_le Measure.restrict_le_self)),
+    inter_eq_left.2 hsub,
+    Measure.restrict_iUnion_ae (fun I J hIJ => T.aedisjoint I J hIJ) hmeas, Measure.sum_fintype]
+
+/-- The measurable hull of the union of the piece images. -/
+def measurableUnion (T : CoreTiling D β) : Set U := toMeasurable volume (⋃ I, (T.piece I).image)
+
+theorem measurableSet_measurableUnion (T : CoreTiling D β) : MeasurableSet T.measurableUnion :=
+  measurableSet_toMeasurable _ _
+
+theorem subset_measurableUnion (T : CoreTiling D β) :
+    (⋃ I, (T.piece I).image) ⊆ T.measurableUnion :=
+  subset_toMeasurable _ _
+
+theorem measurableUnion_ae_eq (T : CoreTiling D β) :
+    T.measurableUnion =ᵐ[volume] ⋃ I, (T.piece I).image :=
+  (NullMeasurableSet.iUnion fun I => (T.piece I).nullMeasurableSet_image).toMeasurable_ae_eq
 
 /-- **The analytic core decomposition of a core tiling** (data): the cores are the Lebesgue
-measures of the piece images, the tail is the Lebesgue measure of the rest of the region. -/
+measures of the piece images, the tail is the Lebesgue measure of the region off the measurable
+hull of the union of the pieces. -/
 noncomputable def toAnalyticCoreDecomposition (T : CoreTiling D β) :
     AnalyticCoreDecomposition D T.M (fun I => (T.piece I).K) (fun I => (T.piece I).n) β where
   core I := volume.restrict (T.piece I).image
-  tail := volume.restrict (T.Ω \ ⋃ I, (T.piece I).image)
+  tail := volume.restrict (T.Ω \ T.measurableUnion)
   measure_eq := by
     classical
-    have hU : MeasurableSet (⋃ I, (T.piece I).image) :=
-      MeasurableSet.iUnion fun I => (T.piece I).measurableSet_image
-    have h2 : (volume.restrict T.Ω).restrict (⋃ I, (T.piece I).image)ᶜ =
-        volume.restrict (T.Ω \ ⋃ I, (T.piece I).image) := by
+    have hU := T.measurableSet_measurableUnion
+    have h1 : (volume.restrict T.Ω).restrict T.measurableUnion =
+        (volume.restrict T.Ω).restrict (⋃ I, (T.piece I).image) :=
+      Measure.restrict_congr_set (ae_restrict_of_ae T.measurableUnion_ae_eq)
+    have h2 : (volume.restrict T.Ω).restrict T.measurableUnionᶜ =
+        volume.restrict (T.Ω \ T.measurableUnion) := by
       rw [Measure.restrict_restrict hU.compl, sdiff_eq, inter_comm]
-    rw [T.μ_eq, ← T.restrict_iUnion_image_eq, ← h2]
+    rw [T.μ_eq, ← T.restrict_iUnion_image_eq, ← h1, ← h2]
     exact (Measure.restrict_add_restrict_compl hU).symm
   δ₀ := T.δ₀
   δ₀_pos := T.δ₀_pos
   gap := by
     classical
-    have hU : MeasurableSet (⋃ I, (T.piece I).image) :=
-      MeasurableSet.iUnion fun I => (T.piece I).measurableSet_image
-    have h2 : (volume.restrict T.Ω).restrict (⋃ I, (T.piece I).image)ᶜ =
-        volume.restrict (T.Ω \ ⋃ I, (T.piece I).image) := by
+    have hU := T.measurableSet_measurableUnion
+    have h2 : (volume.restrict T.Ω).restrict T.measurableUnionᶜ =
+        volume.restrict (T.Ω \ T.measurableUnion) := by
       rw [Measure.restrict_restrict hU.compl, sdiff_eq, inter_comm]
     rw [← h2, ← T.μ_eq, ae_restrict_iff' hU.compl]
-    exact T.gap
+    filter_upwards [T.gap] with z hz hzc
+    exact hz fun hzU => hzc (T.subset_measurableUnion hzU)
   chart I := (T.piece I).pres
 
 theorem toAnalyticCoreDecomposition_h (T : CoreTiling D β) (I : Fin T.M) :
