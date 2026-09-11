@@ -497,3 +497,4 @@ import Grammar.JointAmplitude
 import Grammar.PositiveBoxCore
 import Grammar.ExactNormalTiling
 import Grammar.MonomialBoxExpansion
+import Grammar.ReflectedBoxExpansion
