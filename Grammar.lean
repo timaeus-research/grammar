@@ -545,3 +545,4 @@ import Grammar.ProductChartExtremalPair
 import Grammar.ScalarCellNonneg
 import Grammar.ProductChartPositivity
 import Grammar.PosteriorTransfer
+import Grammar.ProductChartPosterior
