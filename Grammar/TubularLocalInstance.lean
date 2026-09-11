@@ -29,9 +29,10 @@ hypotheses beyond strucdual's atlas:
 * `graphFrameData` — the resulting frame–coframe atlas over the base manifold `↥W` (an open
   subset of the normed space `T_s`, charted by `Opens.instChartedSpace`), and
   `liftedFoot_graph` — the `LiftedFoot` for the restricted tube.
-* `exists_liftedFoot_of_compact` / `exists_local_tubular_equivalence` — the headline: for a compact
-  analytic LCI stratum and any `s ∈ S`, strucdual's analytic tube restricted to a neighbourhood
-  of `s` in `S` is `C^∞`-equivalent to the normal bundle over `W`, via
+* `exists_liftedFoot_of_compact` / `exists_local_tubular_equivalence` /
+  `exists_local_tubular_equivalence_analytic` — the headline: for a compact analytic LCI stratum
+  and any `s ∈ S`, strucdual's analytic tube restricted to a neighbourhood of `s` in `S` is
+  equivalent to the normal bundle over `W` at every grade (`C^∞`, and real-analytic), via
   `Ψ (z, n) = emb z + Σ_a n_a ∇G_a(emb z)`, with inverse
   `y ↦ (π_T (proj y − s), (J Jᵀ)⁻¹ J (y − proj y))`.
 
@@ -131,6 +132,7 @@ end Operators
 section RowFrames
 
 variable {d r : ℕ} {S : Set (Fin d → ℝ)} (A : CompatibleAnalyticLCIAtlas r S) (i : A.ι)
+  {n : ℕ∞ω}
 
 /-- The derivative of a chart map is its Jacobian field. -/
 theorem fderiv_G_eq (x : Fin d → ℝ) :
@@ -164,18 +166,19 @@ theorem rowCoframe_rowFrame {x : Fin d → ℝ} (hx : x ∈ S) (hxi : x ∈ A.V 
     rowCoframe A i x (rowFrame A i x v) = v := by
   exact (isInvertible_gramCLM_fderiv A i hx hxi).inverse_apply_self v
 
-/-- The row frame is `C^∞` in the base point. -/
-theorem contDiffAt_rowFrame (x : Fin d → ℝ) : ContDiffAt ℝ ∞ (rowFrame A i) x :=
+/-- The row frame is `C^n` (indeed analytic) in the base point. -/
+theorem contDiffAt_rowFrame (x : Fin d → ℝ) : ContDiffAt ℝ n (rowFrame A i) x :=
   (transposeCLM d r).contDiff.contDiffAt.comp x (A.analyticAt_G i x).fderiv.contDiffAt
 
-/-- The row coframe is `C^∞` at every point of the stratum in the chart domain. -/
+/-- The row coframe is `C^n` (indeed analytic) at every point of the stratum in the chart
+domain. -/
 theorem contDiffAt_rowCoframe {x : Fin d → ℝ} (hx : x ∈ S) (hxi : x ∈ A.V i) :
-    ContDiffAt ℝ ∞ (rowCoframe A i) x := by
-  have hfd : ContDiffAt ℝ ∞ (fderiv ℝ (A.G i)) x := (A.analyticAt_G i x).fderiv.contDiffAt
-  have hT : ContDiffAt ℝ ∞ (fun x => transposeCLM d r (fderiv ℝ (A.G i) x)) x :=
+    ContDiffAt ℝ n (rowCoframe A i) x := by
+  have hfd : ContDiffAt ℝ n (fderiv ℝ (A.G i)) x := (A.analyticAt_G i x).fderiv.contDiffAt
+  have hT : ContDiffAt ℝ n (fun x => transposeCLM d r (fderiv ℝ (A.G i) x)) x :=
     (transposeCLM d r).contDiff.contDiffAt.comp x hfd
-  have hgram : ContDiffAt ℝ ∞ (fun x => gramCLM (fderiv ℝ (A.G i) x)) x := hfd.clm_comp hT
-  have hinv : ContDiffAt ℝ ∞ ContinuousLinearMap.inverse (gramCLM (fderiv ℝ (A.G i) x)) :=
+  have hgram : ContDiffAt ℝ n (fun x => gramCLM (fderiv ℝ (A.G i) x)) x := hfd.clm_comp hT
+  have hinv : ContDiffAt ℝ n ContinuousLinearMap.inverse (gramCLM (fderiv ℝ (A.G i) x)) :=
     (isInvertible_gramCLM_fderiv A i hx hxi).contDiffAt_map_inverse
   exact (hinv.comp x hgram).clm_comp hfd
 
@@ -186,8 +189,8 @@ section Graph
 variable {d r : ℕ} {S : Set (Fin d → ℝ)} (A : CompatibleAnalyticLCIAtlas r S)
 
 /-- **A tangent-graph chart** of the stratum at `s` in chart `i`: an open piece `W` of the tangent
-space `T_s = ker J_i(s)`, an open `V' ⊆ V_i` around `s`, a `C^∞` parametrisation `emb` of
-`S ∩ V'` by `W`, and its `C^∞` left inverse `ft` (the tangential coordinate). -/
+space `T_s = ker J_i(s)`, an open `V' ⊆ V_i` around `s`, a real-analytic parametrisation `emb`
+of `S ∩ V'` by `W`, and its analytic left inverse `ft` (the tangential coordinate). -/
 structure TangentGraphChart (i : A.ι) (s : Fin d → ℝ) where
   /-- The parameter domain in the tangent space. -/
   W : Opens ↥(tangentSpaceOf (A.J i s))
@@ -198,12 +201,12 @@ structure TangentGraphChart (i : A.ι) (s : Fin d → ℝ) where
   s_mem : s ∈ S ∩ V'
   /-- The graph parametrisation. -/
   emb : ↥(tangentSpaceOf (A.J i s)) → Fin d → ℝ
-  contDiffOn_emb : ContDiffOn ℝ ∞ emb (W : Set ↥(tangentSpaceOf (A.J i s)))
+  contDiffOn_emb : ContDiffOn ℝ ω emb (W : Set ↥(tangentSpaceOf (A.J i s)))
   emb_mem : ∀ z ∈ W, emb z ∈ S ∩ V'
   emb_injOn : InjOn emb (W : Set ↥(tangentSpaceOf (A.J i s)))
   /-- The tangential coordinate. -/
   ft : (Fin d → ℝ) → ↥(tangentSpaceOf (A.J i s))
-  contDiff_ft : ContDiff ℝ ∞ ft
+  contDiff_ft : ContDiff ℝ ω ft
   ft_mem : ∀ x ∈ S ∩ V', ft x ∈ W
   emb_ft : ∀ x ∈ S ∩ V', emb (ft x) = x
 
@@ -261,7 +264,7 @@ theorem exists_tangentGraphChart (i : A.ι) {s : Fin d → ℝ} (hs : s ∈ S) (
   have hs₀ : s ∈ ψ₀.source := hstrict.mem_toOpenPartialHomeomorph_source
   have hinvA : AnalyticAt ℝ ψ₀.symm (F s) := (hFc.to_localInverse hFd' hn).analyticAt
   obtain ⟨O, hO, hOopen, hFsO⟩ := eventually_nhds_iff.1 hinvA.eventually_analyticAt
-  have hOsm : ContDiffOn ℝ ∞ ψ₀.symm O :=
+  have hOsm : ContDiffOn ℝ ω ψ₀.symm O :=
     (show AnalyticOnNhd ℝ ψ₀.symm O from fun y hy => hO y hy).contDiffOn hOopen.uniqueDiffOn
   set ψ := ψ₀.restrOpen (A.V i) (A.isOpen_V i) with hψdef
   have hψc : ⇑ψ = F := by rw [hψdef, OpenPartialHomeomorph.coe_restrOpen, hψ₀]
@@ -318,8 +321,8 @@ theorem exists_tangentGraphChart (i : A.ι) {s : Fin d → ℝ} (hs : s ∈ S) (
     have h₂ : ((0 : Fin r → ℝ), z₂) ∈ ψ.symm.source := by
       rw [ψ.symm_source]; exact (hz₂ : ((0 : Fin r → ℝ), z₂) ∈ ψ.target ∩ O).1
     exact (Prod.mk.inj (ψ.symm.injOn h₁ h₂ h)).2
-  have hemb_smooth : ContDiffOn ℝ ∞ emb (W : Set ↥(tangentSpaceOf (A.J i s))) := by
-    have h1 : ContDiffOn ℝ ∞ (fun z : ↥(tangentSpaceOf (A.J i s)) => ((0 : Fin r → ℝ), z))
+  have hemb_smooth : ContDiffOn ℝ ω emb (W : Set ↥(tangentSpaceOf (A.J i s))) := by
+    have h1 : ContDiffOn ℝ ω (fun z : ↥(tangentSpaceOf (A.J i s)) => ((0 : Fin r → ℝ), z))
         (W : Set ↥(tangentSpaceOf (A.J i s))) := (contDiff_const.prodMk contDiff_id).contDiffOn
     exact hOsm.comp h1 fun z hz => (hz : ((0 : Fin r → ℝ), z) ∈ ψ.target ∩ O).2
   exact ⟨⟨W, V', hV'open, hV'sub, ⟨hs, hsV'⟩, emb, hemb_smooth, hemb_mem, hemb_inj, ft,
@@ -330,14 +333,24 @@ end Graph
 section Lift
 
 variable {d r : ℕ} {S : Set (Fin d → ℝ)} {A : CompatibleAnalyticLCIAtlas r S} {i : A.ι}
-  {s : Fin d → ℝ}
+  {s : Fin d → ℝ} {n : ℕ∞ω}
 
-/-- A `C^∞` map on an open subset of a normed space is `C^∞` as a map on the `Opens` manifold. -/
+/-- A `C^n` map on an open subset of a normed space is `C^n` as a map on the `Opens` manifold. -/
 theorem contMDiff_comp_val {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [NormedAddCommGroup F] [NormedSpace ℝ F] (W : Opens E) {f : E → F}
-    (hf : ContDiffOn ℝ ∞ f (W : Set E)) :
-    ContMDiff 𝓘(ℝ, E) 𝓘(ℝ, F) ∞ (fun z : ↥W => f z.1) :=
+    (hf : ContDiffOn ℝ n f (W : Set E)) :
+    ContMDiff 𝓘(ℝ, E) 𝓘(ℝ, F) n (fun z : ↥W => f z.1) :=
   (contMDiffOn_iff_contDiffOn.2 hf).comp_contMDiff contMDiff_subtype_val fun z => z.2
+
+/-- Regularity of a map into an `Opens` manifold is regularity of its composite with the
+inclusion — Mathlib's `ContMDiffWithinAt.subtypeVal_comp_iff` at every grade `n` (the underlying
+`liftPropWithinAt_subtypeVal_comp_iff` is grade-free). -/
+theorem contMDiffWithinAt_subtypeVal_comp_iff {E F : Type*} [NormedAddCommGroup E]
+    [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] (W : Opens F) (f : E → ↥W)
+    (t : Set E) (x : E) :
+    ContMDiffWithinAt 𝓘(ℝ, E) 𝓘(ℝ, F) n (Subtype.val ∘ f) t x ↔
+      ContMDiffWithinAt 𝓘(ℝ, E) 𝓘(ℝ, F) n f t x :=
+  ChartedSpace.liftPropWithinAt_subtypeVal_comp_iff f t x
 
 /-- The graph parametrisation as a map on the base manifold `↥W`. -/
 def graphEmb (C : TangentGraphChart A i s) : ↥C.W → Fin d → ℝ := fun z => C.emb z.1
@@ -352,9 +365,10 @@ noncomputable def graphFoot (C : TangentGraphChart A i s) (T : NormalTubularChar
 theorem graphEmb_mem (C : TangentGraphChart A i s) (z : ↥C.W) : graphEmb C z ∈ S ∩ C.V' :=
   C.emb_mem z.1 z.2
 
-/-- **The frame–coframe atlas of the Jacobian rows along the graph**, over the base `↥W`. -/
-noncomputable def graphFrameData (C : TangentGraphChart A i s) :
-    FrameCoframeData 𝓘(ℝ, ↥(tangentSpaceOf (A.J i s))) (Fin r → ℝ) ∞
+/-- **The frame–coframe atlas of the Jacobian rows along the graph**, over the base `↥W`, at any
+grade `n` (the data are analytic). -/
+noncomputable def graphFrameData (n : ℕ∞ω) (C : TangentGraphChart A i s) :
+    FrameCoframeData 𝓘(ℝ, ↥(tangentSpaceOf (A.J i s))) (Fin r → ℝ) n
       (fun z : ↥C.W => A.normal (graphEmb C z)) Unit where
   baseSet _ := univ
   isOpen_baseSet _ := isOpen_univ
@@ -364,7 +378,8 @@ noncomputable def graphFrameData (C : TangentGraphChart A i s) :
   range_frame _ z _ := range_rowFrame A i (graphEmb_mem C z).1 (C.V'_subset (graphEmb_mem C z).2)
   contMDiffOn_frame _ :=
     (contMDiff_comp_val C.W (f := fun x => rowFrame A i (C.emb x)) fun z hz =>
-      (contDiffAt_rowFrame A i _).comp_contDiffWithinAt z (C.contDiffOn_emb z hz)).contMDiffOn
+      (contDiffAt_rowFrame A i _).comp_contDiffWithinAt z
+        ((C.contDiffOn_emb.of_le le_top) z hz)).contMDiffOn
   coframe _ z := rowCoframe A i (graphEmb C z)
   coframe_frame _ z _ v :=
     rowCoframe_rowFrame A i (graphEmb_mem C z).1 (C.V'_subset (graphEmb_mem C z).2) v
@@ -372,7 +387,7 @@ noncomputable def graphFrameData (C : TangentGraphChart A i s) :
     (contMDiff_comp_val C.W (f := fun x => rowCoframe A i (C.emb x)) fun z hz =>
       (contDiffAt_rowCoframe A i (C.emb_mem z hz).1
         (C.V'_subset (C.emb_mem z hz).2)).comp_contDiffWithinAt z
-          (C.contDiffOn_emb z hz)).contMDiffOn
+          ((C.contDiffOn_emb.of_le le_top) z hz)).contMDiffOn
 
 theorem graphFoot_mem_W (C : TangentGraphChart A i s) (T : NormalTubularChart A.normal S)
     {y : Fin d → ℝ} (hy : y ∈ (restrictTube T C.V' C.isOpen_V').U) :
@@ -384,30 +399,35 @@ theorem graphFoot_val (C : TangentGraphChart A i s) (T : NormalTubularChart A.no
     (graphFoot C T y).1 = C.ft (T.proj y) := by
   simp only [graphFoot, dif_pos (graphFoot_mem_W C T hy)]
 
-/-- The lifted foot is `C^∞` on the restricted tube. -/
-theorem contMDiffOn_graphFoot (C : TangentGraphChart A i s) (T : NormalTubularChart A.normal S) :
-    ContMDiffOn 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ↥(tangentSpaceOf (A.J i s))) ∞ (graphFoot C T)
+/-- The lifted foot has the grade of the foot projection on the restricted tube. -/
+theorem contMDiffOn_graphFoot (C : TangentGraphChart A i s) (T : NormalTubularChart A.normal S)
+    (hproj : ∀ y ∈ T.U, ContDiffAt ℝ n T.proj y) :
+    ContMDiffOn 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ↥(tangentSpaceOf (A.J i s))) n (graphFoot C T)
       (restrictTube T C.V' C.isOpen_V').U := by
   intro y hy
-  rw [← ContMDiffWithinAt.subtypeVal_comp_iff]
+  rw [← contMDiffWithinAt_subtypeVal_comp_iff]
   refine ContMDiffWithinAt.congr (f := fun y => C.ft (T.proj y)) ?_
     (fun y' hy' => graphFoot_val C T hy') (graphFoot_val C T hy)
   exact contMDiffWithinAt_iff_contDiffWithinAt.2
-    (C.contDiff_ft.contDiffAt.comp y (T.contDiffAt_proj hy.1)).contDiffWithinAt
+    ((C.contDiff_ft.of_le le_top).contDiffAt.comp y (hproj y hy.1)).contDiffWithinAt
 
 /-- **The lifted foot from strucdual's tube**: over a tangent-graph chart, the restricted tube,
-the graph parametrisation, the Jacobian-row atlas and the tangential foot form a `LiftedFoot`. -/
-theorem liftedFoot_graph (C : TangentGraphChart A i s) (T : NormalTubularChart A.normal S) :
-    LiftedFoot (restrictTube T C.V' C.isOpen_V') (graphEmb C) (graphFrameData C)
+the graph parametrisation, the Jacobian-row atlas and the tangential foot form a `LiftedFoot` at
+every grade `n` carried by the foot projection (`n = ∞` for any chart, `n = ω` for an analytic
+chart). -/
+theorem liftedFoot_graph (C : TangentGraphChart A i s) (T : NormalTubularChart A.normal S)
+    (hproj : ∀ y ∈ T.U, ContDiffAt ℝ n T.proj y) :
+    LiftedFoot (restrictTube T C.V' C.isOpen_V') (graphEmb C) (graphFrameData n C)
       (graphFoot C T) where
-  contMDiff_emb := contMDiff_comp_val C.W C.contDiffOn_emb
+  contMDiff_emb := contMDiff_comp_val C.W (C.contDiffOn_emb.of_le le_top)
   emb_mem z := graphEmb_mem C z
   emb_injective z₁ z₂ h := Subtype.ext (C.emb_injOn z₁.2 z₂.2 h)
-  contMDiffOn_P := contMDiffOn_graphFoot C T
+  contMDiffOn_P := contMDiffOn_graphFoot C T hproj
   emb_P y hy := by
     change C.emb (graphFoot C T y).1 = T.proj y
     rw [graphFoot_val C T hy]
     exact C.emb_ft _ ⟨T.proj_mem hy.1, hy.2⟩
+  contDiffAt_ncoord y hy := contDiffAt_id.sub (hproj y hy.1)
 
 end Lift
 
@@ -415,40 +435,66 @@ section Headline
 
 variable {d r : ℕ} {S : Set (Fin d → ℝ)}
 
-/-- **The lifted foot exists for compact analytic LCI strata.** For every `s ∈ S`, strucdual's
-analytic tube, restricted to a neighbourhood of `s` in `S`, carries a `LiftedFoot` over the
-tangent-graph base `↥W` — discharging the hypothesis of the conditional tubular equivalence. -/
-theorem exists_liftedFoot_of_compact (hS : IsCompact S) (A : CompatibleAnalyticLCIAtlas r S)
-    {s : Fin d → ℝ} (hs : s ∈ S) :
+/-- An analytic normal tubular chart has a foot projection of every grade on its tube. -/
+theorem analyticTube_contDiffAt_proj {N : (Fin d → ℝ) → Submodule ℝ (Fin d → ℝ)}
+    (T : AnalyticNormalTubularChart N S) (n : ℕ∞ω) {y : Fin d → ℝ} (hy : y ∈ T.U) :
+    ContDiffAt ℝ n T.proj y :=
+  (T.analyticAt_proj hy).contDiffAt
+
+/-- **The lifted foot exists for compact analytic LCI strata, at every grade.** For every `s ∈ S`,
+strucdual's analytic tube, restricted to a neighbourhood of `s` in `S`, carries a `LiftedFoot` of
+grade `n` over the tangent-graph base `↥W` — discharging the hypothesis of the conditional tubular
+equivalence (`n = ∞`: smooth; `n = ω`: real-analytic). -/
+theorem exists_liftedFoot_of_compact (n : ℕ∞ω) (hS : IsCompact S)
+    (A : CompatibleAnalyticLCIAtlas r S) {s : Fin d → ℝ} (hs : s ∈ S) :
     ∃ (T : AnalyticNormalTubularChart A.normal S) (i : A.ι) (C : TangentGraphChart A i s),
       LiftedFoot (restrictTube T.toNormalTubularChart C.V' C.isOpen_V') (graphEmb C)
-        (graphFrameData C) (graphFoot C T.toNormalTubularChart) := by
+        (graphFrameData n C) (graphFoot C T.toNormalTubularChart) := by
   obtain ⟨T⟩ := exists_analyticNormalTubularChart_of_atlas hS A
   obtain ⟨i, hsi⟩ := A.cover hs
   obtain ⟨C⟩ := exists_tangentGraphChart A i hs hsi
-  exact ⟨T, i, C, liftedFoot_graph C _⟩
+  exact ⟨T, i, C, liftedFoot_graph C _ fun y hy => analyticTube_contDiffAt_proj T n hy⟩
 
-/-- **The local tubular equivalence for compact analytic LCI strata (unconditional).** Near every
-`s ∈ S` there is a tangent-graph chart `C` (with `s ∈ C.V'` open) and an open partial
-homeomorphism `Ψ` from the certified domain of the Jacobian-row normal bundle over `↥C.W` onto
-the restricted tube `U ∩ proj⁻¹ V'`, `Ψ (z, n) = emb z + Σ_a n_a ∇G_a(emb z)`, `C^∞` in both
-directions. -/
-theorem exists_local_tubular_equivalence (hS : IsCompact S) (A : CompatibleAnalyticLCIAtlas r S)
-    {s : Fin d → ℝ} (hs : s ∈ S) :
+/-- **The local tubular equivalence for compact analytic LCI strata (unconditional, every
+grade).** Near every `s ∈ S` there is a tangent-graph chart `C` (with `s ∈ C.V'` open) and an open
+partial homeomorphism `Ψ` from the certified domain of the Jacobian-row normal bundle over `↥C.W`
+onto the restricted tube `U ∩ proj⁻¹ V'`, `Ψ (z, n) = emb z + Σ_a n_a ∇G_a(emb z)`, of grade `n`
+in both directions. -/
+theorem exists_local_tubular_equivalence (n : ℕ∞ω) (hS : IsCompact S)
+    (A : CompatibleAnalyticLCIAtlas r S) {s : Fin d → ℝ} (hs : s ∈ S) :
     ∃ (T : AnalyticNormalTubularChart A.normal S) (i : A.ι) (C : TangentGraphChart A i s),
       s ∈ C.V' ∧ IsOpen C.V' ∧
-      ∃ Ψ : OpenPartialHomeomorph (TotalSpace (Fin r → ℝ) (graphFrameData C).toAtlas.toCore.Fiber)
-          (Fin d → ℝ),
+      ∃ Ψ : OpenPartialHomeomorph
+          (TotalSpace (Fin r → ℝ) (graphFrameData n C).toAtlas.toCore.Fiber) (Fin d → ℝ),
         Ψ.source = tubeDom (restrictTube T.toNormalTubularChart C.V' C.isOpen_V') (graphEmb C)
-          (graphFrameData C) ∧
+          (graphFrameData n C) ∧
         Ψ.target = T.U ∩ T.proj ⁻¹' C.V' ∧
-        (∀ p, Ψ p = C.emb p.1.1 + (graphFrameData C).toAtlas.realise p) ∧
-        ContMDiff (𝓘(ℝ, ↥(tangentSpaceOf (A.J i s))).prod 𝓘(ℝ, Fin r → ℝ)) 𝓘(ℝ, Fin d → ℝ) ∞ Ψ ∧
-        ContMDiffOn 𝓘(ℝ, Fin d → ℝ) (𝓘(ℝ, ↥(tangentSpaceOf (A.J i s))).prod 𝓘(ℝ, Fin r → ℝ)) ∞
+        (∀ p, Ψ p = C.emb p.1.1 + (graphFrameData n C).toAtlas.realise p) ∧
+        ContMDiff (𝓘(ℝ, ↥(tangentSpaceOf (A.J i s))).prod 𝓘(ℝ, Fin r → ℝ)) 𝓘(ℝ, Fin d → ℝ) n Ψ ∧
+        ContMDiffOn 𝓘(ℝ, Fin d → ℝ) (𝓘(ℝ, ↥(tangentSpaceOf (A.J i s))).prod 𝓘(ℝ, Fin r → ℝ)) n
           Ψ.symm Ψ.target := by
-  obtain ⟨T, i, C, h⟩ := exists_liftedFoot_of_compact hS A hs
+  obtain ⟨T, i, C, h⟩ := exists_liftedFoot_of_compact n hS A hs
   exact ⟨T, i, C, C.s_mem.2, C.isOpen_V', tubeHomeomorph h, rfl, rfl, fun _ => rfl,
     contMDiff_tubeMap h, contMDiffOn_tubeInv h⟩
+
+/-- **The local tubular equivalence is real-analytic**: the grade-`ω` instance of
+`exists_local_tubular_equivalence` — `Ψ` and its inverse are real-analytic (the regularity the
+paper's analyticity remark for tubular neighbourhoods requires, obtained without a metric from the
+analytic inverse function theorem and strucdual's analytic tube). -/
+theorem exists_local_tubular_equivalence_analytic (hS : IsCompact S)
+    (A : CompatibleAnalyticLCIAtlas r S) {s : Fin d → ℝ} (hs : s ∈ S) :
+    ∃ (T : AnalyticNormalTubularChart A.normal S) (i : A.ι) (C : TangentGraphChart A i s),
+      s ∈ C.V' ∧ IsOpen C.V' ∧
+      ∃ Ψ : OpenPartialHomeomorph
+          (TotalSpace (Fin r → ℝ) (graphFrameData ω C).toAtlas.toCore.Fiber) (Fin d → ℝ),
+        Ψ.source = tubeDom (restrictTube T.toNormalTubularChart C.V' C.isOpen_V') (graphEmb C)
+          (graphFrameData ω C) ∧
+        Ψ.target = T.U ∩ T.proj ⁻¹' C.V' ∧
+        (∀ p, Ψ p = C.emb p.1.1 + (graphFrameData ω C).toAtlas.realise p) ∧
+        ContMDiff (𝓘(ℝ, ↥(tangentSpaceOf (A.J i s))).prod 𝓘(ℝ, Fin r → ℝ)) 𝓘(ℝ, Fin d → ℝ) ω Ψ ∧
+        ContMDiffOn 𝓘(ℝ, Fin d → ℝ) (𝓘(ℝ, ↥(tangentSpaceOf (A.J i s))).prod 𝓘(ℝ, Fin r → ℝ)) ω
+          Ψ.symm Ψ.target :=
+  exists_local_tubular_equivalence ω hS A hs
 
 end Headline
 

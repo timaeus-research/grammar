@@ -22,6 +22,12 @@ What this closes: *given* a certified tube and a smooth identification of its fo
 base, the frame-built normal bundle realises the tube diffeomorphically. What it does **not** prove:
 the existence of the lifted foot (a smooth left inverse of `emb` along the tube), an embedded
 level-set manifold, or a tubular neighbourhood from the labelled equations alone.
+
+All statements are at an arbitrary grade `n : ℕ∞ω` (`∞` smooth, `ω` real-analytic): the
+`LiftedFoot` records, besides `emb` and `P`, the regularity of the tube's normal coordinate at that
+grade (`contDiffAt_ncoord`; for `n = ∞` the chart's own field, for `n = ω` the analytic chart's
+`analyticAt_ncoord`). `TubularLocalInstance` discharges the whole hypothesis locally, at every
+grade, for compact analytic LCI strata.
 -/
 
 open scoped Manifold ContDiff
@@ -33,22 +39,25 @@ section Bridge
 
 variable {d : ℕ} {B EB HB : Type*} [TopologicalSpace B] [NormedAddCommGroup EB] [NormedSpace ℝ EB]
   [TopologicalSpace HB] {IB : ModelWithCorners ℝ EB HB} [ChartedSpace HB B]
-  {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
+  {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] {n : ℕ∞ω}
   {N : (Fin d → ℝ) → Submodule ℝ (Fin d → ℝ)} {S : Set (Fin d → ℝ)}
 
 /-- **A lifted foot**: a tube `T`, an injective smooth map `emb : B → ℝ^d` onto `S`, a frame–coframe
 atlas of the normal field along `emb`, and a smooth map `P` on the tube with
 `emb (P y) = proj y`. -/
 structure LiftedFoot (T : NormalTubularChart N S) (emb : B → (Fin d → ℝ)) {ι : Type*}
-    (D : FrameCoframeData IB V ∞ (fun x => N (emb x)) ι) (P : (Fin d → ℝ) → B) : Prop where
-  contMDiff_emb : ContMDiff IB 𝓘(ℝ, Fin d → ℝ) ∞ emb
+    (D : FrameCoframeData IB V n (fun x => N (emb x)) ι) (P : (Fin d → ℝ) → B) : Prop where
+  contMDiff_emb : ContMDiff IB 𝓘(ℝ, Fin d → ℝ) n emb
   emb_mem : ∀ x, emb x ∈ S
   emb_injective : Injective emb
-  contMDiffOn_P : ContMDiffOn 𝓘(ℝ, Fin d → ℝ) IB ∞ P T.U
+  contMDiffOn_P : ContMDiffOn 𝓘(ℝ, Fin d → ℝ) IB n P T.U
   emb_P : ∀ y ∈ T.U, emb (P y) = T.proj y
+  /-- The tube's normal coordinate has the grade of the bridge (for `n = ∞` this is the chart's own
+  `contDiffAt_ncoord`; for `n = ω` the analytic chart's `analyticAt_ncoord`). -/
+  contDiffAt_ncoord : ∀ y ∈ T.U, ContDiffAt ℝ n T.ncoord y
 
 variable (T : NormalTubularChart N S) (emb : B → (Fin d → ℝ)) {ι : Type*}
-  (D : FrameCoframeData IB V ∞ (fun x => N (emb x)) ι) (P : (Fin d → ℝ) → B)
+  (D : FrameCoframeData IB V n (fun x => N (emb x)) ι) (P : (Fin d → ℝ) → B)
 
 /-- **The tubular map** `Ψ (x, n) = emb x + n`. -/
 noncomputable def tubeMap (p : TotalSpace V D.toAtlas.toCore.Fiber) : Fin d → ℝ :=
@@ -142,7 +151,7 @@ theorem image_tubeMap (h : LiftedFoot T emb D P) : tubeMap emb D '' tubeDom T em
 
 /-- **`Ψ` is `C^∞`** on the whole total space. -/
 theorem contMDiff_tubeMap (h : LiftedFoot T emb D P) :
-    ContMDiff (IB.prod 𝓘(ℝ, V)) 𝓘(ℝ, Fin d → ℝ) ∞ (tubeMap emb D) :=
+    ContMDiff (IB.prod 𝓘(ℝ, V)) 𝓘(ℝ, Fin d → ℝ) n (tubeMap emb D) :=
   (h.contMDiff_emb.comp (Bundle.contMDiff_proj _)).add D.toAtlas.contMDiff_realise
 
 /-- In the frame `j`, the fibre coordinate of the inverse is the coframe applied to the normal
@@ -155,7 +164,7 @@ theorem snd_tubeInv_eq_coframe (h : LiftedFoot T emb D P) (j : ι) {y : Fin d �
 
 /-- **The inverse is `C^∞` on the tube.** -/
 theorem contMDiffOn_tubeInv (h : LiftedFoot T emb D P) :
-    ContMDiffOn 𝓘(ℝ, Fin d → ℝ) (IB.prod 𝓘(ℝ, V)) ∞ (tubeInv T D P h) T.U := by
+    ContMDiffOn 𝓘(ℝ, Fin d → ℝ) (IB.prod 𝓘(ℝ, V)) n (tubeInv T D P h) T.U := by
   intro y₀ hy₀
   set j := D.indexAt (P y₀) with hj
   have hsrc : tubeInv T D P h y₀ ∈
@@ -167,9 +176,9 @@ theorem contMDiffOn_tubeInv (h : LiftedFoot T emb D P) :
     Filter.inter_mem self_mem_nhdsWithin
       ((h.contMDiffOn_P.continuousOn.continuousWithinAt hy₀).preimage_mem_nhdsWithin
         ((D.isOpen_baseSet j).mem_nhds (D.mem_baseSet_at (P y₀))))
-  have hnc : ContMDiffOn 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, Fin d → ℝ) ∞ T.ncoord (T.U ∩ P ⁻¹' (D.baseSet j)) :=
-    fun y hy => (T.contDiffAt_ncoord hy.1).contMDiffAt.contMDiffWithinAt
-  have hcof : ContMDiffOn 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, V) ∞
+  have hnc : ContMDiffOn 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, Fin d → ℝ) n T.ncoord (T.U ∩ P ⁻¹' (D.baseSet j)) :=
+    fun y hy => (h.contDiffAt_ncoord y hy.1).contMDiffAt.contMDiffWithinAt
+  have hcof : ContMDiffOn 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, V) n
       (fun y => D.coframe j (P y) (T.ncoord y)) (T.U ∩ P ⁻¹' (D.baseSet j)) :=
     ((D.contMDiffOn_coframe j).comp (h.contMDiffOn_P.mono inter_subset_left)
       fun y hy => hy.2).clm_apply hnc
