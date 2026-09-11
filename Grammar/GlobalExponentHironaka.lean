@@ -42,19 +42,27 @@ namespace Grammar
 
 variable {d : ℕ}
 
-/-- **The exponent of a monomial resolution.** -/
-theorem exponent_of_monomialResolution {U : Set (Fin d → ℝ)} (hU : IsOpen U)
-    {K : (Fin d → ℝ) → ℝ} (hK : AnalyticOnNhd ℝ K U) (hK0 : ∀ x ∈ U, 0 ≤ K x) (hKm : Measurable K)
-    {w : Fin d → ℝ} (hw : w ∈ U) (hKw : K w = 0) {F : (Fin d → ℝ) → ℝ}
-    (hF : AnalyticOnNhd ℝ F U) (hFpos : ∀ x ∈ U, 0 < F x) {N : Set (Fin d → ℝ)} (hN : N ∈ 𝓝 w)
-    (R : PartialResolution d K N) (hR : R.IsMonomial) :
-    ∃ Rg : Set (Fin d → ℝ), IsCompact Rg ∧ Rg ∈ 𝓝 w ∧ Rg ⊆ U ∧
+/-- **The exponent of a monomial resolution** (the region inside any prescribed closed ball). -/
+theorem exponent_of_monomialResolution {U₀ : Set (Fin d → ℝ)} (hU₀ : IsOpen U₀)
+    {K : (Fin d → ℝ) → ℝ} (hK₀ : AnalyticOnNhd ℝ K U₀) (hK0₀ : ∀ x ∈ U₀, 0 ≤ K x)
+    (hKm : Measurable K) {w : Fin d → ℝ} (hw₀ : w ∈ U₀) (hKw : K w = 0) {F : (Fin d → ℝ) → ℝ}
+    (hF₀ : AnalyticOnNhd ℝ F U₀) (hFpos₀ : ∀ x ∈ U₀, 0 < F x) {ρ₀ : ℝ} (hρ₀ : 0 < ρ₀)
+    {N : Set (Fin d → ℝ)} (hN : N ∈ 𝓝 w) (R : PartialResolution d K N) (hR : R.IsMonomial) :
+    ∃ Rg : Set (Fin d → ℝ), IsCompact Rg ∧ Rg ∈ 𝓝 w ∧ Rg ⊆ Metric.closedBall w ρ₀ ∧ Rg ⊆ U₀ ∧
       ∃ (ι : Type) (_ : Fintype ι) (lam : ι → ℝ) (m : ι → ℕ) (i₀ : ι),
         (∀ p, ∃ (i : R.ι) (y₀ : Fin d → ℝ) (h : Fin d →₀ ℕ) (C : CentredChartData K (R.φ i) h y₀),
           y₀ ∈ R.dom i ∧ K (R.φ i y₀) = 0 ∧ lam p = C.lam ∧ m p = C.mult) ∧
         (∀ p, lam i₀ ≤ lam p) ∧ (∀ p, lam p = lam i₀ → m p ≤ m i₀) ∧
         regionIntegral volume Rg F K =Θ[atTop] powLogScale (lam i₀) (m i₀ - 1) := by
   classical
+  -- work inside the ball of radius `ρ₀`
+  set U : Set (Fin d → ℝ) := U₀ ∩ Metric.ball w ρ₀ with hUdef
+  have hU : IsOpen U := hU₀.inter Metric.isOpen_ball
+  have hw : w ∈ U := ⟨hw₀, Metric.mem_ball_self hρ₀⟩
+  have hK : AnalyticOnNhd ℝ K U := hK₀.mono inter_subset_left
+  have hK0 : ∀ x ∈ U, 0 ≤ K x := fun x hx => hK0₀ x hx.1
+  have hF : AnalyticOnNhd ℝ F U := hF₀.mono inter_subset_left
+  have hFpos : ∀ x ∈ U, 0 < F x := fun x hx => hFpos₀ x hx.1
   have hR' : ∀ i, ∃ (e h : Fin d →₀ ℕ) (W : Set (Fin d → ℝ)),
       IsMonomialChart K (R.φ i) (R.dom i) e h W := hR
   choose e h W hc using hR'
@@ -236,7 +244,8 @@ theorem exponent_of_monomialResolution {U : Set (Fin d → ℝ)} (hU : IsOpen U)
       fun N => c p * powLogScale (lam p) (m p - 1) N := fun p => (hdp p).2.2.2.2.2.2.2
   obtain ⟨i₀, hmin, hmax, hΘ⟩ := isTheta_of_local_leading_terms hRgm hF0 hFint hK0' hKm Ω hΩm hΩR
     hδ₀pos hgap c lam m hcpos hI
-  refine ⟨Rg, hRgc, hRgn, hRgU, ι, inferInstance, lam, m, i₀, fun p => ?_, hmin, hmax, hΘ⟩
+  refine ⟨Rg, hRgc, hRgn, (hRgU.trans inter_subset_right).trans Metric.ball_subset_closedBall,
+    hRgU.trans inter_subset_left, ι, inferInstance, lam, m, i₀, fun p => ?_, hmin, hmax, hΘ⟩
   obtain ⟨C, hl, hm⟩ := (hdp p).2.2.2.2.2.1
   exact ⟨p.1, p.2.1, h p.1, C, (hpZ p).1.1, (hpZ p).2, hl, hm⟩
 
@@ -249,9 +258,9 @@ divisor-point chart pairs `(min_j (h_{n_j}+1)/(2k_j), #minimisers)` of `R`. -/
 theorem exponent_of_analytic {U : Set (Fin d → ℝ)} (hU : IsOpen U) {K : (Fin d → ℝ) → ℝ}
     (hK : AnalyticOnNhd ℝ K U) (hK0 : ∀ x ∈ U, 0 ≤ K x) (hKm : Measurable K) {w : Fin d → ℝ}
     (hw : w ∈ U) (hKw : K w = 0) (hne : ¬ K =ᶠ[𝓝 w] 0) {F : (Fin d → ℝ) → ℝ}
-    (hF : AnalyticOnNhd ℝ F U) (hFpos : ∀ x ∈ U, 0 < F x) :
+    (hF : AnalyticOnNhd ℝ F U) (hFpos : ∀ x ∈ U, 0 < F x) {ρ₀ : ℝ} (hρ₀ : 0 < ρ₀) :
     ∃ (N : Set (Fin d → ℝ)) (R : PartialResolution d K N), R.IsMonomial ∧
-      ∃ Rg : Set (Fin d → ℝ), IsCompact Rg ∧ Rg ∈ 𝓝 w ∧ Rg ⊆ U ∧
+      ∃ Rg : Set (Fin d → ℝ), IsCompact Rg ∧ Rg ∈ 𝓝 w ∧ Rg ⊆ Metric.closedBall w ρ₀ ∧ Rg ⊆ U ∧
         ∃ (ι : Type) (_ : Fintype ι) (lam : ι → ℝ) (m : ι → ℕ) (i₀ : ι),
           (∀ p, ∃ (i : R.ι) (y₀ : Fin d → ℝ) (h : Fin d →₀ ℕ)
             (C : CentredChartData K (R.φ i) h y₀),
@@ -260,6 +269,6 @@ theorem exponent_of_analytic {U : Set (Fin d → ℝ)} (hU : IsOpen U) {K : (Fin
           regionIntegral volume Rg F K =Θ[atTop] powLogScale (lam i₀) (m i₀ - 1) := by
   obtain ⟨N, -, hNn, R, hR⟩ := Monomialize.Analytic.exists_monomialResolution_at
     (Monomialize.Analytic.Q_all d) hU hK hw hKw hne
-  exact ⟨N, R, hR, exponent_of_monomialResolution hU hK hK0 hKm hw hKw hF hFpos hNn R hR⟩
+  exact ⟨N, R, hR, exponent_of_monomialResolution hU hK hK0 hKm hw hKw hF hFpos hρ₀ hNn R hR⟩
 
 end Grammar
