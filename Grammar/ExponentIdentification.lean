@@ -258,4 +258,84 @@ theorem freeEnergy_of_analytic {U : Set (Fin d → ℝ)} (hU : IsOpen U) {K : (F
   exact freeEnergy_asymptotic (Eventually.of_forall fun N =>
     regionIntegral_pos_of_mem_nhds hK hF hFpos hRgc hRgn hRgU N) hΘ
 
+/-! ### Intrinsic properties of the resolution pair -/
+
+theorem CentredChartData.one_le_mult {K : (Fin d → ℝ) → ℝ} {φ : (Fin d → ℝ) → (Fin d → ℝ)}
+    {h : Fin d →₀ ℕ} {y₀ : Fin d → ℝ} (C : CentredChartData K φ h y₀) : 1 ≤ C.mult :=
+  multCount_pos _ _ C.exists_ratioExp_eq_lam
+
+/-- **The resolution pair is intrinsic**: `λ_*` is a positive rational, `1 ≤ m_* ≤ d`, and every
+sufficiently small closed ball around `w`, weighted by any continuous positive observable, has the
+Laplace order `N^{−λ_*}(log N)^{m_*−1}`. -/
+theorem resolution_pair_intrinsic {U : Set (Fin d → ℝ)} (hU : IsOpen U) {K : (Fin d → ℝ) → ℝ}
+    (hK : AnalyticOnNhd ℝ K U) (hK0 : ∀ x ∈ U, 0 ≤ K x) (hKm : Measurable K) {w : Fin d → ℝ}
+    (hw : w ∈ U) (hKw : K w = 0) (hne : ¬ K =ᶠ[𝓝 w] 0) :
+    ∃ (N : Set (Fin d → ℝ)) (R : PartialResolution d K N), R.IsMonomial ∧
+      ∃ (ι : Type) (_ : Fintype ι) (lam : ι → ℝ) (m : ι → ℕ) (i₀ : ι),
+        (∀ p, ∃ (i : R.ι) (y₀ : Fin d → ℝ) (h : Fin d →₀ ℕ) (C : CentredChartData K (R.φ i) h y₀),
+          y₀ ∈ R.dom i ∧ K (R.φ i y₀) = 0 ∧ lam p = C.lam ∧ m p = C.mult) ∧
+        (∀ p, lam i₀ ≤ lam p) ∧ (∀ p, lam p = lam i₀ → m p ≤ m i₀) ∧
+        (∃ q : ℚ, lam i₀ = q) ∧ 0 < lam i₀ ∧ 1 ≤ m i₀ ∧ m i₀ ≤ d ∧
+        ∃ r₀ : ℝ, 0 < r₀ ∧ ∀ r : ℝ, 0 < r → r ≤ r₀ →
+          ∀ F : (Fin d → ℝ) → ℝ, ContinuousOn F (Metric.closedBall w r) →
+            (∀ x ∈ Metric.closedBall w r, 0 < F x) →
+            regionIntegral volume (Metric.closedBall w r) F K =Θ[atTop]
+              powLogScale (lam i₀) (m i₀ - 1) := by
+  obtain ⟨lamH, thetaH, r₀, hlam, h1, hd, hr₀, hLT, N, R, hR, -, -, -, -, -, ι, hι, lam, m, i₀,
+    hpieces, hmin, hmax, -, hlamEq, hmEq⟩ :=
+    laplace_pair_eq_resolution_pair hU hK hK0 hKm hw hKw hne (F := fun _ => (1 : ℝ))
+      analyticOnNhd_const (fun _ _ => one_pos)
+  -- `1 ≤ m_*`
+  have hm1 : 1 ≤ m i₀ := by
+    obtain ⟨_, _, _, C, -, -, -, hmC⟩ := hpieces i₀
+    rw [hmC]
+    exact C.one_le_mult
+  -- a radius inside `U`
+  obtain ⟨rU, hrU, hballU⟩ := Metric.mem_nhds_iff.1 (hU.mem_nhds hw)
+  set r₁ : ℝ := min r₀ (rU / 2) with hr₁def
+  have hr₁ : 0 < r₁ := lt_min hr₀ (half_pos hrU)
+  refine ⟨N, R, hR, ι, hι, lam, m, i₀, hpieces, hmin, hmax, ⟨lamH, hlamEq⟩,
+    hlamEq ▸ (by exact_mod_cast hlam), hm1, by omega, r₁, hr₁, fun r hr hrr₁ F hFc hFpos => ?_⟩
+  have hrU' : Metric.closedBall w r ⊆ U := by
+    refine (Metric.closedBall_subset_ball ?_).trans hballU
+    exact lt_of_le_of_lt (hrr₁.trans (min_le_right _ _)) (half_lt_self hrU)
+  have hBc : IsCompact (Metric.closedBall w r) := isCompact_closedBall _ _
+  have hBne : (Metric.closedBall w r).Nonempty := ⟨w, Metric.mem_closedBall_self hr.le⟩
+  obtain ⟨xmin, hxmin, hmin'⟩ := hBc.exists_isMinOn hBne hFc
+  obtain ⟨xmax, hxmax, hmax'⟩ := hBc.exists_isMaxOn hBne hFc
+  have hc₁pos : 0 < F xmin := hFpos _ hxmin
+  have hc₂pos : 0 < F xmax := hFpos _ hxmax
+  have hKc : ContinuousOn K (Metric.closedBall w r) := hK.continuousOn.mono hrU'
+  have hZint : ∀ N : ℝ, IntegrableOn (fun x => Real.exp (-N * K x)) (Metric.closedBall w r) :=
+    fun N => (Real.continuous_exp.comp_continuousOn (hKc.const_smul (-N))).integrableOn_compact hBc
+  have hFKint : ∀ N : ℝ,
+      IntegrableOn (fun x => F x * Real.exp (-N * K x)) (Metric.closedBall w r) := fun N =>
+    (hFc.mul (Real.continuous_exp.comp_continuousOn (hKc.const_smul (-N)))).integrableOn_compact
+      hBc
+  have hBm : MeasurableSet (Metric.closedBall w r) := Metric.isClosed_closedBall.measurableSet
+  set Z : ℝ → ℝ := fun N => ∫ x in Metric.closedBall w r, Real.exp (-N * K x) with hZ
+  have hlow : ∀ N : ℝ, F xmin * Z N ≤ regionIntegral volume (Metric.closedBall w r) F K N := by
+    intro N
+    simp only [hZ, regionIntegral]
+    rw [← integral_const_mul]
+    exact setIntegral_mono_on ((hZint N).const_mul _) (hFKint N) hBm fun x hx =>
+      mul_le_mul_of_nonneg_right (hmin' hx) (Real.exp_pos _).le
+  have hup : ∀ N : ℝ, regionIntegral volume (Metric.closedBall w r) F K N ≤ F xmax * Z N := by
+    intro N
+    simp only [hZ, regionIntegral]
+    rw [← integral_const_mul]
+    exact setIntegral_mono_on (hFKint N) ((hZint N).const_mul _) hBm fun x hx =>
+      mul_le_mul_of_nonneg_right (hmax' hx) (Real.exp_pos _).le
+  have hZnn : ∀ N, 0 ≤ Z N := fun N =>
+    setIntegral_nonneg_of_ae_restrict (Eventually.of_forall fun x => (Real.exp_pos _).le)
+  have hΘZ : Z =Θ[atTop] powerLogRate (lamH : ℝ) (thetaH - 1) :=
+    hLT r hr (hrr₁.trans (min_le_left _ _))
+  have hΘF : regionIntegral volume (Metric.closedBall w r) F K =Θ[atTop]
+      powerLogRate (lamH : ℝ) (thetaH - 1) :=
+    isTheta_of_le_of_le (Eventually.of_forall hlow) (Eventually.of_forall hup)
+      (Eventually.of_forall fun N => mul_nonneg hc₁pos.le (hZnn N))
+      (hΘZ.const_mul_left hc₁pos.ne') (hΘZ.const_mul_left hc₂pos.ne')
+  rw [hlamEq, hmEq]
+  exact hΘF
+
 end Grammar
