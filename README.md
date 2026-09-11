@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 506 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 507 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CCIII | **Orthant charts of a centred hironaka chart are split box charts**: the composite of the reflection of the normal coordinates, the inverse strip normalisation and the translated chart is a split box chart with Jacobian factor `jac₀·ρ^{-h}·|det DT⁻¹|`, exact monomial phase and injectivity on the positive box | `Grammar/ChartOrthantCore.lean` (`orthantChart`, `exists_splitBoxChart_orthant`, `abs_det_fderiv_orthantChart`, `prod_abs_pow_inv_nIdx`) |
 | CCII | **Centred normal form of a hironaka chart at a divisor point**: a splitting into the normal set and the tangential coordinates, positive phase exponents, and analytic positive phase and Jacobian units in translated coordinates, with the chart injective off the normal hyperplanes | `Grammar/CentredChart.lean` (`CentredChartData`, `exists_centredChartData`, `even_positive_form_halfExp`, `splittingOf`) |
 | CCI | **Reflections along a splitting**: the normal-coordinate reflection of the ambient space has `|det| = 1`, intertwines the product coordinates, and its orthant images of the positive box are disjoint and cover the two-sided box a.e. | `Grammar/SplitReflection.lean` (`splitReflect`, `abs_det_splitReflect`, `splitReflect_prodToPi`, `disjoint_splitOrthant`, `mem_iUnion_splitOrthant`) |
 | CC | **Split box charts and the abstract core tiling**: an ambient-space chart injective on a positive box along a coordinate splitting with monomial Jacobian exactly presents the Lebesgue measure on its image; core pieces/core tilings abstract the tiling bridge | `Grammar/SplitBoxCore.lean` (`SplitBoxChart`, `SplitBoxChart.exists_corePresentation`, `CorePiece`, `CoreTiling`, `CoreTiling.cutoffExpansion`) |
