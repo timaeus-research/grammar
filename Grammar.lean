@@ -522,3 +522,4 @@ import Grammar.TubularGlobalExpansion
 import Grammar.CoordStratumAtlas
 import Grammar.CoordPlaneStratum
 import Grammar.ChartStratumPieces
+import Grammar.ResolvedChartExpansion
