@@ -8,7 +8,8 @@ external inputs. This directory records that pass.
 ## Scope frozen
 
 * Lean library: `timaeus-research/grammar` at `fd37665` (488 modules, axiom-clean, zero sorries;
-  StrucDual pinned at `4f317b3`).
+  StrucDual pinned at `4f317b3`). Addendum: at `2024ead` hironaka is bumped to `eb9b6ca` and the
+  resolution hypothesis `Q n` is discharged (CLXXXV, 489 modules).
 * Mirror: 633 dots; companion note: 211 dots; total 844 (`dot_inventory.md`).
 * Every dot was inspected by one of six independent reviewers (general-purpose agents with read
   access to the Lean sources) against the checklist: silently supplied hypotheses, smooth vs
@@ -68,6 +69,7 @@ estimates, and does not identify the abstract coefficient family with a model's 
 
 | Input or missing step | Classification | What closure requires |
 |---|---|---|
+| Hironaka's chart form (Bierstone–Milman Thm 3.2, `Q n`) | **discharged** (CLXXXV; hironaka `eb9b6ca`, `Q_all` axiom-clean) | — |
 | Certified resolution charts and their relation to the original model | substantive geometry; bridge unfinished | exact chart identities and domains |
 | Analytic units, compatible localisation, passage to the resolved setting | unfinished | a compatibility theorem or an explicit external package |
 | Level-set manifold and tangent-image identification (`GeometricIdentification`) | unfinished under suitable regularity | IFT/regular-level-set construction or externally supplied manifold data |
