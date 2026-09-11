@@ -516,3 +516,4 @@ import Grammar.TubularGlobalInstance
 import Grammar.TubularJacobian
 import Grammar.TubularFibreIntegration
 import Grammar.TubularExpansion
+import Grammar.TubularCoordFree

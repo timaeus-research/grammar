@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 518 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 519 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CCXVII | **`eq:tubular_expansion` coordinate-free on strucdual's tube**: the fibre measures of the pulled-back density live on the ambient normal spaces `N_x`, and `∫_{U ∩ proj⁻¹V'} F dy = ∫_z 1_W(z) ∑_k ⟨D^k_⊥F(emb z), 𝖬_k(emb z)⟩ dz` with the invariant contractions of the additive normal family — every chosen-normal-family hypothesis of the coordinate-free layer instantiated by the actual tube | `Grammar/TubularCoordFree.lean` (`integral_tube_piece_eq_tsum_normalContraction`, `normalContraction_tube`, `tubeNormalMeasure`) |
 | CCXVI | **The Taylor–moment expansion on the actual tube**: the fibre measures of the pulled-back Lebesgue density have finite moments of all orders, and for observables with fibre power series carrying them, `∫_{U ∩ proj⁻¹V'} F dy = ∫_z ∑_k (k!)⁻¹ ⟨D^k(F∘ψ_z)(0), 𝖬_k(z)⟩ dz` (moment and multi-index forms) — the paper's `eq:tubular_expansion` on strucdual's tube; the zero-section Jacobian `g(z,0) = |det([D emb, J^T] ∘ L⁻¹)|` | `Grammar/TubularExpansion.lean` (`integral_tube_piece_eq_tsum_multiIndex`, `integral_tube_piece_eq_tsum_moment`, `integrable_norm_pow_tubeFibre`, `tubeJac_zero`) |
 | CCXV | **Integration along the fibres of the tube**: the pulled-back Lebesgue density `1_Ω · tubeJac`, integrated out along the normal fibres — `∫_{U ∩ proj⁻¹V'} F dy = ∫_z ∫ F(ψ(z,·)) dη_z dz` (the paper's `eq:pushforward_local`, with the weighted fibre measures of `WeightedFibreIntegration`), the nonnegative version without hypotheses, and the pushforward density `∫ f(ft(proj y)) dy = ∫ f(z) C(z) dz`, `C(z)` the fibre mass (`eq:pushforward_char`, local form) | `Grammar/TubularFibreIntegration.lean` (`integral_tube_piece_fibreMeasure`, `integral_tube_piece_fubini`, `lintegral_tube_piece`, `integral_foot_eq_fibreMass`) |
 | CCXIV | **The tubular change of variables with its Jacobian density**: over a graph chart the tube is `ψ (z, n) = emb z + J_i(emb z)ᵀ n` on `{z ∈ W, ‖J_i(emb z)ᵀ n‖ < ε}`, injective with image the tube over the piece, and `∫_{ψ(B)} F dy = ∫_B tubeJac • F ∘ ψ` with `tubeJac = |det D(ψ ∘ L⁻¹)|` (canonical volume-preserving concatenation `L`) positive and real-analytic on the domain — the paper's `∫_V F |μ| = ∫ (F∘Φ) Φ^*|μ|` with the pulled-back Lebesgue density computed | `Grammar/TubularJacobian.lean` (`integral_tube_piece`, `integral_tubeChart_image`, `tubeJac_pos`, `analyticAt_tubeJac`) |
