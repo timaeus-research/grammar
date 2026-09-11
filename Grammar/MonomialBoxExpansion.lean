@@ -70,20 +70,20 @@ theorem measurableSet_posBox {A : Set (Fin t → ℝ)} (hA : IsCompact A) (b : �
 /-- The localisation datum of the box integral. -/
 noncomputable def monomialBoxData (k : Fin (n + 1) → ℕ) {β : ℝ} (hβ : 0 < β)
     {A : Set (Fin t → ℝ)} (hA : IsCompact A) (b : ℝ) {F : (Fin t → ℝ) × (Fin (n + 1) → ℝ) → ℝ}
-    (hF : Continuous F) {δ : ℝ} (hδ : 0 < δ) :
+    (hF : ContinuousOn F (posBox A b)) {δ : ℝ} (hδ : 0 < δ) :
     LocalisationData ((Fin t → ℝ) × (Fin (n + 1) → ℝ)) where
   μ := volume.restrict (posBox A b)
   phase := monomialPhase k β
   obs := F
   phase_measurable := (continuous_monomialPhase k β).measurable
   phase_nonneg := Eventually.of_forall (monomialPhase_nonneg hβ.le)
-  obs_integrable := hF.continuousOn.integrableOn_compact (isCompact_posBox hA b)
+  obs_integrable := hF.integrableOn_compact (isCompact_posBox hA b)
   δ := δ
   δ_pos := hδ
 
 theorem monomialBoxData_Z (k : Fin (n + 1) → ℕ) {β : ℝ} (hβ : 0 < β) {A : Set (Fin t → ℝ)}
-    (hA : IsCompact A) (b : ℝ) {F : (Fin t → ℝ) × (Fin (n + 1) → ℝ) → ℝ} (hF : Continuous F)
-    {δ : ℝ} (hδ : 0 < δ) (N : ℝ) :
+    (hA : IsCompact A) (b : ℝ) {F : (Fin t → ℝ) × (Fin (n + 1) → ℝ) → ℝ}
+    (hF : ContinuousOn F (posBox A b)) {δ : ℝ} (hδ : 0 < δ) (N : ℝ) :
     (monomialBoxData k hβ hA b hF hδ).Z N =
       ∫ z in posBox A b, F z * Real.exp (-N * monomialPhase k β z) := rfl
 
@@ -106,7 +106,8 @@ theorem ae_ne_zero_snd :
 theorem monomialBox_cutoffExpansion (k : Fin (n + 1) → ℕ) (hk : ∀ i, 0 < k i) {β : ℝ}
     (hβ : 0 < β) {A : Set (Fin t → ℝ)} (hA : IsCompact A) {B b : ℝ} (hb : 0 < b) (hbB : b ≤ B)
     (hB : 0 < B) (hAB : ∀ v ∈ A, ∀ i, |v i| ≤ B) {F : (Fin t → ℝ) × (Fin (n + 1) → ℝ) → ℝ}
-    (hF : Continuous F) {P : FormalMultilinearSeries ℝ (Fin t ⊕ Fin (n + 1) → ℝ) ℝ} {R : ℝ≥0∞}
+    (hF : ContinuousOn F (posBox A b)) {P : FormalMultilinearSeries ℝ (Fin t ⊕ Fin (n + 1) → ℝ) ℝ}
+    {R : ℝ≥0∞}
     (hG : HasFPowerSeriesOnBall (fun w => F (w ∘ Sum.inl, w ∘ Sum.inr)) P 0 R) {ρ : ℝ≥0}
     (hρ : (ρ : ℝ≥0∞) < R) (hBρ : ((t + (n + 1) : ℕ) : ℝ) * B < ρ) (hB1 : B < ρ) {δ : ℝ}
     (hδ : 0 < δ) :

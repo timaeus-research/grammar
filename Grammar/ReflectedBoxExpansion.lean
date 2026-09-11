@@ -236,21 +236,23 @@ theorem measurableSet_twoSidedBox {A : Set (Fin t → ℝ)} (hA : IsCompact A) (
 
 /-- The localisation datum of the two-sided box integral. -/
 noncomputable def twoSidedBoxData (k : Fin (n + 1) → ℕ) {β : ℝ} (hβ : 0 < β) {A : Set (Fin t → ℝ)}
-    (hA : IsCompact A) (b : ℝ) {F : (Fin t → ℝ) × (Fin (n + 1) → ℝ) → ℝ} (hF : Continuous F)
-    {δ : ℝ} (hδ : 0 < δ) : LocalisationData ((Fin t → ℝ) × (Fin (n + 1) → ℝ)) where
+    (hA : IsCompact A) (b : ℝ) {F : (Fin t → ℝ) × (Fin (n + 1) → ℝ) → ℝ}
+    (hF : ContinuousOn F (twoSidedBox A b)) {δ : ℝ} (hδ : 0 < δ) :
+    LocalisationData ((Fin t → ℝ) × (Fin (n + 1) → ℝ)) where
   μ := volume.restrict (twoSidedBox A b)
   phase := monomialPhase k β
   obs := F
   phase_measurable := (continuous_monomialPhase k β).measurable
   phase_nonneg := Eventually.of_forall (monomialPhase_nonneg hβ.le)
-  obs_integrable := hF.continuousOn.integrableOn_compact (isCompact_twoSidedBox hA b)
+  obs_integrable := hF.integrableOn_compact (isCompact_twoSidedBox hA b)
   δ := δ
   δ_pos := hδ
 
 /-- **The unconditional expansion of the two-sided exact-monomial box integral.** -/
 theorem twoSidedBox_cutoffExpansion (k : Fin (n + 1) → ℕ) (hk : ∀ i, 0 < k i) {β : ℝ} (hβ : 0 < β)
     {A : Set (Fin t → ℝ)} (hA : IsCompact A) {B b : ℝ} (hb : 0 < b) (hbB : b ≤ B) (hB : 0 < B)
-    (hAB : ∀ v ∈ A, ∀ i, |v i| ≤ B) {F : (Fin t → ℝ) × (Fin (n + 1) → ℝ) → ℝ} (hF : Continuous F)
+    (hAB : ∀ v ∈ A, ∀ i, |v i| ≤ B) {F : (Fin t → ℝ) × (Fin (n + 1) → ℝ) → ℝ}
+    (hF : ContinuousOn F (twoSidedBox A b))
     {P : FormalMultilinearSeries ℝ (Fin t ⊕ Fin (n + 1) → ℝ) ℝ} {R : ℝ≥0∞}
     (hG : HasFPowerSeriesOnBall (fun w => F (w ∘ Sum.inl, w ∘ Sum.inr)) P 0 R) {ρ : ℝ≥0}
     (hρ : (ρ : ℝ≥0∞) < R) (hBρ : ((t + (n + 1) : ℕ) : ℝ) * B < ρ) (hB1 : B < ρ) {δ : ℝ}
