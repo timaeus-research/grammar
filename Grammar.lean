@@ -501,3 +501,4 @@ import Grammar.ReflectedBoxExpansion
 import Grammar.StripBoxExpansion
 import Grammar.StripLocalExpansion
 import Grammar.AnalyticJacobian
+import Grammar.SplitBoxCore
