@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 488 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 489 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CLXXXV | **The population Laplace exponent pair, unconditionally**: with hironaka's chart-form theorem `Q_all` (356/356 leaves, axiom-clean) the exponent pair `(λ_H, θ_H)` of a real-analytic nonnegative phase near a zero, the identification `(λ, m) = (λ_H, θ_H)` of any certified population core limit, and the empirical exponent `log Z_n/log n → −λ_H` no longer carry `Q n` as a hypothesis | `Grammar/HironakaUnconditional.lean` (`laplaceTheta_of_analyticOnNhd_nonneg`, `exists_exponentPair`, `tendstoInMeasure_log_div_log_of_analyticOnNhd_nonneg`) |
 | CLXXXIV | **Closure endpoints for the empirical chain**: Banach `L²` from the `ℓ¹` coordinate certificate (Minkowski + Fatou), the scaled-core limit with the tail certificate exposed, and the identified single-chart annealed endpoint — one `ν` for the limit `E[A_n(Z_n + Rem_n)] → E_ν[C(Z + A)]` and its first moment (covariance-modified face integral; population coefficient at `β(1 − βv₀/2)` at constant face variance); `βκ < 2` alone suffices | `Grammar/ClosureEndpoint.lean` (`memLp_two_of_summableCoordL2`, `tendstoInDistribution_scaled_dataBoxIntegral_sampleDatum_tail`, `annealed_sampleDatum_single_identified`, `annealed_sampleDatum_single_effectiveTemperature`) |
 | CLXXXIII | **The effective-temperature corollary and the normal-location check**: a.e. constant face variance `σ² = v₀` (`βv₀ < 2`) makes the limiting expectation of the leading coefficient the zero-phase population coefficient at `β_eff = β(1 − βv₀/2)`; for `g_a(x) = a²/2 − ax` the sampling phase is `√2 n^{−1/2}∑X_i` with variance `2` | `Grammar/EffectiveTemperature.lean` (`dataBoxCoeff_leading_zero_phase`, `integral_dataBoxCoeff_leading_eq_population_of_const_faceVariance`, `variance_phase_normalLocation`) |
 | CLXXXII | **The sub-Gaussian empirical programme**: functionals of the `ℓ¹` Gaussian limit are Gaussian for `L²` observations; a uniform full-box sub-Gaussian proxy `κ` on the centred phase evaluations is inherited by the empirical phase with the same proxy, `Var ≤ κ` sharp; the single- and several-chart annealed sample-datum theorems (`pβκ < 2`) and the Gaussian first moment (`βκ < 2`) without boundedness | `Grammar/L1GaussianFunctionalL2.lean`, `Grammar/SubgaussianPhase.lean`, `Grammar/SubgaussianAssembly.lean` (`map_eq_gaussianReal_of_marginals_of_memLp`, `hasSubgaussianMGF_empiricalPhase`, `variance_le_of_hasSubgaussianMGF`, `tendsto_integral_scaled_coreSum_sampleDatum_subgaussian`, `integral_dataBoxCoeff_leading_eq_subgaussian`) |
@@ -92,7 +93,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 What is **not** formalised: resolution of singularities itself (Hironaka — proved leaf-wise in
 the dependency `timaeus-research/hironaka`, whose chart form with continuous units feeds
-CXXIII–CXXV through `Grammar/HironakaAdapter.lean` with `Q n` as an explicit hypothesis) and the existence of
+CXXIII–CXXV through `Grammar/HironakaAdapter.lean` with `Q n` as an explicit hypothesis until hironaka's `Q_all` landed — CLXXXV consumes it unconditionally) and the existence of
 the certified chart presentation and adapted partition of unity, including the
 complexified chart, its torus inclusion in the Hypothesis-I neighbourhood and the
 analytic divisibility of the pulled-back log-likelihood ratio, and the joint product-polydisc

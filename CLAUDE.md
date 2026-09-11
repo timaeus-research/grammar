@@ -74,7 +74,7 @@ Gate every commit on `lake build > log 2>&1; echo $?` (exit 0, last line
   neighbourhoods, `StrucDual/Geometry`, Mathlib v4.33.1) is a pinned lake dependency consumed by
   `Grammar/StrucDualNormalFamily.lean`; `timaeus-research/hironaka` (resolution of
   singularities, chart form) is a pinned lake dependency, consumed only through its axiom-clean
-  declarations (`Q n` stays an explicit hypothesis); `Grammar/HironakaAdapter.lean` is the adapter.
+  declarations (`Q n` was an explicit hypothesis until hironaka's `Q_all` landed; pin `eb9b6ca`, consumed unconditionally in `HironakaUnconditional.lean`); `Grammar/HironakaAdapter.lean` is the adapter.
 - Use `↦` (not `=>`) for lambda arrows: `fun x ↦ ...`
 - Avoid `native_decide` — sidesteps the kernel's trust boundary. Prefer
   `decide +kernel`. We have no certificates here so this should not come up.
