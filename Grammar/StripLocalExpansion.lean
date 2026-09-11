@@ -92,52 +92,52 @@ end Inverse
 
 /-! ### Joint analyticity of the normal-form amplitude -/
 
-variable {t n : ℕ}
+variable {t n d : ℕ} {σ : Fin t ⊕ Fin (n + 1) ≃ Fin d}
 
 theorem analyticAt_prodToPi (p : (Fin t → ℝ) × (Fin (n + 1) → ℝ)) :
-    AnalyticAt ℝ (prodToPi t n) p := by
+    AnalyticAt ℝ (prodToPi σ) p := by
   rw [analyticAt_pi_iff]
   intro x
-  obtain ⟨s, rfl⟩ := finSumFinEquiv.surjective x
+  obtain ⟨s, rfl⟩ := σ.surjective x
   rcases s with i | j
   · have h : (fun q : (Fin t → ℝ) × (Fin (n + 1) → ℝ) =>
-        prodToPi t n q (finSumFinEquiv (Sum.inl i))) = fun q => q.1 i :=
+        prodToPi σ q (σ (Sum.inl i))) = fun q => q.1 i :=
       funext fun q => prodToPi_apply_tIdx q i
     rw [h]
     exact ((ContinuousLinearMap.proj i).comp (ContinuousLinearMap.fst ℝ _ _)).analyticAt p
   · have h : (fun q : (Fin t → ℝ) × (Fin (n + 1) → ℝ) =>
-        prodToPi t n q (finSumFinEquiv (Sum.inr j))) = fun q => q.2 j :=
+        prodToPi σ q (σ (Sum.inr j))) = fun q => q.2 j :=
       funext fun q => prodToPi_apply_nIdx q j
     rw [h]
     exact ((ContinuousLinearMap.proj j).comp (ContinuousLinearMap.snd ℝ _ _)).analyticAt p
 
 section Main
 
-variable {k : Fin (n + 1) → ℕ} {j₀ : Fin (n + 1)} {β : ℝ} {V : Set (Fin (t + (n + 1)) → ℝ)}
-  {unit : (Fin (t + (n + 1)) → ℝ) → ℝ} {A : Set (Fin t → ℝ)} {b₁ : ℝ}
-  (SD : StripData (nIdx t j₀) V (unitRoot β (2 * k j₀) unit) (stripBase t A j₀ b₁))
+variable {k : Fin (n + 1) → ℕ} {j₀ : Fin (n + 1)} {β : ℝ} {V : Set (Fin d → ℝ)}
+  {unit : (Fin d → ℝ) → ℝ} {A : Set (Fin t → ℝ)} {b₁ : ℝ}
+  (SD : StripData (nIdx σ j₀) V (unitRoot β (2 * k j₀) unit) (stripBase σ A j₀ b₁))
 
 /-- **Joint analyticity of the normal-form amplitude** at points over the image of the strip. -/
 theorem analyticAt_normalAmp (hβ : 0 < β) (hk : 0 < k j₀)
     (hunit : AnalyticOnNhd ℝ unit V) (hpos : ∀ y ∈ V, 0 < unit y)
-    {F : (Fin (t + (n + 1)) → ℝ) → ℝ} (hF : AnalyticOnNhd ℝ F V)
+    {F : (Fin d → ℝ) → ℝ} (hF : AnalyticOnNhd ℝ F V)
     {p : (Fin t → ℝ) × (Fin (n + 1) → ℝ)}
-    (hp : prodToPi t n p ∈ rescale (nIdx t j₀) (unitRoot β (2 * k j₀) unit) '' SD.S) :
+    (hp : prodToPi σ p ∈ rescale (nIdx σ j₀) (unitRoot β (2 * k j₀) unit) '' SD.S) :
     AnalyticAt ℝ (normalAmp SD F) p := by
   have hρ : AnalyticOnNhd ℝ (unitRoot β (2 * k j₀) unit) V := fun y hy =>
     analyticAt_unitRoot hβ (by omega) (hunit y hy) (hpos y hy)
-  have h1 : AnalyticAt ℝ (fun w => |(fderiv ℝ SD.inv w).det|) (prodToPi t n p) :=
+  have h1 : AnalyticAt ℝ (fun w => |(fderiv ℝ SD.inv w).det|) (prodToPi σ p) :=
     SD.analyticAt_det_fderiv_inv hρ hp
-  have h2 : AnalyticAt ℝ (fun w => F (SD.inv w)) (prodToPi t n p) :=
+  have h2 : AnalyticAt ℝ (fun w => F (SD.inv w)) (prodToPi σ p) :=
     (hF _ (SD.S_sub (SD.inv_mem hp))).comp (SD.inv_analytic _ hp)
   exact ((h1.mul h2).comp (analyticAt_prodToPi p))
 
 /-- The joint amplitude `w ↦ normalAmp (w ∘ inl, w ∘ inr)` is analytic. -/
 theorem analyticAt_normalAmp_joint (hβ : 0 < β) (hk : 0 < k j₀)
     (hunit : AnalyticOnNhd ℝ unit V) (hpos : ∀ y ∈ V, 0 < unit y)
-    {F : (Fin (t + (n + 1)) → ℝ) → ℝ} (hF : AnalyticOnNhd ℝ F V) {w : Fin t ⊕ Fin (n + 1) → ℝ}
-    (hw : prodToPi t n (w ∘ Sum.inl, w ∘ Sum.inr) ∈
-      rescale (nIdx t j₀) (unitRoot β (2 * k j₀) unit) '' SD.S) :
+    {F : (Fin d → ℝ) → ℝ} (hF : AnalyticOnNhd ℝ F V) {w : Fin t ⊕ Fin (n + 1) → ℝ}
+    (hw : prodToPi σ (w ∘ Sum.inl, w ∘ Sum.inr) ∈
+      rescale (nIdx σ j₀) (unitRoot β (2 * k j₀) unit) '' SD.S) :
     AnalyticAt ℝ (fun w : Fin t ⊕ Fin (n + 1) → ℝ => normalAmp SD F (w ∘ Sum.inl, w ∘ Sum.inr))
       w := by
   have hL : AnalyticAt ℝ (fun w : Fin t ⊕ Fin (n + 1) → ℝ => (w ∘ Sum.inl, w ∘ Sum.inr)) w := by
@@ -158,19 +158,19 @@ an analytic positive unit and an analytic observable, some adapted region around
 over the tangential origin has the full power–log cutoff expansion, with no series hypothesis. -/
 theorem strip_cutoffExpansion_local (hV : IsOpen V) (hk : ∀ j, 0 < k j) (hβ : 0 < β)
     (hunit : AnalyticOnNhd ℝ unit V) (hpos : ∀ y ∈ V, 0 < unit y)
-    {K : (Fin (t + (n + 1)) → ℝ) → ℝ}
-    (hK : ∀ y ∈ V, K y = unit y * ∏ j, y (nIdx t j) ^ (2 * k j)) (hA : IsCompact A)
-    (h0 : (0 : Fin t → ℝ) ∈ A) (hb₁ : 0 < b₁) {F : (Fin (t + (n + 1)) → ℝ) → ℝ}
+    {K : (Fin d → ℝ) → ℝ}
+    (hK : ∀ y ∈ V, K y = unit y * ∏ j, y (nIdx σ j) ^ (2 * k j)) (hA : IsCompact A)
+    (h0 : (0 : Fin t → ℝ) ∈ A) (hb₁ : 0 < b₁) {F : (Fin d → ℝ) → ℝ}
     (hF : AnalyticOnNhd ℝ F V) {δ : ℝ} (hδ : 0 < δ) :
     ∃ (B b' : ℝ), 0 < B ∧ 0 < b' ∧ ∃ (Q Dg : ℕ) (c : ℝ → ℕ → ℝ), 0 < Q ∧
-      CutoffExpansion Q Dg (fun N => ∫ y in SD.inv '' zBox t (A ∩ Metric.closedBall 0 B) b',
+      CutoffExpansion Q Dg (fun N => ∫ y in SD.inv '' zBox σ (A ∩ Metric.closedBall 0 B) b',
         F y * Real.exp (-N * K y)) c := by
   -- the joint series at the tangential origin
   set b₂ : ℝ := min b₁ SD.b with hb₂
   have hb₂pos : 0 < b₂ := lt_min hb₁ SD.b_pos
-  have hmem : prodToPi t n ((0 : Fin t → ℝ), (0 : Fin (n + 1) → ℝ)) ∈
-      rescale (nIdx t j₀) (unitRoot β (2 * k j₀) unit) '' SD.S := by
-    have hz : prodToPi t n ((0 : Fin t → ℝ), (0 : Fin (n + 1) → ℝ)) ∈ zBox t A b₂ :=
+  have hmem : prodToPi σ ((0 : Fin t → ℝ), (0 : Fin (n + 1) → ℝ)) ∈
+      rescale (nIdx σ j₀) (unitRoot β (2 * k j₀) unit) '' SD.S := by
+    have hz : prodToPi σ ((0 : Fin t → ℝ), (0 : Fin (n + 1) → ℝ)) ∈ zBox σ A b₂ :=
       ⟨(0, 0), ⟨h0, fun j _ => by simp [hb₂pos.le]⟩, rfl⟩
     exact ((zBox_subset_cylinder le_rfl (min_le_left _ _) (min_le_right _ _)).trans
       SD.cyl_sub_image) hz
