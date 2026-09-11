@@ -110,6 +110,31 @@ Q4. After this gap: what is the next most valuable programme for the paper? Cand
 Answer in Lean-aware mathematical prose with proposed declaration names; do not claim upstream
 Mathlib names you are not sure of.
 
+## Addendum (after CCXXVI, before the consult could run)
+
+* Obstacle 4 is closed: `Grammar/DivisorFreePieces.lean` proves `hasLeadingTerm_pieceIntegral_empty_of_monomial`
+  (phase bounded below on the divisor-free piece of a monomial chart's compact domain) and
+  `hasLeadingTerm_boltzmannIntegral_of_monomial` (interface with `D_i = supp e_i`; certificates
+  needed only for the NONEMPTY chart–stratum pieces).
+* Option (A) seems to add nothing: CCVIII already gives Θ over the compact set resolved by the
+  `PartialResolution`, which is a.e. the union of the chart images. Please confirm or correct.
+* My diagnosis of the real obstruction, for you to check: the paper's Lemma adapted_pou makes the
+  partition weights CONSTANT ON NORMAL FIBRES so they factor out of the normal expansion; the
+  measurable cover weights `ρ_i ∘ φ_i` and the indicator of an arbitrary compact `dom_i` are not
+  fibre-constant, so the per-piece leading coefficient genuinely depends on them through the trace of
+  the piece on the stratum (the face integral), and only a fibre-saturated product piece with a
+  fibre-constant weight has a canonical coefficient. CCXXIII shows `sizePiece` IS fibre-saturated on
+  the ε-tube of `P_I`; the obstruction is entirely in `1_{dom_i} · ρ_i∘φ_i`. A conditional theorem
+  with the hypothesis "the pulled-back weight is fibre-constant on the piece" (the paper's own
+  hypothesis) may be the honest exact-coefficient statement. Please assess, and say whether hironaka's
+  `PartialResolution` (chart domains: are they boxes/polydiscs?) can be upgraded to fibre-saturated
+  domains and fibre-constant weights by shrinking/tiling.
+* CCV's region is local in the tangential direction too (`A' = A ∩ closedBall 0 B`, `B` existential,
+  from the strip normalisation of the phase unit); a whole-stratum piece therefore needs a finite
+  tangential cover with additivity of the face coefficients — the exact-tiling machinery of
+  CXCIV (`AnalyticCoreDecomposition`, `gCoeff`, `first_nonzero`) is the existing tool. Please say
+  whether that is the route (D') you would take, and what its module contracts are.
+
 ## Appendix: exact statements (from the repository)
 225:theorem integral_sizePiece_eq_integral_condContraction {F : (Fin d → ℝ) → ℝ}
 226-    (hF : IntegrableOn (fun y => wt.w y * F y) (sizePiece D ε I))
