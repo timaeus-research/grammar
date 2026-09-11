@@ -523,3 +523,4 @@ import Grammar.CoordStratumAtlas
 import Grammar.CoordPlaneStratum
 import Grammar.ChartStratumPieces
 import Grammar.ResolvedChartExpansion
+import Grammar.LeadingTermInterface
