@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 479 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 480 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CLXXVIII | **The normal bundle of a coordinate stratum and its tubular equivalence**: the stratum `{u = 0} ⊆ ℝ^{m+k}` as labelled defining equations with constant coordinate frame and normal field (trivial `C^∞` bundle), `(v,n) ↦ v + n` a diffeomorphism from the normal bundle total space onto the ambient chart with inverse `(foot, normal coordinate)`, and the contraction through this bundle equal to CLXXII's chart contraction | `Grammar/CoordinateStratumBundle.lean` (`stratumEquations`, `frame_eq`, `normal_eq`, `tubeDiffeomorph`, `normalContraction_eq_chart`) |
 | CLXXVII | **Global normal sections**: a family of symmetric fibre forms with `C^n` frame coordinates in every frame; transformation law under transition functions, frame independence via the smoothness of `(f,g) ↦ g ∘ f`, covering-frames criterion, and the global Taylor-section theorem `x ↦ D^r_⊥F(x)` over a normed-space base | `Grammar/GlobalNormalSections.lean` (`IsGlobalNormalSection`, `pullForm_eq_comp_coordChange`, `isGlobalNormalSection_normalTaylorForm`) |
 | CLXXVI | **The normal bundle of labelled defining equations**: chart-independent tangent field, normal field `(TX)ᗮ`, Riesz gradient frames (smooth, injective, range `N x`) ⇒ a `C^∞` normal bundle with fibre `ℝ^k` whose transition functions are diagonal in the labels — the labelled lines are canonical (`eq:decomp_nx` at bundle level) | `Grammar/LabelledNormalBundle.lean` (`tangent_eq`, `range_frame`, `contMDiffVectorBundle`, `coordChange_diagonal`, `coordChange_single`) |
 | CLXXV | **Frame atlases from frames and coframes**: transition functions determined by the frames once each has a smooth left inverse; over inner product spaces the Moore–Penrose coframe `(f†f)⁻¹f†` is a smooth left inverse of a smooth injective frame family | `Grammar/FrameAtlasOfCoframes.lean` (`FrameCoframeData.toAtlas`, `pinv_apply`, `contMDiffOn_pinv`, `frameCoframeDataOfFrames`) |
