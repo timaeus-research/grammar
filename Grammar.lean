@@ -512,3 +512,4 @@ import Grammar.GlobalExponentBound
 import Grammar.GlobalExponentHironaka
 import Grammar.ExponentIdentification
 import Grammar.TubularLocalInstance
+import Grammar.TubularGlobalInstance

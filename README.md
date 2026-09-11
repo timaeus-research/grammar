@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 514 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 515 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CCXIII | **The global analytic tubular equivalence of a compact analytic LCI stratum**: the stratum is a real-analytic manifold (`Stratum A`, graph charts), and strucdual's analytic tube is real-analytically equivalent to the certified domain of the Jacobian-row normal bundle over the whole stratum by `Ψ (x, n) = x + Σ_a n_a ∇G_a(x)`, `Ψ (x, 0) = x`, inverse `y ↦ (proj y, (J Jᵀ)⁻¹ J (y − proj y))` — the paper's tubular neighbourhood `Φ : NX → M`, analytic and metric-free | `Grammar/TubularGlobalInstance.lean` (`exists_global_tubular_equivalence_analytic`, `instIsManifoldStratum`, `liftedFoot_stratum`) |
 | CCXII | **The local tubular equivalence is real-analytic**: the grade-`ω` instance of the grade-generic `exists_local_tubular_equivalence`; `Ψ (z, n) = emb z + Σ_a n_a ∇G_a(emb z)` and its inverse are real-analytic — the regularity the paper's tubular-neighbourhood analyticity remark requires, obtained without a metric; `TubularBridge` made grade-generic | `Grammar/TubularLocalInstance.lean` (`exists_local_tubular_equivalence_analytic`), `Grammar/TubularBridge.lean` |
 | CCXI | **The lifted foot from strucdual's analytic tube: the local tubular equivalence is unconditional for compact analytic LCI strata**: for compact `S ⊆ ℝ^d` with a compatible analytic LCI atlas and any `s ∈ S`, strucdual's analytic tube restricted to a neighbourhood of `s` in `S` carries a `LiftedFoot` (CLXXX), so `Ψ (z, n) = emb z + Σ_a n_a ∇G_a(emb z)` is a `C^∞` open partial homeomorphism from the Jacobian-row normal bundle over a piece of the tangent space onto the restricted tube; stratum as a graph over `ker J_i(s)` by the analytic inverse function theorem, Gram left inverse `(J Jᵀ)⁻¹ J` as coframe | `Grammar/TubularLocalInstance.lean` (`exists_local_tubular_equivalence`, `exists_liftedFoot_of_compact`, `liftedFoot_graph`) |
 | CCX | **Candidate-lattice support of the local expansion**: the coefficients of the divisor-point expansion vanish off `Λ(h_N, k) = ⋃_j ((h_{n_j}+1)/(2k_j) + ℕ/(2k_j))` and off log degrees `≤ n` | `Grammar/ChartLeadingTerm.lean` (`IsMonomialChart.local_cutoffExpansion_candidate`, `chart_local_cutoffExpansion_candidate`) |
