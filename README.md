@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 513 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 514 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CCXI | **The lifted foot from strucdual's analytic tube: the local tubular equivalence is unconditional for compact analytic LCI strata**: for compact `S ⊆ ℝ^d` with a compatible analytic LCI atlas and any `s ∈ S`, strucdual's analytic tube restricted to a neighbourhood of `s` in `S` carries a `LiftedFoot` (CLXXX), so `Ψ (z, n) = emb z + Σ_a n_a ∇G_a(emb z)` is a `C^∞` open partial homeomorphism from the Jacobian-row normal bundle over a piece of the tangent space onto the restricted tube; stratum as a graph over `ker J_i(s)` by the analytic inverse function theorem, Gram left inverse `(J Jᵀ)⁻¹ J` as coframe | `Grammar/TubularLocalInstance.lean` (`exists_local_tubular_equivalence`, `exists_liftedFoot_of_compact`, `liftedFoot_graph`) |
 | CCX | **Candidate-lattice support of the local expansion**: the coefficients of the divisor-point expansion vanish off `Λ(h_N, k) = ⋃_j ((h_{n_j}+1)/(2k_j) + ℕ/(2k_j))` and off log degrees `≤ n` | `Grammar/ChartLeadingTerm.lean` (`IsMonomialChart.local_cutoffExpansion_candidate`, `chart_local_cutoffExpansion_candidate`) |
 | CCIX | **The small-ball Laplace exponent pair is the resolution pair**: hironaka's `(λ_H, θ_H)` of the small balls equals the extremal divisor-point chart pair `(λ_*, m_*)` of any monomial resolution (`λ_* = λ_H`, `m_* − 1 = θ_H − 1`): the population exponent of `K` at a zero is `min` over divisor points of `min_j (h_{n_j}+1)/(2k_j)`, independent of resolution, cover, region and observable | `Grammar/ExponentIdentification.lean` (`laplace_pair_eq_resolution_pair`, `resolution_pair_intrinsic`, `resolution_pair_of_population_comparison`, `freeEnergy_of_analytic`, `isTheta_of_le_of_le`, `pair_eq_of_powLogScale_isTheta`) |
 | CCVIII | **The resolution formula for the exponent, unconditional**: for `K ≥ 0` analytic near a zero `w` (not identically zero), `F > 0` analytic, some compact neighbourhood of `w` has `∫ F e^{−NK} = Θ(N^{−λ_*}(log N)^{m_*−1})` with `(λ_*, m_*)` the min/max of the divisor-point chart pairs of a hironaka resolution — the support condition on the Jacobian exponents removed by tangential Jacobian weights | `Grammar/GlobalExponentHironaka.lean` (`exponent_of_analytic`), `Grammar/CentredChart.lean` (`CentredChartData.hT`), `Grammar/ChartOrthantCore.lean` (`tanWeight`, `weightHyperplanes`), `Grammar/DataSpaceSmul.lean` |

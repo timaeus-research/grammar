@@ -54,7 +54,7 @@ geometric bridge: `Localisation` → `ChartPresentation` → `NormalJet` → `Mo
 `TaylorMoment` → `ChartTaylorMoment` → `GeometricMainTheorem` → `AnalyticCorePresentation` → `MonomialUnitRemoval` → `MonomialParity` → `StripNormalisation` → `MonomialTiling` → `MonomialCoefficients` → `JointAmplitude` → `PositiveBoxCore` → `ExactNormalTiling` → `MonomialBoxExpansion` → `ReflectedBoxExpansion` → `StripBoxExpansion` → `StripLocalExpansion` → `AnalyticJacobian` → `SplitBoxCore` → `SplitReflection` → `CentredChart` → `DataSpaceSmul` → `ChartOrthantCore` → `ChartOrthantTiling` → `ChartLeadingTerm` → `GlobalExponentBound` → `GlobalExponentHironaka` → `ExponentIdentification`; coordinate-free geometry: `NormalTaylorForm` →
 `ConormalSplitting` → `SymmetricWeights` → `NormalFibreMoment` → `WeightedFibreIntegration` →
 `CoordFreeTaylorMoment` → `ChartNormalFamily` → `StrucDualNormalFamily` → `NormalBundleOfFrames` →
-`FrameAtlasOfCoframes` → `LabelledNormalBundle` → `GlobalNormalSections` → `CoordinateStratumBundle` → `LabelledConormalBridge` → `TubularBridge`; empirical CLT: `L1Seq` →
+`FrameAtlasOfCoframes` → `LabelledNormalBundle` → `GlobalNormalSections` → `CoordinateStratumBundle` → `LabelledConormalBridge` → `TubularBridge` → `TubularLocalInstance`; empirical CLT: `L1Seq` →
 `L1SeqUpgrade` → `CLTFiniteDim` → `EmpiricalTail` → `L1SeqTight` → `L1SeqGaussianLimit` →
 `L1SeqCLT` → `SampleDatum` → `SampleExpansion` → `PolyCoeffMeasurable` → `TorusCertificate` →
 `AnalyticCertificate` → `JointSample` → `TangentialReconstruct` → `TangentialCertificate` →
