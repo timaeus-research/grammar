@@ -525,3 +525,4 @@ import Grammar.ChartStratumPieces
 import Grammar.ResolvedChartExpansion
 import Grammar.LeadingTermInterface
 import Grammar.DivisorFreePieces
+import Grammar.IntegratedLeadingTerm
