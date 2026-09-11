@@ -543,3 +543,4 @@ import Grammar.ProductChartHypotheses
 import Grammar.ProductChartPieceData
 import Grammar.ProductChartExtremalPair
 import Grammar.ScalarCellNonneg
+import Grammar.ProductChartPositivity
