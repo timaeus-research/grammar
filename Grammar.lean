@@ -480,3 +480,8 @@ import Grammar.GlobalNormalSections
 import Grammar.CoordinateStratumBundle
 import Grammar.LabelledConormalBridge
 import Grammar.TubularBridge
+import Grammar.SamplingCompatibility
+import Grammar.L1GaussianFunctionalL2
+import Grammar.SubgaussianPhase
+import Grammar.SubgaussianAssembly
+import Grammar.EffectiveTemperature
