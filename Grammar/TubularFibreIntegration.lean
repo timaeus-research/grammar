@@ -64,7 +64,7 @@ theorem tubeDensity_nonneg (T : NormalTubularChart A.normal S) (C : ModelGraphCh
 
 /-- The tube chart is continuous on the certified domain. -/
 theorem continuousOn_tubeChart (T : NormalTubularChart A.normal S) (C : ModelGraphChart A s) :
-    ContinuousOn (tubeChart C) (tubeChartDom T C) := fun p hp =>
+    ContinuousOn (tubeChart C) (tubeChartDom T C) := fun _ hp =>
   (contDiffAt_tubeChart C (n := 1) hp.1).continuousAt.continuousWithinAt
 
 /-- **Integrability transfers through the tube chart**: if `F` is integrable on the tube piece,
