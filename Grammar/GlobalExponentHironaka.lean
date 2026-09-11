@@ -5,13 +5,15 @@ Authors: Timaeus Research
 -/
 import Grammar.GlobalExponentBound
 import Monomialize.VolumeScaling.PartialResolution
+import Monomialize.Analytic.BM89.QInduction
+import Monomialize.Analytic.BM89.Readout
 
 /-!
 # The exponent of a monomial resolution: the finite local cover from the chart domains
 
 The conditional theorem of `GlobalExponentBound` is discharged for a hironaka **partial
-resolution** whose charts are monomial with Jacobian exponents supported in the phase exponents:
-the finite local cover exists. The point is that the region of the divisor-point theorem contains
+resolution** whose charts are monomial: the finite local cover exists. The point is that the region
+of the divisor-point theorem contains
 the chart image of an **open source neighbourhood** of the divisor point
 (`exists_isOpen_subset_localRegion`), the chart domains are compact, and the charts cover the
 resolved compact set up to a null set (`PartialResolution.cover`). Covering each compact
@@ -21,17 +23,17 @@ on which the phase stays positive (other points) gives finitely many local regio
 
 **Theorem** (`exponent_of_monomialResolution`): for `K ≥ 0` analytic on an open `U ∋ w`, `K w = 0`,
 `F > 0` analytic on `U`, and a partial resolution `R` of `K` on a compact neighbourhood `N` of `w`
-whose charts are monomial with `0 < h_j → 0 < e_j`, there is a compact neighbourhood `Ω ⊆ U` of `w`
+whose charts are monomial, there is a compact neighbourhood `Ω ⊆ U` of `w`
 and finitely many divisor-point chart pairs `(λ_p, m_p) = (C_p.lam, C_p.mult)` such that
 `∫_Ω F e^{−NK} = Θ(N^{−λ_*}(log N)^{m_*−1})` with `λ_* = min_p λ_p`, `m_* = max{m_p : λ_p = λ_*}`:
 **the exponent pair is the minimum over the divisor points of the charts of the minimal Mellin
 ratio of the normal exponents**, `(h_{n_j}+1)/(2k_j)`.
 
-Non-claims: the hypothesis `0 < h_j → 0 < e_j` (Jacobian divisor inside the phase divisor) is a
-property of the resolution that hironaka's readout does not record, so the corollary with
-`exists_monomialResolution_at` is not stated; leading order only; the coefficient is not
-identified; the finite family of pairs depends on the chosen finite subcover (its minimum does not,
-by the theorem itself, but this is not stated).
+With hironaka's `Q_all` this is unconditional (`exponent_of_analytic`): no support condition on the
+Jacobian exponents is needed, the tangential Jacobian weights being carried by the centred chart
+data. Non-claims: leading order only; the coefficient is not identified; the finite family of pairs
+depends on the chosen finite subcover (its minimum does not, by the theorem itself, but this is not
+stated); the exponent is that of a compact neighbourhood, not identified with a germ invariant.
 -/
 
 open MeasureTheory Set Filter Topology Asymptotics Monomialize.Analytic Monomialize.VolumeScaling
@@ -40,14 +42,12 @@ namespace Grammar
 
 variable {d : ℕ}
 
-/-- **The exponent of a monomial resolution with supported Jacobian exponents.** -/
+/-- **The exponent of a monomial resolution.** -/
 theorem exponent_of_monomialResolution {U : Set (Fin d → ℝ)} (hU : IsOpen U)
     {K : (Fin d → ℝ) → ℝ} (hK : AnalyticOnNhd ℝ K U) (hK0 : ∀ x ∈ U, 0 ≤ K x) (hKm : Measurable K)
     {w : Fin d → ℝ} (hw : w ∈ U) (hKw : K w = 0) {F : (Fin d → ℝ) → ℝ}
     (hF : AnalyticOnNhd ℝ F U) (hFpos : ∀ x ∈ U, 0 < F x) {N : Set (Fin d → ℝ)} (hN : N ∈ 𝓝 w)
-    (R : PartialResolution d K N)
-    (hR : ∀ i, ∃ (e h : Fin d →₀ ℕ) (W : Set (Fin d → ℝ)),
-      IsMonomialChart K (R.φ i) (R.dom i) e h W ∧ ∀ j, 0 < h j → 0 < e j) :
+    (R : PartialResolution d K N) (hR : R.IsMonomial) :
     ∃ Rg : Set (Fin d → ℝ), IsCompact Rg ∧ Rg ∈ 𝓝 w ∧ Rg ⊆ U ∧
       ∃ (ι : Type) (_ : Fintype ι) (lam : ι → ℝ) (m : ι → ℕ) (i₀ : ι),
         (∀ p, ∃ (i : R.ι) (y₀ : Fin d → ℝ) (h : Fin d →₀ ℕ) (C : CentredChartData K (R.φ i) h y₀),
@@ -55,7 +55,9 @@ theorem exponent_of_monomialResolution {U : Set (Fin d → ℝ)} (hU : IsOpen U)
         (∀ p, lam i₀ ≤ lam p) ∧ (∀ p, lam p = lam i₀ → m p ≤ m i₀) ∧
         regionIntegral volume Rg F K =Θ[atTop] powLogScale (lam i₀) (m i₀ - 1) := by
   classical
-  choose e h W hc hhe using hR
+  have hR' : ∀ i, ∃ (e h : Fin d →₀ ℕ) (W : Set (Fin d → ℝ)),
+      IsMonomialChart K (R.φ i) (R.dom i) e h W := hR
+  choose e h W hc using hR'
   -- a closed ball around `w` inside `U`
   obtain ⟨r, hr, hball⟩ := Metric.mem_nhds_iff.1 (hU.mem_nhds hw)
   set r' := r / 2 with hr'
@@ -80,7 +82,7 @@ theorem exponent_of_monomialResolution {U : Set (Fin d → ℝ)} (hU : IsOpen U)
     intro i y₀
     by_cases hy : y₀ ∈ D i ∧ K (R.φ i y₀) = 0
     · obtain ⟨C, Ω, hΩc, -, -, hΩU, ⟨V, hVo, hy₀V, hVΩ⟩, c, hc0, hequiv⟩ :=
-        IsMonomialChart.local_leading_term (hc i) hU hK hK0 hKm (hhe i) (hDW i hy.1)
+        IsMonomialChart.local_leading_term (hc i) hU hK hK0 hKm (hDW i hy.1)
           (hDU i y₀ hy.1) hy.2 hF (hFpos _ (hDU i y₀ hy.1))
       exact ⟨V, Ω, C.lam, C.mult, c, fun _ _ => ⟨hVo, hy₀V, hΩc, hΩU, hVΩ, ⟨C, rfl, rfl⟩, hc0,
         hequiv⟩⟩
@@ -237,5 +239,27 @@ theorem exponent_of_monomialResolution {U : Set (Fin d → ℝ)} (hU : IsOpen U)
   refine ⟨Rg, hRgc, hRgn, hRgU, ι, inferInstance, lam, m, i₀, fun p => ?_, hmin, hmax, hΘ⟩
   obtain ⟨C, hl, hm⟩ := (hdp p).2.2.2.2.2.1
   exact ⟨p.1, p.2.1, h p.1, C, (hpZ p).1.1, (hpZ p).2, hl, hm⟩
+
+/-- **The resolution formula for the exponent of a Laplace integral, unconditionally.** For
+`K ≥ 0` analytic on an open `U ∋ w` with `K w = 0` and `K` not identically zero near `w`, and
+`F > 0` analytic on `U`, hironaka's chart form (`Q_all`) provides a monomial partial resolution `R`
+of `K` on a compact neighbourhood of `w`, and some compact neighbourhood `Ω ⊆ U` of `w` has
+`∫_Ω F e^{−NK} = Θ(N^{−λ_*}(log N)^{m_*−1})` with `(λ_*, m_*)` the min/max over finitely many
+divisor-point chart pairs `(min_j (h_{n_j}+1)/(2k_j), #minimisers)` of `R`. -/
+theorem exponent_of_analytic {U : Set (Fin d → ℝ)} (hU : IsOpen U) {K : (Fin d → ℝ) → ℝ}
+    (hK : AnalyticOnNhd ℝ K U) (hK0 : ∀ x ∈ U, 0 ≤ K x) (hKm : Measurable K) {w : Fin d → ℝ}
+    (hw : w ∈ U) (hKw : K w = 0) (hne : ¬ K =ᶠ[𝓝 w] 0) {F : (Fin d → ℝ) → ℝ}
+    (hF : AnalyticOnNhd ℝ F U) (hFpos : ∀ x ∈ U, 0 < F x) :
+    ∃ (N : Set (Fin d → ℝ)) (R : PartialResolution d K N), R.IsMonomial ∧
+      ∃ Rg : Set (Fin d → ℝ), IsCompact Rg ∧ Rg ∈ 𝓝 w ∧ Rg ⊆ U ∧
+        ∃ (ι : Type) (_ : Fintype ι) (lam : ι → ℝ) (m : ι → ℕ) (i₀ : ι),
+          (∀ p, ∃ (i : R.ι) (y₀ : Fin d → ℝ) (h : Fin d →₀ ℕ)
+            (C : CentredChartData K (R.φ i) h y₀),
+            y₀ ∈ R.dom i ∧ K (R.φ i y₀) = 0 ∧ lam p = C.lam ∧ m p = C.mult) ∧
+          (∀ p, lam i₀ ≤ lam p) ∧ (∀ p, lam p = lam i₀ → m p ≤ m i₀) ∧
+          regionIntegral volume Rg F K =Θ[atTop] powLogScale (lam i₀) (m i₀ - 1) := by
+  obtain ⟨N, -, hNn, R, hR⟩ := Monomialize.Analytic.exists_monomialResolution_at
+    (Monomialize.Analytic.Q_all d) hU hK hw hKw hne
+  exact ⟨N, R, hR, exponent_of_monomialResolution hU hK hK0 hKm hw hKw hF hFpos hNn R hR⟩
 
 end Grammar

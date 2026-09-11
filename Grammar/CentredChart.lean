@@ -91,6 +91,12 @@ theorem prod_eq_prod_nIdx {t n : ℕ} (σ : Fin t ⊕ Fin (n + 1) ≃ Fin d) (f 
     one_mul]
   rfl
 
+/-- A product over all coordinates splits into the tangential and the normal factors. -/
+theorem prod_eq_prod_tIdx_mul_prod_nIdx {t n : ℕ} (σ : Fin t ⊕ Fin (n + 1) ≃ Fin d)
+    (f : Fin d → ℝ) : ∏ x, f x = (∏ i, f (tIdx σ i)) * ∏ j, f (nIdx σ j) := by
+  rw [← Equiv.prod_comp σ f, Fintype.prod_sum_type]
+  rfl
+
 /-- The reduced Jacobian is positive at points where the unit and the absorbed coordinates do not
 vanish. -/
 theorem reducedJac_pos' {v : (Fin d → ℝ) → ℝ} (h : Fin d →₀ ℕ) {y₀ y : Fin d → ℝ} (hv0 : v y ≠ 0)
@@ -144,17 +150,25 @@ structure CentredChartData (K : (Fin d → ℝ) → ℝ) (φ : (Fin d → ℝ) �
   jac₀ : (Fin d → ℝ) → ℝ
   jac₀_analytic : AnalyticOnNhd ℝ jac₀ V₀
   jac₀_pos : ∀ y ∈ V₀, 0 < jac₀ y
-  det_eq : ∀ y ∈ V₀, |(fderiv ℝ φ (y + y₀)).det| = jac₀ y * ∏ j, |y (nIdx σ j)| ^ h (nIdx σ j)
-  /-- the Jacobian monomial does not vanish off the normal hyperplanes -/
-  monomialEval_ne_zero : ∀ y ∈ V₀, (∀ j, y (nIdx σ j) ≠ 0) → monomialEval (y + y₀) h ≠ 0
+  /-- the tangential Jacobian weights (the Jacobian exponents of the tangential coordinates
+  vanishing at the centre, whose phase exponent is zero) -/
+  hT : Fin t → ℕ
+  det_eq : ∀ y ∈ V₀, |(fderiv ℝ φ (y + y₀)).det| =
+    jac₀ y * (∏ j, |y (nIdx σ j)| ^ h (nIdx σ j)) * ∏ i, |y (tIdx σ i)| ^ hT i
+  /-- the Jacobian monomial does not vanish off the normal and weight hyperplanes -/
+  monomialEval_ne_zero : ∀ y ∈ V₀, (∀ j, y (nIdx σ j) ≠ 0) →
+    (∀ i, 0 < hT i → y (tIdx σ i) ≠ 0) → monomialEval (y + y₀) h ≠ 0
 
-/-- **Every divisor point of a hironaka monomial chart has centred chart data.** -/
+/-- **Every divisor point of a hironaka monomial chart has centred chart data**, with tangential
+weights `hT i = h_{t_i}` at the tangential coordinates vanishing at the centre (no support
+condition on the Jacobian exponents). -/
 theorem exists_centredChartData {K : (Fin d → ℝ) → ℝ} {φ : (Fin d → ℝ) → (Fin d → ℝ)}
     {dom : Set (Fin d → ℝ)} {e h : Fin d →₀ ℕ} {W : Set (Fin d → ℝ)}
     (hc : IsMonomialChart K φ dom e h W) {U : Set (Fin d → ℝ)} (hU : IsOpen U)
-    (hK : AnalyticOnNhd ℝ K U) (hK0 : ∀ x ∈ U, 0 ≤ K x) (hhe : ∀ j, 0 < h j → 0 < e j)
+    (hK : AnalyticOnNhd ℝ K U) (hK0 : ∀ x ∈ U, 0 ≤ K x)
     {y₀ : Fin d → ℝ} (hy₀W : y₀ ∈ W) (hy₀U : φ y₀ ∈ U) (hKy₀ : K (φ y₀) = 0) :
-    ∃ C : CentredChartData K φ h y₀, ∀ y ∈ C.V₀, y + y₀ ∈ W ∧ φ (y + y₀) ∈ U := by
+    ∃ C : CentredChartData K φ h y₀, (∀ y ∈ C.V₀, y + y₀ ∈ W ∧ φ (y + y₀) ∈ U) ∧
+      ∀ i, C.hT i = reducedExp h y₀ (tIdx C.σ i) := by
   classical
   -- the analytic units
   set W' := W ∩ φ ⁻¹' U with hW'
@@ -207,19 +221,6 @@ theorem exists_centredChartData {K : (Fin d → ℝ) → ℝ} {φ : (Fin d → �
     omega
   have hk_nIdx : ∀ j, 0 < k (nIdx σ j) := fun j => (Finset.mem_filter.1 (hnIdx j)).2
   have hy₀_nIdx : ∀ j, y₀ (nIdx σ j) = 0 := fun j => hS_zero _ (hnIdx j)
-  -- tangential Jacobian exponents at coordinates vanishing at `y₀` vanish
-  have hh_tIdx : ∀ i, reducedExp h y₀ (tIdx σ i) = 0 := by
-    intro i
-    by_cases hz : y₀ (tIdx σ i) = 0
-    · rw [reducedExp_apply_of_eq hz]
-      by_contra hne
-      have hpos : 0 < h (tIdx σ i) := Nat.pos_of_ne_zero hne
-      have he := hhe _ hpos
-      have h2 := two_mul_halfExp_of_eq_zero heven hz
-      have := hk_tIdx i
-      rw [hkdef] at this
-      omega
-    · exact reducedExp_apply_of_ne hz
   -- the neighbourhood of the origin
   have hopen2 : IsOpen {y : Fin d → ℝ | ∀ x, y₀ x ≠ 0 → y x ≠ 0} := by
     have : {y : Fin d → ℝ | ∀ x, y₀ x ≠ 0 → y x ≠ 0} =
@@ -242,7 +243,8 @@ theorem exists_centredChartData {K : (Fin d → ℝ) → ℝ} {φ : (Fin d → �
     reducedExp_apply_of_eq (hy₀_nIdx j)
   refine ⟨⟨_, n, σ, fun j => k (nIdx σ j), hk_nIdx, hy₀_nIdx, V₀, hV₀o, hzero_mem,
     fun y => reducedUnit u e y₀ (y + y₀), ?_, ?_, ?_, fun y => reducedJac v h y₀ (y + y₀),
-    ?_, ?_, ?_, ?_⟩, fun y hy => ⟨hmemW y hy, (hW''W' hy.1).2⟩⟩
+    ?_, ?_, fun i => reducedExp h y₀ (tIdx σ i), ?_, ?_⟩,
+    fun y hy => ⟨hmemW y hy, (hW''W' hy.1).2⟩, fun i => rfl⟩
   · intro y hy
     exact AnalyticAt.comp (g := reducedUnit u e y₀) (f := fun y => y + y₀) (hu'an _ (hmemW'' y hy))
       (analyticAt_id.add analyticAt_const)
@@ -260,24 +262,36 @@ theorem exists_centredChartData {K : (Fin d → ℝ) → ℝ} {φ : (Fin d → �
   · intro y hy
     exact reducedJac_pos' h (hv0 _ (hmemW y hy)) (hne y hy)
   · intro y hy
-    rw [absDet_eq_reducedJac_mul (hdet _ (hmemW y hy)),
-      prod_eq_prod_nIdx σ _ (fun i => by rw [hh_tIdx i, pow_zero])]
-    congr 1
-    refine Finset.prod_congr rfl fun j _ => ?_
-    rw [hred_nIdx j]
-    simp [hy₀_nIdx j]
-  · intro y hy hyn
+    have hnor : ∏ j, |(y + y₀) (nIdx σ j)| ^ reducedExp h y₀ (nIdx σ j) =
+        ∏ j, |y (nIdx σ j)| ^ h (nIdx σ j) := by
+      refine Finset.prod_congr rfl fun j _ => ?_
+      rw [hred_nIdx j]
+      simp [hy₀_nIdx j]
+    have htan : ∏ i, |(y + y₀) (tIdx σ i)| ^ reducedExp h y₀ (tIdx σ i) =
+        ∏ i, |y (tIdx σ i)| ^ reducedExp h y₀ (tIdx σ i) := by
+      refine Finset.prod_congr rfl fun i _ => ?_
+      by_cases hx : y₀ (tIdx σ i) = 0
+      · simp [hx]
+      · rw [reducedExp_apply_of_ne hx, pow_zero, pow_zero]
+    rw [absDet_eq_reducedJac_mul (hdet _ (hmemW y hy)), prod_eq_prod_tIdx_mul_prod_nIdx σ, hnor,
+      htan]
+    ring
+  · intro y hy hyn hyt
     rw [monomialEval_eq_prod]
     refine Finset.prod_ne_zero_iff.2 fun x _ => ?_
     by_cases hx : y₀ x = 0
     · obtain ⟨z, rfl⟩ := σ.surjective x
       rcases z with i | j
-      · have h0 : h (tIdx σ i) = 0 := by
-          have := hh_tIdx i
-          rw [show tIdx σ i = σ (Sum.inl i) from rfl, reducedExp_apply_of_eq hx] at this
-          exact this
-        rw [show σ (Sum.inl i) = tIdx σ i from rfl, h0, pow_zero]
-        exact one_ne_zero
+      · by_cases hh : h (σ (Sum.inl i)) = 0
+        · rw [hh, pow_zero]
+          exact one_ne_zero
+        · refine pow_ne_zero _ ?_
+          have hpos : 0 < reducedExp h y₀ (tIdx σ i) := by
+            rw [show tIdx σ i = σ (Sum.inl i) from rfl, reducedExp_apply_of_eq hx]
+            exact Nat.pos_of_ne_zero hh
+          have := hyt i hpos
+          rw [show tIdx σ i = σ (Sum.inl i) from rfl] at this
+          simpa [hx] using this
       · refine pow_ne_zero _ ?_
         rw [show σ (Sum.inr j) = nIdx σ j from rfl]
         simpa [hy₀_nIdx j] using hyn j

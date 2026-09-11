@@ -10,9 +10,10 @@ import Grammar.ChartOrthantCore
 
 The `2^{n+1}` orthant charts of a centred hironaka chart (`orthantChart`, CCIII) tile the image of
 the strip box `zBox σ A' b'` under the **strip chart** `g = φ(T⁻¹(·) + y₀)` (`stripChart`): their
-images are pairwise disjoint (the strip chart is injective off the normal hyperplanes,
-`injOn_stripChart`), lie in the **local region** `Ω = g(zBox)` (`localRegion`, compact, containing
-`φ y₀`), and cover it up to the null image of the normal hyperplanes (`localRegion_sdiff_subset`,
+images are pairwise disjoint up to null sets (the strip chart is injective off the normal and
+weight hyperplanes, `injOn_stripChart`), lie in the **local region** `Ω = g(zBox)` (`localRegion`,
+compact, containing `φ y₀`), and cover it up to the null image of the normal hyperplanes
+(`localRegion_sdiff_subset`,
 `addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero`). This is a `CoreTiling`, so the
 population integral over `Ω` has the full power–log cutoff expansion with **no series hypothesis**:
 the joint series of every orthant amplitude exists at the origin (`analyticAt_orthantAmp_joint`)
@@ -106,21 +107,27 @@ theorem analyticAt_stripChart (hφ : ∀ y ∈ C.V₀, AnalyticAt ℝ φ (y + y�
     AnalyticAt.comp (g := φ) (f := fun w => w + y₀) (hφ _ (inv_mem_V₀ C SD hζ)) h3
   exact AnalyticAt.comp (g := φ ∘ fun w => w + y₀) (f := SD.inv) h5 (SD.inv_analytic _ hζ)
 
-/-- The points of the strip image with nonvanishing normal coordinates. -/
-def stripImageOff : Set (Fin d → ℝ) := stripImage C SD ∩ {ζ | ∀ j, ζ (nIdx C.σ j) ≠ 0}
+/-- The points of the strip image with nonvanishing normal coordinates and nonvanishing weight
+coordinates. -/
+def stripImageOff : Set (Fin d → ℝ) :=
+  stripImage C SD ∩ {ζ | ∀ j, ζ (nIdx C.σ j) ≠ 0} ∩ {ζ | ∀ i, 0 < C.hT i → ζ (tIdx C.σ i) ≠ 0}
 
-/-- **The strip chart is injective off the normal hyperplanes.** -/
+/-- **The strip chart is injective off the normal and weight hyperplanes.** -/
 theorem injOn_stripChart
     (hinj : ∀ w₁ ∈ C.V₀, ∀ w₂ ∈ C.V₀, monomialEval (w₁ + y₀) h ≠ 0 →
       monomialEval (w₂ + y₀) h ≠ 0 → φ (w₁ + y₀) = φ (w₂ + y₀) → w₁ = w₂) :
     InjOn (stripChart C SD) (stripImageOff C SD) := by
   intro ζ₁ hζ₁ ζ₂ hζ₂ heq
-  have hm₁ := C.monomialEval_ne_zero _ (inv_mem_V₀ C SD hζ₁.1)
-    fun j => SD.inv_apply_ne_zero hζ₁.1 (hζ₁.2 j)
-  have hm₂ := C.monomialEval_ne_zero _ (inv_mem_V₀ C SD hζ₂.1)
-    fun j => SD.inv_apply_ne_zero hζ₂.1 (hζ₂.2 j)
-  exact SD.injOn_inv hζ₁.1 hζ₂.1
-    (hinj _ (inv_mem_V₀ C SD hζ₁.1) _ (inv_mem_V₀ C SD hζ₂.1) hm₁ hm₂ heq)
+  have hm₁ := C.monomialEval_ne_zero _ (inv_mem_V₀ C SD hζ₁.1.1)
+    (fun j => SD.inv_apply_ne_zero hζ₁.1.1 (hζ₁.1.2 j)) fun i hi => by
+      rw [SD.inv_apply_of_ne hζ₁.1.1 (tIdx_ne_nIdx i j₀)]
+      exact hζ₁.2 i hi
+  have hm₂ := C.monomialEval_ne_zero _ (inv_mem_V₀ C SD hζ₂.1.1)
+    (fun j => SD.inv_apply_ne_zero hζ₂.1.1 (hζ₂.1.2 j)) fun i hi => by
+      rw [SD.inv_apply_of_ne hζ₂.1.1 (tIdx_ne_nIdx i j₀)]
+      exact hζ₂.2 i hi
+  exact SD.injOn_inv hζ₁.1.1 hζ₂.1.1
+    (hinj _ (inv_mem_V₀ C SD hζ₁.1.1) _ (inv_mem_V₀ C SD hζ₂.1.1) hm₁ hm₂ heq)
 
 /-- The reflected positive box lies in the strip box. -/
 theorem splitReflect_mem_zBox (s : Fin (C.n + 1) → Bool) {A' : Set (Fin C.t → ℝ)} {b : ℝ}
@@ -315,10 +322,32 @@ theorem toCorePiece_image (s : Fin (C.n + 1) → Bool) :
 
 include hA'A hb'b₁ hb'SD in
 theorem splitReflect_image_subset_stripImageOff (s : Fin (C.n + 1) → Bool) :
-    splitReflect C.σ s '' splitPosBox C.σ A' b' ⊆ stripImageOff C SD := by
+    splitReflect C.σ s '' (splitPosBox C.σ A' b' \ weightHyperplanes C) ⊆ stripImageOff C SD := by
   rintro _ ⟨y, hy, rfl⟩
-  exact ⟨zBox_subset_stripImage C SD hA'A hb'b₁ hb'SD (splitReflect_mem_zBox C s hy),
-    fun j => splitReflect_apply_nIdx_ne_zero C s hy j⟩
+  refine ⟨⟨zBox_subset_stripImage C SD hA'A hb'b₁ hb'SD (splitReflect_mem_zBox C s hy.1),
+    fun j => splitReflect_apply_nIdx_ne_zero C s hy.1 j⟩, fun i hi => ?_⟩
+  rw [splitReflect_apply, splitSgn_tIdx, one_mul]
+  exact (notMem_weightHyperplanes_iff C y).1 hy.2 i hi
+
+include hφ hA'A hb'b₁ hb'SD in
+/-- The image under the strip chart of the reflected box on the weight hyperplanes is null. -/
+theorem volume_stripChart_image_weightHyperplanes (s : Fin (C.n + 1) → Bool) :
+    volume (stripChart C SD ''
+      (splitReflect C.σ s '' (splitPosBox C.σ A' b' ∩ weightHyperplanes C))) = 0 := by
+  have hsub : splitReflect C.σ s '' (splitPosBox C.σ A' b' ∩ weightHyperplanes C) ⊆
+      zBox C.σ A' b' ∩ weightHyperplanes C := by
+    rintro _ ⟨y, hy, rfl⟩
+    refine ⟨splitReflect_mem_zBox C s hy.1, ?_⟩
+    obtain ⟨i, hi⟩ := mem_iUnion.1 hy.2
+    refine mem_iUnion.2 ⟨i, ?_, hi.2⟩
+    change splitReflect C.σ s y (tIdx C.σ i) = 0
+    rw [splitReflect_apply, splitSgn_tIdx, one_mul]
+    exact hi.1
+  refine addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero volume ?_
+    (measure_mono_null hsub (measure_mono_null inter_subset_right (volume_weightHyperplanes C)))
+  intro ζ hζ
+  exact (analyticAt_stripChart C SD hφ (zBox_subset_stripImage C SD hA'A hb'b₁ hb'SD
+    (hsub hζ).1)).differentiableAt.differentiableWithinAt
 
 include hXΨ in
 theorem iUnion_toCorePiece_image :
@@ -359,12 +388,47 @@ noncomputable def orthantCoreTiling : CoreTiling D β where
     rintro _ ⟨y, hy, rfl⟩
     exact splitReflect_mem_zBox C _ hy
   aedisjoint I J hIJ := by
-    rw [toCorePiece_image C SD hA' hb' X hXΨ, toCorePiece_image C SD hA' hb' X hXΨ,
-      ← (injOn_stripChart C SD hinj).image_inter
+    rw [toCorePiece_image C SD hA' hb' X hXΨ, toCorePiece_image C SD hA' hb' X hXΨ]
+    set s₁ := (signIdx C).symm I with hs₁
+    set s₂ := (signIdx C).symm J with hs₂
+    have hs : s₁ ≠ s₂ := fun hs => hIJ ((signIdx C).symm.injective hs)
+    -- decompose each image along the weight hyperplanes
+    have hdec : ∀ s, stripChart C SD '' (splitReflect C.σ s '' splitPosBox C.σ A' b') =
+        stripChart C SD ''
+          (splitReflect C.σ s '' (splitPosBox C.σ A' b' \ weightHyperplanes C)) ∪
+        stripChart C SD ''
+          (splitReflect C.σ s '' (splitPosBox C.σ A' b' ∩ weightHyperplanes C)) := by
+      intro s
+      rw [← image_union, ← image_union, sdiff_union_inter]
+    -- the off-hyperplane parts are disjoint
+    have hoff : stripChart C SD ''
+        (splitReflect C.σ s₁ '' (splitPosBox C.σ A' b' \ weightHyperplanes C)) ∩
+        stripChart C SD ''
+        (splitReflect C.σ s₂ '' (splitPosBox C.σ A' b' \ weightHyperplanes C)) = ∅ := by
+      rw [← (injOn_stripChart C SD hinj).image_inter
         (splitReflect_image_subset_stripImageOff C SD hA'A hb'b₁ hb'SD _)
-        (splitReflect_image_subset_stripImageOff C SD hA'A hb'b₁ hb'SD _),
-      (disjoint_splitOrthant (σ := C.σ) (fun hs => hIJ ((signIdx C).symm.injective hs))
-        A' b').inter_eq, image_empty, measure_empty]
+        (splitReflect_image_subset_stripImageOff C SD hA'A hb'b₁ hb'SD _)]
+      have : splitReflect C.σ s₁ '' (splitPosBox C.σ A' b' \ weightHyperplanes C) ∩
+          splitReflect C.σ s₂ '' (splitPosBox C.σ A' b' \ weightHyperplanes C) = ∅ := by
+        refine eq_empty_of_subset_empty ?_
+        rw [← (disjoint_splitOrthant (σ := C.σ) hs A' b').inter_eq]
+        exact inter_subset_inter (image_mono sdiff_subset) (image_mono sdiff_subset)
+      rw [this, image_empty]
+    have hA0 : volume (stripChart C SD ''
+        (splitReflect C.σ s₁ '' (splitPosBox C.σ A' b' \ weightHyperplanes C)) ∩
+        stripChart C SD ''
+        (splitReflect C.σ s₂ '' (splitPosBox C.σ A' b' \ weightHyperplanes C))) = 0 := by
+      rw [hoff]
+      exact measure_empty
+    rw [hdec s₁, hdec s₂]
+    refine measure_mono_null (fun z hz => ?_) (measure_union_null (measure_union_null hA0
+        (volume_stripChart_image_weightHyperplanes C SD hφ hA'A hb'b₁ hb'SD s₁))
+      (volume_stripChart_image_weightHyperplanes C SD hφ hA'A hb'b₁ hb'SD s₂))
+    rcases hz with ⟨h1 | h1, h2 | h2⟩
+    · exact Or.inl (Or.inl ⟨h1, h2⟩)
+    · exact Or.inr h2
+    · exact Or.inl (Or.inr h1)
+    · exact Or.inr h2
   δ₀ := 1
   δ₀_pos := one_pos
   gap := by
@@ -412,9 +476,11 @@ theorem exists_orthantSplitBoxCharts (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Ana
         ∃ X : (Fin (C.n + 1) → Bool) →
           SplitBoxChart C.σ D (A ∩ Metric.closedBall 0 B) b' β,
           ∀ s, (X s).Ψ = orthantChart C SD s ∧ (X s).h = (fun j => h (nIdx C.σ j)) ∧
-            (X s).k = C.k ∧ (X s).jac = orthantJac C SD s ∧
-            ∀ (v : ↥(A ∩ Metric.closedBall 0 B)) (u : Fin (C.n + 1) → ℝ), (∀ j, |u j| ≤ b') →
-              evalF (toEta b' ((X s).amp v)) u = orthantAmp C SD s F (v.1, u) := by
+            (X s).k = C.k ∧ (X s).jac = (fun y => orthantJac C SD s y * tanWeight C y) ∧
+            ∃ x₀ : TangentialData ↥(A ∩ Metric.closedBall 0 B) (C.n + 1),
+              (∀ v, (X s).amp v = (∏ i, |v.1 i| ^ C.hT i) • x₀ v) ∧ (∀ v, xiCoord (x₀ v) = 0) ∧
+              ∀ (v : ↥(A ∩ Metric.closedBall 0 B)) (u : Fin (C.n + 1) → ℝ), (∀ j, |u j| ≤ b') →
+                evalF (toEta b' (x₀ v)) u = orthantAmp C SD s F (v.1, u) := by
   classical
   -- the joint series at the tangential origin, for every sign pattern
   set b₂ : ℝ := min b₁ SD.b with hb₂
@@ -517,9 +583,12 @@ theorem exists_orthantSplitBoxCharts (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Ana
   intro D hphase hobs
   have hX : ∀ s : Fin (C.n + 1) → Bool, ∃ X : SplitBoxChart C.σ D A' b' β,
       X.Ψ = orthantChart C SD s ∧ X.h = (fun j => h (nIdx C.σ j)) ∧ X.k = C.k ∧
-        X.jac = orthantJac C SD s ∧
-        ∀ (v : A') (u : Fin (C.n + 1) → ℝ), (∀ j, |u j| ≤ b') →
-          evalF (toEta b' (X.amp v)) u = orthantAmp C SD s F (v.1, u) := fun s =>
+        X.jac = (fun y => orthantJac C SD s y * tanWeight C y) ∧
+        ∃ x₀ : TangentialData A' (C.n + 1), (∀ v, X.amp v = (∏ i, |v.1 i| ^ C.hT i) • x₀ v) ∧
+          (∀ v, xiCoord (x₀ v) = 0) ∧
+          ∀ (v : A') (u : Fin (C.n + 1) → ℝ), (∀ j, |u j| ≤ b') →
+            evalF (toEta b' (x₀ v)) u = orthantAmp C SD s F (v.1, u) :=
+    fun s =>
     exists_splitBoxChart_orthant C SD hβ hφ hinj (D := D) hphase hobs
       hA'c hA'A hb'pos hb'b₁ hb'SD (min_le_left _ _) hBpos hAB s (hPR s) (hρR s) hBρ hB1
   choose X hX using hX
@@ -613,12 +682,12 @@ the full power–log cutoff expansion of `∫_Ω F e^{−NK}`. -/
 theorem IsMonomialChart.local_cutoffExpansion {dom : Set (Fin d → ℝ)} {e : Fin d →₀ ℕ}
     {W : Set (Fin d → ℝ)} (hc : IsMonomialChart K φ dom e h W) {U : Set (Fin d → ℝ)}
     (hU : IsOpen U) (hK : AnalyticOnNhd ℝ K U) (hK0 : ∀ x ∈ U, 0 ≤ K x) (hKm : Measurable K)
-    (hhe : ∀ j, 0 < h j → 0 < e j) (hy₀W : y₀ ∈ W) (hy₀U : φ y₀ ∈ U) (hKy₀ : K (φ y₀) = 0)
+    (hy₀W : y₀ ∈ W) (hy₀U : φ y₀ ∈ U) (hKy₀ : K (φ y₀) = 0)
     {F : (Fin d → ℝ) → ℝ} (hF : AnalyticOnNhd ℝ F U) :
     ∃ Ω : Set (Fin d → ℝ), IsCompact Ω ∧ φ y₀ ∈ Ω ∧ Ω ⊆ φ '' W ∧ Ω ⊆ U ∧
       ∃ (Q Dg : ℕ) (c : ℝ → ℕ → ℝ), 0 < Q ∧
         CutoffExpansion Q Dg (fun N => ∫ x in Ω, F x * Real.exp (-N * K x)) c := by
-  obtain ⟨C, hC⟩ := exists_centredChartData hc hU hK hK0 hhe hy₀W hy₀U hKy₀
+  obtain ⟨C, hC, -⟩ := exists_centredChartData hc hU hK hK0 hy₀W hy₀U hKy₀
   -- a closed ball around the origin inside the centred neighbourhood
   obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.1 C.V₀_open 0 C.zero_mem
   set ε' := ε / 2 with hε'

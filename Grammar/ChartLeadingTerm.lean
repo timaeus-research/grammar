@@ -276,13 +276,14 @@ theorem orthantAmp_pos (hβ : 0 < β) {F : (Fin d → ℝ) → ℝ} (s : Fin (C.
   exact mul_pos (orthantJacFun_pos C SD hβ s hdom)
     (hF _ (orthantChart_mem_localRegion C SD s hv hu))
 
-/-- **The face integral of the orthant chart `s`**: the tangential integral over `A'` of the face
-constant times the integral over the unit box of the orthant amplitude at the scaled face point,
-against the residual weight on the nonminimising normal coordinates. -/
+/-- **The face integral of the orthant chart `s`**: the tangential integral over `A'` of the
+tangential Jacobian weight times the face constant times the integral over the unit box of the
+orthant amplitude at the scaled face point, against the residual weight on the nonminimising normal
+coordinates. -/
 noncomputable def orthantFaceIntegral (s : Fin (C.n + 1) → Bool) (F : (Fin d → ℝ) → ℝ)
     (A' : Set (Fin C.t → ℝ)) (b' : ℝ) : ℝ :=
-  ∫ v in A', faceLeadConst C.hN C.k C.lam β * ∫ u in unitBox (C.n + 1),
-    orthantAmp C SD s F (v, b' • faceProj C.hN C.k C.lam u) * residualWeight C.hN C.k C.lam u
+  ∫ v in A', (∏ i, |v i| ^ C.hT i) * (faceLeadConst C.hN C.k C.lam β * ∫ u in unitBox (C.n + 1),
+    orthantAmp C SD s F (v, b' • faceProj C.hN C.k C.lam u) * residualWeight C.hN C.k C.lam u)
 
 /-- **The local leading coefficient**: the sum over the `2^{n+1}` orthants of the box-side scaling
 factor times the orthant face integral. -/
@@ -353,17 +354,43 @@ theorem chart_local_leading_term (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Analyti
   have hm : ∀ I, multCount (ratioExp (Ad.h I) (Ad.k I)) C.lam = C.mult := fun I => by
     rw [hAh, hAk]
     rfl
-  -- the amplitude of a piece is the orthant amplitude on the closed box
+  -- the unweighted datum of a piece: its amplitude is the orthant amplitude on the closed box
+  choose x₀ hx₀amp hx₀xi hx₀ev using fun s => (hX s).2.2.2.2
   have hamp : ∀ (s : Fin (C.n + 1) → Bool) (v : A'), ∀ w ∈ closedCube (C.n + 1),
-      dataAmplitude ((X s).amp v) w = orthantAmp C SD s F (v.1, b' • w) := by
+      dataAmplitude (x₀ s v) w = orthantAmp C SD s F (v.1, b' • w) := by
     intro s v w hw
     rw [dataAmplitude_eq_of_mem _ hw, ← scale_toEta hb'.ne', evalF_scale]
-    refine (hX s).2.2.2.2 v (b' • w) fun j => ?_
+    refine hx₀ev s v (b' • w) fun j => ?_
     rw [Pi.smul_apply, smul_eq_mul, abs_mul, abs_of_pos hb']
     have := hw j (mem_univ j)
     rw [mem_Icc] at this
     rw [abs_of_nonneg this.1]
     exact mul_le_of_le_one_right hb'.le this.2
+  -- the weighted datum
+  have hampw : ∀ (s : Fin (C.n + 1) → Bool) (v : A'), dataAmplitude ((X s).amp v) =
+      fun w => (∏ i, |v.1 i| ^ C.hT i) * dataAmplitude (x₀ s v) w := by
+    intro s v
+    funext w
+    rw [hx₀amp s v, dataAmplitude_smul]
+  -- the unweighted face functional is positive
+  have hFΩ : ∀ x ∈ Ω, 0 < F x := fun x hx => hFU' x (hΩU' hx)
+  have hA₀pos : ∀ (s : Fin (C.n + 1) → Bool) (v : A'),
+      0 < amplitudeCoeff C.hN C.k C.lam β (dataAmplitude (x₀ s v)) := by
+    intro s v
+    have hampos : ∀ w ∈ closedCube (C.n + 1), 0 < dataAmplitude (x₀ s v) w := by
+      intro w hw
+      rw [hamp s v w hw]
+      refine orthantAmp_pos C SD hβ s hA'A hb'b₁ hb'SD hFΩ v.2 fun j => ?_
+      rw [Pi.smul_apply, smul_eq_mul, abs_mul, abs_of_pos hb']
+      have := hw j (mem_univ j)
+      rw [mem_Icc] at this
+      rw [abs_of_nonneg this.1]
+      exact mul_le_of_le_one_right hb'.le this.2
+    have h0c : (0 : Fin (C.n + 1) → ℝ) ∈ closedCube (C.n + 1) := fun j _ => by
+      simp
+    exact amplitudeCoeff_pos C.n C.hN C.k C.k_pos C.lam β C.lam_pos hβ C.lam_le _
+      (continuous_dataAmplitude _) (fun u hu => (hampos _ (faceProj_mem_closedCube _ _ _ hu)).le)
+      0 h0c (hampos _ (faceProj_mem_closedCube _ _ _ h0c))
   -- the assembled coefficient is the local leading coefficient
   have hgeq : gCoeff Ad.ν Ad.h Ad.k β Ad.b Ad.x C.lam (C.mult - 1) =
       localLeadingCoeff C SD F A' b' := by
@@ -378,10 +405,12 @@ theorem chart_local_leading_term (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Analyti
     have hh : (X s).h = C.hN := (hX s).2.1
     rw [hh, (hX s).2.2.1]
     have hpt : ∀ v : A', amplitudeCoeff C.hN C.k C.lam β (dataAmplitude ((X s).amp v)) =
-        faceLeadConst C.hN C.k C.lam β * ∫ u in unitBox (C.n + 1),
+        (∏ i, |v.1 i| ^ C.hT i) * (faceLeadConst C.hN C.k C.lam β * ∫ u in unitBox (C.n + 1),
           orthantAmp C SD s F (v.1, b' • faceProj C.hN C.k C.lam u) *
-            residualWeight C.hN C.k C.lam u := by
+            residualWeight C.hN C.k C.lam u) := by
       intro v
+      rw [hampw s v, amplitudeCoeff_smul]
+      congr 1
       unfold amplitudeCoeff
       congr 1
       refine setIntegral_congr_fun (measurableSet_unitBox _) fun u hu => ?_
@@ -392,15 +421,23 @@ theorem chart_local_leading_term (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Analyti
       rw [← integral_subtype_comap hA'c.isClosed.measurableSet]
       exact integral_congr_ae (Eventually.of_forall fun v => hpt v)
     rw [hint]
-  -- positivity of the assembled leading coefficient
-  have hFΩ : ∀ x ∈ Ω, 0 < F x := fun x hx => hFU' x (hΩU' hx)
-  have hν : ∀ I, Ad.ν I ≠ 0 := by
-    intro I
-    rw [← Measure.measure_univ_ne_zero]
-    change Measure.comap (Subtype.val : A' → Fin C.t → ℝ) volume univ ≠ 0
-    rw [(MeasurableEmbedding.subtype_coe hA'c.isClosed.measurableSet).comap_apply, image_univ,
-      Subtype.range_coe]
-    exact (hAvol B hB).ne'
+  -- positivity of the assembled leading coefficient: the weight is positive off a null set
+  have hA'm : MeasurableSet A' := hA'c.isClosed.measurableSet
+  have hemb : MeasurableEmbedding (Subtype.val : A' → Fin C.t → ℝ) :=
+    MeasurableEmbedding.subtype_coe hA'm
+  set Hw : Set (Fin C.t → ℝ) := ⋃ i, {v | v i = 0} ∩ {_v | 0 < C.hT i} with hHw
+  have hHw0 : volume Hw = 0 := by
+    refine measure_iUnion_null fun i => measure_mono_null inter_subset_left ?_
+    rw [volume_pi]
+    exact Measure.pi_hyperplane _ i 0
+  have hwpos : ∀ v : Fin C.t → ℝ, v ∉ Hw → 0 < ∏ i, |v i| ^ C.hT i := by
+    intro v hv
+    refine Finset.prod_pos fun i _ => ?_
+    by_cases hi : 0 < C.hT i
+    · refine pow_pos (abs_pos.2 fun h0 => hv ?_) _
+      exact mem_iUnion.2 ⟨i, h0, hi⟩
+    · rw [Nat.eq_zero_of_not_pos hi, pow_zero]
+      exact one_pos
   have hpos : ∀ I, 0 < Ad.b I ^ (∑ i, Ad.h I i + (C.n + 1)) *
       (Ad.b I ^ (2 * ∑ i, Ad.k I i)) ^ (-C.lam) *
       ∫ v, amplitudeCoeff (Ad.h I) (Ad.k I) C.lam β (dataAmplitude (Ad.x I v)) ∂(Ad.ν I) := by
@@ -408,29 +445,44 @@ theorem chart_local_leading_term (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Analyti
     have hb'I : 0 < Ad.b I := by rw [hAb]; exact hb'
     refine mul_pos (mul_pos (pow_pos hb'I _) (Real.rpow_pos_of_pos (pow_pos hb'I _) _)) ?_
     have hx : ∀ v, xiCoord (Ad.x I v) = 0 := (Ad.chart I).fluct_zero
-    refine tanCoeff_population_pos (Ad.ν I) C.n (Ad.h I) (Ad.k I) (Ad.k_pos I) β hβ (Ad.x I) hx
-      (hmin I) (hatt I) ?_ (hν I)
-    intro v
-    -- the amplitude of the piece is positive on the closed box
     set s := (signIdx C).symm I with hs
-    have hampos : ∀ w ∈ closedCube (C.n + 1), 0 < dataAmplitude ((X s).amp v) w := by
-      intro w hw
-      rw [hamp s v w hw]
-      refine orthantAmp_pos C SD hβ s hA'A hb'b₁ hb'SD hFΩ v.2 fun j => ?_
-      rw [Pi.smul_apply, smul_eq_mul, abs_mul, abs_of_pos hb']
-      have := hw j (mem_univ j)
-      rw [mem_Icc] at this
-      rw [abs_of_nonneg this.1]
-      exact mul_le_of_le_one_right hb'.le this.2
-    have h0c : (0 : Fin (C.n + 1) → ℝ) ∈ closedCube (C.n + 1) := fun j _ => by
-      simp
-    have hmin' : ∀ i, C.lam ≤ ratioExp (X s).h (X s).k i := by
-      rw [(hX s).2.1, (hX s).2.2.1]
-      exact C.lam_le
-    change 0 < amplitudeCoeff (X s).h (X s).k C.lam β (dataAmplitude ((X s).amp v))
-    refine amplitudeCoeff_pos C.n (X s).h (X s).k (X s).k_pos C.lam β C.lam_pos hβ hmin' _
-      (continuous_dataAmplitude _) (fun u hu => (hampos _ (faceProj_mem_closedCube _ _ _ hu)).le)
-      0 h0c (hampos _ (faceProj_mem_closedCube _ _ _ h0c))
+    -- the integrand is the weight times the positive unweighted face functional
+    have hf : ∀ v : A', amplitudeCoeff (Ad.h I) (Ad.k I) C.lam β (dataAmplitude (Ad.x I v)) =
+        (∏ i, |v.1 i| ^ C.hT i) * amplitudeCoeff C.hN C.k C.lam β (dataAmplitude (x₀ s v)) := by
+      intro v
+      change amplitudeCoeff (X s).h (X s).k C.lam β (dataAmplitude ((X s).amp v)) = _
+      have hh : (X s).h = C.hN := (hX s).2.1
+      rw [hh, (hX s).2.2.1, hampw s v, amplitudeCoeff_smul]
+    have hnn : (0 : A' → ℝ) ≤ fun v =>
+        amplitudeCoeff (Ad.h I) (Ad.k I) C.lam β (dataAmplitude (Ad.x I v)) := by
+      intro v
+      change 0 ≤ amplitudeCoeff (Ad.h I) (Ad.k I) C.lam β (dataAmplitude (Ad.x I v))
+      rw [hf v]
+      exact mul_nonneg (Finset.prod_nonneg fun i _ => pow_nonneg (abs_nonneg _) _)
+        (hA₀pos s v).le
+    have hint : Integrable (fun v =>
+        amplitudeCoeff (Ad.h I) (Ad.k I) C.lam β (dataAmplitude (Ad.x I v))) (Ad.ν I) :=
+      integrable_tanFace (Ad.ν I) C.n (Ad.h I) (Ad.k I) (Ad.k_pos I) β hβ (Ad.x I) hx (hmin I)
+        (hatt I)
+    refine (integral_pos_iff_support_of_nonneg hnn hint).2 ?_
+    -- the support contains the points off the weight hyperplanes, of full measure
+    have hsupp : {v : A' | v.1 ∉ Hw} ⊆ Function.support fun v =>
+        amplitudeCoeff (Ad.h I) (Ad.k I) C.lam β (dataAmplitude (Ad.x I v)) := by
+      intro v hv
+      rw [Function.mem_support, hf v]
+      exact (mul_pos (hwpos v.1 hv) (hA₀pos s v)).ne'
+    refine lt_of_lt_of_le ?_ (measure_mono (μ := Ad.ν I) hsupp)
+    change 0 < Measure.comap (Subtype.val : A' → Fin C.t → ℝ) volume {v : A' | v.1 ∉ Hw}
+    rw [hemb.comap_apply]
+    have himg : Subtype.val '' {v : A' | v.1 ∉ Hw} = A' \ Hw := by
+      ext w
+      constructor
+      · rintro ⟨v, hv, rfl⟩
+        exact ⟨v.2, hv⟩
+      · intro hw
+        exact ⟨⟨w, hw.1⟩, hw.2, rfl⟩
+    rw [himg, measure_sdiff_null hHw0]
+    exact hAvol B hB
   have hgpos : 0 < gCoeff Ad.ν Ad.h Ad.k β Ad.b Ad.x C.lam (C.mult - 1) := by
     rw [gCoeff_uniform_leading Ad hβ hmin hatt hm]
     exact Finset.sum_pos (fun I _ => hpos I) ⟨(signIdx C) (fun _ => true), Finset.mem_univ _⟩
@@ -446,14 +498,14 @@ Mellin ratio of the chart's normal exponents and `m` the number of minimisers. -
 theorem IsMonomialChart.local_leading_term {dom : Set (Fin d → ℝ)} {e : Fin d →₀ ℕ}
     {W : Set (Fin d → ℝ)} (hc : IsMonomialChart K φ dom e h W) {U : Set (Fin d → ℝ)}
     (hU : IsOpen U) (hK : AnalyticOnNhd ℝ K U) (hK0 : ∀ x ∈ U, 0 ≤ K x) (hKm : Measurable K)
-    (hhe : ∀ j, 0 < h j → 0 < e j) (hy₀W : y₀ ∈ W) (hy₀U : φ y₀ ∈ U) (hKy₀ : K (φ y₀) = 0)
+    (hy₀W : y₀ ∈ W) (hy₀U : φ y₀ ∈ U) (hKy₀ : K (φ y₀) = 0)
     {F : (Fin d → ℝ) → ℝ} (hF : AnalyticOnNhd ℝ F U) (hFpos : 0 < F (φ y₀)) :
     ∃ C : CentredChartData K φ h y₀, ∃ Ω : Set (Fin d → ℝ), IsCompact Ω ∧ φ y₀ ∈ Ω ∧
       Ω ⊆ φ '' W ∧ Ω ⊆ U ∧ (∃ V : Set (Fin d → ℝ), IsOpen V ∧ y₀ ∈ V ∧ ∀ y ∈ V, φ y ∈ Ω) ∧
       ∃ c : ℝ, 0 < c ∧
         (fun N => ∫ x in Ω, F x * Real.exp (-N * K x)) ~[atTop]
           fun N => c * (N ^ (-C.lam) * Real.log N ^ (C.mult - 1)) := by
-  obtain ⟨C, hC⟩ := exists_centredChartData hc hU hK hK0 hhe hy₀W hy₀U hKy₀
+  obtain ⟨C, hC, -⟩ := exists_centredChartData hc hU hK hK0 hy₀W hy₀U hKy₀
   obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.1 C.V₀_open 0 C.zero_mem
   set ε' := ε / 2 with hε'
   have hε'pos : 0 < ε' := half_pos hε

@@ -504,6 +504,7 @@ import Grammar.AnalyticJacobian
 import Grammar.SplitBoxCore
 import Grammar.SplitReflection
 import Grammar.CentredChart
+import Grammar.DataSpaceSmul
 import Grammar.ChartOrthantCore
 import Grammar.ChartOrthantTiling
 import Grammar.ChartLeadingTerm

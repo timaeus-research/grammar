@@ -5,6 +5,7 @@ Authors: Timaeus Research
 -/
 import Grammar.CentredChart
 import Grammar.StripLocalExpansion
+import Grammar.DataSpaceSmul
 
 /-!
 # The orthant charts of a centred hironaka chart (towards the chart theorem)
@@ -113,10 +114,68 @@ noncomputable def orthantJacFun (s : Fin (C.n + 1) → Bool) (y : Fin d → ℝ)
 noncomputable def orthantJac (s : Fin (C.n + 1) → Bool) : (Fin d → ℝ) → ℝ :=
   open scoped Classical in (orthantDomain C SD s).piecewise (orthantJacFun C SD s) 0
 
-/-- The amplitude of the orthant chart in product coordinates. -/
+/-- The amplitude of the orthant chart in product coordinates (without the tangential weight). -/
 noncomputable def orthantAmp (s : Fin (C.n + 1) → Bool) (F : (Fin d → ℝ) → ℝ)
     (p : (Fin C.t → ℝ) × (Fin (C.n + 1) → ℝ)) : ℝ :=
   orthantJac C SD s (prodToPi C.σ p) * F (orthantChart C SD s (prodToPi C.σ p))
+
+/-! ### The tangential Jacobian weight -/
+
+/-- The tangential Jacobian weight `∏_i |y_{t_i}|^{hT_i}`. -/
+noncomputable def tanWeight (y : Fin d → ℝ) : ℝ := ∏ i, |y (tIdx C.σ i)| ^ C.hT i
+
+theorem tanWeight_nonneg (y : Fin d → ℝ) : 0 ≤ tanWeight C y :=
+  Finset.prod_nonneg fun _ _ => pow_nonneg (abs_nonneg _) _
+
+theorem continuous_tanWeight : Continuous (tanWeight C) :=
+  continuous_finsetProd _ fun i _ => (continuous_abs.comp (continuous_apply (tIdx C.σ i))).pow _
+
+theorem tanWeight_pos {y : Fin d → ℝ} (hy : ∀ i, 0 < C.hT i → y (tIdx C.σ i) ≠ 0) :
+    0 < tanWeight C y := by
+  refine Finset.prod_pos fun i _ => ?_
+  by_cases hi : 0 < C.hT i
+  · exact pow_pos (abs_pos.2 (hy i hi)) _
+  · rw [Nat.eq_zero_of_not_pos hi, pow_zero]
+    exact one_pos
+
+theorem tanWeight_prodToPi (p : (Fin C.t → ℝ) × (Fin (C.n + 1) → ℝ)) :
+    tanWeight C (prodToPi C.σ p) = ∏ i, |p.1 i| ^ C.hT i := by
+  unfold tanWeight
+  refine Finset.prod_congr rfl fun i _ => ?_
+  rw [prodToPi_apply_tIdx]
+
+/-- The weight hyperplanes `{y_{t_i} = 0}` over the coordinates with positive weight. -/
+def weightHyperplanes : Set (Fin d → ℝ) := ⋃ i, {y | y (tIdx C.σ i) = 0} ∩ {_y | 0 < C.hT i}
+
+theorem measurableSet_weightHyperplanes : MeasurableSet (weightHyperplanes C) :=
+  MeasurableSet.iUnion fun _ =>
+    ((measurableSet_singleton (0 : ℝ)).preimage (measurable_pi_apply _)).inter
+      (MeasurableSet.const _)
+
+theorem volume_weightHyperplanes : volume (weightHyperplanes C) = 0 := by
+  refine measure_iUnion_null fun i => measure_mono_null inter_subset_left ?_
+  rw [volume_pi]
+  exact Measure.pi_hyperplane _ (tIdx C.σ i) 0
+
+theorem notMem_weightHyperplanes_iff (y : Fin d → ℝ) :
+    y ∉ weightHyperplanes C ↔ ∀ i, 0 < C.hT i → y (tIdx C.σ i) ≠ 0 := by
+  simp only [weightHyperplanes, mem_iUnion, mem_inter_iff, mem_ofPred_eq, not_exists, not_and]
+  exact ⟨fun h i hi hy => h i hy hi, fun h i hy hi => h i hi hy⟩
+
+/-- The strip normalisation and the reflection fix the tangential coordinates. -/
+theorem inv_reflect_apply_tIdx (s : Fin (C.n + 1) → Bool) {y : Fin d → ℝ}
+    (hy : splitReflect C.σ s y ∈
+      rescale (nIdx C.σ j₀) (unitRoot β (2 * C.k j₀) C.unit₀) '' SD.S) (i : Fin C.t) :
+    SD.inv (splitReflect C.σ s y) (tIdx C.σ i) = y (tIdx C.σ i) := by
+  rw [SD.inv_apply_of_ne hy (tIdx_ne_nIdx i j₀), splitReflect_apply, splitSgn_tIdx, one_mul]
+
+theorem tanWeight_inv_reflect (s : Fin (C.n + 1) → Bool) {y : Fin d → ℝ}
+    (hy : splitReflect C.σ s y ∈
+      rescale (nIdx C.σ j₀) (unitRoot β (2 * C.k j₀) C.unit₀) '' SD.S) :
+    tanWeight C (SD.inv (splitReflect C.σ s y)) = tanWeight C y := by
+  unfold tanWeight
+  refine Finset.prod_congr rfl fun i _ => ?_
+  rw [inv_reflect_apply_tIdx C SD s hy i]
 
 theorem isOpen_orthantDomain (s : Fin (C.n + 1) → Bool) : IsOpen (orthantDomain C SD s) :=
   SD.image_open.preimage (splitReflect C.σ s).continuous
@@ -256,10 +315,12 @@ theorem prodToPi_apply_nIdx_pos {A' : Set (Fin C.t → ℝ)} {b : ℝ}
   rw [prodToPi_apply_nIdx]
   exact (hp.2 j (mem_univ j)).1
 
-/-- **The orthant chart is a split box chart.** Hypotheses: the chart `φ` is analytic on the
-centred neighbourhood and injective off the Jacobian divisor there, the localisation data has
-phase `K` and observable `F` on the translated chart, and the orthant amplitude has a joint power
-series with a margin `(t + n + 1) B < r₀ < R` over the compact tangential base `A' ⊆ A`. -/
+/-- **The orthant chart is a split box chart** (injective off the weight hyperplanes, with the
+tangential Jacobian weight `∏_i |v_i|^{hT_i}` in the Jacobian factor and in the datum). Hypotheses:
+the chart `φ` is analytic on the centred neighbourhood and injective off the Jacobian divisor
+there, the localisation data has phase `K` and observable `F` on the translated chart, and the
+unweighted orthant amplitude has a joint power series with a margin `(t + n + 1) B < r₀ < R` over
+the compact tangential base `A' ⊆ A`. -/
 theorem exists_splitBoxChart_orthant (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, AnalyticAt ℝ φ (y + y₀))
     (hinj : ∀ w₁ ∈ C.V₀, ∀ w₂ ∈ C.V₀, monomialEval (w₁ + y₀) h ≠ 0 →
       monomialEval (w₂ + y₀) h ≠ 0 → φ (w₁ + y₀) = φ (w₂ + y₀) → w₁ = w₂)
@@ -274,9 +335,12 @@ theorem exists_splitBoxChart_orthant (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Ana
       (fun w => orthantAmp C SD s F (w ∘ Sum.inl, w ∘ Sum.inr)) P 0 R) {r₀ : ℝ≥0}
     (hr₀ : (r₀ : ℝ≥0∞) < R) (hBr₀ : ((C.t + (C.n + 1) : ℕ) : ℝ) * B < r₀) (hB1 : B < r₀) :
     ∃ X : SplitBoxChart C.σ D A' b β, X.Ψ = orthantChart C SD s ∧
-      X.h = (fun j => h (nIdx C.σ j)) ∧ X.k = C.k ∧ X.jac = orthantJac C SD s ∧
-      ∀ (v : A') (u : Fin (C.n + 1) → ℝ), (∀ j, |u j| ≤ b) →
-        evalF (toEta b (X.amp v)) u = orthantAmp C SD s F (v.1, u) := by
+      X.h = (fun j => h (nIdx C.σ j)) ∧ X.k = C.k ∧
+      X.jac = (fun y => orthantJac C SD s y * tanWeight C y) ∧
+      ∃ x₀ : TangentialData A' (C.n + 1), (∀ v, X.amp v = (∏ i, |v.1 i| ^ C.hT i) • x₀ v) ∧
+        (∀ v, xiCoord (x₀ v) = 0) ∧
+        ∀ (v : A') (u : Fin (C.n + 1) → ℝ), (∀ j, |u j| ≤ b) →
+          evalF (toEta b (x₀ v)) u = orthantAmp C SD s F (v.1, u) := by
   classical
   have : CompactSpace A' := isCompact_iff_compactSpace.1 hA'
   have hcard : (Fintype.card (Fin C.t ⊕ Fin (C.n + 1)) : ℝ) * B < r₀ := by
@@ -284,6 +348,11 @@ theorem exists_splitBoxChart_orthant (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Ana
   have hW : Summable (jointWeight P B) :=
     summable_jointWeight P B (summable_monoFamily_mul_pow P (hr₀.trans_le hG.r_le) hB.le hcard)
   set x : TangentialData A' (C.n + 1) := jointTangentialData P B hb hbB hB hW A' hAB with hx
+  -- the weighted datum
+  set wT : A' → ℝ := fun v => ∏ i, |v.1 i| ^ C.hT i with hwT
+  have hwTc : Continuous wT := continuous_finsetProd _ fun i _ =>
+    (continuous_abs.comp ((continuous_apply i).comp continuous_subtype_val)).pow _
+  set xw : TangentialData A' (C.n + 1) := ⟨fun v => wT v • x v, hwTc.smul x.continuous⟩ with hxw
   have hbox := splitPosBox_subset_orthantDomain C SD s hA'A hbb₁ hbSD
   have hρ : AnalyticOnNhd ℝ (unitRoot β (2 * C.k j₀) C.unit₀) C.V₀ := fun w hw =>
     analyticAt_unitRoot hβ (by have := C.k_pos j₀; omega) (C.unit₀_analytic w hw)
@@ -294,10 +363,13 @@ theorem exists_splitBoxChart_orthant (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Ana
     rw [splitReflect_apply]
     exact mul_ne_zero (splitSgn_ne_zero _ _ _) (prodToPi_apply_nIdx_pos C hp j).ne'
   refine ⟨⟨fun j => h (nIdx C.σ j), C.k, C.k_pos, orthantChart C SD s, orthantDomain C SD s,
-    isOpen_orthantDomain C SD s, hbox, ?_, ∅, MeasurableSet.empty, measure_empty, ?_,
-    orthantJac C SD s, measurable_orthantJac C SD hβ s,
-    ?_, ?_, ?_, x, fun v => xiCoord_jointTangentialData P B hb hbB hB hW A' hAB v, ?_⟩,
-    rfl, rfl, rfl, rfl, fun v u hu => ?_⟩
+    isOpen_orthantDomain C SD s, hbox, ?_, weightHyperplanes C, measurableSet_weightHyperplanes C,
+    volume_weightHyperplanes C, ?_,
+    fun y => orthantJac C SD s y * tanWeight C y,
+    (measurable_orthantJac C SD hβ s).mul (continuous_tanWeight C).measurable,
+    ?_, ?_, ?_, xw, fun v => ?_, ?_⟩,
+    rfl, rfl, rfl, rfl, x, fun v => rfl,
+    fun v => xiCoord_jointTangentialData P B hb hbB hB hW A' hAB v, fun v u hu => ?_⟩
   · -- `C¹` on the orthant domain
     have han : AnalyticOnNhd ℝ (orthantChart C SD s) (orthantDomain C SD s) :=
       fun y hy => analyticAt_orthantChart C SD hφ s hy
@@ -310,15 +382,19 @@ theorem exists_splitBoxChart_orthant (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Ana
     have hd₂ := hbox ⟨p₂, hp₂, rfl⟩
     have hw₁ := inv_reflect_mem_V₀ C SD s hd₁
     have hw₂ := inv_reflect_mem_V₀ C SD s hd₂
-    have hm₁ := C.monomialEval_ne_zero _ hw₁ fun j => SD.inv_apply_ne_zero hd₁ (hne p₁ hp₁ j)
-    have hm₂ := C.monomialEval_ne_zero _ hw₂ fun j => SD.inv_apply_ne_zero hd₂ (hne p₂ hp₂ j)
+    have ht₁ := (notMem_weightHyperplanes_iff C _).1 hy₁.2
+    have ht₂ := (notMem_weightHyperplanes_iff C _).1 hy₂.2
+    have hm₁ := C.monomialEval_ne_zero _ hw₁ (fun j => SD.inv_apply_ne_zero hd₁ (hne p₁ hp₁ j))
+      fun i hi => by rw [inv_reflect_apply_tIdx C SD s hd₁ i]; exact ht₁ i hi
+    have hm₂ := C.monomialEval_ne_zero _ hw₂ (fun j => SD.inv_apply_ne_zero hd₂ (hne p₂ hp₂ j))
+      fun i hi => by rw [inv_reflect_apply_tIdx C SD s hd₂ i]; exact ht₂ i hi
     have h1 := hinj _ hw₁ _ hw₂ hm₁ hm₂ heq
     have h2 := SD.injOn_inv hd₁ hd₂ h1
     exact (splitReflect C.σ s).injective h2
   · -- nonnegativity of the Jacobian factor
     intro y hy
     rw [orthantJac_eq C SD s (hbox hy)]
-    exact (orthantJacFun_pos C SD hβ s (hbox hy)).le
+    exact mul_nonneg (orthantJacFun_pos C SD hβ s (hbox hy)).le (tanWeight_nonneg C y)
   · -- the Jacobian factorisation
     intro p hp
     set y := prodToPi C.σ p with hy
@@ -332,7 +408,10 @@ theorem exists_splitBoxChart_orthant (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Ana
     have hzp : ∀ j, |z (nIdx C.σ j)| = p.2 j := fun j => by
       rw [hz, splitReflect_apply, abs_mul, abs_splitSgn, one_mul, hy, prodToPi_apply_nIdx,
         abs_of_pos (hp.2 j (mem_univ j)).1]
-    rw [Finset.prod_congr rfl fun j _ => by rw [hzp j]]
+    have htw : ∏ i, |w (tIdx C.σ i)| ^ C.hT i = tanWeight C y := by
+      rw [hw, hz]
+      exact tanWeight_inv_reflect C SD s hd
+    rw [Finset.prod_congr rfl fun j _ => by rw [hzp j], htw]
     unfold orthantJacFun
     ring
   · -- the exact phase
@@ -349,6 +428,9 @@ theorem exists_splitBoxChart_orthant (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Ana
     refine Finset.prod_congr rfl fun j _ => ?_
     rw [← Even.pow_abs (even_two_mul _), splitReflect_apply, abs_mul, abs_splitSgn, one_mul,
       Even.pow_abs (even_two_mul _), prodToPi_apply_nIdx]
+  · -- zero phase of the weighted datum
+    change xiCoord (wT v • x v) = 0
+    rw [xiCoord_smul, hx, xiCoord_jointTangentialData P B hb hbB hB hW A' hAB v, smul_zero]
   · -- the amplitude clause
     intro v u hu
     have hu' : ∀ j, |u j| ≤ b := fun j => by
@@ -357,14 +439,17 @@ theorem exists_splitBoxChart_orthant (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Ana
       constructor <;> linarith [this.1, this.2]
     have hd : prodToPi C.σ (v.1, u) ∈ orthantDomain C SD s := hbox ⟨(v.1, u), ⟨v.2, hu⟩, rfl⟩
     have hwV := inv_reflect_mem_V₀ C SD s hd
-    rw [hx, evalF_toEta_jointTangentialData P B hb hbB hB hW A' hAB hG hr₀ hBr₀ hB1 v hu']
+    change evalF (toEta b (wT v • x v)) u = _
+    rw [toEta_smul, evalF_smul, hx,
+      evalF_toEta_jointTangentialData P B hb hbB hB hW A' hAB hG hr₀ hBr₀ hB1 v hu']
     simp only [Sum.elim_comp_inl, Sum.elim_comp_inr]
     unfold orthantAmp
     change _ = _ * D.obs (translated φ y₀ _)
-    rw [hobs _ hwV]
-    rfl
-  · -- the amplitude clause on the closed two-sided box
-    change evalF (toEta b (x v)) u = _
+    rw [hobs _ hwV, tanWeight_prodToPi]
+    simp only [hwT]
+    unfold orthantChart
+    ring
+  · -- the unweighted amplitude clause on the closed two-sided box
     rw [hx, evalF_toEta_jointTangentialData P B hb hbB hB hW A' hAB hG hr₀ hBr₀ hB1 v hu]
     simp only [Sum.elim_comp_inl, Sum.elim_comp_inr]
 

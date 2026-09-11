@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 511 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 512 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CCVIII | **The resolution formula for the exponent, unconditional**: for `K ≥ 0` analytic near a zero `w` (not identically zero), `F > 0` analytic, some compact neighbourhood of `w` has `∫ F e^{−NK} = Θ(N^{−λ_*}(log N)^{m_*−1})` with `(λ_*, m_*)` the min/max of the divisor-point chart pairs of a hironaka resolution — the support condition on the Jacobian exponents removed by tangential Jacobian weights | `Grammar/GlobalExponentHironaka.lean` (`exponent_of_analytic`), `Grammar/CentredChart.lean` (`CentredChartData.hT`), `Grammar/ChartOrthantCore.lean` (`tanWeight`, `weightHyperplanes`), `Grammar/DataSpaceSmul.lean` |
 | CCVII | **The exponent of a monomial resolution**: for a hironaka partial resolution with supported Jacobian exponents, a compact neighbourhood of the zero `w` has `∫ F e^{−NK} = Θ(N^{−λ_*}(log N)^{m_*−1})` with `(λ_*, m_*)` the min/max over the divisor points of the charts of the chart pairs `(min_j (h_{n_j}+1)/(2k_j), #minimisers)` — the finite local cover from the compact chart domains | `Grammar/GlobalExponentHironaka.lean` (`exponent_of_monomialResolution`; `exists_isOpen_subset_localRegion` in `ChartOrthantTiling.lean`) |
 | CCVI | **Global exponent from local leading terms (conditional on a local cover)**: for `F ≥ 0`, finitely many subregions with identified leading terms covering the region off a phase gap give `∫_R F e^{−NK} = Θ(N^{−λ_*}(log N)^{m_*−1})`, `λ_* = min λ_i`, `m_* = max{m_i : λ_i = λ_*}`, and the free energy form `−log Z = λ_* log N − (m_*−1) log log N + O(1)` | `Grammar/GlobalExponentBound.lean` (`isTheta_of_local_leading_terms`, `regionIntegral_le_sum_add_tail`, `freeEnergy_asymptotic`) |
 | CCV | **The identified leading term at a divisor point of a hironaka chart**: for `F(φ y₀) > 0`, `∫_Ω F e^{−NK} ~ c N^{−λ} (log N)^{m−1}` with `c > 0`, `λ` the minimal Mellin ratio `min_j (h_{n_j}+1)/(2k_j)` of the chart's normal exponents and `m` the number of minimisers; general-box-side population coefficients and the first-nonzero theorem for uniform core decompositions | `Grammar/ChartLeadingTerm.lean` (`IsMonomialChart.local_leading_term`, `chart_local_leading_term`, `localLeadingCoeff`, `orthantFaceIntegral`, `AnalyticCoreDecomposition.isEquivalent_uniform`, `dataBoxCoeff_population_leading_b`) |
