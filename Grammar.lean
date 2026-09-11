@@ -479,3 +479,4 @@ import Grammar.LabelledNormalBundle
 import Grammar.GlobalNormalSections
 import Grammar.CoordinateStratumBundle
 import Grammar.LabelledConormalBridge
+import Grammar.TubularBridge
