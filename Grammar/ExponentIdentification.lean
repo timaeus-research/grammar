@@ -172,4 +172,47 @@ theorem laplace_pair_eq_resolution_pair {U : Set (Fin d → ℝ)} (hU : IsOpen U
     hΘ.symm.trans hΘF
   exact pair_eq_of_powLogScale_isTheta hpair
 
+/-! ### The resolution pair in the population and empirical exponent theorems -/
+
+/-- **The resolution pair is the exponent of every certified population core theorem on the small
+balls, and the empirical exponent.** For `K ≥ 0` analytic on an open `U ∋ w`, `K w = 0`, `K` not
+identically zero near `w`, `K` measurable: there are a monomial resolution `R` of `K` near `w`,
+finitely many divisor-point chart pairs with extremal pair `(λ_*, m_*)`, and `r₀ > 0` such that on
+every ball `B̄(w,r)`, `0 < r ≤ r₀`, (i) a certified population core theorem
+`A_k ∫_{B̄(w,r)} e^{−kK} → L₀ > 0` at the pair `(λ, m)` forces `λ = λ_*` and `m − 1 = m_* − 1`;
+(ii) if moreover the scaled empirical evidence converges in distribution to an almost surely
+positive limit at that pair, then `log Z_k^{emp}/log k → −λ_*` in probability. -/
+theorem resolution_pair_of_population_comparison {U : Set (Fin d → ℝ)} (hU : IsOpen U)
+    {K : (Fin d → ℝ) → ℝ} (hK : AnalyticOnNhd ℝ K U) (hK0 : ∀ x ∈ U, 0 ≤ K x) (hKm : Measurable K)
+    {w : Fin d → ℝ} (hw : w ∈ U) (hKw : K w = 0) (hne : ¬ K =ᶠ[𝓝 w] 0) :
+    ∃ (N : Set (Fin d → ℝ)) (R : PartialResolution d K N), R.IsMonomial ∧
+      ∃ (ι : Type) (_ : Fintype ι) (lam : ι → ℝ) (m : ι → ℕ) (i₀ : ι),
+        (∀ p, ∃ (i : R.ι) (y₀ : Fin d → ℝ) (h : Fin d →₀ ℕ) (C : CentredChartData K (R.φ i) h y₀),
+          y₀ ∈ R.dom i ∧ K (R.φ i y₀) = 0 ∧ lam p = C.lam ∧ m p = C.mult) ∧
+        (∀ p, lam i₀ ≤ lam p) ∧ (∀ p, lam p = lam i₀ → m p ≤ m i₀) ∧
+        ∃ r₀ : ℝ, 0 < r₀ ∧ ∀ r : ℝ, 0 < r → r ≤ r₀ →
+          ∀ (lam' : ℝ) (m' : ℕ) (L₀ : ℝ), 0 < L₀ →
+            Tendsto (fun k : ℕ => scaleA lam' m' k *
+              ∫ x in Metric.closedBall w r, Real.exp (-(k : ℝ) * K x)) atTop (𝓝 L₀) →
+            (lam' = lam i₀ ∧ m' - 1 = m i₀ - 1) ∧
+            ∀ {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω} [IsProbabilityMeasure μ]
+              {Ω' : Type*} [MeasurableSpace Ω'] {μ' : Measure Ω'} [IsProbabilityMeasure μ']
+              {Z : ℕ → Ω → ℝ} {L : Ω' → ℝ},
+              TendstoInDistribution (fun k ω => scaleA lam' m' k * Z k ω) atTop L (fun _ => μ) μ' →
+              (∀ k ω, 0 < Z k ω) → (∀ᵐ ω ∂μ', 0 < L ω) →
+              TendstoInMeasure μ (fun k ω => Real.log (Z k ω) / Real.log k) atTop
+                (fun _ => -lam i₀) := by
+  -- the identification with the observable `F = 1`
+  obtain ⟨lamH, thetaH, r₀, -, -, -, hr₀, hLT, N, R, hR, -, -, -, -, -, ι, hι, lam, m, i₀, hpieces,
+    hmin, hmax, -, hlamEq, hmEq⟩ :=
+    laplace_pair_eq_resolution_pair hU hK hK0 hKm hw hKw hne (F := fun _ => (1 : ℝ))
+      analyticOnNhd_const (fun _ _ => one_pos)
+  refine ⟨N, R, hR, ι, hι, lam, m, i₀, hpieces, hmin, hmax, r₀, hr₀, fun r hr hrr₀ lam' m' L₀ hL₀
+    hconv => ?_⟩
+  have hcmp := exponentPair_eq_of_population_comparison (hLT r hr hrr₀) lam' m' hL₀ hconv
+  have hlam' : lam' = lam i₀ := hcmp.1.trans hlamEq.symm
+  refine ⟨⟨hlam', hcmp.2.trans hmEq.symm⟩, ?_⟩
+  intro Ω _ μ _ Ω' _ μ' _ Z L hdist hZpos hLpos
+  exact tendstoInMeasure_log_div_log_of_population_comparison m' hlam' hdist hZpos hLpos
+
 end Grammar
