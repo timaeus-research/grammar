@@ -490,6 +490,76 @@ theorem chart_local_leading_term (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Analyti
   rw [← hgeq]
   exact Ad.isEquivalent_uniform hβ hmin hatt hm hgpos.ne'
 
+/-- **The local expansion is supported on the chart's candidate lattice.** Under the hypotheses of
+the local chart theorem, the region `Ω` of the orthant tiling has a power–log cutoff expansion
+whose coefficients vanish off the candidate exponent set `Λ(h_N, k) = ⋃_j ((h_{n_j}+1)/(2k_j) +
+ℕ/(2k_j))` of the chart's normal exponents and off the log degrees `≤ n`. -/
+theorem chart_local_cutoffExpansion_candidate (hβ : 0 < β)
+    (hφ : ∀ y ∈ C.V₀, AnalyticAt ℝ φ (y + y₀))
+    (hinj : ∀ w₁ ∈ C.V₀, ∀ w₂ ∈ C.V₀, monomialEval (w₁ + y₀) h ≠ 0 →
+      monomialEval (w₂ + y₀) h ≠ 0 → φ (w₁ + y₀) = φ (w₂ + y₀) → w₁ = w₂)
+    (hKm : Measurable K) (hK0 : ∀ w ∈ C.V₀, 0 ≤ K (translated φ y₀ w)) {F : (Fin d → ℝ) → ℝ}
+    (hF : ∀ w ∈ C.V₀, AnalyticAt ℝ F (translated φ y₀ w)) (hA : IsCompact A)
+    (h0 : (0 : Fin C.t → ℝ) ∈ A) (hb₁ : 0 < b₁) :
+    ∃ (B b' : ℝ), 0 < B ∧ 0 < b' ∧
+      IsCompact (localRegion C SD (A ∩ Metric.closedBall 0 B) b') ∧
+      φ y₀ ∈ localRegion C SD (A ∩ Metric.closedBall 0 B) b' ∧
+      localRegion C SD (A ∩ Metric.closedBall 0 B) b' ⊆ translated φ y₀ '' C.V₀ ∧
+      ∃ (Q Dg : ℕ) (c : ℝ → ℕ → ℝ), 0 < Q ∧
+        (∀ μ j, c μ j ≠ 0 → candidateExp C.hN C.k μ ∧ j ≤ C.n) ∧
+        CutoffExpansion Q Dg (fun N => ∫ x in localRegion C SD (A ∩ Metric.closedBall 0 B) b',
+          F x * Real.exp (-N * K x)) c := by
+  classical
+  obtain ⟨B, b', hB, hb', hb'b₁, hb'SD, hΩc, hmem, hsub, -, hX⟩ :=
+    exists_orthantSplitBoxCharts C SD hβ hφ hinj hF hA h0 hb₁ isOpen_univ (mem_univ _)
+  set A' := A ∩ Metric.closedBall (0 : Fin C.t → ℝ) B with hA'
+  have hA'c : IsCompact A' := hA.inter_right Metric.isClosed_closedBall
+  have hA'A : A' ⊆ A := inter_subset_left
+  set Ω := localRegion C SD A' b' with hΩ
+  have hΩm : MeasurableSet Ω := hΩc.isClosed.measurableSet
+  have hΩmem : ∀ x ∈ Ω, ∃ w ∈ C.V₀, x = translated φ y₀ w := by
+    intro x hx
+    obtain ⟨w, hw, rfl⟩ := hsub hx
+    exact ⟨w, hw, rfl⟩
+  have hFc : ContinuousOn F Ω := by
+    intro x hx
+    obtain ⟨w, hw, rfl⟩ := hΩmem x hx
+    exact (hF w hw).continuousAt.continuousWithinAt
+  let D : LocalisationData (Fin d → ℝ) :=
+    ⟨volume.restrict Ω, K, F, hKm,
+      ae_restrict_of_forall_mem hΩm fun x hx => by
+        obtain ⟨w, hw, rfl⟩ := hΩmem x hx
+        exact hK0 w hw,
+      hFc.integrableOn_compact hΩc, 1, one_pos⟩
+  obtain ⟨X, hX⟩ := hX D (fun _ _ => rfl) (fun _ _ => rfl)
+  set T := orthantCoreTiling C SD hinj hφ (D := D) rfl hA'c hA'A hb' hb'b₁ hb'SD X
+    (fun s => (hX s).1) with hT
+  set Ad := T.toAnalyticCoreDecomposition with hAd
+  have hAh : ∀ I, Ad.h I = C.hN := fun I => (hX _).2.1
+  have hAk : ∀ I, Ad.k I = C.k := fun I => (hX _).2.2.1
+  refine ⟨B, b', hB, hb', hΩc, hmem, hsub, commonQ Ad.k, commonD fun I => (T.piece I).n,
+    gCoeff Ad.ν Ad.h Ad.k β Ad.b Ad.x, commonQ_pos Ad.k Ad.k_pos, fun μ j hne => ?_,
+    Ad.cutoffExpansion hβ⟩
+  -- the coefficients vanish off the candidate lattice and above log degree `n`
+  by_contra hcon
+  apply hne
+  unfold gCoeff
+  refine Finset.sum_eq_zero fun I _ => ?_
+  rw [not_and_or] at hcon
+  rcases hcon with hμ | hj
+  · have hzero : ∀ v,
+        dataBoxCoeff (T.piece I).n (Ad.h I) (Ad.k I) β (Ad.b I) (Ad.x I v) μ j = 0 := by
+      intro v
+      have hμ' : ¬ candidateExp (Ad.h I) (Ad.k I) μ := by
+        rw [hAh, hAk]
+        exact hμ
+      exact dataBoxCoeff_eq_zero_of_not_candidate _ (Ad.h I) (Ad.k I) (Ad.k_pos I) β hβ
+        (Ad.b_pos I) _ hμ' j
+    unfold tanCoeff
+    exact integral_eq_zero_of_ae (Eventually.of_forall fun v => hzero v)
+  · exact tanCoeff_eq_zero_of_lt (Ad.ν I) (T.piece I).n (Ad.h I) (Ad.k I) β (Ad.b I) (Ad.x I) μ
+      (by change C.n < j; omega)
+
 /-- **The identified leading term at a divisor point of a hironaka chart.** Under the hypotheses of
 `IsMonomialChart.local_cutoffExpansion` with `F (φ y₀) > 0`: for the centred chart data `C` at
 `y₀`, some compact region `Ω ∋ φ y₀` inside `φ(W) ∩ U` has
@@ -548,6 +618,51 @@ theorem IsMonomialChart.local_leading_term {dom : Set (Fin d → ℝ)} {e : Fin 
   refine ⟨C, _, hΩc, hmem, ?_, ?_, exists_isOpen_subset_localRegion C SD one_pos
     (lt_min hε'pos hB) hrA inter_subset_left hb' hb'b₁ hb'SD (by simp [hA, hε'pos.le]) hε'pos.le,
     _, hc0, hequiv⟩
+  · intro x hx
+    obtain ⟨w, hw, rfl⟩ := hsub hx
+    exact ⟨w + y₀, (hC w hw).1, rfl⟩
+  · intro x hx
+    obtain ⟨w, hw, rfl⟩ := hsub hx
+    exact (hC w hw).2
+
+/-- **The local expansion at a divisor point of a hironaka chart is supported on the chart's
+candidate lattice** `Λ(h_N, k)`, with log degrees at most the normal dimension `n`. -/
+theorem IsMonomialChart.local_cutoffExpansion_candidate {dom : Set (Fin d → ℝ)} {e : Fin d →₀ ℕ}
+    {W : Set (Fin d → ℝ)} (hc : IsMonomialChart K φ dom e h W) {U : Set (Fin d → ℝ)}
+    (hU : IsOpen U) (hK : AnalyticOnNhd ℝ K U) (hK0 : ∀ x ∈ U, 0 ≤ K x) (hKm : Measurable K)
+    (hy₀W : y₀ ∈ W) (hy₀U : φ y₀ ∈ U) (hKy₀ : K (φ y₀) = 0)
+    {F : (Fin d → ℝ) → ℝ} (hF : AnalyticOnNhd ℝ F U) :
+    ∃ C : CentredChartData K φ h y₀, ∃ Ω : Set (Fin d → ℝ), IsCompact Ω ∧ φ y₀ ∈ Ω ∧
+      Ω ⊆ φ '' W ∧ Ω ⊆ U ∧ ∃ (Q Dg : ℕ) (c : ℝ → ℕ → ℝ), 0 < Q ∧
+        (∀ μ j, c μ j ≠ 0 → candidateExp C.hN C.k μ ∧ j ≤ C.n) ∧
+        CutoffExpansion Q Dg (fun N => ∫ x in Ω, F x * Real.exp (-N * K x)) c := by
+  obtain ⟨C, hC, -⟩ := exists_centredChartData hc hU hK hK0 hy₀W hy₀U hKy₀
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.1 C.V₀_open 0 C.zero_mem
+  set ε' := ε / 2 with hε'
+  have hε'pos : 0 < ε' := half_pos hε
+  have hcball : Metric.closedBall (0 : Fin d → ℝ) ε' ⊆ C.V₀ :=
+    (Metric.closedBall_subset_ball (half_lt_self hε)).trans hball
+  set j₀ : Fin (C.n + 1) := 0 with hj₀
+  set A : Set (Fin C.t → ℝ) := Metric.closedBall 0 ε' with hA
+  have hρ : AnalyticOnNhd ℝ (unitRoot 1 (2 * C.k j₀) C.unit₀) C.V₀ := fun w hw =>
+    analyticAt_unitRoot one_pos (by have := C.k_pos j₀; omega) (C.unit₀_analytic w hw)
+      (C.unit₀_pos w hw)
+  have hQ₀ : IsCompact (stripBase C.σ A j₀ ε') :=
+    isCompact_stripBase (isCompact_closedBall _ _) j₀ ε'
+  have hQ₀V : stripBase C.σ A j₀ ε' ⊆ C.V₀ :=
+    (stripBase_subset_closedBall C.σ j₀ hε'pos.le).trans hcball
+  obtain ⟨SD⟩ := exists_stripData C.V₀_open hρ (fun w _ => unitRoot_pos _ _ _ _) hQ₀ hQ₀V
+    fun y hy => stripBase_apply_nIdx hy
+  have hφ : ∀ y ∈ C.V₀, AnalyticAt ℝ φ (y + y₀) := fun y hy => hc.analyticOnNhd _ (hC y hy).1
+  have hinj : ∀ w₁ ∈ C.V₀, ∀ w₂ ∈ C.V₀, monomialEval (w₁ + y₀) h ≠ 0 →
+      monomialEval (w₂ + y₀) h ≠ 0 → φ (w₁ + y₀) = φ (w₂ + y₀) → w₁ = w₂ := by
+    intro w₁ hw₁ w₂ hw₂ hm₁ hm₂ heq
+    have := hc.injOn ⟨(hC w₁ hw₁).1, hm₁⟩ ⟨(hC w₂ hw₂).1, hm₂⟩ heq
+    exact add_right_cancel this
+  obtain ⟨B, b', -, -, hΩc, hmem, hsub, Q, Dg, c, hQ, hsupp, hexp⟩ :=
+    chart_local_cutoffExpansion_candidate C SD one_pos hφ hinj hKm (fun w hw => hK0 _ (hC w hw).2)
+      (fun w hw => hF _ (hC w hw).2) (isCompact_closedBall _ _) (by simp [hA, hε'pos.le]) hε'pos
+  refine ⟨C, _, hΩc, hmem, ?_, ?_, Q, Dg, c, hQ, hsupp, hexp⟩
   · intro x hx
     obtain ⟨w, hw, rfl⟩ := hsub hx
     exact ⟨w + y₀, (hC w hw).1, rfl⟩
