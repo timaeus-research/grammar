@@ -505,3 +505,4 @@ import Grammar.SplitBoxCore
 import Grammar.SplitReflection
 import Grammar.CentredChart
 import Grammar.ChartOrthantCore
+import Grammar.ChartOrthantTiling
