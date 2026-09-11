@@ -231,24 +231,25 @@ theorem volume_zBox_inter_hyperplanes (A' : Set (Fin C.t → ℝ)) (b' : ℝ) :
 
 /-! ### The local chart theorem -/
 
-/-- **The local chart theorem.** At a divisor point of a hironaka chart with centred chart data
-`C` and strip data `SD` (both existing by CCII and `exists_stripData`), for every analytic
-observable `F` near `φ y₀` and every compact tangential base `A ∋ 0`, some compact region
-`Ω = g(zBox σ (A ∩ B̄_B) b') ∋ φ y₀` has the full power–log cutoff expansion of
-`∫_Ω F e^{−NK}`, with no series hypothesis. -/
-theorem chart_local_cutoffExpansion (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, AnalyticAt ℝ φ (y + y₀))
+/-- **The orthant core tiling of the local region.** At a divisor point of a hironaka chart with
+centred chart data `C` and strip data `SD`, for every analytic observable `F` near `φ y₀` and
+every compact tangential base `A ∋ 0`, some compact region `Ω = g(zBox σ (A ∩ B̄_B) b') ∋ φ y₀` is
+tiled by the `2^{n+1}` orthant charts: every localisation datum on `Ω` with phase `K` and
+observable `F` has a core tiling. -/
+theorem chart_local_coreTiling (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, AnalyticAt ℝ φ (y + y₀))
     (hinj : ∀ w₁ ∈ C.V₀, ∀ w₂ ∈ C.V₀, monomialEval (w₁ + y₀) h ≠ 0 →
       monomialEval (w₂ + y₀) h ≠ 0 → φ (w₁ + y₀) = φ (w₂ + y₀) → w₁ = w₂)
-    (hKm : Measurable K) (hK0 : ∀ w ∈ C.V₀, 0 ≤ K (translated φ y₀ w)) {F : (Fin d → ℝ) → ℝ}
-    (hF : ∀ w ∈ C.V₀, AnalyticAt ℝ F (translated φ y₀ w)) (hA : IsCompact A)
+    {F : (Fin d → ℝ) → ℝ} (hF : ∀ w ∈ C.V₀, AnalyticAt ℝ F (translated φ y₀ w)) (hA : IsCompact A)
     (h0 : (0 : Fin C.t → ℝ) ∈ A) (hb₁ : 0 < b₁) :
     ∃ (B b' : ℝ), 0 < B ∧ 0 < b' ∧
       IsCompact (localRegion C SD (A ∩ Metric.closedBall 0 B) b') ∧
       φ y₀ ∈ localRegion C SD (A ∩ Metric.closedBall 0 B) b' ∧
       localRegion C SD (A ∩ Metric.closedBall 0 B) b' ⊆ translated φ y₀ '' C.V₀ ∧
-      ∃ (Q Dg : ℕ) (c : ℝ → ℕ → ℝ), 0 < Q ∧
-        CutoffExpansion Q Dg (fun N => ∫ x in localRegion C SD (A ∩ Metric.closedBall 0 B) b',
-          F x * Real.exp (-N * K x)) c := by
+      ∀ D : LocalisationData (Fin d → ℝ),
+        D.μ = volume.restrict (localRegion C SD (A ∩ Metric.closedBall 0 B) b') →
+        (∀ w ∈ C.V₀, D.phase (translated φ y₀ w) = K (translated φ y₀ w)) →
+        (∀ w ∈ C.V₀, D.obs (translated φ y₀ w) = F (translated φ y₀ w)) →
+        Nonempty (CoreTiling D β) := by
   classical
   -- the joint series at the tangential origin, for every sign pattern
   set b₂ : ℝ := min b₁ SD.b with hb₂
@@ -301,24 +302,14 @@ theorem chart_local_cutoffExpansion (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Anal
   have hΩc : IsCompact Ω := isCompact_localRegion C SD hφ hA'c hA'A hb'b₁ hb'SD
   have hΩm : MeasurableSet Ω := hΩc.isClosed.measurableSet
   have hzS : zBox C.σ A' b' ⊆ stripImage C SD := zBox_subset_stripImage C SD hA'A hb'b₁ hb'SD
-  have hΩmem : ∀ x ∈ Ω, ∃ w ∈ C.V₀, x = translated φ y₀ w := by
-    rintro x ⟨ζ, hζ, rfl⟩
-    exact ⟨SD.inv ζ, inv_mem_V₀ C SD (hzS hζ), rfl⟩
-  have hFc : ContinuousOn F Ω := by
-    intro x hx
-    obtain ⟨w, hw, rfl⟩ := hΩmem x hx
-    exact (hF w hw).continuousAt.continuousWithinAt
-  let D : LocalisationData (Fin d → ℝ) :=
-    ⟨volume.restrict Ω, K, F, hKm,
-      ae_restrict_of_forall_mem hΩm fun x hx => by
-        obtain ⟨w, hw, rfl⟩ := hΩmem x hx
-        exact hK0 w hw,
-      hFc.integrableOn_compact hΩc, 1, one_pos⟩
+  refine ⟨B, b', hBpos, hb'pos, hΩc, mem_localRegion_zero C SD h0' h0 hb₁.le hb'pos.le,
+    localRegion_subset C SD hA'A hb'b₁ hb'SD, ?_⟩
+  intro D hμ hphase hobs
   -- the orthant charts
   have hX : ∀ s : Fin (C.n + 1) → Bool, ∃ X : SplitBoxChart C.σ D A' b' β,
       X.Ψ = orthantChart C SD s ∧ X.h = (fun j => h (nIdx C.σ j)) ∧ X.k = C.k ∧
         X.jac = orthantJac C SD s := fun s =>
-    exists_splitBoxChart_orthant C SD hβ hφ hinj (D := D) (fun _ _ => rfl) (fun _ _ => rfl)
+    exists_splitBoxChart_orthant C SD hβ hφ hinj (D := D) hphase hobs
       hA'c hA'A hb'pos hb'b₁ hb'SD (min_le_left _ _) hBpos hAB s (hPR s) (hρR s) hBρ hB1
   choose X hX using hX
   -- the pieces
@@ -357,7 +348,7 @@ theorem chart_local_cutoffExpansion (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Anal
     exact (analyticAt_stripChart C SD hφ (hzS hζ.1)).differentiableAt.differentiableWithinAt
   -- the core tiling
   let T : CoreTiling D β :=
-    { Ω := Ω, μ_eq := rfl, M := Fintype.card (Fin (C.n + 1) → Bool), piece := piece,
+    { Ω := Ω, μ_eq := hμ, M := Fintype.card (Fin (C.n + 1) → Bool), piece := piece,
       image_subset := fun I => by
         rw [himage]
         refine image_mono ?_
@@ -369,17 +360,54 @@ theorem chart_local_cutoffExpansion (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Anal
           image_empty, measure_empty],
       δ₀ := 1, δ₀_pos := one_pos,
       gap := by
-        change ∀ᵐ z ∂(volume.restrict Ω), z ∉ ⋃ I, (piece I).image → (1 : ℝ) ≤ K z
-        rw [ae_iff, Measure.restrict_apply' hΩm]
+        rw [hμ, ae_iff, Measure.restrict_apply' hΩm]
         refine measure_mono_null ?_ hnull
         intro z hz
         rw [mem_inter_iff, mem_ofPred_eq, Classical.not_imp] at hz
         refine localRegion_sdiff_subset C SD ⟨hz.2, ?_⟩
         rw [← hunion]
         exact hz.1.1 }
+  exact ⟨T⟩
+
+/-- **The local chart theorem.** At a divisor point of a hironaka chart with centred chart data
+`C` and strip data `SD` (both existing by CCII and `exists_stripData`), for every analytic
+observable `F` near `φ y₀` and every compact tangential base `A ∋ 0`, some compact region
+`Ω = g(zBox σ (A ∩ B̄_B) b') ∋ φ y₀` has the full power–log cutoff expansion of
+`∫_Ω F e^{−NK}`, with no series hypothesis. -/
+theorem chart_local_cutoffExpansion (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, AnalyticAt ℝ φ (y + y₀))
+    (hinj : ∀ w₁ ∈ C.V₀, ∀ w₂ ∈ C.V₀, monomialEval (w₁ + y₀) h ≠ 0 →
+      monomialEval (w₂ + y₀) h ≠ 0 → φ (w₁ + y₀) = φ (w₂ + y₀) → w₁ = w₂)
+    (hKm : Measurable K) (hK0 : ∀ w ∈ C.V₀, 0 ≤ K (translated φ y₀ w)) {F : (Fin d → ℝ) → ℝ}
+    (hF : ∀ w ∈ C.V₀, AnalyticAt ℝ F (translated φ y₀ w)) (hA : IsCompact A)
+    (h0 : (0 : Fin C.t → ℝ) ∈ A) (hb₁ : 0 < b₁) :
+    ∃ (B b' : ℝ), 0 < B ∧ 0 < b' ∧
+      IsCompact (localRegion C SD (A ∩ Metric.closedBall 0 B) b') ∧
+      φ y₀ ∈ localRegion C SD (A ∩ Metric.closedBall 0 B) b' ∧
+      localRegion C SD (A ∩ Metric.closedBall 0 B) b' ⊆ translated φ y₀ '' C.V₀ ∧
+      ∃ (Q Dg : ℕ) (c : ℝ → ℕ → ℝ), 0 < Q ∧
+        CutoffExpansion Q Dg (fun N => ∫ x in localRegion C SD (A ∩ Metric.closedBall 0 B) b',
+          F x * Real.exp (-N * K x)) c := by
+  obtain ⟨B, b', hB, hb', hΩc, hmem, hsub, hT⟩ :=
+    chart_local_coreTiling C SD hβ hφ hinj hF hA h0 hb₁
+  set Ω := localRegion C SD (A ∩ Metric.closedBall 0 B) b' with hΩ
+  have hΩm : MeasurableSet Ω := hΩc.isClosed.measurableSet
+  have hΩmem : ∀ x ∈ Ω, ∃ w ∈ C.V₀, x = translated φ y₀ w := by
+    intro x hx
+    obtain ⟨w, hw, rfl⟩ := hsub hx
+    exact ⟨w, hw, rfl⟩
+  have hFc : ContinuousOn F Ω := by
+    intro x hx
+    obtain ⟨w, hw, rfl⟩ := hΩmem x hx
+    exact (hF w hw).continuousAt.continuousWithinAt
+  let D : LocalisationData (Fin d → ℝ) :=
+    ⟨volume.restrict Ω, K, F, hKm,
+      ae_restrict_of_forall_mem hΩm fun x hx => by
+        obtain ⟨w, hw, rfl⟩ := hΩmem x hx
+        exact hK0 w hw,
+      hFc.integrableOn_compact hΩc, 1, one_pos⟩
+  obtain ⟨T⟩ := hT D rfl (fun _ _ => rfl) (fun _ _ => rfl)
   obtain ⟨Q, Dg, c, hQ, hc⟩ := T.cutoffExpansion hβ
-  exact ⟨B, b', hBpos, hb'pos, hΩc, mem_localRegion_zero C SD h0' h0 hb₁.le hb'pos.le,
-    localRegion_subset C SD hA'A hb'b₁ hb'SD, Q, Dg, c, hQ, hc⟩
+  exact ⟨B, b', hB, hb', hΩc, hmem, hsub, Q, Dg, c, hQ, hc⟩
 
 /-! ### The theorem at a divisor point of a hironaka chart -/
 
