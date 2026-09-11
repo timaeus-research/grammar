@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 494 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 495 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CXCI | **Monomial coefficients of a real power series**: `p n (u,…,u) = ∑_{|γ|=n} c_γ u^γ`, the dimension-loss ℓ¹ estimate `∑_{|γ|=n}|c_γ| ≤ (card ι)^n‖p n‖`, absolute convergence on the cube for `card ι·b < ρ < radius`, and the data-space element of an analytic amplitude with `evalF = f` on the box | `Grammar/MonomialCoefficients.lean` (`monoCoeff`, `sum_monoCoeff_mul_mono`, `sum_abs_monoCoeff_le`, `summable_monoFamily_mul_pow`, `hasSum_monoFamily_mul_mono`, `amplitudeDatum`, `evalF_toEta_amplitudeDatum`) |
 | CXC | **Exact-monomial tiling**: a box with the exact monomial phase tiles, up to a positive phase gap, into finitely many disjoint monomial cores (one tangential-monomial rescaling each, exact phase `∏_{j∈S} w_j^{2k_j}` on a product set), by one induction with the weighted-product invariant | `Grammar/MonomialTiling.lean` (`MonomialCore`, `coreMap`, `normalPhase_eq_prod_coreMap`, `exists_absorption`, `exists_monomialTiling`) |
 | CLXXXIX | **Compact-strip normalisation**: the unit-removal rescaling is injective on a strip over a compact base by fibrewise monotonicity, with positive Jacobian `ρ + y_i∂_iρ`, open image containing a cylinder of positive height, and analytic inverse | `Grammar/StripNormalisation.lean` (`fibreMap`, `hasFDerivAt_rescale`, `det_rescaleDerivAt`, `exists_stripNormalisation`) |
 | CLXXXVIII | **Parity and sign**: on a nonnegative monomial chart the coordinates vanishing at the centre carry even exponents, and absorbing the others into the unit gives `K = u'·∏ y_j^{2k_j}` with `u' > 0` analytic near the centre | `Grammar/MonomialParity.lean` (`even_exponent_of_nonneg`, `reducedUnit_pos`, `exists_even_positive_form`) |

@@ -492,3 +492,4 @@ import Grammar.MonomialUnitRemoval
 import Grammar.MonomialParity
 import Grammar.StripNormalisation
 import Grammar.MonomialTiling
+import Grammar.MonomialCoefficients
