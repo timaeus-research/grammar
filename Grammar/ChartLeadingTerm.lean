@@ -276,6 +276,21 @@ theorem orthantAmp_pos (hβ : 0 < β) {F : (Fin d → ℝ) → ℝ} (s : Fin (C.
   exact mul_pos (orthantJacFun_pos C SD hβ s hdom)
     (hF _ (orthantChart_mem_localRegion C SD s hv hu))
 
+/-- **The face integral of the orthant chart `s`**: the tangential integral over `A'` of the face
+constant times the integral over the unit box of the orthant amplitude at the scaled face point,
+against the residual weight on the nonminimising normal coordinates. -/
+noncomputable def orthantFaceIntegral (s : Fin (C.n + 1) → Bool) (F : (Fin d → ℝ) → ℝ)
+    (A' : Set (Fin C.t → ℝ)) (b' : ℝ) : ℝ :=
+  ∫ v in A', faceLeadConst C.hN C.k C.lam β * ∫ u in unitBox (C.n + 1),
+    orthantAmp C SD s F (v, b' • faceProj C.hN C.k C.lam u) * residualWeight C.hN C.k C.lam u
+
+/-- **The local leading coefficient**: the sum over the `2^{n+1}` orthants of the box-side scaling
+factor times the orthant face integral. -/
+noncomputable def localLeadingCoeff (F : (Fin d → ℝ) → ℝ) (A' : Set (Fin C.t → ℝ)) (b' : ℝ) :
+    ℝ :=
+  ∑ s : Fin (C.n + 1) → Bool, b' ^ (∑ j, C.hN j + (C.n + 1)) * (b' ^ (2 * ∑ j, C.k j)) ^ (-C.lam) *
+    orthantFaceIntegral C SD s F A' b'
+
 /-- **The identified leading term of the local chart theorem.** Under the hypotheses of the local
 chart theorem, with `F > 0` on an open `U' ∋ φ y₀` and a tangential base of positive volume near
 the origin, the region `Ω` can be taken inside `U'` and
@@ -294,10 +309,11 @@ theorem chart_local_leading_term (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Analyti
       φ y₀ ∈ localRegion C SD (A ∩ Metric.closedBall 0 B) b' ∧
       localRegion C SD (A ∩ Metric.closedBall 0 B) b' ⊆ translated φ y₀ '' C.V₀ ∧
       localRegion C SD (A ∩ Metric.closedBall 0 B) b' ⊆ U' ∧
-      ∃ c : ℝ, 0 < c ∧
+      0 < localLeadingCoeff C SD F (A ∩ Metric.closedBall 0 B) b' ∧
         (fun N => ∫ x in localRegion C SD (A ∩ Metric.closedBall 0 B) b',
           F x * Real.exp (-N * K x)) ~[atTop]
-        fun N => c * (N ^ (-C.lam) * Real.log N ^ (C.mult - 1)) := by
+        fun N => localLeadingCoeff C SD F (A ∩ Metric.closedBall 0 B) b' *
+          (N ^ (-C.lam) * Real.log N ^ (C.mult - 1)) := by
   classical
   obtain ⟨B, b', hB, hb', hb'b₁, hb'SD, hΩc, hmem, hsub, hΩU', hX⟩ :=
     exists_orthantSplitBoxCharts C SD hβ hφ hinj hF hA h0 hb₁ hU' hy₀U'
@@ -337,6 +353,45 @@ theorem chart_local_leading_term (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Analyti
   have hm : ∀ I, multCount (ratioExp (Ad.h I) (Ad.k I)) C.lam = C.mult := fun I => by
     rw [hAh, hAk]
     rfl
+  -- the amplitude of a piece is the orthant amplitude on the closed box
+  have hamp : ∀ (s : Fin (C.n + 1) → Bool) (v : A'), ∀ w ∈ closedCube (C.n + 1),
+      dataAmplitude ((X s).amp v) w = orthantAmp C SD s F (v.1, b' • w) := by
+    intro s v w hw
+    rw [dataAmplitude_eq_of_mem _ hw, ← scale_toEta hb'.ne', evalF_scale]
+    refine (hX s).2.2.2.2 v (b' • w) fun j => ?_
+    rw [Pi.smul_apply, smul_eq_mul, abs_mul, abs_of_pos hb']
+    have := hw j (mem_univ j)
+    rw [mem_Icc] at this
+    rw [abs_of_nonneg this.1]
+    exact mul_le_of_le_one_right hb'.le this.2
+  -- the assembled coefficient is the local leading coefficient
+  have hgeq : gCoeff Ad.ν Ad.h Ad.k β Ad.b Ad.x C.lam (C.mult - 1) =
+      localLeadingCoeff C SD F A' b' := by
+    rw [gCoeff_uniform_leading Ad hβ hmin hatt hm]
+    unfold localLeadingCoeff
+    rw [← Equiv.sum_comp (signIdx C).symm]
+    refine Finset.sum_congr rfl fun I _ => ?_
+    set s := (signIdx C).symm I with hs
+    change b' ^ (∑ i, (X s).h i + (C.n + 1)) * (b' ^ (2 * ∑ i, (X s).k i)) ^ (-C.lam) *
+      ∫ v : A', amplitudeCoeff (X s).h (X s).k C.lam β (dataAmplitude ((X s).amp v))
+        ∂(Measure.comap Subtype.val volume) = _
+    have hh : (X s).h = C.hN := (hX s).2.1
+    rw [hh, (hX s).2.2.1]
+    have hpt : ∀ v : A', amplitudeCoeff C.hN C.k C.lam β (dataAmplitude ((X s).amp v)) =
+        faceLeadConst C.hN C.k C.lam β * ∫ u in unitBox (C.n + 1),
+          orthantAmp C SD s F (v.1, b' • faceProj C.hN C.k C.lam u) *
+            residualWeight C.hN C.k C.lam u := by
+      intro v
+      unfold amplitudeCoeff
+      congr 1
+      refine setIntegral_congr_fun (measurableSet_unitBox _) fun u hu => ?_
+      rw [hamp s v _ (faceProj_mapsTo _ _ _ hu)]
+    have hint : (∫ v : A', amplitudeCoeff C.hN C.k C.lam β (dataAmplitude ((X s).amp v))
+        ∂(Measure.comap Subtype.val volume)) = orthantFaceIntegral C SD s F A' b' := by
+      unfold orthantFaceIntegral
+      rw [← integral_subtype_comap hA'c.isClosed.measurableSet]
+      exact integral_congr_ae (Eventually.of_forall fun v => hpt v)
+    rw [hint]
   -- positivity of the assembled leading coefficient
   have hFΩ : ∀ x ∈ Ω, 0 < F x := fun x hx => hFU' x (hΩU' hx)
   have hν : ∀ I, Ad.ν I ≠ 0 := by
@@ -356,21 +411,11 @@ theorem chart_local_leading_term (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Analyti
     refine tanCoeff_population_pos (Ad.ν I) C.n (Ad.h I) (Ad.k I) (Ad.k_pos I) β hβ (Ad.x I) hx
       (hmin I) (hatt I) ?_ (hν I)
     intro v
-    -- the amplitude of the piece is the orthant amplitude, positive on the closed box
+    -- the amplitude of the piece is positive on the closed box
     set s := (signIdx C).symm I with hs
-    have hamp : ∀ w ∈ closedCube (C.n + 1),
-        dataAmplitude ((X s).amp v) w = orthantAmp C SD s F (v.1, b' • w) := by
-      intro w hw
-      rw [dataAmplitude_eq_of_mem _ hw, ← scale_toEta hb'.ne', evalF_scale]
-      refine (hX s).2.2.2.2 v (b' • w) fun j => ?_
-      rw [Pi.smul_apply, smul_eq_mul, abs_mul, abs_of_pos hb']
-      have := hw j (mem_univ j)
-      rw [mem_Icc] at this
-      rw [abs_of_nonneg this.1]
-      exact mul_le_of_le_one_right hb'.le this.2
     have hampos : ∀ w ∈ closedCube (C.n + 1), 0 < dataAmplitude ((X s).amp v) w := by
       intro w hw
-      rw [hamp w hw]
+      rw [hamp s v w hw]
       refine orthantAmp_pos C SD hβ s hA'A hb'b₁ hb'SD hFΩ v.2 fun j => ?_
       rw [Pi.smul_apply, smul_eq_mul, abs_mul, abs_of_pos hb']
       have := hw j (mem_univ j)
@@ -389,8 +434,8 @@ theorem chart_local_leading_term (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Analyti
   have hgpos : 0 < gCoeff Ad.ν Ad.h Ad.k β Ad.b Ad.x C.lam (C.mult - 1) := by
     rw [gCoeff_uniform_leading Ad hβ hmin hatt hm]
     exact Finset.sum_pos (fun I _ => hpos I) ⟨(signIdx C) (fun _ => true), Finset.mem_univ _⟩
-  refine ⟨B, b', hB, hb', hΩc, hmem, hsub, hΩU',
-    gCoeff Ad.ν Ad.h Ad.k β Ad.b Ad.x C.lam (C.mult - 1), hgpos, ?_⟩
+  refine ⟨B, b', hB, hb', hΩc, hmem, hsub, hΩU', hgeq ▸ hgpos, ?_⟩
+  rw [← hgeq]
   exact Ad.isEquivalent_uniform hβ hmin hatt hm hgpos.ne'
 
 /-- **The identified leading term at a divisor point of a hironaka chart.** Under the hypotheses of
@@ -439,11 +484,11 @@ theorem IsMonomialChart.local_leading_term {dom : Set (Fin d → ℝ)} {e : Fin 
     refine measure_mono fun v hv => ⟨?_, ?_⟩
     · exact Metric.closedBall_subset_closedBall (min_le_left _ _) hv
     · exact Metric.closedBall_subset_closedBall (min_le_right _ _) hv
-  obtain ⟨B, b', -, -, hΩc, hmem, hsub, -, c, hc0, hequiv⟩ :=
+  obtain ⟨B, b', -, -, hΩc, hmem, hsub, -, hc0, hequiv⟩ :=
     chart_local_leading_term C SD one_pos hφ hinj hKm (fun w hw => hK0 _ (hC w hw).2)
       (fun w hw => hF _ (hC w hw).2) (isCompact_closedBall _ _) (by simp [hA, hε'pos.le]) hAvol
       hε'pos hU'o ⟨hy₀U, hFpos⟩ (fun x hx => hx.2)
-  refine ⟨C, _, hΩc, hmem, ?_, ?_, c, hc0, hequiv⟩
+  refine ⟨C, _, hΩc, hmem, ?_, ?_, _, hc0, hequiv⟩
   · intro x hx
     obtain ⟨w, hw, rfl⟩ := hsub hx
     exact ⟨w + y₀, (hC w hw).1, rfl⟩
