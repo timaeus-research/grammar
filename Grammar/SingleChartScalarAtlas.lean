@@ -212,13 +212,44 @@ noncomputable def pieceAmp (z : Fin (d - (I.card - 1 + 1)) → ℝ) (n : Fin (I.
       F ((R.chart i).φ (planeSplit (stratumSplit I hne) (z, n)))
 
 include hε hD hI hK0 hW hsub hu hu0 hKu hv hdet hind hT' hρm hρb hdom hρ hFc hpc hFm hF hK hy₀ in
-/-- **The scalar-unit atlas of a chart–stratum piece from monomial-chart data**: all cells at the
-pair `(min_a (h_{ν(a)}+1)/(2k_a), #minimisers − 1)` with `2k_a = e_{ν(a)}`. -/
-theorem exists_pieceAtlas_of_chart :
+/-- **The scalar-unit atlas of a chart–stratum piece from monomial-chart data, with its cells
+exposed**: the atlas is the orthant atlas of the cell built on the compact-base piece density
+`chartPieceDensity`, with a continuous phase unit `q'` equal to the scalar phase on the base and a
+continuous amplitude `A'` equal to `pieceAmp` on base × closed ball; all cells at the pair
+`(min_a (h_{ν(a)}+1)/(2k_a), #minimisers − 1)` with `2k_a = e_{ν(a)}`. -/
+theorem exists_pieceAtlas_of_chart_data :
     ∃ At : FiniteScalarUnitAtlas (d - (I.card - 1 + 1)) (R.pieceIntegral D ε i I F K p),
       (∀ σ, (At.cell σ).lam = minRatio (normalExp I hne h) (normalHalfExp I hne e)) ∧
-      ∀ σ, (At.cell σ).mult = multCount (ratioExp (normalExp I hne h) (normalHalfExp I hne e))
-        (minRatio (normalExp I hne h) (normalHalfExp I hne e)) := by
+      (∀ σ, (At.cell σ).mult = multCount (ratioExp (normalExp I hne h) (normalHalfExp I hne e))
+        (minRatio (normalExp I hne h) (normalHalfExp I hne e))) ∧
+      ∃ (q' : (Fin (d - (I.card - 1 + 1)) → ℝ) → ℝ)
+        (A' : (Fin (d - (I.card - 1 + 1)) → ℝ) → (Fin (I.card - 1 + 1) → ℝ) → ℝ)
+        (hq'c : Continuous q')
+        (hq'pos : ∀ z ∈ (R.chartPieceDensity i D hε I hne e hD hI K p T' hT' ρT hdom hρ).base,
+          0 < q' z)
+        (hA'c : Continuous (Function.uncurry A'))
+        (hk : ∀ a, 0 < normalHalfExp I hne e a)
+        (hbase : IsCompact (R.chartPieceDensity i D hε I hne e hD hI K p T' hT' ρT hdom hρ).base)
+        (hβ : IntegrableOn (R.chartPieceDensity i D hε I hne e hD hI K p T' hT' ρT hdom hρ).beta
+          (R.chartPieceDensity i D hε I hne e hD hI K p T' hT' ρT hdom hρ).base)
+        (hamp' : ∀ z ∈ (R.chartPieceDensity i D hε I hne e hD hI K p T' hT' ρT hdom hρ).base,
+          ∀ n ∈ Metric.ball (0 : Fin (I.card - 1 + 1) → ℝ) ε,
+            (R.chartPieceDensity i D hε I hne e hD hI K p T' hT' ρT hdom hρ).amp z n *
+              F ((R.chart i).φ (planeSplit (stratumSplit I hne) (z, n))) =
+              A' z n * ∏ a, |n a| ^ normalExp I hne h a)
+        (hphase' : ∀ z ∈ (R.chartPieceDensity i D hε I hne e hD hI K p T' hT' ρT hdom hρ).base,
+          ∀ n ∈ Metric.ball (0 : Fin (I.card - 1 + 1) → ℝ) ε,
+            K ((R.chart i).Φ (planeSplit (stratumSplit I hne) (z, n))) =
+              q' z * ∏ a, n a ^ (2 * normalHalfExp I hne e a)),
+        (∀ z ∈ (R.chartPieceDensity i D hε I hne e hD hI K p T' hT' ρT hdom hρ).base,
+          q' z = scalarPhase I hne u e z) ∧
+        (∀ z ∈ (R.chartPieceDensity i D hε I hne e hD hI K p T' hT' ρT hdom hρ).base,
+          ∀ n ∈ Metric.closedBall (0 : Fin (I.card - 1 + 1) → ℝ) ε,
+            A' z n = R.pieceAmp i I hne h v (F := F) (p := p) z n) ∧
+        At = R.pieceAtlas i D hε I hne
+          (R.chartPieceDensity i D hε I hne e hD hI K p T' hT' ρT hdom hρ) hbase hβ rfl
+          (normalExp I hne h) (normalHalfExp I hne e) hk q' hq'c hq'pos A' hA'c hamp' hphase' hFm
+          hF hK hK0 := by
   -- the adapted density with compact base
   set Ad := R.chartPieceDensity i D hε I hne e hD hI K p T' hT' ρT hdom hρ with hAd
   have hbase : IsCompact Ad.base :=
@@ -343,7 +374,20 @@ theorem exists_pieceAtlas_of_chart :
     exact hqpos z hz
   exact ⟨R.pieceAtlas i D hε I hne Ad hbase hβ hbox (normalExp I hne h) (normalHalfExp I hne e) hk
     q' hq'c hq'pos (Function.curry A'') hA'c hamp' hphase' hFm hF hK hK0, fun _ => rfl,
-    fun _ => rfl⟩
+    fun _ => rfl, q', Function.curry A'', hq'c, hq'pos, hA'c, hk, hbase, hβ, hamp', hphase', hq'eq,
+    fun z hz n hn => hA''eq (z, n) ⟨hz, hn⟩, rfl⟩
+
+include hε hD hI hK0 hW hsub hu hu0 hKu hv hdet hind hT' hρm hρb hdom hρ hFc hpc hFm hF hK hy₀ in
+/-- **The scalar-unit atlas of a chart–stratum piece from monomial-chart data**: all cells at the
+pair `(min_a (h_{ν(a)}+1)/(2k_a), #minimisers − 1)` with `2k_a = e_{ν(a)}`. -/
+theorem exists_pieceAtlas_of_chart :
+    ∃ At : FiniteScalarUnitAtlas (d - (I.card - 1 + 1)) (R.pieceIntegral D ε i I F K p),
+      (∀ σ, (At.cell σ).lam = minRatio (normalExp I hne h) (normalHalfExp I hne e)) ∧
+      ∀ σ, (At.cell σ).mult = multCount (ratioExp (normalExp I hne h) (normalHalfExp I hne e))
+        (minRatio (normalExp I hne h) (normalHalfExp I hne e)) := by
+  obtain ⟨At, h1, h2, -⟩ := R.exists_pieceAtlas_of_chart_data i D hε I hne e h hD hI hK0 hW hsub u v
+    hu hu0 hKu hv hdet hind T' hT' ρT hρm hρb hdom hρ hFc hpc hFm hF hK hy₀
+  exact ⟨At, h1, h2⟩
 
 end ResolutionCover
 
