@@ -321,13 +321,15 @@ noncomputable def cubeLocalisationData {d : ℕ} (K F : (Fin d → ℝ) → ℝ)
 
 /-- **The compatible divisor localisation statement in dimension `d`** (Astra #67 unit 4): for
 every real-analytic `K ≥ 0` with a zero `w` at which it is not identically zero and every
-continuous observable, the Laplace integrals on all small closed cubes around `w` admit analytic
+real-analytic observable (the amplitude clause of a core presentation is a convergent power series
+in the normal variables, which a merely continuous observable cannot supply), the Laplace
+integrals on all small closed cubes around `w` admit analytic
 core decompositions at every temperature `β > 0`. This is the geometric existence theorem the
 programme must prove; nothing here asserts it. -/
 def CompatibleDivisorLocalisation (d : ℕ) : Prop :=
   ∀ {U : Set (Fin d → ℝ)}, IsOpen U → ∀ {K : (Fin d → ℝ) → ℝ}, AnalyticOnNhd ℝ K U →
     ∀ {w : Fin d → ℝ}, w ∈ U → K w = 0 → (¬ ∀ᶠ x in 𝓝 w, K x = 0) → (∀ x, 0 ≤ K x) →
-    ∀ (hK : Measurable K) (hK0 : ∀ x, 0 ≤ K x) {F : (Fin d → ℝ) → ℝ}, Continuous F →
+    ∀ (hK : Measurable K) (hK0 : ∀ x, 0 ≤ K x) {F : (Fin d → ℝ) → ℝ}, AnalyticOnNhd ℝ F U →
     ∀ {β : ℝ}, 0 < β → ∃ r₀ : ℝ, 0 < r₀ ∧ ∀ r : ℝ, 0 < r → r ≤ r₀ →
       ∀ (hFr : Integrable F (volume.restrict (Metric.closedBall w r))) (δ : ℝ) (hδ : 0 < δ),
         HasAnalyticCoreDecomposition (cubeLocalisationData K F hK hK0 w r hFr δ hδ) β
