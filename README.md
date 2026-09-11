@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 520 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 521 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CCXIX | **The per-stratum formula on the whole tube of a compact stratum**: finitely many graph pieces cover the stratum, the tube is disjointified over them, truncation acts on fibre germs, and `∫_U F dy = ∫_U G(proj y) dy` with `G` the piecewise contraction series with normalised fibre moments — the global coordinate-free per-stratum formula against the pushforward of Lebesgue measure | `Grammar/TubularGlobalExpansion.lean` (`integral_tube_eq_integral_globalContraction`, `exists_graphCover`, `condContractionSeries_indicator`) |
 | CCXVIII | **`eq:per_stratum_expansion_coordfree` on strucdual's tube, pushforward form**: `∫_{U'} F dy = ∫_{U'} (∑_k ⟨D^k_⊥F, 𝖬^κ_k⟩)(proj y) dy` — the tube integral equals the integral over the stratum piece, against the pushforward of Lebesgue measure through the foot, of the contraction series with the normalised fibre moments on the ambient normal spaces; no chart coordinate | `Grammar/TubularPushforward.lean` (`integral_tube_piece_eq_integral_condContraction`, `condContractionSeries`, `condTubeNormalMeasure`, `integral_foot_eq_tubeBase`) |
 | CCXVII | **`eq:tubular_expansion` coordinate-free on strucdual's tube**: the fibre measures of the pulled-back density live on the ambient normal spaces `N_x`, and `∫_{U ∩ proj⁻¹V'} F dy = ∫_z 1_W(z) ∑_k ⟨D^k_⊥F(emb z), 𝖬_k(emb z)⟩ dz` with the invariant contractions of the additive normal family — every chosen-normal-family hypothesis of the coordinate-free layer instantiated by the actual tube | `Grammar/TubularCoordFree.lean` (`integral_tube_piece_eq_tsum_normalContraction`, `normalContraction_tube`, `tubeNormalMeasure`) |
 | CCXVI | **The Taylor–moment expansion on the actual tube**: the fibre measures of the pulled-back Lebesgue density have finite moments of all orders, and for observables with fibre power series carrying them, `∫_{U ∩ proj⁻¹V'} F dy = ∫_z ∑_k (k!)⁻¹ ⟨D^k(F∘ψ_z)(0), 𝖬_k(z)⟩ dz` (moment and multi-index forms) — the paper's `eq:tubular_expansion` on strucdual's tube; the zero-section Jacobian `g(z,0) = |det([D emb, J^T] ∘ L⁻¹)|` | `Grammar/TubularExpansion.lean` (`integral_tube_piece_eq_tsum_multiIndex`, `integral_tube_piece_eq_tsum_moment`, `integrable_norm_pow_tubeFibre`, `tubeJac_zero`) |

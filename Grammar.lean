@@ -518,3 +518,4 @@ import Grammar.TubularFibreIntegration
 import Grammar.TubularExpansion
 import Grammar.TubularCoordFree
 import Grammar.TubularPushforward
+import Grammar.TubularGlobalExpansion

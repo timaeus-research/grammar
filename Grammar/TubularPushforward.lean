@@ -207,6 +207,102 @@ theorem condContractionSeries_emb {F : (Fin d → ℝ) → ℝ}
     (fun k => integrable_norm_pow_tubeFibre T C z k) (hdom z hz), fibreIntegral,
     integral_fibreMeasure volume (measurable_tubeDensity T C) (tubeDensity_nonneg T C) z]
 
+/-- The normalised fibre integral `C(z)⁻¹ ∫ F∘ψ_z dη_z` as a function of `z`. -/
+noncomputable def normFibreIntegral (F : (Fin d → ℝ) → ℝ) (z : Fin (d - r) → ℝ) : ℝ :=
+  (fibreMass volume (tubeDensity T C) z).toReal⁻¹ * fibreIntegral T C F z
+
+theorem aestronglyMeasurable_normFibreIntegral {F : (Fin d → ℝ) → ℝ}
+    (hF : IntegrableOn F (T.U ∩ T.proj ⁻¹' C.V')) :
+    AEStronglyMeasurable (normFibreIntegral T C F) volume :=
+  ((measurable_fibreMass_tube T C).ennreal_toReal.inv.aestronglyMeasurable).mul
+    (integrable_fibreIntegral T C hF).aestronglyMeasurable
+
+/-- `tubeDensity(z,n) · (C(z)⁻¹ ∫ F∘ψ_z dη_z)` is integrable on the product space. -/
+theorem integrable_tubeDensity_mul_normFibreIntegral {F : (Fin d → ℝ) → ℝ}
+    (hF : IntegrableOn F (T.U ∩ T.proj ⁻¹' C.V')) :
+    Integrable (fun p : (Fin (d - r) → ℝ) × (Fin r → ℝ) =>
+      tubeDensity T C p * normFibreIntegral T C F p.1) := by
+  have hfi : Integrable (fibreIntegral T C F) := integrable_fibreIntegral T C hF
+  rw [Measure.volume_eq_prod]
+  refine (integrable_prod_iff ?_).2 ⟨?_, ?_⟩
+  · rw [← Measure.volume_eq_prod]
+    exact (measurable_tubeDensity T C).aestronglyMeasurable.mul
+      ((aestronglyMeasurable_normFibreIntegral T C hF).comp_quasiMeasurePreserving
+        Measure.quasiMeasurePreserving_fst)
+  · exact Eventually.of_forall fun z =>
+      (integrable_tubeDensity_fibre T C z).mul_const (normFibreIntegral T C F z)
+  · refine (hfi.norm).congr (Eventually.of_forall fun z => ?_)
+    simp only
+    have : ∀ n, ‖tubeDensity T C (z, n) * normFibreIntegral T C F z‖ =
+        tubeDensity T C (z, n) * ‖normFibreIntegral T C F z‖ := fun n => by
+      rw [norm_mul, Real.norm_of_nonneg (tubeDensity_nonneg T C _)]
+    simp_rw [this]
+    rw [integral_mul_const, integral_tubeDensity_fibre]
+    by_cases h0 : fibreMass volume (tubeDensity T C) z = 0
+    · rw [fibreIntegral_eq_zero_of_mass_zero T C F h0]
+      simp [normFibreIntegral, h0]
+    · have hne : (fibreMass volume (tubeDensity T C) z).toReal ≠ 0 :=
+        ENNReal.toReal_ne_zero.2 ⟨h0, fibreMass_tube_ne_top T C z⟩
+      rw [normFibreIntegral, norm_mul, Real.norm_eq_abs, Real.norm_eq_abs, abs_inv,
+        ENNReal.abs_toReal, ← mul_assoc, mul_inv_cancel₀ hne, one_mul]
+
+/-- The fibre integral against the fibre measure is the mass times the normalised fibre
+integral. -/
+theorem integral_fibreMeasure_eq_mass_mul_normFibreIntegral (F : (Fin d → ℝ) → ℝ)
+    (z : Fin (d - r) → ℝ) :
+    ∫ n, F (tubeChart C (z, n)) ∂fibreMeasure volume (tubeDensity T C) z =
+      (fibreMass volume (tubeDensity T C) z).toReal * normFibreIntegral T C F z := by
+  rw [integral_fibreMeasure volume (measurable_tubeDensity T C) (tubeDensity_nonneg T C) z]
+  change fibreIntegral T C F z = _
+  by_cases h0 : fibreMass volume (tubeDensity T C) z = 0
+  · rw [fibreIntegral_eq_zero_of_mass_zero T C F h0]
+    simp [h0]
+  · have hne : (fibreMass volume (tubeDensity T C) z).toReal ≠ 0 :=
+      ENNReal.toReal_ne_zero.2 ⟨h0, fibreMass_tube_ne_top T C z⟩
+    rw [normFibreIntegral, ← mul_assoc, mul_inv_cancel₀ hne, one_mul]
+
+/-- On the certified domain the contraction series of the foot is the normalised fibre
+integral of the base coordinate; off it both sides are annihilated by the density. -/
+theorem tubeDensity_mul_condContractionSeries {F : (Fin d → ℝ) → ℝ}
+    {q : (Fin (d - r) → ℝ) → FormalMultilinearSeries ℝ (Fin r → ℝ) ℝ}
+    {Rad : (Fin (d - r) → ℝ) → ℝ≥0∞}
+    (hq : ∀ z ∈ C.W, HasFPowerSeriesOnBall (fun n => F (tubeChart C (z, n))) (q z) 0 (Rad z))
+    (hη : ∀ z ∈ C.W, ∀ᵐ n ∂fibreMeasure volume (tubeDensity T C) z,
+      n ∈ Metric.eball (0 : Fin r → ℝ) (Rad z))
+    (hdom : ∀ z ∈ C.W, Summable fun k =>
+      ‖q z k‖ * ∫ n, ‖n‖ ^ k ∂fibreMeasure volume (tubeDensity T C) z)
+    (p : (Fin (d - r) → ℝ) × (Fin r → ℝ)) :
+    tubeDensity T C p * condContractionSeries T C F (T.proj (tubeChart C p)) =
+      tubeDensity T C p * normFibreIntegral T C F p.1 := by
+  by_cases hp : p ∈ tubeChartDom T C
+  · rw [(tubeChart_mem T C hp).2.1, condContractionSeries_emb T C hq hη hdom hp.1]
+    rfl
+  · simp [tubeDensity, indicator_of_notMem hp]
+
+/-- **The contraction series of the foot is integrable on the tube piece.** -/
+theorem integrableOn_condContractionSeries_foot {F : (Fin d → ℝ) → ℝ}
+    (hF : IntegrableOn F (T.U ∩ T.proj ⁻¹' C.V'))
+    {q : (Fin (d - r) → ℝ) → FormalMultilinearSeries ℝ (Fin r → ℝ) ℝ}
+    {Rad : (Fin (d - r) → ℝ) → ℝ≥0∞}
+    (hq : ∀ z ∈ C.W, HasFPowerSeriesOnBall (fun n => F (tubeChart C (z, n))) (q z) 0 (Rad z))
+    (hη : ∀ z ∈ C.W, ∀ᵐ n ∂fibreMeasure volume (tubeDensity T C) z,
+      n ∈ Metric.eball (0 : Fin r → ℝ) (Rad z))
+    (hdom : ∀ z ∈ C.W, Summable fun k =>
+      ‖q z k‖ * ∫ n, ‖n‖ ^ k ∂fibreMeasure volume (tubeDensity T C) z) :
+    IntegrableOn (fun y => condContractionSeries T C F (T.proj y)) (T.U ∩ T.proj ⁻¹' C.V') := by
+  have hΩ : MeasurableSet (tubeChartDom T C) := (isOpen_tubeChartDom T C).measurableSet
+  rw [← image_tubeChart T C, ← image_flatChart_concat C,
+    integrableOn_image_iff_integrableOn_abs_det_fderiv_smul volume
+      (C.measurableEmbedding_concat.measurableSet_image.2 hΩ)
+      (hasFDerivWithinAt_flatChart C fun p hp => hp.1) (injOn_flatChart T C subset_rfl),
+    ← C.measurePreserving_concat.integrableOn_comp_preimage C.measurableEmbedding_concat,
+    C.concat.injective.preimage_image]
+  have h := integrable_tubeDensity_mul_normFibreIntegral T C hF
+  refine (h.integrableOn.congr_fun (fun p hp => ?_) hΩ)
+  simp only [Function.comp, flatChart_concat, smul_eq_mul]
+  rw [← tubeDensity_mul_condContractionSeries T C hq hη hdom p, tubeDensity, indicator_of_mem hp]
+  rfl
+
 /-- **`eq:per_stratum_expansion_coordfree` on strucdual's tube**: for `F` integrable on the tube
 piece whose fibre restrictions have power series carrying the fibre measures and dominating their
 moments, `∫_{U'} F dy = ∫_{U'} (∑_k ⟨D^k_⊥F, 𝖬^κ_k⟩)(proj y) dy` — the integral over the stratum
@@ -223,57 +319,18 @@ theorem integral_tube_piece_eq_integral_condContraction {F : (Fin d → ℝ) →
       ‖q z k‖ * ∫ n, ‖n‖ ^ k ∂fibreMeasure volume (tubeDensity T C) z) :
     ∫ y in T.U ∩ T.proj ⁻¹' C.V', F y =
       ∫ y in T.U ∩ T.proj ⁻¹' C.V', condContractionSeries T C F (T.proj y) := by
-  set Cm : (Fin (d - r) → ℝ) → ℝ≥0∞ := fun z => fibreMass volume (tubeDensity T C) z with hCm
-  set G : (Fin (d - r) → ℝ) → ℝ := fun z => (Cm z).toReal⁻¹ * fibreIntegral T C F z with hG
-  -- the product-space integrand
-  have hpt : ∀ p : (Fin (d - r) → ℝ) × (Fin r → ℝ),
-      tubeDensity T C p * condContractionSeries T C F (T.proj (tubeChart C p)) =
-        tubeDensity T C p * G p.1 := by
-    intro p
-    by_cases hp : p ∈ tubeChartDom T C
-    · rw [(tubeChart_mem T C hp).2.1, condContractionSeries_emb T C hq hη hdom hp.1]
-    · simp [tubeDensity, indicator_of_notMem hp]
-  have hCmeas : Measurable Cm := measurable_fibreMass_tube T C
-  have hfi : Integrable (fibreIntegral T C F) := integrable_fibreIntegral T C hF
-  have hGm : AEStronglyMeasurable G volume :=
-    (hCmeas.ennreal_toReal.inv.aestronglyMeasurable).mul hfi.aestronglyMeasurable
-  have hint : Integrable (fun p : (Fin (d - r) → ℝ) × (Fin r → ℝ) => tubeDensity T C p * G p.1)
-      (volume.prod volume) := by
-    refine (integrable_prod_iff ?_).2 ⟨?_, ?_⟩
-    · rw [← Measure.volume_eq_prod]
-      exact (measurable_tubeDensity T C).aestronglyMeasurable.mul
-        (hGm.comp_quasiMeasurePreserving Measure.quasiMeasurePreserving_fst)
-    · exact Eventually.of_forall fun z => (integrable_tubeDensity_fibre T C z).mul_const (G z)
-    · refine (hfi.norm).congr (Eventually.of_forall fun z => ?_)
-      simp only
-      have : ∀ n, ‖tubeDensity T C (z, n) * G z‖ = tubeDensity T C (z, n) * ‖G z‖ := fun n => by
-        rw [norm_mul, Real.norm_of_nonneg (tubeDensity_nonneg T C _)]
-      simp_rw [this]
-      rw [integral_mul_const, integral_tubeDensity_fibre]
-      by_cases h0 : Cm z = 0
-      · rw [fibreIntegral_eq_zero_of_mass_zero T C F h0]
-        simp [hG, h0]
-      · have hne : (Cm z).toReal ≠ 0 := ENNReal.toReal_ne_zero.2 ⟨h0, fibreMass_tube_ne_top T C z⟩
-        change ‖fibreIntegral T C F z‖ = (Cm z).toReal * ‖(Cm z).toReal⁻¹ * fibreIntegral T C F z‖
-        rw [norm_mul, Real.norm_eq_abs, Real.norm_eq_abs, abs_inv, ENNReal.abs_toReal,
-          ← mul_assoc, mul_inv_cancel₀ hne, one_mul]
-  -- assemble
   have hR : ∫ y in T.U ∩ T.proj ⁻¹' C.V', condContractionSeries T C F (T.proj y) =
-      ∫ p, tubeDensity T C p * G p.1 := by
+      ∫ p, tubeDensity T C p * normFibreIntegral T C F p.1 := by
     rw [integral_tube_piece_eq_density T C]
-    exact integral_congr_ae (Eventually.of_forall hpt)
-  rw [hR, Measure.volume_eq_prod, integral_prod _ hint, integral_tube_piece_fibreMeasure T C hF]
+    exact integral_congr_ae (Eventually.of_forall (tubeDensity_mul_condContractionSeries T C hq hη
+      hdom))
+  have hint := integrable_tubeDensity_mul_normFibreIntegral T C hF
+  rw [hR, Measure.volume_eq_prod] at *
+  rw [integral_prod _ hint, integral_tube_piece_fibreMeasure T C hF]
   refine integral_congr_ae (Eventually.of_forall fun z => ?_)
   simp only
   rw [integral_mul_const, integral_tubeDensity_fibre,
-    integral_fibreMeasure volume (measurable_tubeDensity T C) (tubeDensity_nonneg T C) z]
-  change fibreIntegral T C F z = (Cm z).toReal * G z
-  by_cases h0 : Cm z = 0
-  · rw [fibreIntegral_eq_zero_of_mass_zero T C F h0]
-    simp [h0]
-  · have hne : (Cm z).toReal ≠ 0 := ENNReal.toReal_ne_zero.2 ⟨h0, fibreMass_tube_ne_top T C z⟩
-    change fibreIntegral T C F z = (Cm z).toReal * ((Cm z).toReal⁻¹ * fibreIntegral T C F z)
-    rw [← mul_assoc, mul_inv_cancel₀ hne, one_mul]
+    integral_fibreMeasure_eq_mass_mul_normFibreIntegral]
 
 end Pushforward
 
