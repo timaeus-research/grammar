@@ -533,3 +533,4 @@ import Grammar.ScalarUnitKernel
 import Grammar.SymmetricScalarUnitCells
 import Grammar.AdaptedPieceAtlas
 import Grammar.FaceCoefficient
+import Grammar.MomentKernel
