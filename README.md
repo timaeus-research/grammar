@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 509 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 510 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CCVI | **Global exponent from local leading terms (conditional on a local cover)**: for `F ≥ 0`, finitely many subregions with identified leading terms covering the region off a phase gap give `∫_R F e^{−NK} = Θ(N^{−λ_*}(log N)^{m_*−1})`, `λ_* = min λ_i`, `m_* = max{m_i : λ_i = λ_*}`, and the free energy form `−log Z = λ_* log N − (m_*−1) log log N + O(1)` | `Grammar/GlobalExponentBound.lean` (`isTheta_of_local_leading_terms`, `regionIntegral_le_sum_add_tail`, `freeEnergy_asymptotic`) |
 | CCV | **The identified leading term at a divisor point of a hironaka chart**: for `F(φ y₀) > 0`, `∫_Ω F e^{−NK} ~ c N^{−λ} (log N)^{m−1}` with `c > 0`, `λ` the minimal Mellin ratio `min_j (h_{n_j}+1)/(2k_j)` of the chart's normal exponents and `m` the number of minimisers; general-box-side population coefficients and the first-nonzero theorem for uniform core decompositions | `Grammar/ChartLeadingTerm.lean` (`IsMonomialChart.local_leading_term`, `chart_local_leading_term`, `localLeadingCoeff`, `orthantFaceIntegral`, `AnalyticCoreDecomposition.isEquivalent_uniform`, `dataBoxCoeff_population_leading_b`) |
 | CCIV | **The local theorem at a divisor point of a hironaka chart (unconditional)**: a compact region `Ω ∋ φ y₀` inside the chart image on which `∫_Ω F e^{−NK}` has the full power–log cutoff expansion, via the core tiling of the `2^{n+1}` orthant charts under the strip chart | `Grammar/ChartOrthantTiling.lean` (`IsMonomialChart.local_cutoffExpansion`, `chart_local_coreTiling`, `chart_local_cutoffExpansion`, `injOn_stripChart`, `localRegion`) |
 | CCIII | **Orthant charts of a centred hironaka chart are split box charts**: the composite of the reflection of the normal coordinates, the inverse strip normalisation and the translated chart is a split box chart with Jacobian factor `jac₀·ρ^{-h}·|det DT⁻¹|`, exact monomial phase and injectivity on the positive box | `Grammar/ChartOrthantCore.lean` (`orthantChart`, `exists_splitBoxChart_orthant`, `abs_det_fderiv_orthantChart`, `prod_abs_pow_inv_nIdx`) |
