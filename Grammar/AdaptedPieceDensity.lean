@@ -12,7 +12,8 @@ Module 1 of the adapted-density programme (`tide-log/gpt6_bigpicture_v75.md`). A
 density** for a static density `w` on a piece, relative to the coordinate splitting `planeSplit τ`
 of a stratum, is an a.e. factorisation
 `1_piece · w ∘ planeSplit τ = 1_base(z) β(z) · 1_normalBox(n) a(z, n)`
-into a measurable tangential weight `β` on a measurable base and a normal amplitude `a`
+into a tangential weight `β` on a measurable base and a normal amplitude `a` (their regularity
+is imposed by the downstream integration theorems)
 (`AdaptedProductDensity`). Against it any weighted piece integral is the iterated integral
 `∫_base β(z) ∫_normalBox a(z,n) G(planeSplit(z,n)) dn dz`
 (`AdaptedProductDensity.integral_piece_eq`),
@@ -55,7 +56,7 @@ structure AdaptedProductDensity (w : (Fin d → ℝ) → ℝ) (piece : Set (Fin 
   /-- The normal box. -/
   normalBox : Set (Fin r → ℝ)
   measurableSet_normalBox : MeasurableSet normalBox
-  /-- The tangential weight (measurable only). -/
+  /-- The tangential weight (its regularity is imposed by the downstream integration theorems). -/
   beta : (Fin (d - r) → ℝ) → ℝ
   /-- The normal amplitude. -/
   amp : (Fin (d - r) → ℝ) → (Fin r → ℝ) → ℝ

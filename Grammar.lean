@@ -529,3 +529,4 @@ import Grammar.IntegratedLeadingTerm
 import Grammar.AdaptedPieceDensity
 import Grammar.ConstantUnitKernel
 import Grammar.ConstantUnitAtlas
+import Grammar.ScalarUnitKernel
