@@ -503,3 +503,4 @@ import Grammar.StripLocalExpansion
 import Grammar.AnalyticJacobian
 import Grammar.SplitBoxCore
 import Grammar.SplitReflection
+import Grammar.CentredChart
