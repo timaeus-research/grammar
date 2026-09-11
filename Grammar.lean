@@ -538,3 +538,4 @@ import Grammar.ScalarChartNormalForm
 import Grammar.CompactProductChartDensity
 import Grammar.SingleChartScalarAtlas
 import Grammar.PositiveScalarCoefficient
+import Grammar.LogRatioSymmetricMoments
