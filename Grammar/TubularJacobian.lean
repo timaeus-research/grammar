@@ -45,32 +45,85 @@ variable {m r d : ℕ}
 def concatIndex (hm : m + r = d) : Fin d ≃ Fin m ⊕ Fin r :=
   (finCongr hm.symm).trans finSumFinEquiv.symm
 
+/-- **Coordinate splitting** along an index identification `τ : Fin d ≃ Fin m ⊕ Fin r`:
+`ℝ^m × ℝ^r ≃L ℝ^d`, `(u, v) ↦ (Sum.elim u v) ∘ τ`. -/
+noncomputable def coordCLE (τ : Fin d ≃ Fin m ⊕ Fin r) :
+    ((Fin m → ℝ) × (Fin r → ℝ)) ≃L[ℝ] (Fin d → ℝ) :=
+  ((LinearEquiv.sumArrowLequivProdArrow (Fin m) (Fin r) ℝ ℝ).symm.trans
+    (LinearEquiv.funCongrLeft ℝ ℝ τ)).toContinuousLinearEquiv
+
+theorem coordCLE_apply (τ : Fin d ≃ Fin m ⊕ Fin r) (p : (Fin m → ℝ) × (Fin r → ℝ)) (k : Fin d) :
+    coordCLE τ p k = Sum.elim p.1 p.2 (τ k) := rfl
+
+theorem coordCLE_apply_inl (τ : Fin d ≃ Fin m ⊕ Fin r) (p : (Fin m → ℝ) × (Fin r → ℝ))
+    (i : Fin m) : coordCLE τ p (τ.symm (Sum.inl i)) = p.1 i := by
+  rw [coordCLE_apply, Equiv.apply_symm_apply, Sum.elim_inl]
+
+theorem coordCLE_apply_inr (τ : Fin d ≃ Fin m ⊕ Fin r) (p : (Fin m → ℝ) × (Fin r → ℝ))
+    (j : Fin r) : coordCLE τ p (τ.symm (Sum.inr j)) = p.2 j := by
+  rw [coordCLE_apply, Equiv.apply_symm_apply, Sum.elim_inr]
+
+theorem coordCLE_symm_apply_fst (τ : Fin d ≃ Fin m ⊕ Fin r) (y : Fin d → ℝ) (i : Fin m) :
+    ((coordCLE τ).symm y).1 i = y (τ.symm (Sum.inl i)) := by
+  conv_rhs => rw [← (coordCLE τ).apply_symm_apply y]
+  rw [coordCLE_apply_inl]
+
+theorem coordCLE_symm_apply_snd (τ : Fin d ≃ Fin m ⊕ Fin r) (y : Fin d → ℝ) (j : Fin r) :
+    ((coordCLE τ).symm y).2 j = y (τ.symm (Sum.inr j)) := by
+  conv_rhs => rw [← (coordCLE τ).apply_symm_apply y]
+  rw [coordCLE_apply_inr]
+
+/-- Coordinate splitting preserves Lebesgue measure (product Lebesgue measure on the left). -/
+theorem measurePreserving_coordCLE (τ : Fin d ≃ Fin m ⊕ Fin r) :
+    MeasurePreserving (coordCLE τ) volume volume := by
+  have h1 := (volume_measurePreserving_sumPiEquivProdPi (fun _ : Fin m ⊕ Fin r => ℝ)).symm
+  have h2 := volume_measurePreserving_piCongrLeft (fun _ : Fin d => ℝ) τ.symm
+  refine (h2.comp h1).congr (coordCLE τ).continuous.measurable
+    (Filter.Eventually.of_forall fun p => ?_)
+  funext k
+  obtain ⟨j, rfl⟩ : ∃ j, k = τ.symm j := ⟨τ k, (Equiv.symm_apply_apply _ k).symm⟩
+  rw [Function.comp_apply, MeasurableEquiv.piCongrLeft_apply_apply, coordCLE_apply,
+    Equiv.apply_symm_apply]
+  cases j <;> rfl
+
+theorem measurableEmbedding_coordCLE (τ : Fin d ≃ Fin m ⊕ Fin r) :
+    MeasurableEmbedding (coordCLE τ) :=
+  (coordCLE τ).toHomeomorph.measurableEmbedding
+
+/-- Coordinate splitting is an isometry for the sup norms. -/
+theorem norm_coordCLE (τ : Fin d ≃ Fin m ⊕ Fin r) (p : (Fin m → ℝ) × (Fin r → ℝ)) :
+    ‖coordCLE τ p‖ = ‖p‖ := by
+  refine le_antisymm ?_ ?_
+  · refine (pi_norm_le_iff_of_nonneg (norm_nonneg _)).2 fun k => ?_
+    rw [coordCLE_apply]
+    rcases τ k with i | j
+    · exact (norm_le_pi_norm p.1 i).trans (norm_fst_le p)
+    · exact (norm_le_pi_norm p.2 j).trans (norm_snd_le p)
+  · rw [Prod.norm_def]
+    refine max_le ?_ ?_
+    · refine (pi_norm_le_iff_of_nonneg (norm_nonneg _)).2 fun i => ?_
+      rw [← coordCLE_apply_inl τ p i]
+      exact norm_le_pi_norm _ _
+    · refine (pi_norm_le_iff_of_nonneg (norm_nonneg _)).2 fun j => ?_
+      rw [← coordCLE_apply_inr τ p j]
+      exact norm_le_pi_norm _ _
+
 /-- **Coordinate concatenation** `ℝ^m × ℝ^r ≃L ℝ^d`, `(u, v) ↦ (Sum.elim u v) ∘ concatIndex`. -/
 noncomputable def volumePreservingConcat (hm : m + r = d) :
     ((Fin m → ℝ) × (Fin r → ℝ)) ≃L[ℝ] (Fin d → ℝ) :=
-  ((LinearEquiv.sumArrowLequivProdArrow (Fin m) (Fin r) ℝ ℝ).symm.trans
-    (LinearEquiv.funCongrLeft ℝ ℝ (concatIndex hm))).toContinuousLinearEquiv
+  coordCLE (concatIndex hm)
 
 theorem volumePreservingConcat_apply (hm : m + r = d) (p : (Fin m → ℝ) × (Fin r → ℝ)) (k : Fin d) :
     volumePreservingConcat hm p k = Sum.elim p.1 p.2 (concatIndex hm k) := rfl
 
 /-- Coordinate concatenation preserves Lebesgue measure (product Lebesgue measure on the left). -/
 theorem measurePreserving_concat (hm : m + r = d) :
-    MeasurePreserving (volumePreservingConcat hm) volume volume := by
-  have h1 := (volume_measurePreserving_sumPiEquivProdPi (fun _ : Fin m ⊕ Fin r => ℝ)).symm
-  have h2 := volume_measurePreserving_piCongrLeft (fun _ : Fin d => ℝ) (concatIndex hm).symm
-  refine (h2.comp h1).congr (volumePreservingConcat hm).continuous.measurable
-    (Filter.Eventually.of_forall fun p => ?_)
-  funext k
-  obtain ⟨j, rfl⟩ : ∃ j, k = (concatIndex hm).symm j :=
-    ⟨concatIndex hm k, (Equiv.symm_apply_apply _ k).symm⟩
-  rw [Function.comp_apply, MeasurableEquiv.piCongrLeft_apply_apply, volumePreservingConcat_apply,
-    Equiv.apply_symm_apply]
-  cases j <;> rfl
+    MeasurePreserving (volumePreservingConcat hm) volume volume :=
+  measurePreserving_coordCLE _
 
 theorem measurableEmbedding_concat (hm : m + r = d) :
     MeasurableEmbedding (volumePreservingConcat hm) :=
-  (volumePreservingConcat hm).toHomeomorph.measurableEmbedding
+  measurableEmbedding_coordCLE _
 
 end Concat
 

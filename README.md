@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 522 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 523 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -32,6 +32,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 | | Theorem | File |
 |---|---|---|
 | CCXX | **Weighted tube densities**: a nonnegative bounded measurable weight `w` (cutoffs, cover weights, Jacobian unit, prior) is carried by the pulled-back density `1_Ω · tubeJac · (w∘ψ)` through the whole fibre-integration chain — fibre measures, pushforward density, expansions, normalised contractions and the global assembly now read `∫_U w F dy = ∫_U w · G(proj y) dy` with the jets acting on `F` alone | `Grammar/TubularFibreIntegration.lean` … `Grammar/TubularGlobalExpansion.lean` (`TubeWeight`, `tubeDensity`, `integral_tube_eq_integral_globalContraction`) |
+| CCXXII | **Coordinate planes as analytic LCI strata**: for any index splitting, the coordinate plane has a single-chart LCI atlas, strucdual's analytic tube at every radius, a global graph chart with Jacobian density `1`, certified domain the normal ball, and the per-stratum formula `∫_{‖y−foot y‖<ε} w F dy = ∫ w · (∑_k ⟨D^k_⊥F, 𝖬^κ_k⟩)(foot y) dy` | `Grammar/CoordPlaneStratum.lean` (`coordPlaneAtlas`, `coordPlaneTube`, `coordPlaneChart`, `tubeJac_coordPlaneChart`, `integral_coordPlaneTube_eq_integral_condContraction`) |
 | CCXXI | **The model coordinate plane as an analytic LCI stratum**: `{x : stratumProj x = 0} ⊆ ℝ^{m+k}` with one chart and constant Jacobian, normal field strucdual's, and strucdual's analytic tube at every radius transported to the atlas | `Grammar/CoordStratumAtlas.lean` (`coordStratumAtlas`, `coordStratumTube`) |
 | CCXIX | **The per-stratum formula on the whole tube of a compact stratum**: finitely many graph pieces cover the stratum, the tube is disjointified over them, truncation acts on fibre germs, and `∫_U F dy = ∫_U G(proj y) dy` with `G` the piecewise contraction series with normalised fibre moments — the global coordinate-free per-stratum formula against the pushforward of Lebesgue measure | `Grammar/TubularGlobalExpansion.lean` (`integral_tube_eq_integral_globalContraction`, `exists_graphCover`, `condContractionSeries_indicator`) |
 | CCXVIII | **`eq:per_stratum_expansion_coordfree` on strucdual's tube, pushforward form**: `∫_{U'} F dy = ∫_{U'} (∑_k ⟨D^k_⊥F, 𝖬^κ_k⟩)(proj y) dy` — the tube integral equals the integral over the stratum piece, against the pushforward of Lebesgue measure through the foot, of the contraction series with the normalised fibre moments on the ambient normal spaces; no chart coordinate | `Grammar/TubularPushforward.lean` (`integral_tube_piece_eq_integral_condContraction`, `condContractionSeries`, `condTubeNormalMeasure`, `integral_foot_eq_tubeBase`) |

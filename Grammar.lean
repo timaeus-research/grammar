@@ -520,3 +520,4 @@ import Grammar.TubularCoordFree
 import Grammar.TubularPushforward
 import Grammar.TubularGlobalExpansion
 import Grammar.CoordStratumAtlas
+import Grammar.CoordPlaneStratum
