@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 516 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 517 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CCXV | **Integration along the fibres of the tube**: the pulled-back Lebesgue density `1_Ω · tubeJac`, integrated out along the normal fibres — `∫_{U ∩ proj⁻¹V'} F dy = ∫_z ∫ F(ψ(z,·)) dη_z dz` (the paper's `eq:pushforward_local`, with the weighted fibre measures of `WeightedFibreIntegration`), the nonnegative version without hypotheses, and the pushforward density `∫ f(ft(proj y)) dy = ∫ f(z) C(z) dz`, `C(z)` the fibre mass (`eq:pushforward_char`, local form) | `Grammar/TubularFibreIntegration.lean` (`integral_tube_piece_fibreMeasure`, `integral_tube_piece_fubini`, `lintegral_tube_piece`, `integral_foot_eq_fibreMass`) |
 | CCXIV | **The tubular change of variables with its Jacobian density**: over a graph chart the tube is `ψ (z, n) = emb z + J_i(emb z)ᵀ n` on `{z ∈ W, ‖J_i(emb z)ᵀ n‖ < ε}`, injective with image the tube over the piece, and `∫_{ψ(B)} F dy = ∫_B tubeJac • F ∘ ψ` with `tubeJac = |det D(ψ ∘ L⁻¹)|` (canonical volume-preserving concatenation `L`) positive and real-analytic on the domain — the paper's `∫_V F |μ| = ∫ (F∘Φ) Φ^*|μ|` with the pulled-back Lebesgue density computed | `Grammar/TubularJacobian.lean` (`integral_tube_piece`, `integral_tubeChart_image`, `tubeJac_pos`, `analyticAt_tubeJac`) |
 | CCXIII | **The global analytic tubular equivalence of a compact analytic LCI stratum**: the stratum is a real-analytic manifold (`Stratum A`, graph charts), and strucdual's analytic tube is real-analytically equivalent to the certified domain of the Jacobian-row normal bundle over the whole stratum by `Ψ (x, n) = x + Σ_a n_a ∇G_a(x)`, `Ψ (x, 0) = x`, inverse `y ↦ (proj y, (J Jᵀ)⁻¹ J (y − proj y))` — the paper's tubular neighbourhood `Φ : NX → M`, analytic and metric-free | `Grammar/TubularGlobalInstance.lean` (`exists_global_tubular_equivalence_analytic`, `instIsManifoldStratum`, `liftedFoot_stratum`) |
 | CCXII | **The local tubular equivalence is real-analytic**: the grade-`ω` instance of the grade-generic `exists_local_tubular_equivalence`; `Ψ (z, n) = emb z + Σ_a n_a ∇G_a(emb z)` and its inverse are real-analytic — the regularity the paper's tubular-neighbourhood analyticity remark requires, obtained without a metric; `TubularBridge` made grade-generic | `Grammar/TubularLocalInstance.lean` (`exists_local_tubular_equivalence_analytic`), `Grammar/TubularBridge.lean` |

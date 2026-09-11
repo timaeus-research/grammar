@@ -256,6 +256,36 @@ theorem contDiffAt_flatChart (C : ModelGraphChart A s) {n : ℕ∞ω}
     exact hp
   exact (contDiffAt_tubeChart C (n := n) hp').comp (C.concat p) C.concat.symm.contDiff.contDiffAt
 
+theorem ModelGraphChart.measurePreserving_concat (C : ModelGraphChart A s) :
+    MeasurePreserving C.concat volume volume :=
+  Grammar.measurePreserving_concat C.concat_eq
+
+theorem ModelGraphChart.measurableEmbedding_concat (C : ModelGraphChart A s) :
+    MeasurableEmbedding C.concat :=
+  Grammar.measurableEmbedding_concat C.concat_eq
+
+theorem image_flatChart_concat (C : ModelGraphChart A s)
+    (B : Set ((Fin (d - r) → ℝ) × (Fin r → ℝ))) :
+    flatChart C '' (C.concat '' B) = tubeChart C '' B := by
+  rw [Set.image_image]
+  exact Set.image_congr fun p _ => flatChart_concat C p
+
+theorem hasFDerivWithinAt_flatChart (C : ModelGraphChart A s)
+    {B : Set ((Fin (d - r) → ℝ) × (Fin r → ℝ))} (hB : ∀ p ∈ B, p.1 ∈ C.W) :
+    ∀ w ∈ C.concat '' B,
+      HasFDerivWithinAt (flatChart C) (fderiv ℝ (flatChart C) w) (C.concat '' B) w := by
+  rintro w ⟨p, hp, rfl⟩
+  exact ((contDiffAt_flatChart C (n := ω) (hB p hp)).differentiableAt
+    (by simp)).hasFDerivAt.hasFDerivWithinAt
+
+theorem injOn_flatChart (T : NormalTubularChart A.normal S) (C : ModelGraphChart A s)
+    {B : Set ((Fin (d - r) → ℝ) × (Fin r → ℝ))} (hBΩ : B ⊆ tubeChartDom T C) :
+    InjOn (flatChart C) (C.concat '' B) := by
+  refine ((injOn_tubeChart T C).mono hBΩ).comp C.concat.symm.injective.injOn ?_
+  rintro w ⟨p, hp, rfl⟩
+  rw [ContinuousLinearEquiv.symm_apply_apply]
+  exact hp
+
 /-- **The tubular change of variables with the Jacobian density**: for measurable `B ⊆ Ω`,
 `∫_{ψ(B)} F(y) dy = ∫_B tubeJac p • F(ψ p) dp` (Lebesgue measure on `ℝ^d`, product Lebesgue
 measure on `ℝ^{d−r} × ℝ^r`). -/
@@ -263,24 +293,10 @@ theorem integral_tubeChart_image (T : NormalTubularChart A.normal S) (C : ModelG
     {B : Set ((Fin (d - r) → ℝ) × (Fin r → ℝ))} (hB : MeasurableSet B) (hBΩ : B ⊆ tubeChartDom T C)
     (F : (Fin d → ℝ) → ℝ) :
     ∫ y in tubeChart C '' B, F y = ∫ p in B, tubeJac C p • F (tubeChart C p) := by
-  have hLemb : MeasurableEmbedding C.concat := measurableEmbedding_concat C.concat_eq
-  have himg : tubeChart C '' B = flatChart C '' (C.concat '' B) := by
-    rw [Set.image_image]
-    exact Set.image_congr fun p _ => (flatChart_concat C p).symm
-  have hmeas : MeasurableSet (C.concat '' B) := hLemb.measurableSet_image.2 hB
-  have hderiv : ∀ w ∈ C.concat '' B,
-      HasFDerivWithinAt (flatChart C) (fderiv ℝ (flatChart C) w) (C.concat '' B) w := by
-    rintro w ⟨p, hp, rfl⟩
-    exact ((contDiffAt_flatChart C (n := ω) (hBΩ hp).1).differentiableAt
-      (by simp)).hasFDerivAt.hasFDerivWithinAt
-  have hinj : InjOn (flatChart C) (C.concat '' B) := by
-    refine ((injOn_tubeChart T C).mono hBΩ).comp C.concat.symm.injective.injOn ?_
-    rintro w ⟨p, hp, rfl⟩
-    rw [ContinuousLinearEquiv.symm_apply_apply]
-    exact hp
-  have hmp : MeasurePreserving C.concat volume volume := measurePreserving_concat C.concat_eq
-  rw [himg, integral_image_eq_integral_abs_det_fderiv_smul volume hmeas hderiv hinj F,
-    hmp.setIntegral_image_emb hLemb]
+  rw [← image_flatChart_concat C B, integral_image_eq_integral_abs_det_fderiv_smul volume
+    (C.measurableEmbedding_concat.measurableSet_image.2 hB)
+    (hasFDerivWithinAt_flatChart C fun p hp => (hBΩ hp).1) (injOn_flatChart T C hBΩ) F,
+    C.measurePreserving_concat.setIntegral_image_emb C.measurableEmbedding_concat]
   refine setIntegral_congr_fun hB fun p _ => ?_
   simp only [tubeJac, flatChart_concat]
 
