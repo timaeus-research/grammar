@@ -540,3 +540,4 @@ import Grammar.SingleChartScalarAtlas
 import Grammar.PositiveScalarCoefficient
 import Grammar.LogRatioSymmetricMoments
 import Grammar.ProductChartHypotheses
+import Grammar.ProductChartPieceData

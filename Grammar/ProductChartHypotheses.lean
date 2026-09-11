@@ -209,7 +209,9 @@ structure ProductMonomialChart {d : ℕ} {ι : Type*} [Fintype ι] (R : Resoluti
   W : Set (Fin d → ℝ)
   W_open : IsOpen W
   dom_subset : (R.chart i).dom ⊆ W
-  /-- The phase unit. -/
+  /-- hironaka's monomial-chart certificate (its existential units are not the ones below). -/
+  monomial : IsMonomialChart K (R.chart i).φ (R.chart i).dom e h W
+  /-- The phase unit (a specific witness, carrying the independence hypothesis below). -/
   u : (Fin d → ℝ) → ℝ
   u_cont : ContinuousOn u W
   u_ne : ∀ y ∈ W, u y ≠ 0
