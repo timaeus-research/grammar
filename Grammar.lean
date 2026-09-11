@@ -517,3 +517,4 @@ import Grammar.TubularJacobian
 import Grammar.TubularFibreIntegration
 import Grammar.TubularExpansion
 import Grammar.TubularCoordFree
+import Grammar.TubularPushforward
