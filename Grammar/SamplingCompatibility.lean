@@ -64,9 +64,8 @@ theorem phaseEvalCLM_phaseObs (x : 𝓧) {u : Fin d → ℝ} (hu : u ∈ closedC
     phaseEvalCLM u hu (phaseObs b hb c hc x) = evalF (c x) (b • u) := by
   rw [phaseEvalCLM_eq_phaseEval, phaseEval_phaseObs]
 
-variable [MeasurableSpace 𝓧] {Ω : Type*} [MeasurableSpace Ω] (P : Measure Ω) (X : ℕ → Ω → 𝓧)
+variable {Ω : Type*} [MeasurableSpace Ω] (P : Measure Ω) (X : ℕ → Ω → 𝓧)
 
-omit [MeasurableSpace 𝓧] in
 /-- **Amplitude unchanged** (integrable observations): the amplitude coordinates of the sample
 datum are those of `A`. -/
 theorem etaCoord_sampleDatum_of_integrable (hint : Integrable (sampleObs b hb c hc X 0) P)
@@ -77,7 +76,6 @@ theorem etaCoord_sampleDatum_of_integrable (hint : Integrable (sampleObs b hb c 
   rw [lp.coeFn_add, Pi.add_apply, empiricalSum_apply hint]
   simp [sampleObs, phaseObs_inr]
 
-omit [MeasurableSpace 𝓧] in
 /-- **Exact centred evaluation** (integrable observations): for a zero-phase amplitude datum,
 `ξ_n(u) = n^{−1/2} ∑_{i<n} (ξ_{Y_i}(u) − E ξ_{Y_0}(u))`. -/
 theorem phaseEval_sampleDatum_of_integrable (hint : Integrable (sampleObs b hb c hc X 0) P)
@@ -98,7 +96,6 @@ theorem phaseEval_sampleDatum_of_integrable (hint : Integrable (sampleObs b hb c
 
 variable (a : 𝓧 → (Fin d → ℝ) → ℝ) (φ : (Fin d → ℝ) → ℝ)
 
-omit [MeasurableSpace 𝓧] in
 /-- **The sign of the fluctuation at the sample datum**: if `c x` is the Taylor family of
 `−a(x,·)` at the box point `b·u` and `E a(X,b·u) = φ(b·u)`, then the phase of the sample datum is
 `ξ_n(u) = −ζ_n(b·u)`, minus the centred empirical process of the coefficient. -/
@@ -121,7 +118,6 @@ theorem evalF_xiCoord_sampleDatum_eq_neg_zetaEmp (hint : Integrable (sampleObs b
   simp only [sampleObs, phaseEvalCLM_phaseObs, hca]
   ring
 
-omit [MeasurableSpace 𝓧] in
 /-- **`N = n` at the sample datum**: the sampling exponent `−β ∑_{i<n} φ a(X_i)` is the
 standard-integral exponent `−βnφ² + β√n φ ξ_n(u)` evaluated at the phase of the sample datum. -/
 theorem sampling_exponent_eq_sampleDatum_phase (hint : Integrable (sampleObs b hb c hc X 0) P)
@@ -140,7 +136,7 @@ end Evaluation
 
 section Core
 
-variable {n : ℕ} {𝓧 : Type*} [MeasurableSpace 𝓧] (b : ℝ) (hb : 0 < b)
+variable {n : ℕ} {𝓧 : Type*} (b : ℝ) (hb : 0 < b)
   (c : 𝓧 → CoeffFamily (n + 1)) (hc : ∀ x, AbsSummableAt (c x) b)
 variable {Ω : Type*} [MeasurableSpace Ω] (P : Measure Ω) (X : ℕ → Ω → 𝓧)
   (a : 𝓧 → (Fin (n + 1) → ℝ) → ℝ)
@@ -151,7 +147,6 @@ theorem evalF_toXi_eq (x : DataSpace (n + 1)) (v : Fin (n + 1) → ℝ) :
     evalF (toXi b x) v = evalF (xiCoord x) (b⁻¹ • v) := by
   rw [← scale_toXi hb.ne' x, evalF_scale, smul_smul, mul_inv_cancel₀ hb.ne', one_smul]
 
-omit [MeasurableSpace 𝓧] in
 theorem toEta_sampleDatum_of_integrable (hint : Integrable (sampleObs b hb c hc X 0) P)
     (A : DataSpace (n + 1)) (m : ℕ) (ω : Ω) :
     toEta b (sampleDatum b hb c hc P X A m ω) = toEta b A := by
