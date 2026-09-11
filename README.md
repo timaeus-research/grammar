@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 497 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 498 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CXCIV | **Exact-normal tiling ⇒ analytic core decomposition**: finitely many positive box charts (in product coordinates, over compact bases, carried in by volume-preserving equivalences) with a.e.-disjoint images inside the region and a phase gap off their union give the full population expansion; the remaining obligation `HasExactNormalTilings d ⇒ CompatibleDivisorLocalisation d` is stated exactly | `Grammar/ExactNormalTiling.lean` (`TilingPiece`, `ExactNormalTiling`, `ExactNormalTiling.hasAnalyticCoreDecomposition`, `ExactNormalTiling.cutoffExpansion`, `compatibleDivisorLocalisation_of_hasExactNormalTilings`) |
 | CXCIII | **Core presentation of a positive box chart**: a `C¹` chart injective on `A × (0,b]^{n+1}` with monomial Jacobian, exact phase and a tangential amplitude datum exactly presents the Lebesgue measure on its box image (change of variables) | `Grammar/PositiveBoxCore.lean` (`PositiveBoxChart`, `PositiveBoxChart.exists_corePresentation`) |
 | CXCII | **Tangential datum of a jointly analytic amplitude**: from one joint power series in (tangential, normal) variables, the normal-fibre amplitude families are uniformly weighted-ℓ¹, evaluate to `G(v,u)` on the normal box, and depend continuously on `v` in ℓ¹ (dominated convergence of the joint ℓ¹ series) — a `TangentialData` over any compact base in the tangential cube | `Grammar/JointAmplitude.lean` (`jointFibre`, `absSummableAt_jointFibre`, `hasSum_jointFibre_mul_mono`, `continuous_jointDatum`, `jointTangentialData`, `evalF_toEta_jointTangentialData`) |
 | CXCI | **Monomial coefficients of a real power series**: `p n (u,…,u) = ∑_{|γ|=n} c_γ u^γ`, the dimension-loss ℓ¹ estimate `∑_{|γ|=n}|c_γ| ≤ (card ι)^n‖p n‖`, absolute convergence on the cube for `card ι·b < ρ < radius`, and the data-space element of an analytic amplitude with `evalF = f` on the box | `Grammar/MonomialCoefficients.lean` (`monoCoeff`, `sum_monoCoeff_mul_mono`, `sum_abs_monoCoeff_le`, `summable_monoFamily_mul_pow`, `hasSum_monoFamily_mul_mono`, `amplitudeDatum`, `evalF_toEta_amplitudeDatum`) |
