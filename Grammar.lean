@@ -531,3 +531,4 @@ import Grammar.ConstantUnitKernel
 import Grammar.ConstantUnitAtlas
 import Grammar.ScalarUnitKernel
 import Grammar.SymmetricScalarUnitCells
+import Grammar.AdaptedPieceAtlas
