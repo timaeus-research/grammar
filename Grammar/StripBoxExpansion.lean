@@ -201,6 +201,10 @@ theorem isCompact_stripBase {A : Set (Fin t → ℝ)} (hA : IsCompact A) (j₀ :
   · intro u hu j _
     exact abs_le.1 (hu.2 j)
 
+theorem stripBase_mono {A A' : Set (Fin t → ℝ)} (h : A' ⊆ A) (j₀ : Fin (n + 1)) (b₁ : ℝ) :
+    stripBase t A' j₀ b₁ ⊆ stripBase t A j₀ b₁ :=
+  image_mono (prod_mono h le_rfl)
+
 theorem stripBase_apply_nIdx {A : Set (Fin t → ℝ)} {j₀ : Fin (n + 1)} {b₁ : ℝ}
     {y : Fin (t + (n + 1)) → ℝ} (hy : y ∈ stripBase t A j₀ b₁) : y (nIdx t j₀) = 0 := by
   obtain ⟨p, hp, rfl⟩ := hy
@@ -212,13 +216,13 @@ variable (t) in
 def zBox (A : Set (Fin t → ℝ)) (b' : ℝ) : Set (Fin (t + (n + 1)) → ℝ) :=
   prodToPi t n '' twoSidedBox A b'
 
-theorem zBox_subset_cylinder {A : Set (Fin t → ℝ)} {j₀ : Fin (n + 1)} {b₁ b' bc : ℝ}
-    (hb'b₁ : b' ≤ b₁) (hb'c : b' ≤ bc) :
-    zBox t A b' ⊆ cylinder (nIdx t j₀) (stripBase t A j₀ b₁) bc := by
+theorem zBox_subset_cylinder {A A' : Set (Fin t → ℝ)} (hA'A : A' ⊆ A) {j₀ : Fin (n + 1)}
+    {b₁ b' bc : ℝ} (hb'b₁ : b' ≤ b₁) (hb'c : b' ≤ bc) :
+    zBox t A' b' ⊆ cylinder (nIdx t j₀) (stripBase t A j₀ b₁) bc := by
   rintro z ⟨p, hp, rfl⟩
   refine ⟨?_, ?_⟩
   · rw [baseProj_prodToPi]
-    refine ⟨(p.1, Function.update p.2 j₀ 0), ⟨hp.1, ?_, fun j => ?_⟩, rfl⟩
+    refine ⟨(p.1, Function.update p.2 j₀ 0), ⟨hA'A hp.1, ?_, fun j => ?_⟩, rfl⟩
     · simp
     · have hpj := hp.2 j (mem_univ j)
       by_cases h : j = j₀
@@ -266,29 +270,30 @@ theorem phase_inv (hβ : 0 < β) (hk : 0 < k j₀) (hpos : ∀ y ∈ V, 0 < unit
 `∫_{T⁻¹(zBox)} F e^{−NK} = ∫_{A × [-b',b']^{n+1}} normalAmp e^{−Nβ∏u^{2k}}`. -/
 theorem integral_strip_eq_twoSidedBox (hβ : 0 < β) (hk : 0 < k j₀) (hpos : ∀ y ∈ V, 0 < unit y)
     {K : (Fin (t + (n + 1)) → ℝ) → ℝ}
-    (hK : ∀ y ∈ V, K y = unit y * ∏ j, y (nIdx t j) ^ (2 * k j)) (hA : IsCompact A) {b' : ℝ}
-    (hb'b₁ : b' ≤ b₁) (hb'b : b' ≤ SD.b) (F : (Fin (t + (n + 1)) → ℝ) → ℝ) (N : ℝ) :
-    ∫ y in SD.inv '' zBox t A b', F y * Real.exp (-N * K y) =
-      ∫ p in twoSidedBox A b', normalAmp SD F p * Real.exp (-N * monomialPhase k β p) := by
-  have hzsub : zBox t A b' ⊆ rescale (nIdx t j₀) (unitRoot β (2 * k j₀) unit) '' SD.S :=
-    (zBox_subset_cylinder hb'b₁ hb'b).trans SD.cyl_sub_image
-  have hderiv : ∀ z ∈ zBox t A b',
-      HasFDerivWithinAt SD.inv (fderiv ℝ SD.inv z) (zBox t A b') z :=
+    (hK : ∀ y ∈ V, K y = unit y * ∏ j, y (nIdx t j) ^ (2 * k j)) {A' : Set (Fin t → ℝ)}
+    (hA' : IsCompact A') (hA'A : A' ⊆ A) {b' : ℝ} (hb'b₁ : b' ≤ b₁) (hb'b : b' ≤ SD.b)
+    (F : (Fin (t + (n + 1)) → ℝ) → ℝ) (N : ℝ) :
+    ∫ y in SD.inv '' zBox t A' b', F y * Real.exp (-N * K y) =
+      ∫ p in twoSidedBox A' b', normalAmp SD F p * Real.exp (-N * monomialPhase k β p) := by
+  have hzsub : zBox t A' b' ⊆ rescale (nIdx t j₀) (unitRoot β (2 * k j₀) unit) '' SD.S :=
+    (zBox_subset_cylinder hA'A hb'b₁ hb'b).trans SD.cyl_sub_image
+  have hderiv : ∀ z ∈ zBox t A' b',
+      HasFDerivWithinAt SD.inv (fderiv ℝ SD.inv z) (zBox t A' b') z :=
     fun z hz => (SD.hasFDerivAt_inv (hzsub hz)).hasFDerivWithinAt
-  have h1 : ∫ y in SD.inv '' zBox t A b', F y * Real.exp (-N * K y) =
-      ∫ z in zBox t A b', |(fderiv ℝ SD.inv z).det| •
+  have h1 : ∫ y in SD.inv '' zBox t A' b', F y * Real.exp (-N * K y) =
+      ∫ z in zBox t A' b', |(fderiv ℝ SD.inv z).det| •
         (F (SD.inv z) * Real.exp (-N * K (SD.inv z))) :=
-    integral_image_eq_integral_abs_det_fderiv_smul volume (measurableSet_zBox hA b') hderiv
+    integral_image_eq_integral_abs_det_fderiv_smul volume (measurableSet_zBox hA' b') hderiv
       (SD.injOn_inv.mono hzsub) _
-  have h2 : ∫ z in zBox t A b', |(fderiv ℝ SD.inv z).det| •
+  have h2 : ∫ z in zBox t A' b', |(fderiv ℝ SD.inv z).det| •
       (F (SD.inv z) * Real.exp (-N * K (SD.inv z))) =
-      ∫ p in twoSidedBox A b', |(fderiv ℝ SD.inv (prodToPi t n p)).det| •
+      ∫ p in twoSidedBox A' b', |(fderiv ℝ SD.inv (prodToPi t n p)).det| •
         (F (SD.inv (prodToPi t n p)) * Real.exp (-N * K (SD.inv (prodToPi t n p)))) := by
     unfold zBox
     exact measurePreserving_prodToPi.setIntegral_image_emb (prodToPi t n).measurableEmbedding _ _
   rw [h1, h2]
-  refine setIntegral_congr_fun (measurableSet_twoSidedBox hA b') fun p hp => ?_
-  have hz : prodToPi t n p ∈ zBox t A b' := ⟨p, hp, rfl⟩
+  refine setIntegral_congr_fun (measurableSet_twoSidedBox hA' b') fun p hp => ?_
+  have hz : prodToPi t n p ∈ zBox t A' b' := ⟨p, hp, rfl⟩
   simp only [smul_eq_mul, normalAmp]
   rw [phase_inv SD hβ hk hpos hK (hzsub hz)]
   unfold monomialPhase
@@ -296,11 +301,11 @@ theorem integral_strip_eq_twoSidedBox (hβ : 0 < β) (hk : 0 < k j₀) (hpos : �
   ring
 
 /-- **Continuity of the normal-form amplitude** on the box. -/
-theorem continuousOn_normalAmp (hV : IsOpen V) {b' : ℝ} (hb'b₁ : b' ≤ b₁)
-    (hb'b : b' ≤ SD.b) {F : (Fin (t + (n + 1)) → ℝ) → ℝ} (hF : ContinuousOn F V) :
-    ContinuousOn (normalAmp SD F) (twoSidedBox A b') := by
-  have hzsub : zBox t A b' ⊆ rescale (nIdx t j₀) (unitRoot β (2 * k j₀) unit) '' SD.S :=
-    (zBox_subset_cylinder hb'b₁ hb'b).trans SD.cyl_sub_image
+theorem continuousOn_normalAmp (hV : IsOpen V) {A' : Set (Fin t → ℝ)} (hA'A : A' ⊆ A) {b' : ℝ}
+    (hb'b₁ : b' ≤ b₁) (hb'b : b' ≤ SD.b) {F : (Fin (t + (n + 1)) → ℝ) → ℝ}
+    (hF : ContinuousOn F V) : ContinuousOn (normalAmp SD F) (twoSidedBox A' b') := by
+  have hzsub : zBox t A' b' ⊆ rescale (nIdx t j₀) (unitRoot β (2 * k j₀) unit) '' SD.S :=
+    (zBox_subset_cylinder hA'A hb'b₁ hb'b).trans SD.cyl_sub_image
   intro p hp
   have hz : prodToPi t n p ∈ rescale (nIdx t j₀) (unitRoot β (2 * k j₀) unit) '' SD.S :=
     hzsub ⟨p, hp, rfl⟩
@@ -317,22 +322,23 @@ analytic positive unit, the integral over the adapted region `T⁻¹(zBox)` has 
 cutoff expansion, given the joint series of the normal-form amplitude with the dimension margin. -/
 theorem strip_cutoffExpansion (hV : IsOpen V) (hk : ∀ j, 0 < k j) (hβ : 0 < β)
     (hpos : ∀ y ∈ V, 0 < unit y) {K : (Fin (t + (n + 1)) → ℝ) → ℝ}
-    (hK : ∀ y ∈ V, K y = unit y * ∏ j, y (nIdx t j) ^ (2 * k j)) (hA : IsCompact A) {B b' : ℝ}
-    (hb' : 0 < b') (hb'b₁ : b' ≤ b₁) (hb'b : b' ≤ SD.b) (hb'B : b' ≤ B) (hB : 0 < B)
-    (hAB : ∀ v ∈ A, ∀ i, |v i| ≤ B) {F : (Fin (t + (n + 1)) → ℝ) → ℝ} (hF : ContinuousOn F V)
+    (hK : ∀ y ∈ V, K y = unit y * ∏ j, y (nIdx t j) ^ (2 * k j)) {A' : Set (Fin t → ℝ)}
+    (hA' : IsCompact A') (hA'A : A' ⊆ A) {B b' : ℝ} (hb' : 0 < b') (hb'b₁ : b' ≤ b₁)
+    (hb'b : b' ≤ SD.b) (hb'B : b' ≤ B) (hB : 0 < B) (hAB : ∀ v ∈ A', ∀ i, |v i| ≤ B)
+    {F : (Fin (t + (n + 1)) → ℝ) → ℝ} (hF : ContinuousOn F V)
     {P : FormalMultilinearSeries ℝ (Fin t ⊕ Fin (n + 1) → ℝ) ℝ} {R : ℝ≥0∞}
     (hG : HasFPowerSeriesOnBall (fun w => normalAmp SD F (w ∘ Sum.inl, w ∘ Sum.inr)) P 0 R)
     {ρ : ℝ≥0} (hρ : (ρ : ℝ≥0∞) < R) (hBρ : ((t + (n + 1) : ℕ) : ℝ) * B < ρ) (hB1 : B < ρ)
     {δ : ℝ} (hδ : 0 < δ) :
     ∃ (Q Dg : ℕ) (c : ℝ → ℕ → ℝ), 0 < Q ∧
       CutoffExpansion Q Dg
-        (fun N => ∫ y in SD.inv '' zBox t A b', F y * Real.exp (-N * K y)) c := by
-  have heq : (fun N => ∫ y in SD.inv '' zBox t A b', F y * Real.exp (-N * K y)) =
-      fun N => ∫ p in twoSidedBox A b', normalAmp SD F p * Real.exp (-N * monomialPhase k β p) :=
-    funext fun N => integral_strip_eq_twoSidedBox SD hβ (hk j₀) hpos hK hA hb'b₁ hb'b F N
+        (fun N => ∫ y in SD.inv '' zBox t A' b', F y * Real.exp (-N * K y)) c := by
+  have heq : (fun N => ∫ y in SD.inv '' zBox t A' b', F y * Real.exp (-N * K y)) =
+      fun N => ∫ p in twoSidedBox A' b', normalAmp SD F p * Real.exp (-N * monomialPhase k β p) :=
+    funext fun N => integral_strip_eq_twoSidedBox SD hβ (hk j₀) hpos hK hA' hA'A hb'b₁ hb'b F N
   rw [heq]
-  exact twoSidedBox_cutoffExpansion k hk hβ hA hb' hb'B hB hAB
-    (continuousOn_normalAmp SD hV hb'b₁ hb'b hF) hG hρ hBρ hB1 hδ
+  exact twoSidedBox_cutoffExpansion k hk hβ hA' hb' hb'B hB hAB
+    (continuousOn_normalAmp SD hV hA'A hb'b₁ hb'b hF) hG hρ hBρ hB1 hδ
 
 end Main
 

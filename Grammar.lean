@@ -499,3 +499,4 @@ import Grammar.ExactNormalTiling
 import Grammar.MonomialBoxExpansion
 import Grammar.ReflectedBoxExpansion
 import Grammar.StripBoxExpansion
+import Grammar.StripLocalExpansion

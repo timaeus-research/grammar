@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 501 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 502 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CXCVIII | **Local unconditional single-chart expansion**: the inverse Jacobian is analytic and positive, the normal-form amplitude is jointly analytic, and shrinking the base to a small ball gives the series margin — some adapted region has the full cutoff expansion with no hypothesis beyond analyticity | `Grammar/StripLocalExpansion.lean` (`StripData.det_fderiv_inv`, `analyticAt_normalAmp`, `strip_cutoffExpansion_local`) |
 | CXCVII | **Strip-normalised single-chart expansion**: for `K = unit·∏ y^{2k}` with an analytic positive unit, the integral over the adapted region `T⁻¹(zBox)` equals a two-sided box integral of the normal-form amplitude `|det DT⁻¹|·F∘T⁻¹` (change of variables + product coordinates) and has the full cutoff expansion given that amplitude's joint series | `Grammar/StripBoxExpansion.lean` (`StripData`, `prodToPi`, `phase_inv`, `integral_strip_eq_twoSidedBox`, `strip_cutoffExpansion`) |
 | CXCVI | **Two-sided exact-monomial box**: the `2^{n+1}` orthants are reflected positive box charts (`|det| = 1`, phase invariant, joint series composed with an isometry), tiling `A × [-b,b]^{n+1}`; its integral has the full cutoff expansion unconditionally | `Grammar/ReflectedBoxExpansion.lean` (`reflectEquiv`, `det_reflectEquiv`, `hasFPowerSeriesOnBall_comp_jointReflect`, `disjoint_orthant`, `twoSidedBox_cutoffExpansion`) |
 | CXCV | **Unconditional expansion of an exact-monomial box integral**: `∫_{A×[0,b]^{n+1}} F e^{−Nβ∏u^{2k}}` has the full power–log cutoff expansion for a jointly analytic `F` (one joint series with the dimension margin) — the bridge run end to end with the identity chart | `Grammar/MonomialBoxExpansion.lean` (`monomialBoxData`, `ae_ne_zero_snd`, `monomialBox_cutoffExpansion`) |
