@@ -539,3 +539,4 @@ import Grammar.CompactProductChartDensity
 import Grammar.SingleChartScalarAtlas
 import Grammar.PositiveScalarCoefficient
 import Grammar.LogRatioSymmetricMoments
+import Grammar.ProductChartHypotheses
