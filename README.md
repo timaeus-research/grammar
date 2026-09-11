@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 504 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 505 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CCI | **Reflections along a splitting**: the normal-coordinate reflection of the ambient space has `|det| = 1`, intertwines the product coordinates, and its orthant images of the positive box are disjoint and cover the two-sided box a.e. | `Grammar/SplitReflection.lean` (`splitReflect`, `abs_det_splitReflect`, `splitReflect_prodToPi`, `disjoint_splitOrthant`, `mem_iUnion_splitOrthant`) |
 | CC | **Split box charts and the abstract core tiling**: an ambient-space chart injective on a positive box along a coordinate splitting with monomial Jacobian exactly presents the Lebesgue measure on its image; core pieces/core tilings abstract the tiling bridge | `Grammar/SplitBoxCore.lean` (`SplitBoxChart`, `SplitBoxChart.exists_corePresentation`, `CorePiece`, `CoreTiling`, `CoreTiling.cutoffExpansion`) |
 | CXCIX | **Analytic units of a monomial chart**: the determinant is analytic on endomorphisms, so the Jacobian of an analytic chart is analytic and hironaka's continuous phase/Jacobian units are analytic; reduced Jacobian factor at a centre | `Grammar/AnalyticJacobian.lean` (`analyticAt_det`, `MonomialChart.exists_analytic_unit`, `MonomialChart.exists_analytic_jacUnit`, `analyticAt_reducedJac`) |
 | CXCVIII | **Local unconditional single-chart expansion**: the inverse Jacobian is analytic and positive, the normal-form amplitude is jointly analytic, and shrinking the base to a small ball gives the series margin — some adapted region has the full cutoff expansion with no hypothesis beyond analyticity | `Grammar/StripLocalExpansion.lean` (`StripData.det_fderiv_inv`, `analyticAt_normalAmp`, `strip_cutoffExpansion_local`) |
