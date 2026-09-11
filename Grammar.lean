@@ -485,3 +485,4 @@ import Grammar.L1GaussianFunctionalL2
 import Grammar.SubgaussianPhase
 import Grammar.SubgaussianAssembly
 import Grammar.EffectiveTemperature
+import Grammar.ClosureEndpoint

@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 487 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 488 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CLXXXIV | **Closure endpoints for the empirical chain**: Banach `L²` from the `ℓ¹` coordinate certificate (Minkowski + Fatou), the scaled-core limit with the tail certificate exposed, and the identified single-chart annealed endpoint — one `ν` for the limit `E[A_n(Z_n + Rem_n)] → E_ν[C(Z + A)]` and its first moment (covariance-modified face integral; population coefficient at `β(1 − βv₀/2)` at constant face variance); `βκ < 2` alone suffices | `Grammar/ClosureEndpoint.lean` (`memLp_two_of_summableCoordL2`, `tendstoInDistribution_scaled_dataBoxIntegral_sampleDatum_tail`, `annealed_sampleDatum_single_identified`, `annealed_sampleDatum_single_effectiveTemperature`) |
 | CLXXXIII | **The effective-temperature corollary and the normal-location check**: a.e. constant face variance `σ² = v₀` (`βv₀ < 2`) makes the limiting expectation of the leading coefficient the zero-phase population coefficient at `β_eff = β(1 − βv₀/2)`; for `g_a(x) = a²/2 − ax` the sampling phase is `√2 n^{−1/2}∑X_i` with variance `2` | `Grammar/EffectiveTemperature.lean` (`dataBoxCoeff_leading_zero_phase`, `integral_dataBoxCoeff_leading_eq_population_of_const_faceVariance`, `variance_phase_normalLocation`) |
 | CLXXXII | **The sub-Gaussian empirical programme**: functionals of the `ℓ¹` Gaussian limit are Gaussian for `L²` observations; a uniform full-box sub-Gaussian proxy `κ` on the centred phase evaluations is inherited by the empirical phase with the same proxy, `Var ≤ κ` sharp; the single- and several-chart annealed sample-datum theorems (`pβκ < 2`) and the Gaussian first moment (`βκ < 2`) without boundedness | `Grammar/L1GaussianFunctionalL2.lean`, `Grammar/SubgaussianPhase.lean`, `Grammar/SubgaussianAssembly.lean` (`map_eq_gaussianReal_of_marginals_of_memLp`, `hasSubgaussianMGF_empiricalPhase`, `variance_le_of_hasSubgaussianMGF`, `tendsto_integral_scaled_coreSum_sampleDatum_subgaussian`, `integral_dataBoxCoeff_leading_eq_subgaussian`) |
 | CLXXXI | **Sampling/core compatibility**: exact centred evaluation and amplitude invariance of the sample datum for integrable observations; the sample phase is `−ζ_n` when the coefficient family is the Taylor family of `−a`; the certified box core at the sample datum is the sampling integral `∫ η_A v^h e^{−β∑ f(X_i,v)} dv` with `N = n` | `Grammar/SamplingCompatibility.lean` (`evalF_xiCoord_sampleDatum_eq_neg_zetaEmp`, `sampling_exponent_eq_sampleDatum_phase`, `exp_sampling_exponent_eq_core_factor`, `dataBoxIntegral_sampleDatum_eq_sampling`) |
