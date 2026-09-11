@@ -274,7 +274,9 @@ theorem exists_splitBoxChart_orthant (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Ana
       (fun w => orthantAmp C SD s F (w ∘ Sum.inl, w ∘ Sum.inr)) P 0 R) {r₀ : ℝ≥0}
     (hr₀ : (r₀ : ℝ≥0∞) < R) (hBr₀ : ((C.t + (C.n + 1) : ℕ) : ℝ) * B < r₀) (hB1 : B < r₀) :
     ∃ X : SplitBoxChart C.σ D A' b β, X.Ψ = orthantChart C SD s ∧
-      X.h = (fun j => h (nIdx C.σ j)) ∧ X.k = C.k ∧ X.jac = orthantJac C SD s := by
+      X.h = (fun j => h (nIdx C.σ j)) ∧ X.k = C.k ∧ X.jac = orthantJac C SD s ∧
+      ∀ (v : A') (u : Fin (C.n + 1) → ℝ), (∀ j, |u j| ≤ b) →
+        evalF (toEta b (X.amp v)) u = orthantAmp C SD s F (v.1, u) := by
   classical
   have : CompactSpace A' := isCompact_iff_compactSpace.1 hA'
   have hcard : (Fintype.card (Fin C.t ⊕ Fin (C.n + 1)) : ℝ) * B < r₀ := by
@@ -294,7 +296,7 @@ theorem exists_splitBoxChart_orthant (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Ana
   refine ⟨⟨fun j => h (nIdx C.σ j), C.k, C.k_pos, orthantChart C SD s, orthantDomain C SD s,
     isOpen_orthantDomain C SD s, hbox, ?_, ?_, orthantJac C SD s, measurable_orthantJac C SD hβ s,
     ?_, ?_, ?_, x, fun v => xiCoord_jointTangentialData P B hb hbB hB hW A' hAB v, ?_⟩,
-    rfl, rfl, rfl, rfl⟩
+    rfl, rfl, rfl, rfl, fun v u hu => ?_⟩
   · -- `C¹` on the orthant domain
     have han : AnalyticOnNhd ℝ (orthantChart C SD s) (orthantDomain C SD s) :=
       fun y hy => analyticAt_orthantChart C SD hφ s hy
@@ -360,5 +362,9 @@ theorem exists_splitBoxChart_orthant (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, Ana
     change _ = _ * D.obs (translated φ y₀ _)
     rw [hobs _ hwV]
     rfl
+  · -- the amplitude clause on the closed two-sided box
+    change evalF (toEta b (x v)) u = _
+    rw [hx, evalF_toEta_jointTangentialData P B hb hbB hB hW A' hAB hG hr₀ hBr₀ hB1 v hu]
+    simp only [Sum.elim_comp_inl, Sum.elim_comp_inr]
 
 end Grammar

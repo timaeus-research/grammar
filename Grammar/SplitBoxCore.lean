@@ -86,9 +86,11 @@ namespace SplitBoxChart
 variable {σ : Fin t ⊕ Fin (n + 1) ≃ Fin d} {D : LocalisationData (Fin d → ℝ)}
   {A : Set (Fin t → ℝ)} {b β : ℝ} (C : SplitBoxChart σ D A b β)
 
-/-- **The core presentation of a split box chart.** -/
-theorem exists_corePresentation (hA : MeasurableSet A) (hAfin : volume A < ∞) (hb : 0 < b) :
-    Nonempty (CorePresentation D (volume.restrict (C.Ψ '' splitPosBox σ A b)) A n β) := by
+/-- **The core presentation of a split box chart** (data: base measure `comap Subtype.val volume`
+on `A`, exponents `C.h`, `C.k`, box side `b`, chart `Ψ ∘ prodToPi` extended by zero, density
+`C.jac`, tangential datum `C.amp`). -/
+noncomputable def corePresentation (hA : MeasurableSet A) (hAfin : volume A < ∞) (hb : 0 < b) :
+    CorePresentation D (volume.restrict (C.Ψ '' splitPosBox σ A b)) A n β := by
   classical
   set S₀ := A ×ˢ piBox (n + 1) (Ioc 0 b) with hS₀
   have hS₀m : MeasurableSet S₀ := hA.prod (measurableSet_piBox _ _ measurableSet_Ioc)
@@ -171,8 +173,8 @@ theorem exists_corePresentation (hA : MeasurableSet A) (hAfin : volume A < ∞) 
     rw [hdens, ← Measure.map_map hΨ'm hjm, map_withDensity_comp _ hjm hgm, hmapj,
       Measure.map_congr hΨ'ae, withDensity_congr_ae hgdet]
     exact map_withDensity_abs_det_fderiv_eq_addHaar volume hSm.nullMeasurableSet hderiv C.injOn
-  refine ⟨⟨ν, C.h, C.k, C.k_pos, b, hb, Ψ' ∘ j, hΨ'm.comp hjm, fun p => C.jac (j p),
-    C.measurable_jac.comp hjm, ?_, C.amp, htransport, ?_, ?_, C.amp_xi⟩⟩
+  refine ⟨ν, C.h, C.k, C.k_pos, b, hb, Ψ' ∘ j, hΨ'm.comp hjm, fun p => C.jac (j p),
+    C.measurable_jac.comp hjm, ?_, C.amp, htransport, ?_, ?_, C.amp_xi⟩
   · filter_upwards [ae_snd_mem_box ν n b] with p hp
     exact C.jac_nonneg _ (hmemS p hp)
   · filter_upwards [ae_snd_mem_box ν n b] with p hp
@@ -183,6 +185,26 @@ theorem exists_corePresentation (hA : MeasurableSet A) (hAfin : volume A < ∞) 
     change evalF (toEta b (C.amp p.1)) p.2 = C.jac (j p) * D.obs (Ψ' (j p))
     rw [hΨ'eq (hmemS p hp)]
     exact C.amp_eq p.1 p.2 hp
+
+theorem corePresentation_h (hA : MeasurableSet A) (hAfin : volume A < ∞) (hb : 0 < b) :
+    (C.corePresentation hA hAfin hb).h = C.h := rfl
+
+theorem corePresentation_k (hA : MeasurableSet A) (hAfin : volume A < ∞) (hb : 0 < b) :
+    (C.corePresentation hA hAfin hb).k = C.k := rfl
+
+theorem corePresentation_b (hA : MeasurableSet A) (hAfin : volume A < ∞) (hb : 0 < b) :
+    (C.corePresentation hA hAfin hb).b = b := rfl
+
+theorem corePresentation_x (hA : MeasurableSet A) (hAfin : volume A < ∞) (hb : 0 < b) :
+    (C.corePresentation hA hAfin hb).x = C.amp := rfl
+
+theorem corePresentation_ν (hA : MeasurableSet A) (hAfin : volume A < ∞) (hb : 0 < b) :
+    (C.corePresentation hA hAfin hb).ν = Measure.comap Subtype.val volume := rfl
+
+/-- **The core presentation of a split box chart** (existence form). -/
+theorem exists_corePresentation (hA : MeasurableSet A) (hAfin : volume A < ∞) (hb : 0 < b) :
+    Nonempty (CorePresentation D (volume.restrict (C.Ψ '' splitPosBox σ A b)) A n β) :=
+  ⟨C.corePresentation hA hAfin hb⟩
 
 end SplitBoxChart
 
@@ -206,7 +228,7 @@ structure CorePiece (D : LocalisationData U) (β : ℝ) where
   image : Set U
   measurableSet_image : MeasurableSet image
   /-- the core presentation -/
-  pres : Nonempty (CorePresentation D (volume.restrict image) K n β)
+  pres : CorePresentation D (volume.restrict image) K n β
 
 attribute [instance] CorePiece.instTop CorePiece.instMeas CorePiece.instCompact CorePiece.instT2
   CorePiece.instOpens
@@ -219,7 +241,7 @@ noncomputable def TilingPiece.toCorePiece {D : LocalisationData U} {β : ℝ} (P
   n := P.n
   image := P.image
   measurableSet_image := P.measurableSet_image
-  pres := P.exists_corePresentation
+  pres := P.exists_corePresentation.some
 
 /-- A split box chart over a compact base is a core piece. -/
 noncomputable def SplitBoxChart.toCorePiece {σ : Fin t ⊕ Fin (n + 1) ≃ Fin d}
@@ -232,7 +254,7 @@ noncomputable def SplitBoxChart.toCorePiece {σ : Fin t ⊕ Fin (n + 1) ≃ Fin 
   measurableSet_image :=
     (measurableSet_splitPosBox σ hA.isClosed.measurableSet b).image_of_continuousOn_injOn
       (C.contDiffOn.continuousOn.mono C.box_subset) C.injOn
-  pres := C.exists_corePresentation hA.isClosed.measurableSet hA.measure_lt_top hb
+  pres := C.corePresentation hA.isClosed.measurableSet hA.measure_lt_top hb
 
 /-- **A core tiling**: finitely many core pieces inside the region, pairwise disjoint up to null
 sets, with a positive phase gap off their union. -/
@@ -255,31 +277,65 @@ namespace CoreTiling
 
 variable {D : LocalisationData U} {β : ℝ}
 
-/-- **The bridge**: a core tiling is an analytic core decomposition. -/
-theorem hasAnalyticCoreDecomposition (T : CoreTiling D β) : HasAnalyticCoreDecomposition D β := by
+theorem restrict_iUnion_image_eq (T : CoreTiling D β) :
+    (volume.restrict T.Ω).restrict (⋃ I, (T.piece I).image) =
+      ∑ I, volume.restrict (T.piece I).image := by
   classical
   have hmeas : ∀ I, MeasurableSet (T.piece I).image := fun I => (T.piece I).measurableSet_image
   have hU : MeasurableSet (⋃ I, (T.piece I).image) := MeasurableSet.iUnion hmeas
   have hsub : (⋃ I, (T.piece I).image) ⊆ T.Ω := iUnion_subset T.image_subset
-  have hsum : volume.restrict (⋃ I, (T.piece I).image) =
-      ∑ I, volume.restrict (T.piece I).image := by
-    rw [Measure.restrict_iUnion_ae (fun I J hIJ => T.aedisjoint I J hIJ)
+  rw [Measure.restrict_restrict hU, inter_eq_left.2 hsub,
+    Measure.restrict_iUnion_ae (fun I J hIJ => T.aedisjoint I J hIJ)
       (fun I => (hmeas I).nullMeasurableSet), Measure.sum_fintype]
-  have h1 : (volume.restrict T.Ω).restrict (⋃ I, (T.piece I).image) =
-      volume.restrict (⋃ I, (T.piece I).image) := by
-    rw [Measure.restrict_restrict hU, inter_eq_left.2 hsub]
-  have h2 : (volume.restrict T.Ω).restrict (⋃ I, (T.piece I).image)ᶜ =
-      volume.restrict (T.Ω \ ⋃ I, (T.piece I).image) := by
-    rw [Measure.restrict_restrict hU.compl, sdiff_eq, inter_comm]
-  refine ⟨T.M, fun I => (T.piece I).K, fun I => inferInstance, fun I => inferInstance,
-    fun I => inferInstance, fun I => inferInstance, fun I => inferInstance,
-    fun I => (T.piece I).n, ⟨⟨fun I => volume.restrict (T.piece I).image,
-      volume.restrict (T.Ω \ ⋃ I, (T.piece I).image), ?_, T.δ₀, T.δ₀_pos, ?_,
-      fun I => (T.piece I).pres.some⟩⟩⟩
-  · rw [T.μ_eq, ← hsum, ← h1, ← h2]
+
+/-- **The analytic core decomposition of a core tiling** (data): the cores are the Lebesgue
+measures of the piece images, the tail is the Lebesgue measure of the rest of the region. -/
+noncomputable def toAnalyticCoreDecomposition (T : CoreTiling D β) :
+    AnalyticCoreDecomposition D T.M (fun I => (T.piece I).K) (fun I => (T.piece I).n) β where
+  core I := volume.restrict (T.piece I).image
+  tail := volume.restrict (T.Ω \ ⋃ I, (T.piece I).image)
+  measure_eq := by
+    classical
+    have hU : MeasurableSet (⋃ I, (T.piece I).image) :=
+      MeasurableSet.iUnion fun I => (T.piece I).measurableSet_image
+    have h2 : (volume.restrict T.Ω).restrict (⋃ I, (T.piece I).image)ᶜ =
+        volume.restrict (T.Ω \ ⋃ I, (T.piece I).image) := by
+      rw [Measure.restrict_restrict hU.compl, sdiff_eq, inter_comm]
+    rw [T.μ_eq, ← T.restrict_iUnion_image_eq, ← h2]
     exact (Measure.restrict_add_restrict_compl hU).symm
-  · rw [← h2, ← T.μ_eq, ae_restrict_iff' hU.compl]
+  δ₀ := T.δ₀
+  δ₀_pos := T.δ₀_pos
+  gap := by
+    classical
+    have hU : MeasurableSet (⋃ I, (T.piece I).image) :=
+      MeasurableSet.iUnion fun I => (T.piece I).measurableSet_image
+    have h2 : (volume.restrict T.Ω).restrict (⋃ I, (T.piece I).image)ᶜ =
+        volume.restrict (T.Ω \ ⋃ I, (T.piece I).image) := by
+      rw [Measure.restrict_restrict hU.compl, sdiff_eq, inter_comm]
+    rw [← h2, ← T.μ_eq, ae_restrict_iff' hU.compl]
     exact T.gap
+  chart I := (T.piece I).pres
+
+theorem toAnalyticCoreDecomposition_h (T : CoreTiling D β) (I : Fin T.M) :
+    T.toAnalyticCoreDecomposition.h I = (T.piece I).pres.h := rfl
+
+theorem toAnalyticCoreDecomposition_k (T : CoreTiling D β) (I : Fin T.M) :
+    T.toAnalyticCoreDecomposition.k I = (T.piece I).pres.k := rfl
+
+theorem toAnalyticCoreDecomposition_b (T : CoreTiling D β) (I : Fin T.M) :
+    T.toAnalyticCoreDecomposition.b I = (T.piece I).pres.b := rfl
+
+theorem toAnalyticCoreDecomposition_x (T : CoreTiling D β) (I : Fin T.M) :
+    T.toAnalyticCoreDecomposition.x I = (T.piece I).pres.x := rfl
+
+theorem toAnalyticCoreDecomposition_ν (T : CoreTiling D β) (I : Fin T.M) :
+    T.toAnalyticCoreDecomposition.ν I = (T.piece I).pres.ν := rfl
+
+/-- **The bridge**: a core tiling is an analytic core decomposition. -/
+theorem hasAnalyticCoreDecomposition (T : CoreTiling D β) : HasAnalyticCoreDecomposition D β :=
+  ⟨T.M, fun I => (T.piece I).K, fun _ => inferInstance, fun _ => inferInstance,
+    fun _ => inferInstance, fun _ => inferInstance, fun _ => inferInstance,
+    fun I => (T.piece I).n, ⟨T.toAnalyticCoreDecomposition⟩⟩
 
 /-- **The population expansion from a core tiling.** -/
 theorem cutoffExpansion (T : CoreTiling D β) (hβ : 0 < β) :

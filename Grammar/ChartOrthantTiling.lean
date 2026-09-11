@@ -231,25 +231,131 @@ theorem volume_zBox_inter_hyperplanes (A' : Set (Fin C.t → ℝ)) (b' : ℝ) :
 
 /-! ### The local chart theorem -/
 
-/-- **The orthant core tiling of the local region.** At a divisor point of a hironaka chart with
-centred chart data `C` and strip data `SD`, for every analytic observable `F` near `φ y₀` and
-every compact tangential base `A ∋ 0`, some compact region `Ω = g(zBox σ (A ∩ B̄_B) b') ∋ φ y₀` is
-tiled by the `2^{n+1}` orthant charts: every localisation datum on `Ω` with phase `K` and
-observable `F` has a core tiling. -/
-theorem chart_local_coreTiling (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, AnalyticAt ℝ φ (y + y₀))
+/-! ### The orthant core tiling as data -/
+
+section Tiling
+
+variable (hinj : ∀ w₁ ∈ C.V₀, ∀ w₂ ∈ C.V₀, monomialEval (w₁ + y₀) h ≠ 0 →
+      monomialEval (w₂ + y₀) h ≠ 0 → φ (w₁ + y₀) = φ (w₂ + y₀) → w₁ = w₂)
+  (hφ : ∀ y ∈ C.V₀, AnalyticAt ℝ φ (y + y₀)) {D : LocalisationData (Fin d → ℝ)}
+  {A' : Set (Fin C.t → ℝ)} {b' : ℝ} (hμ : D.μ = volume.restrict (localRegion C SD A' b'))
+  (hA' : IsCompact A') (hA'A : A' ⊆ A) (hb' : 0 < b') (hb'b₁ : b' ≤ b₁) (hb'SD : b' ≤ SD.b)
+  (X : (Fin (C.n + 1) → Bool) → SplitBoxChart C.σ D A' b' β)
+  (hXΨ : ∀ s, (X s).Ψ = orthantChart C SD s)
+
+/-- The sign patterns enumerated. -/
+noncomputable def signIdx : (Fin (C.n + 1) → Bool) ≃ Fin (Fintype.card (Fin (C.n + 1) → Bool)) :=
+  Fintype.equivFin _
+
+include hXΨ in
+theorem toCorePiece_image (s : Fin (C.n + 1) → Bool) :
+    ((X s).toCorePiece hA' hb').image =
+      stripChart C SD '' (splitReflect C.σ s '' splitPosBox C.σ A' b') := by
+  change (X s).Ψ '' splitPosBox C.σ A' b' = _
+  rw [hXΨ, orthantChart_eq, image_comp]
+
+include hA'A hb'b₁ hb'SD in
+theorem splitReflect_image_subset_stripImageOff (s : Fin (C.n + 1) → Bool) :
+    splitReflect C.σ s '' splitPosBox C.σ A' b' ⊆ stripImageOff C SD := by
+  rintro _ ⟨y, hy, rfl⟩
+  exact ⟨zBox_subset_stripImage C SD hA'A hb'b₁ hb'SD (splitReflect_mem_zBox C s hy),
+    fun j => splitReflect_apply_nIdx_ne_zero C s hy j⟩
+
+include hXΨ in
+theorem iUnion_toCorePiece_image :
+    (⋃ I, ((X ((signIdx C).symm I)).toCorePiece hA' hb').image) =
+      ⋃ s : Fin (C.n + 1) → Bool, orthantChart C SD s '' splitPosBox C.σ A' b' := by
+  ext x
+  simp only [mem_iUnion, toCorePiece_image C SD hA' hb' X hXΨ]
+  constructor
+  · rintro ⟨I, hI⟩
+    refine ⟨(signIdx C).symm I, ?_⟩
+    rw [orthantChart_eq, image_comp]
+    exact hI
+  · rintro ⟨s, hs⟩
+    refine ⟨signIdx C s, ?_⟩
+    rw [Equiv.symm_apply_apply]
+    rw [orthantChart_eq, image_comp] at hs
+    exact hs
+
+include hφ hA'A hb'b₁ hb'SD in
+/-- The image under the strip chart of the strip box on the normal hyperplanes is null. -/
+theorem volume_stripChart_image_hyperplanes :
+    volume (stripChart C SD '' (zBox C.σ A' b' ∩ {ζ | ¬ ∀ j, ζ (nIdx C.σ j) ≠ 0})) = 0 := by
+  refine addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero volume ?_
+    (volume_zBox_inter_hyperplanes C A' b')
+  intro ζ hζ
+  exact (analyticAt_stripChart C SD hφ
+    (zBox_subset_stripImage C SD hA'A hb'b₁ hb'SD hζ.1)).differentiableAt.differentiableWithinAt
+
+/-- **The orthant core tiling** of the local region by the `2^{n+1}` orthant split box charts. -/
+noncomputable def orthantCoreTiling : CoreTiling D β where
+  Ω := localRegion C SD A' b'
+  μ_eq := hμ
+  M := Fintype.card (Fin (C.n + 1) → Bool)
+  piece I := (X ((signIdx C).symm I)).toCorePiece hA' hb'
+  image_subset I := by
+    rw [toCorePiece_image C SD hA' hb' X hXΨ]
+    refine image_mono ?_
+    rintro _ ⟨y, hy, rfl⟩
+    exact splitReflect_mem_zBox C _ hy
+  aedisjoint I J hIJ := by
+    rw [toCorePiece_image C SD hA' hb' X hXΨ, toCorePiece_image C SD hA' hb' X hXΨ,
+      ← (injOn_stripChart C SD hinj).image_inter
+        (splitReflect_image_subset_stripImageOff C SD hA'A hb'b₁ hb'SD _)
+        (splitReflect_image_subset_stripImageOff C SD hA'A hb'b₁ hb'SD _),
+      (disjoint_splitOrthant (σ := C.σ) (fun hs => hIJ ((signIdx C).symm.injective hs))
+        A' b').inter_eq, image_empty, measure_empty]
+  δ₀ := 1
+  δ₀_pos := one_pos
+  gap := by
+    have hΩm : MeasurableSet (localRegion C SD A' b') :=
+      (isCompact_localRegion C SD hφ hA' hA'A hb'b₁ hb'SD).isClosed.measurableSet
+    rw [hμ, ae_iff, Measure.restrict_apply' hΩm]
+    refine measure_mono_null ?_
+      (volume_stripChart_image_hyperplanes C SD hφ hA'A hb'b₁ hb'SD)
+    intro z hz
+    rw [mem_inter_iff, mem_ofPred_eq, Classical.not_imp] at hz
+    refine localRegion_sdiff_subset C SD ⟨hz.2, ?_⟩
+    rw [← iUnion_toCorePiece_image C SD hA' hb' X hXΨ]
+    exact hz.1.1
+
+theorem orthantCoreTiling_piece (I) :
+    (orthantCoreTiling C SD hinj hφ hμ hA' hA'A hb' hb'b₁ hb'SD X hXΨ).piece I =
+      (X ((signIdx C).symm I)).toCorePiece hA' hb' := rfl
+
+theorem orthantCoreTiling_M :
+    (orthantCoreTiling C SD hinj hφ hμ hA' hA'A hb' hb'b₁ hb'SD X hXΨ).M =
+      Fintype.card (Fin (C.n + 1) → Bool) := rfl
+
+end Tiling
+
+/-- **The orthant split box charts of the local region.** At a divisor point of a hironaka chart
+with centred chart data `C` and strip data `SD`, for every analytic observable `F` near `φ y₀`,
+every compact tangential base `A ∋ 0` and every open `U' ∋ φ y₀`, some compact region
+`Ω = g(zBox σ (A ∩ B̄_B) b') ∋ φ y₀` inside `U'` carries, for every localisation datum on `Ω` with
+phase `K` and observable `F`, the `2^{n+1}` orthant split box charts with Jacobian exponents
+`h_{n_j}`, phase exponents `k` and box side `b'`. -/
+theorem exists_orthantSplitBoxCharts (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, AnalyticAt ℝ φ (y + y₀))
     (hinj : ∀ w₁ ∈ C.V₀, ∀ w₂ ∈ C.V₀, monomialEval (w₁ + y₀) h ≠ 0 →
       monomialEval (w₂ + y₀) h ≠ 0 → φ (w₁ + y₀) = φ (w₂ + y₀) → w₁ = w₂)
     {F : (Fin d → ℝ) → ℝ} (hF : ∀ w ∈ C.V₀, AnalyticAt ℝ F (translated φ y₀ w)) (hA : IsCompact A)
-    (h0 : (0 : Fin C.t → ℝ) ∈ A) (hb₁ : 0 < b₁) :
-    ∃ (B b' : ℝ), 0 < B ∧ 0 < b' ∧
+    (h0 : (0 : Fin C.t → ℝ) ∈ A) (hb₁ : 0 < b₁) {U' : Set (Fin d → ℝ)} (hU' : IsOpen U')
+    (hy₀U' : φ y₀ ∈ U') :
+    ∃ (B b' : ℝ), 0 < B ∧ 0 < b' ∧ b' ≤ b₁ ∧ b' ≤ SD.b ∧
       IsCompact (localRegion C SD (A ∩ Metric.closedBall 0 B) b') ∧
       φ y₀ ∈ localRegion C SD (A ∩ Metric.closedBall 0 B) b' ∧
       localRegion C SD (A ∩ Metric.closedBall 0 B) b' ⊆ translated φ y₀ '' C.V₀ ∧
+      localRegion C SD (A ∩ Metric.closedBall 0 B) b' ⊆ U' ∧
       ∀ D : LocalisationData (Fin d → ℝ),
-        D.μ = volume.restrict (localRegion C SD (A ∩ Metric.closedBall 0 B) b') →
         (∀ w ∈ C.V₀, D.phase (translated φ y₀ w) = K (translated φ y₀ w)) →
         (∀ w ∈ C.V₀, D.obs (translated φ y₀ w) = F (translated φ y₀ w)) →
-        Nonempty (CoreTiling D β) := by
+        ∃ X : (Fin (C.n + 1) → Bool) →
+          SplitBoxChart C.σ D (A ∩ Metric.closedBall 0 B) b' β,
+          ∀ s, (X s).Ψ = orthantChart C SD s ∧ (X s).h = (fun j => h (nIdx C.σ j)) ∧
+            (X s).k = C.k ∧ (X s).jac = orthantJac C SD s ∧
+            ∀ (v : ↥(A ∩ Metric.closedBall 0 B)) (u : Fin (C.n + 1) → ℝ), (∀ j, |u j| ≤ b') →
+              evalF (toEta b' ((X s).amp v)) u = orthantAmp C SD s F (v.1, u) := by
   classical
   -- the joint series at the tangential origin, for every sign pattern
   set b₂ : ℝ := min b₁ SD.b with hb₂
@@ -276,15 +382,46 @@ theorem chart_local_coreTiling (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, AnalyticA
     (ENNReal.coe_le_coe.2 (hs₀ s (Finset.mem_univ s))).trans_lt (hrR s)
   have hρpos : (0 : ℝ) < ρ := by exact_mod_cast hr0 s₀
   -- the margin
-  set B : ℝ := ρ / ((C.t + (C.n + 1) : ℕ) + 2) with hB
-  have hBpos : 0 < B := by positivity
-  have hBρ : ((C.t + (C.n + 1) : ℕ) : ℝ) * B < ρ := by
-    rw [hB, mul_div_assoc']
+  set B₀ : ℝ := ρ / ((C.t + (C.n + 1) : ℕ) + 2) with hB₀
+  have hB₀pos : 0 < B₀ := by positivity
+  have hB₀ρ : ((C.t + (C.n + 1) : ℕ) : ℝ) * B₀ < ρ := by
+    rw [hB₀, mul_div_assoc']
     rw [div_lt_iff₀ (by positivity)]
     nlinarith
-  have hB1 : B < ρ := by
-    rw [hB, div_lt_iff₀ (by positivity)]
+  have hB₀1 : B₀ < ρ := by
+    rw [hB₀, div_lt_iff₀ (by positivity)]
     nlinarith
+  -- the shrinking into `U'`: continuity of the strip chart in product coordinates at the origin
+  have h00 : prodToPi C.σ ((0 : Fin C.t → ℝ), (0 : Fin (C.n + 1) → ℝ)) = 0 := by
+    funext x
+    obtain ⟨z, rfl⟩ := C.σ.surjective x
+    rcases z with i | j
+    · rw [show C.σ (Sum.inl i) = tIdx C.σ i from rfl, prodToPi_apply_tIdx]
+      rfl
+    · rw [show C.σ (Sum.inr j) = nIdx C.σ j from rfl, prodToPi_apply_nIdx]
+      rfl
+  have hg0 : stripChart C SD (prodToPi C.σ ((0 : Fin C.t → ℝ), (0 : Fin (C.n + 1) → ℝ))) =
+      φ y₀ := by
+    rw [h00, stripChart, inv_zero C SD h0 hb₁.le, translated, zero_add]
+  have hgc : ContinuousAt (stripChart C SD ∘ prodToPi C.σ)
+      ((0 : Fin C.t → ℝ), (0 : Fin (C.n + 1) → ℝ)) := by
+    have hmem0 : prodToPi C.σ ((0 : Fin C.t → ℝ), (0 : Fin (C.n + 1) → ℝ)) ∈
+        stripImage C SD := by
+      have := h0dom (fun _ => true)
+      rw [mem_orthantDomain_iff', splitReflect_prodToPi, reflectChart_apply, map_zero] at this
+      exact this
+    exact (analyticAt_stripChart C SD hφ hmem0).continuousAt.comp
+      continuous_prodToPi.continuousAt
+  obtain ⟨ε, hε, hball⟩ := Metric.mem_nhds_iff.1 (hgc.preimage_mem_nhds (by
+    rw [Function.comp_apply, hg0]
+    exact hU'.mem_nhds hy₀U'))
+  set B : ℝ := min B₀ (ε / 2) with hB
+  have hBpos : 0 < B := lt_min hB₀pos (half_pos hε)
+  have hBB₀ : B ≤ B₀ := min_le_left _ _
+  have hBε : B ≤ ε / 2 := min_le_right _ _
+  have hBρ : ((C.t + (C.n + 1) : ℕ) : ℝ) * B < ρ :=
+    (mul_le_mul_of_nonneg_left hBB₀ (by positivity)).trans_lt hB₀ρ
+  have hB1 : B < ρ := hBB₀.trans_lt hB₀1
   set b' : ℝ := min B b₂ with hb'
   have hb'pos : 0 < b' := lt_min hBpos hb₂pos
   have hb'b₁ : b' ≤ b₁ := (min_le_right _ _).trans (min_le_left _ _)
@@ -302,72 +439,56 @@ theorem chart_local_coreTiling (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, AnalyticA
   have hΩc : IsCompact Ω := isCompact_localRegion C SD hφ hA'c hA'A hb'b₁ hb'SD
   have hΩm : MeasurableSet Ω := hΩc.isClosed.measurableSet
   have hzS : zBox C.σ A' b' ⊆ stripImage C SD := zBox_subset_stripImage C SD hA'A hb'b₁ hb'SD
-  refine ⟨B, b', hBpos, hb'pos, hΩc, mem_localRegion_zero C SD h0' h0 hb₁.le hb'pos.le,
-    localRegion_subset C SD hA'A hb'b₁ hb'SD, ?_⟩
-  intro D hμ hphase hobs
-  -- the orthant charts
+  have hΩU' : Ω ⊆ U' := by
+    rintro _ ⟨ζ, ⟨p, hp, rfl⟩, rfl⟩
+    refine hball (?_ : p ∈ Metric.ball 0 ε)
+    rw [Metric.mem_ball, dist_zero_right, Prod.norm_def]
+    have h1 : ‖p.1‖ ≤ B := by simpa using hp.1.2
+    have h2 : ‖p.2‖ ≤ b' := by
+      rw [pi_norm_le_iff_of_nonneg hb'pos.le]
+      intro j
+      have := hp.2 j (mem_univ j)
+      rw [Real.norm_eq_abs, abs_le]
+      exact ⟨this.1, this.2⟩
+    have hb'B : b' ≤ B := min_le_left _ _
+    exact (max_le h1 (h2.trans hb'B)).trans_lt (hBε.trans_lt (half_lt_self hε))
+  refine ⟨B, b', hBpos, hb'pos, hb'b₁, hb'SD, hΩc,
+    mem_localRegion_zero C SD h0' h0 hb₁.le hb'pos.le,
+    localRegion_subset C SD hA'A hb'b₁ hb'SD, hΩU', ?_⟩
+  intro D hphase hobs
   have hX : ∀ s : Fin (C.n + 1) → Bool, ∃ X : SplitBoxChart C.σ D A' b' β,
       X.Ψ = orthantChart C SD s ∧ X.h = (fun j => h (nIdx C.σ j)) ∧ X.k = C.k ∧
-        X.jac = orthantJac C SD s := fun s =>
+        X.jac = orthantJac C SD s ∧
+        ∀ (v : A') (u : Fin (C.n + 1) → ℝ), (∀ j, |u j| ≤ b') →
+          evalF (toEta b' (X.amp v)) u = orthantAmp C SD s F (v.1, u) := fun s =>
     exists_splitBoxChart_orthant C SD hβ hφ hinj (D := D) hphase hobs
       hA'c hA'A hb'pos hb'b₁ hb'SD (min_le_left _ _) hBpos hAB s (hPR s) (hρR s) hBρ hB1
   choose X hX using hX
-  -- the pieces
-  set e := Fintype.equivFin (Fin (C.n + 1) → Bool) with he
-  let piece : Fin (Fintype.card (Fin (C.n + 1) → Bool)) → CorePiece D β := fun I =>
-    (X (e.symm I)).toCorePiece hA'c hb'pos
-  have himage : ∀ I, (piece I).image =
-      stripChart C SD '' (splitReflect C.σ (e.symm I) '' splitPosBox C.σ A' b') := by
-    intro I
-    change (X (e.symm I)).Ψ '' splitPosBox C.σ A' b' = _
-    rw [(hX _).1, orthantChart_eq, image_comp]
-  have hoff : ∀ s : Fin (C.n + 1) → Bool,
-      splitReflect C.σ s '' splitPosBox C.σ A' b' ⊆ stripImageOff C SD := by
-    rintro s _ ⟨y, hy, rfl⟩
-    exact ⟨hzS (splitReflect_mem_zBox C s hy), fun j => splitReflect_apply_nIdx_ne_zero C s hy j⟩
-  have hunion : (⋃ I, (piece I).image) =
-      ⋃ s : Fin (C.n + 1) → Bool, orthantChart C SD s '' splitPosBox C.σ A' b' := by
-    ext x
-    simp only [mem_iUnion, himage]
-    constructor
-    · rintro ⟨I, hI⟩
-      refine ⟨e.symm I, ?_⟩
-      rw [orthantChart_eq, image_comp]
-      exact hI
-    · rintro ⟨s, hs⟩
-      refine ⟨e s, ?_⟩
-      rw [Equiv.symm_apply_apply]
-      rw [orthantChart_eq, image_comp] at hs
-      exact hs
-  -- the null set off the pieces
-  have hnull : volume (stripChart C SD ''
-      (zBox C.σ A' b' ∩ {ζ | ¬ ∀ j, ζ (nIdx C.σ j) ≠ 0})) = 0 := by
-    refine addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero volume ?_
-      (volume_zBox_inter_hyperplanes C A' b')
-    intro ζ hζ
-    exact (analyticAt_stripChart C SD hφ (hzS hζ.1)).differentiableAt.differentiableWithinAt
-  -- the core tiling
-  let T : CoreTiling D β :=
-    { Ω := Ω, μ_eq := hμ, M := Fintype.card (Fin (C.n + 1) → Bool), piece := piece,
-      image_subset := fun I => by
-        rw [himage]
-        refine image_mono ?_
-        rintro _ ⟨y, hy, rfl⟩
-        exact splitReflect_mem_zBox C _ hy,
-      aedisjoint := fun I J hIJ => by
-        rw [himage, himage, ← (injOn_stripChart C SD hinj).image_inter (hoff _) (hoff _),
-          (disjoint_splitOrthant (σ := C.σ) (fun hs => hIJ (e.symm.injective hs)) A' b').inter_eq,
-          image_empty, measure_empty],
-      δ₀ := 1, δ₀_pos := one_pos,
-      gap := by
-        rw [hμ, ae_iff, Measure.restrict_apply' hΩm]
-        refine measure_mono_null ?_ hnull
-        intro z hz
-        rw [mem_inter_iff, mem_ofPred_eq, Classical.not_imp] at hz
-        refine localRegion_sdiff_subset C SD ⟨hz.2, ?_⟩
-        rw [← hunion]
-        exact hz.1.1 }
-  exact ⟨T⟩
+  exact ⟨X, hX⟩
+
+/-- **The orthant core tiling of the local region.** Every localisation datum on the region
+`Ω` of `exists_orthantSplitBoxCharts` with phase `K` and observable `F` has a core tiling. -/
+theorem chart_local_coreTiling (hβ : 0 < β) (hφ : ∀ y ∈ C.V₀, AnalyticAt ℝ φ (y + y₀))
+    (hinj : ∀ w₁ ∈ C.V₀, ∀ w₂ ∈ C.V₀, monomialEval (w₁ + y₀) h ≠ 0 →
+      monomialEval (w₂ + y₀) h ≠ 0 → φ (w₁ + y₀) = φ (w₂ + y₀) → w₁ = w₂)
+    {F : (Fin d → ℝ) → ℝ} (hF : ∀ w ∈ C.V₀, AnalyticAt ℝ F (translated φ y₀ w)) (hA : IsCompact A)
+    (h0 : (0 : Fin C.t → ℝ) ∈ A) (hb₁ : 0 < b₁) :
+    ∃ (B b' : ℝ), 0 < B ∧ 0 < b' ∧
+      IsCompact (localRegion C SD (A ∩ Metric.closedBall 0 B) b') ∧
+      φ y₀ ∈ localRegion C SD (A ∩ Metric.closedBall 0 B) b' ∧
+      localRegion C SD (A ∩ Metric.closedBall 0 B) b' ⊆ translated φ y₀ '' C.V₀ ∧
+      ∀ D : LocalisationData (Fin d → ℝ),
+        D.μ = volume.restrict (localRegion C SD (A ∩ Metric.closedBall 0 B) b') →
+        (∀ w ∈ C.V₀, D.phase (translated φ y₀ w) = K (translated φ y₀ w)) →
+        (∀ w ∈ C.V₀, D.obs (translated φ y₀ w) = F (translated φ y₀ w)) →
+        Nonempty (CoreTiling D β) := by
+  obtain ⟨B, b', hB, hb', hb'b₁, hb'SD, hΩc, hmem, hsub, -, hX⟩ :=
+    exists_orthantSplitBoxCharts C SD hβ hφ hinj hF hA h0 hb₁ isOpen_univ (mem_univ _)
+  refine ⟨B, b', hB, hb', hΩc, hmem, hsub, ?_⟩
+  intro D hμ hphase hobs
+  obtain ⟨X, hX⟩ := hX D hphase hobs
+  exact ⟨orthantCoreTiling C SD hinj hφ hμ (hA.inter_right Metric.isClosed_closedBall)
+    inter_subset_left hb' hb'b₁ hb'SD X fun s => (hX s).1⟩
 
 /-- **The local chart theorem.** At a divisor point of a hironaka chart with centred chart data
 `C` and strip data `SD` (both existing by CCII and `exists_stripData`), for every analytic
