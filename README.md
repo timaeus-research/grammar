@@ -19,7 +19,7 @@ the data premise of the stochastic theorem `thm:strataempiricalexpansion`, with 
 chart moment certificate derived from the order-zero envelope of the paper's
 Hypothesis I under the division bridge, and all charts treated jointly from one sample.
 
-The library `Grammar` has 493 modules and no `sorry` or additional axioms. The
+The library `Grammar` has 494 modules and no `sorry` or additional axioms. The
 headline theorems, their gates, the independent statement-level reviews and the
 explicit non-claims are indexed in [`Grammar/HEADLINES.md`](Grammar/HEADLINES.md);
 a one-page layer map of the spatial, random-data and geometric-bridge programmes is
@@ -31,6 +31,7 @@ a one-page layer map of the spatial, random-data and geometric-bridge programmes
 
 | | Theorem | File |
 |---|---|---|
+| CXC | **Exact-monomial tiling**: a box with the exact monomial phase tiles, up to a positive phase gap, into finitely many disjoint monomial cores (one tangential-monomial rescaling each, exact phase `∏_{j∈S} w_j^{2k_j}` on a product set), by one induction with the weighted-product invariant | `Grammar/MonomialTiling.lean` (`MonomialCore`, `coreMap`, `normalPhase_eq_prod_coreMap`, `exists_absorption`, `exists_monomialTiling`) |
 | CLXXXIX | **Compact-strip normalisation**: the unit-removal rescaling is injective on a strip over a compact base by fibrewise monotonicity, with positive Jacobian `ρ + y_i∂_iρ`, open image containing a cylinder of positive height, and analytic inverse | `Grammar/StripNormalisation.lean` (`fibreMap`, `hasFDerivAt_rescale`, `det_rescaleDerivAt`, `exists_stripNormalisation`) |
 | CLXXXVIII | **Parity and sign**: on a nonnegative monomial chart the coordinates vanishing at the centre carry even exponents, and absorbing the others into the unit gives `K = u'·∏ y_j^{2k_j}` with `u' > 0` analytic near the centre | `Grammar/MonomialParity.lean` (`even_exponent_of_nonneg`, `reducedUnit_pos`, `exists_even_positive_form`) |
 | CLXXXVII | **Exact unit removal**: on a monomial chart `K = u·y^e` the analytic unit is absorbed exactly by rescaling one divisor coordinate; the rescaling is analytic with invertible differential on the divisor, and the analytic inverse function theorem gives a local analytic normal form `K ∘ ψ⁻¹ = β·z^e` | `Grammar/MonomialUnitRemoval.lean` (`exact_normal_form`, `analyticAt_rescale`, `hasFDerivAt_rescale_of_zero`, `LocalNormalForm`, `exists_localNormalForm`) |
