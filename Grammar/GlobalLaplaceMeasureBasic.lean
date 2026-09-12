@@ -19,7 +19,7 @@ that for every bounded continuous test function `a`
 
 * `globalLaplace W K a t = ∫_W a e^{−tK}` is the target integral with the trivial tube weight
   (`globalLaplace_eq_targetIntegral`), so every target-region certificate of the library applies.
-* `LeadingFacePiece`: a finite measure on a Euclidean face space together with a measurable map to
+* `LeadingFacePiece`: a finite measure on a face space together with a measurable map to
   the parameter space; its pushforward `targetMeasure` is a finite measure on the parameter space,
   and a finite family of such pieces has the leading measure `leadingMeasureOf pieces T`
   (`∫ f dσ = Σ_T ∫ f ∘ toTarget dν_a`, concentration on any set that a.e. contains the images).
@@ -141,19 +141,20 @@ theorem coeff_mono_of_hasLeadingTerm (hW : volume W ≠ ⊤) (hK : Measurable K)
 
 /-! ### Face pieces and their pushforwards -/
 
-/-- **A leading face piece**: a finite measure on a Euclidean face space with a measurable map to
-the parameter space (the composite of a chart map with the embedding of a face). -/
+/-- **A leading face piece**: a finite measure on a face space with a measurable map to the
+parameter space (the composite of a chart map with the embedding of a face). -/
 structure LeadingFacePiece (d : ℕ) where
-  /-- The dimension of the face space. -/
-  dim : ℕ
+  /-- The face space. -/
+  α : Type
+  [mα : MeasurableSpace α]
   /-- The face measure (all geometric factors of the coefficient). -/
-  measure : Measure (Fin dim → ℝ)
+  measure : Measure α
   [finite : IsFiniteMeasure measure]
   /-- The map to the parameter space. -/
-  toTarget : (Fin dim → ℝ) → (Fin d → ℝ)
+  toTarget : α → (Fin d → ℝ)
   measurable_toTarget : Measurable toTarget
 
-attribute [instance] LeadingFacePiece.finite
+attribute [instance] LeadingFacePiece.mα LeadingFacePiece.finite
 
 namespace LeadingFacePiece
 
