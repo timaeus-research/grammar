@@ -568,3 +568,4 @@ import Grammar.LeadingTermConsequences
 import Grammar.VariableResidualFormula
 import Grammar.VariableUnitResidualExample
 import Grammar.VariableNoActiveAssembly
+import Grammar.MonomialChartProductBox
