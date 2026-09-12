@@ -619,3 +619,4 @@ import Grammar.AnalyticSeriesFamily
 import Grammar.CoordinateBoxCoreCertificate
 import Grammar.ParameterisedSeriesDatum
 import Grammar.DiagonalBoxTransport
+import Grammar.NormalisedBoxCore

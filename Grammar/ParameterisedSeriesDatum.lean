@@ -153,6 +153,11 @@ theorem toEta_datumC (x : X) : toEta b (F.datumC hb hbb' x) = F.f x := F.toEta_d
 
 theorem toXi_datumC (x : X) : toXi b (F.datumC hb hbb' x) = 0 := F.toXi_datum hb hbb' x
 
+theorem xiCoord_datum (x : X) : xiCoord (F.datum hb hbb' x) = 0 :=
+  funext fun γ => F.datum_inl hb hbb' x γ
+
+theorem xiCoord_datumC (x : X) : xiCoord (F.datumC hb hbb' x) = 0 := F.xiCoord_datum hb hbb' x
+
 /-! ### Joint continuity of the evaluated series -/
 
 omit hb hbb'
