@@ -633,3 +633,4 @@ import Grammar.HolomorphicOriginalFaceSeries
 import Grammar.AnalyticCoordinateBoxExpansion
 import Grammar.ExpansionCongruence
 import Grammar.LocalAnalyticInputs
+import Grammar.PolynomialBoxInstance

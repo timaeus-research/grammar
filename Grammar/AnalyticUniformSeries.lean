@@ -41,8 +41,9 @@ theorem summable_cauchyMajorant_weight (m : ℕ) {ρ r : ℝ} (hρ : 0 ≤ ρ) (
 variable {X : Type*} [TopologicalSpace X] {m : ℕ} {ρ r R M : ℝ}
 
 /-- ★ **Analytic uniform series at an arbitrary radius**: the real Cauchy coefficients at radius `r`
-of a holomorphic family, jointly continuous and bounded by `M` on the closed polydisc of radius `r`,
-form a `ρ`-summable uniform series family for every `ρ < r`. -/
+of a family jointly continuous and bounded by `M` on the closed polydisc of radius `r` form a
+`ρ`-summable uniform series family for every `ρ < r`. (Holomorphicity is not needed for the family
+itself; it enters only in the reconstruction `evalF_analyticUniformSeries`.) -/
 noncomputable def analyticUniformSeries (hρ : 0 < ρ) (hρr : ρ < r) (F : X → (Fin m → ℂ) → ℂ)
     (hcont : ContinuousOn (fun p : X × (Fin m → ℂ) => F p.1 p.2) (univ ×ˢ closedPolydisc m r))
     (hbound : ∀ x, ∀ z ∈ closedPolydisc m r, ‖F x z‖ ≤ M) : UniformSeriesFamily X m ρ where

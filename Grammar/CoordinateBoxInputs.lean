@@ -287,6 +287,16 @@ theorem globalLaplace_congr_on {K a' a'' : (Fin d → ℝ) → ℝ}
   unfold globalLaplace
   exact setIntegral_congr_fun (measurableSet_W a) fun w hw => by simp only [h w hw]
 
+/-- Integrability of the observable against the positive-part weight, as a named theorem: a
+`▸`-cast in a certificate argument makes the kernel reduce the equality proof when two statements
+are compared, so certificate statements use this constant instead. -/
+theorem integrable_posPart (hϕ0W : ∀ w ∈ piBox d (Icc 0 a), 0 ≤ ϕ w)
+    (hint : Integrable φ
+      ((volume.restrict (piBox d (Icc 0 a))).withDensity fun w => ENNReal.ofReal (ϕ w))) :
+    Integrable φ
+      ((volume.restrict (piBox d (Icc 0 a))).withDensity fun w => ENNReal.ofReal (posPart ϕ w)) :=
+  (withDensity_posPart a hϕ0W).symm ▸ hint
+
 include hφm in
 /-- ★★★ **The compact-box expansion for a prior nonnegative on the box**: the expansion of
 `∫_{[0,a]^d} φ ϕ e^{−nK}` holds with the certificate and coefficient field of the positive part
@@ -295,17 +305,17 @@ theorem hasCoordFreeExpansion_collar_of_nonneg_on (hϕ0W : ∀ w ∈ piBox d (Ic
     (F : ∀ I : NonemptyIdx d, FaceSeries k hk a δ ϕ φ I) :
     (normalData d k (zeroOrders d) hk).HasCoordFreeExpansion
       (certificate k hk a δ hδ (posPart ϕ) φ (measurable_posPart hϕm) (posPart_nonneg ϕ)
-        ((withDensity_posPart a hϕ0W).symm ▸ hφint) hd ha hδa
+        (integrable_posPart a hϕ0W hφint) hd ha hδa
         fun I => (F I).toPosPart k hk a δ hδ hd ha hδa hϕ0W).stratumMeasure
       (coeffCertificate k hk a δ hδ (posPart ϕ) φ (measurable_posPart hϕm) (posPart_nonneg ϕ)
-        ((withDensity_posPart a hϕ0W).symm ▸ hφint) hd ha hδa
+        (integrable_posPart a hϕ0W hφint) hd ha hδa
         fun I => (F I).toPosPart k hk a δ hδ hd ha hδa hϕ0W).field
       (spectrumLe (commonQ (certificate k hk a δ hδ (posPart ϕ) φ (measurable_posPart hϕm)
-        (posPart_nonneg ϕ) ((withDensity_posPart a hϕ0W).symm ▸ hφint) hd ha hδa
+        (posPart_nonneg ϕ) (integrable_posPart a hϕ0W hφint) hd ha hδa
         fun I => (F I).toPosPart k hk a δ hδ hd ha hδa hϕ0W).cores.k) (d - 1))
       (piBox d (Icc 0 a)) (CoordModel.phase d k) ϕ φ := by
   have h := hasCoordFreeExpansion_collar' k hk a δ hδ (posPart ϕ) φ (measurable_posPart hϕm)
-    (posPart_nonneg ϕ) hφm ((withDensity_posPart a hϕ0W).symm ▸ hφint) hd ha hδa
+    (posPart_nonneg ϕ) hφm (integrable_posPart a hϕ0W hφint) hd ha hδa
     fun I => (F I).toPosPart k hk a δ hδ hd ha hδa hϕ0W
   intro A
   have hA := h A

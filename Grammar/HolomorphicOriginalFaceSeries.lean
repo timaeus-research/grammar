@@ -158,8 +158,9 @@ noncomputable def uniformSeries (H : (Fin d → ℂ) → ℂ) (hH : Differentiab
     fun s _ hz => norm_recentred_le a I (by linarith [A.bufferRadius_pos a]) hM s
       (norm_le_of_mem_closedPolydisc (by linarith [A.bufferRadius_pos a]) hz)
 
-/-- F. The evaluation identity for the original real function on the real ball of radius
-`A.radius`. -/
+/-- F. The evaluation identity on the real ball of radius `A.radius`: the series reconstructs
+`Re H` at the recentred point (the identification with the original real function is made in
+`faceSeries`, through the packet's real-slice agreement). -/
 theorem evalF_uniformSeries (H : (Fin d → ℂ) → ℂ) (hH : DifferentiableOn ℂ H A.Ω)
     (hM : ∀ w ∈ piBox d (Icc 0 a), ∀ z : Fin d → ℂ, ‖z‖ ≤ A.bufferRadius a →
       ‖H (complexify w + z)‖ ≤ A.bound a) (I : NonemptyIdx d) (s : ↥(faceSet a I.1))

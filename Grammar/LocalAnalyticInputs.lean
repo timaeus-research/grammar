@@ -23,7 +23,8 @@ extension packet for the representatives (`toRep`), the existing theorem applies
 expansion transfers to the original functions by the congruence of CCCXXXIII (the products agree
 on the box; the certificate's stratum measures live in the box, where the germs agree) — H3:
 ★★★ `hasCoordFreeExpansion_of_holomorphicBoxExtension_local`, whose hypotheses are the packet,
-`0 < d`, `0 < a` and nonnegativity of the prior on the box only.
+`0 < d`, `0 < a` and nonnegativity of the prior on the box only, stated with the named produced
+certificates `producedCertificate`, `producedCoeffCertificate`.
 
 Non-claims: the certificates are those of the representatives' positive part (visibly produced);
 the holomorphic extensions remain hypotheses. Zero `sorry`/`axiom`.
@@ -163,38 +164,47 @@ theorem integrable_obsRep :
 end HolomorphicBoxExtension
 
 variable (k : Fin d → ℕ) (hk : ∀ i, 0 < k i) (A : HolomorphicBoxExtension a ϕ φ) (hd : 0 < d)
-  (ha : 0 < a)
+  (ha : 0 < a) (hϕ0W : ∀ w ∈ piBox d (Icc 0 a), 0 ≤ ϕ w) (δ : ℝ) (hδ : 0 < δ)
+  (hδa : ∀ i, δ ^ ((d : ℝ)⁻¹) < a ^ (2 * k i))
+  (hsmall : ∀ (I : NonemptyIdx d) (i : Fin (nI I + 1)),
+    2 * δ ^ ((d : ℝ)⁻¹ * ((2 * k (σI I i).1 : ℕ) : ℝ)⁻¹) < (A.toRep.faceSeries a I).ρ)
 
+/-- **The produced certificate**: the compact-box certificate of the positive part of the prior
+representative and the observable representative at collar level `δ`, from the face series of
+the representatives' packet. -/
+noncomputable def producedCertificate :
+    ResolvedCertificate (geometry d k (zeroOrders d) hk) (normalData d k (zeroOrders d) hk)
+      (piBox d (Icc 0 a)) (CoordModel.phase d k) (posPart A.priorRep) A.obsRep :=
+  certificate k hk a δ hδ (posPart A.priorRep) A.obsRep (measurable_posPart A.measurable_priorRep)
+    (posPart_nonneg A.priorRep)
+    (integrable_posPart a (A.priorRep_nonneg_on hϕ0W) A.integrable_obsRep) hd ha hδa fun I =>
+      ((A.toRep.faceSeries a I).toFaceSeries k hk a δ hδ hd ha (hsmall I)).toPosPart k hk a δ hδ hd
+        ha hδa (A.priorRep_nonneg_on hϕ0W)
+
+/-- **The produced coefficient certificate.** -/
+noncomputable def producedCoeffCertificate :
+    (producedCertificate k hk A hd ha hϕ0W δ hδ hδa hsmall).CoefficientCertificate :=
+  coeffCertificate k hk a δ hδ (posPart A.priorRep) A.obsRep
+    (measurable_posPart A.measurable_priorRep) (posPart_nonneg A.priorRep)
+    (integrable_posPart a (A.priorRep_nonneg_on hϕ0W) A.integrable_obsRep) hd ha hδa fun I =>
+      ((A.toRep.faceSeries a I).toFaceSeries k hk a δ hδ hd ha (hsmall I)).toPosPart k hk a δ hδ hd
+        ha hδa (A.priorRep_nonneg_on hϕ0W)
+
+omit δ hδ hδa hsmall in
 /-- ★★★ **The coordinate-free expansion from holomorphic data near the box, with local inputs
 only**: the hypotheses are the extension packet, `0 < d`, `0 < a` and nonnegativity of the prior
 on the box. For some collar level `δ`, the original integral `∫_{[0,a]^d} φ ϕ e^{−nK}` has the
-coordinate-free expansion with the stratum measures and the coefficient field of the certificates
-built from the face series of the representatives' packet and the positive part of the prior
-representative. -/
-theorem hasCoordFreeExpansion_of_holomorphicBoxExtension_local
-    (hϕ0W : ∀ w ∈ piBox d (Icc 0 a), 0 ≤ ϕ w) :
+coordinate-free expansion with the stratum measures and the coefficient field of the produced
+certificates (`producedCertificate`, `producedCoeffCertificate`). -/
+theorem hasCoordFreeExpansion_of_holomorphicBoxExtension_local :
     ∃ (δ : ℝ) (hδ : 0 < δ) (hδa : ∀ i, δ ^ ((d : ℝ)⁻¹) < a ^ (2 * k i))
       (hsmall : ∀ (I : NonemptyIdx d) (i : Fin (nI I + 1)),
         2 * δ ^ ((d : ℝ)⁻¹ * ((2 * k (σI I i).1 : ℕ) : ℝ)⁻¹) < (A.toRep.faceSeries a I).ρ),
       (normalData d k (zeroOrders d) hk).HasCoordFreeExpansion
-        (certificate k hk a δ hδ (posPart A.priorRep) A.obsRep
-          (measurable_posPart A.measurable_priorRep) (posPart_nonneg A.priorRep)
-          ((withDensity_posPart a (A.priorRep_nonneg_on hϕ0W)).symm ▸ A.integrable_obsRep)
-          hd ha hδa fun I =>
-            ((A.toRep.faceSeries a I).toFaceSeries k hk a δ hδ hd ha (hsmall I)).toPosPart k hk a
-              δ hδ hd ha hδa (A.priorRep_nonneg_on hϕ0W)).stratumMeasure
-        (coeffCertificate k hk a δ hδ (posPart A.priorRep) A.obsRep
-          (measurable_posPart A.measurable_priorRep) (posPart_nonneg A.priorRep)
-          ((withDensity_posPart a (A.priorRep_nonneg_on hϕ0W)).symm ▸ A.integrable_obsRep)
-          hd ha hδa fun I =>
-            ((A.toRep.faceSeries a I).toFaceSeries k hk a δ hδ hd ha (hsmall I)).toPosPart k hk a
-              δ hδ hd ha hδa (A.priorRep_nonneg_on hϕ0W)).field
-        (spectrumLe (commonQ (certificate k hk a δ hδ (posPart A.priorRep) A.obsRep
-          (measurable_posPart A.measurable_priorRep) (posPart_nonneg A.priorRep)
-          ((withDensity_posPart a (A.priorRep_nonneg_on hϕ0W)).symm ▸ A.integrable_obsRep)
-          hd ha hδa fun I =>
-            ((A.toRep.faceSeries a I).toFaceSeries k hk a δ hδ hd ha (hsmall I)).toPosPart k hk a
-              δ hδ hd ha hδa (A.priorRep_nonneg_on hϕ0W)).cores.k) (d - 1))
+        (producedCertificate k hk A hd ha hϕ0W δ hδ hδa hsmall).stratumMeasure
+        (producedCoeffCertificate k hk A hd ha hϕ0W δ hδ hδa hsmall).field
+        (spectrumLe (commonQ (producedCertificate k hk A hd ha hϕ0W δ hδ hδa hsmall).cores.k)
+          (d - 1))
         (piBox d (Icc 0 a)) (CoordModel.phase d k) ϕ φ := by
   obtain ⟨δ, hδ, hδa, hsmall, h⟩ :=
     hasCoordFreeExpansion_of_holomorphicBoxExtension_nonneg_on a k hk A.priorRep A.obsRep
@@ -208,7 +218,7 @@ theorem hasCoordFreeExpansion_of_holomorphicBoxExtension_local
   · intro I
     filter_upwards [ae_stratumMeasure_mem_box k hk a δ hδ (posPart A.priorRep) A.obsRep
       (measurable_posPart A.measurable_priorRep) (posPart_nonneg A.priorRep)
-      ((withDensity_posPart a (A.priorRep_nonneg_on hϕ0W)).symm ▸ A.integrable_obsRep) hd ha hδa
+      (integrable_posPart a (A.priorRep_nonneg_on hϕ0W) A.integrable_obsRep) hd ha hδa
       (fun I => ((A.toRep.faceSeries a I).toFaceSeries k hk a δ hδ hd ha (hsmall I)).toPosPart k
         hk a δ hδ hd ha hδa (A.priorRep_nonneg_on hϕ0W)) I] with s hs
     exact eventually_of_mem (A.isOpen_realDomain.mem_nhds (A.box_subset_realDomain hs))

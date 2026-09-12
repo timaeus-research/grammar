@@ -49,7 +49,7 @@ theorem realParts_complexify (w : Fin d → ℝ) : realParts (complexify w) = w 
 /-- **Agreement on a real neighbourhood suffices**: holomorphic extensions on an open `Ω ⊇` box
 agreeing with `ϕ, φ` on an open real neighbourhood `V ⊇` box give a holomorphic box extension
 (on `Ω ∩ {z : Re z ∈ V}`). -/
-noncomputable def HolomorphicBoxExtension.ofRealNhd {ϕ φ : (Fin d → ℝ) → ℝ}
+def HolomorphicBoxExtension.ofRealNhd {ϕ φ : (Fin d → ℝ) → ℝ}
     {Ω : Set (Fin d → ℂ)} (hΩ : IsOpen Ω) (hWΩ : ∀ w ∈ piBox d (Icc 0 a), complexify w ∈ Ω)
     {Hϕ Hφ : (Fin d → ℂ) → ℂ} (hHϕ : DifferentiableOn ℂ Hϕ Ω) (hHφ : DifferentiableOn ℂ Hφ Ω)
     {V : Set (Fin d → ℝ)} (hV : IsOpen V) (hWV : piBox d (Icc 0 a) ⊆ V)
@@ -106,15 +106,15 @@ theorem hasCoordFreeExpansion_of_holomorphicBoxExtension_nonneg_on
         2 * δ ^ ((d : ℝ)⁻¹ * ((2 * k (σI I i).1 : ℕ) : ℝ)⁻¹) < (A.faceSeries a I).ρ),
       (normalData d k (zeroOrders d) hk).HasCoordFreeExpansion
         (certificate k hk a δ hδ (posPart ϕ) φ (measurable_posPart hϕm) (posPart_nonneg ϕ)
-          ((withDensity_posPart a hϕ0W).symm ▸ hφint) hd ha hδa fun I =>
+          (integrable_posPart a hϕ0W hφint) hd ha hδa fun I =>
             ((A.faceSeries a I).toFaceSeries k hk a δ hδ hd ha (hsmall I)).toPosPart k hk a δ hδ
               hd ha hδa hϕ0W).stratumMeasure
         (coeffCertificate k hk a δ hδ (posPart ϕ) φ (measurable_posPart hϕm) (posPart_nonneg ϕ)
-          ((withDensity_posPart a hϕ0W).symm ▸ hφint) hd ha hδa fun I =>
+          (integrable_posPart a hϕ0W hφint) hd ha hδa fun I =>
             ((A.faceSeries a I).toFaceSeries k hk a δ hδ hd ha (hsmall I)).toPosPart k hk a δ hδ
               hd ha hδa hϕ0W).field
         (spectrumLe (commonQ (certificate k hk a δ hδ (posPart ϕ) φ (measurable_posPart hϕm)
-          (posPart_nonneg ϕ) ((withDensity_posPart a hϕ0W).symm ▸ hφint) hd ha hδa fun I =>
+          (posPart_nonneg ϕ) (integrable_posPart a hϕ0W hφint) hd ha hδa fun I =>
             ((A.faceSeries a I).toFaceSeries k hk a δ hδ hd ha (hsmall I)).toPosPart k hk a δ hδ
               hd ha hδa hϕ0W).cores.k) (d - 1))
         (piBox d (Icc 0 a)) (CoordModel.phase d k) ϕ φ := by
