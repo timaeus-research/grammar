@@ -631,3 +631,5 @@ import Grammar.ComplexNormalInsertion
 import Grammar.HolomorphicBoxBuffer
 import Grammar.HolomorphicOriginalFaceSeries
 import Grammar.AnalyticCoordinateBoxExpansion
+import Grammar.ExpansionCongruence
+import Grammar.LocalAnalyticInputs
