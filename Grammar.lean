@@ -572,3 +572,5 @@ import Grammar.MonomialChartProductBox
 import Grammar.LocalExplicitCoefficient
 import Grammar.PartitionAssemblyRegression
 import Grammar.LeadingTermNegligible
+import Grammar.SourceAmplitudeBridge
+import Grammar.SourceAmplitudeLeadingTerm
