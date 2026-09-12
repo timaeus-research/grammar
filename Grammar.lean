@@ -575,3 +575,4 @@ import Grammar.LeadingTermNegligible
 import Grammar.SourceAmplitudeBridge
 import Grammar.SourceAmplitudeLeadingTerm
 import Grammar.SourceDecompositionAssembly
+import Grammar.CompactSourceLocalization
