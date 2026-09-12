@@ -608,3 +608,4 @@ import Grammar.OneDimPolynomialSeries
 import Grammar.OneDimCoordFreeInstance
 import Grammar.CutoffExpansionUniqueness
 import Grammar.JetFamilyOfSeries
+import Grammar.CoordFreeLeadingTerm
