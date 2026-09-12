@@ -561,3 +561,4 @@ import Grammar.VariableUnitPieceAtlas
 import Grammar.ProductChartVar
 import Grammar.ProductChartVarPosterior
 import Grammar.VariableUnitSquareExample
+import Grammar.ProductChartVarCompat
