@@ -597,3 +597,4 @@ import Grammar.BlowUpCubeLeadingMeasure
 import Grammar.LeadingMeasureConcentration
 import Grammar.NormalDifferentialConvention
 import Grammar.ResolvedGeometry
+import Grammar.ResolvedNormalData
