@@ -146,6 +146,24 @@ normal-unit normalisation → analytic-normal collar decomposition → general c
 
 Status: main `7e5cc68`, 627 modules; consult #97's stopping gate for phase 2 MET (original-face input produces the collar-base series; coordinate conormals evaluate the diagonal frames with scale `λ_i(s)`; tubular-frame series construct a core without assuming transport or the phase normal form; fibre jets identified with the fixed normal germ through the frame; all instantiated on the water-filling certificate). PHASE 2 CLOSED. Mirror pin `7e5cc68`.
 
+## 5c. Phase 3 — the complex analytic-neighbourhood bridge (consult #98, 2026-09-12)
+
+Goal: from holomorphic extensions of the prior and the observable on a complex neighbourhood of the
+embedded compact box, agreeing with them on its real slice (`HolomorphicBoxExtension`), produce the
+closed-face normal series `OriginalFaceSeries` at a COMMON radius `ρ`, then choose the collar level
+(CCCXXVII) and feed CCCXXV. Interfaces stay unchanged (per-face `ρ` kept downstream). Box-only agreement
+gives a different theorem (about chosen extensions) and is optional; complexification from real
+analyticity is NOT part of this phase.
+
+| unit | module | content | status |
+|---|---|---|---|
+| P0 | `CollarDeltaSelection` (CCCXXVII) | small-level selection `exists_delta`; `hasCoordFreeExpansion_collar_of_face_exists` | done |
+| P1 | `AnalyticUniformSeries` | radius-parametric Cauchy → `UniformSeriesFamily X m ρ` for `0 < ρ < r < R` (`polyRealCoeff m r`, majorant `M r^{-|γ|}`, weighted geometric summability, reconstruction `evalF = Re F` for `‖u‖ < ρ`) | next |
+| P2 | `ComplexNormalInsertion` | `complexify`, insertion CLM `L_I : ℂ^m →L ℂ^d`, `‖L_I z‖ ≤ ‖z‖`, compatibility with `originalNormalMap`, `isCompact_faceSet` | pending |
+| P3 | `HolomorphicBoxBuffer` | uniform buffer `∃ R > 0, ∀ w ∈ W, ∀ z, ‖z‖ ≤ R → complexify w + z ∈ Ω`, compact tube, uniform bounds | pending |
+| P4 | `HolomorphicOriginalFaceSeries` | recentred family `G s z = H(complexify s + L_I z)`; containment, holomorphicity, joint continuity, bounds; common-radius `OriginalFaceSeries` producer | pending |
+| P5 | `AnalyticCoordinateBoxExpansion` | composition: holomorphic box extension ⇒ coordinate-free expansion (global and box-local nonnegativity) | pending |
+
 ## 6. Hypotheses that remain at the end
 
 Certified resolved geometry with a compatible monomial atlas (a.e.-disjoint or multiplicity-corrected
