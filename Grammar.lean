@@ -559,3 +559,4 @@ import Grammar.VariableUnitCellRegressions
 import Grammar.LeadingAtlas
 import Grammar.VariableUnitPieceAtlas
 import Grammar.ProductChartVar
+import Grammar.ProductChartVarPosterior
