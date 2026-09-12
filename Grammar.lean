@@ -620,3 +620,4 @@ import Grammar.CoordinateBoxCoreCertificate
 import Grammar.ParameterisedSeriesDatum
 import Grammar.DiagonalBoxTransport
 import Grammar.NormalisedBoxCore
+import Grammar.WaterFillingCollar
