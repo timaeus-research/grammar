@@ -618,3 +618,4 @@ import Grammar.CoreNormalMomentRepresentation
 import Grammar.AnalyticSeriesFamily
 import Grammar.CoordinateBoxCoreCertificate
 import Grammar.ParameterisedSeriesDatum
+import Grammar.DiagonalBoxTransport

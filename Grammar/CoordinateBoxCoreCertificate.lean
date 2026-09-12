@@ -17,8 +17,11 @@ observable `φ` given by `b'`-weighted ℓ¹ coefficient families (`b < b'`) wit
 both certificates of the coordinate-free expansion theorem are CONSTRUCTED — not assumed:
 
 * the prior and the observable are realised globally by clamping the coordinates into
-  `[-r, r]`, `b < r < b'` (`evalFClamp`): globally continuous, equal to the series on the box,
-  analytic at `0` with the symmetric-monomial series on the ball of radius `r`;
+  `[-r, r]`, `b < r < b'` (`evalFClamp`): globally continuous and equal to the series on the box;
+  the observable is analytic at `0` with the symmetric-monomial series on the ball of radius `r`,
+  while the prior `max (clamped series) 0` need not be differentiable at `0` (e.g. `fϕ = u₁`) —
+  the density family `cc = fϕ` is the prior's analytic representative on the positive box, not
+  the Taylor family of the globally defined prior;
 * `locData` (prior-weighted Lebesgue measure on the box), the single core `core` at the deepest
   stratum (Dirac base, normal box `(0,b]^{n+1}`, `Φ(s,u) = u`, density `c(s,u) = ϕ(u)`,
   `h = 0`, exponents `k`, amplitude datum `fϕ ⋆ fφ`), with the exact transport identity
