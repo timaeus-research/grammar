@@ -603,3 +603,4 @@ import Grammar.ZeroFluctSpectralKernel
 import Grammar.ChartCoefficientTensors
 import Grammar.ResolvedCoordFreeExpansion
 import Grammar.CoordFreeExpansionCompletion
+import Grammar.OneDimResolvedGeometry
