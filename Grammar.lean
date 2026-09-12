@@ -636,3 +636,6 @@ import Grammar.LocalAnalyticInputs
 import Grammar.PolynomialBoxInstance
 import Grammar.SignedBoxPackets
 import Grammar.OrthantDecomposition
+import Grammar.NormalReflectionTransport
+import Grammar.CertificateSeriesRegularity
+import Grammar.ExpansionAssembly
