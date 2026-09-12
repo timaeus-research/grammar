@@ -121,16 +121,16 @@ identification of the amplitude datum with its Cauchy product with the monomial 
 presentation's power series, under the dimension-loss radius margin. -/
 noncomputable def ResolvedCertificate.CoefficientCertificate.ofSeries
     (cc : ∀ J, ↥(C.base J) → CoeffFamily (C.n J + 1))
-    (cc_abs : ∀ J s, AbsSummableAt (cc J s) (C.adapted.b J))
+    (cc_abs : ∀ J s, AbsSummableAt (cc J s) (C.cores.b J))
     (ρ : ∀ J, ↥(C.base J) → ℝ≥0) (hρ : ∀ J s, ((ρ J s : ℝ≥0) : ℝ≥0∞) < (C.T J).R s)
-    (hbρ : ∀ J s, ((C.n J + 1 : ℕ) : ℝ) * C.adapted.b J < ρ J s)
-    (datum_eq : ∀ J s, toEta (C.adapted.b J) ((C.adapted.chart J).x s) =
+    (hbρ : ∀ J s, ((C.n J + 1 : ℕ) : ℝ) * C.cores.b J < ρ J s)
+    (datum_eq : ∀ J s, toEta (C.cores.b J) ((C.cores.chart J).x s) =
       CoeffFamily.conv (cc J s) (monoFamily ((C.T J).p s))) :
     C.CoefficientCertificate where
   cc := cc
   cc_abs := cc_abs
   jet_abs := fun J s =>
-    absSummableAt_jetFamily ((C.T J).analytic s) (hρ J s) (C.adapted.b_pos J).le (hbρ J s)
+    absSummableAt_jetFamily ((C.T J).analytic s) (hρ J s) (C.cores.b_pos J).le (hbρ J s)
   datum_eq := fun J s => by
     rw [datum_eq J s, jetFamily_eq_monoFamily ((C.T J).analytic s)]
 

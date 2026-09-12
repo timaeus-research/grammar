@@ -186,14 +186,14 @@ theorem ResolvedCertificate.CoefficientCertificate.expansionCoefficient_eq_of_ce
     D.expansionCoefficient C.stratumMeasure Cc.field φ q =
       D.expansionCoefficient C'.stratumMeasure Cc'.field φ q := by
   rw [Cc.expansionCoefficient_eq_gCoeff, Cc'.expansionCoefficient_eq_gCoeff]
-  exact CutoffExpansion.coeff_eq_of_lattices (commonQ_pos C.adapted.k C.adapted.k_pos)
-    (commonQ_pos C'.adapted.k C'.adapted.k_pos) (C.cutoffExpansion_globalLaplace hK hϕ hϕ0 hφ)
+  exact CutoffExpansion.coeff_eq_of_lattices (commonQ_pos C.cores.k C.cores.k_pos)
+    (commonQ_pos C'.cores.k C'.cores.k_pos) (C.cutoffExpansion_globalLaplace hK hϕ hϕ0 hφ)
     (C'.cutoffExpansion_globalLaplace hK hϕ hϕ0 hφ)
-    (fun μ hμ j => gCoeff_eq_zero_of_not_lattice _ _ _ _ _ _ C.adapted.k_pos C.β_pos
-      C.adapted.b_pos hμ j)
+    (fun μ hμ j => gCoeff_eq_zero_of_not_lattice _ _ _ _ _ _ C.cores.k_pos C.β_pos
+      C.cores.b_pos hμ j)
     (fun μ j hj => gCoeff_eq_zero_of_lt _ _ _ _ _ _ hj)
-    (fun μ hμ j => gCoeff_eq_zero_of_not_lattice _ _ _ _ _ _ C'.adapted.k_pos C'.β_pos
-      C'.adapted.b_pos hμ j)
+    (fun μ hμ j => gCoeff_eq_zero_of_not_lattice _ _ _ _ _ _ C'.cores.k_pos C'.β_pos
+      C'.cores.b_pos hμ j)
     (fun μ j hj => gCoeff_eq_zero_of_lt _ _ _ _ _ _ hj) q.exponent q.logDegree
 
 end Grammar

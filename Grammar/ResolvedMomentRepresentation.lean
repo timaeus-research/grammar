@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Timaeus Research
 -/
 import Grammar.ResolvedNormalData
-import Grammar.GeometricMainTheorem
+import Grammar.CoreNormalMomentRepresentation
 import Grammar.ChartNormalFamily
 
 /-!
@@ -12,14 +12,16 @@ import Grammar.ChartNormalFamily
 
 Unit 4 of the coordinate-free programme (`tide-log/plan_coordinate_free_expansion.md`). The
 library's conditional geometric main theorem
-(`AdaptedStrataData.expectation_expansion_of_adaptedStrataData`) already writes a localised
+(`AnalyticCoreDecomposition.expectation_expansion_of_analyticCoreDecomposition`, CCCXVI) writes a
+localised
 resolved integral as a sum over pieces of base integrals of fibre Taylor–moment series, with the
 pieces presented in box coordinates. This unit puts it on the resolved geometry of CCXCVIII–CCXCIX:
 
 * `ResolvedCertificate R D W K ϕ φ` — the hypotheses of the final theorem: a localisation datum
   on the resolved space whose observable and phase are `φ∘π`, `K∘π` and whose measure pushes
-  forward along `π` to the prior-weighted Lebesgue measure on `W` (`transport`); adapted strata
-  data whose base spaces are the STRATA `S_I` of the resolved geometry, with normal-moment
+  forward along `π` to the prior-weighted Lebesgue measure on `W` (`transport`); an analytic core
+  decomposition (cores and a phase-gap tail) whose base spaces are compact pieces of the STRATA
+  `S_I` of the resolved geometry, with normal-moment
   presentations (analytic fibre observables); and the compatibility of the box parametrisations
   with the tubular germs through linear frames `e_s : ℝ^{|I|} ≃ N_s` (`Φ_eq`). This is where the
   charts live; nothing below the line mentions them.
@@ -50,7 +52,8 @@ variable {d : ℕ} {U : Type*} [TopologicalSpace U] [T2Space U] [MeasurableSpace
   [MeasurableSpace A] [BorelSpace A]
 
 /-- **A resolved certificate**: the localisation datum on the resolved space transporting the
-original integral, adapted strata data on the strata with normal-moment presentations, and the
+original integral, an analytic core decomposition on the strata with normal-moment presentations,
+and the
 frames identifying the box parametrisations with the tubular germs. -/
 structure ResolvedCertificate (R : ResolvedGeometry d U) (D : ResolvedNormalData R A)
     (W : Set (Fin d → ℝ)) (K ϕ φ : (Fin d → ℝ) → ℝ) where
@@ -73,15 +76,16 @@ structure ResolvedCertificate (R : ResolvedGeometry d U) (D : ResolvedNormalData
   /-- The inverse temperature of the normal form. -/
   β : ℝ
   β_pos : 0 < β
-  /-- The adapted strata data, with the compact stratum pieces as base spaces. -/
-  adapted : AdaptedStrataData L M (fun I => ↥(base I)) n β
+  /-- The analytic core decomposition (cores with a phase-gap tail), with the compact stratum
+  pieces as base spaces. -/
+  cores : AnalyticCoreDecomposition L M (fun I => ↥(base I)) n β
   /-- The normal-moment presentations (analytic fibre observables). -/
-  T : ∀ I, NormalMomentPresentation (adapted.chart I)
+  T : ∀ I, CoreNormalMomentPresentation (cores.chart I)
   /-- The frames `ℝ^{n_I+1} ≃ N_s` identifying box normal coordinates with the normal space. -/
   frame : ∀ I (s : ↥(base I)), (Fin (n I + 1) → ℝ) ≃L[ℝ] D.N (strat I) s.1
   /-- The box parametrisation is the tubular germ in the frame. -/
   Φ_eq : ∀ I (s : ↥(base I)) (u : Fin (n I + 1) → ℝ),
-    (adapted.chart I).Φ (s, u) = D.Φ (strat I) s.1 (frame I s u)
+    (cores.chart I).Φ (s, u) = D.Φ (strat I) s.1 (frame I s u)
 
 namespace ResolvedCertificate
 
@@ -94,8 +98,8 @@ instance (I : Fin C.M) : CompactSpace ↥(C.base I) := isCompact_iff_compactSpac
 omit [T2Space U] [BorelSpace U] [MeasurableSpace A] [BorelSpace A] in
 /-- The observable in the box fibre is the pulled-back observable through the tubular germ. -/
 theorem obsFibre_eq (I : Fin C.M) (s : ↥(C.base I)) (u : Fin (C.n I + 1) → ℝ) :
-    (C.adapted.chart I).obsFibre s u = φ (R.π (D.Φ (C.strat I) s.1 (C.frame I s u))) := by
-  unfold ChartPresentation.obsFibre
+    (C.cores.chart I).obsFibre s u = φ (R.π (D.Φ (C.strat I) s.1 (C.frame I s u))) := by
+  unfold CorePresentation.obsFibre
   rw [C.obs_eq, C.Φ_eq]
   rfl
 
@@ -104,7 +108,7 @@ theorem obsFibre_eq (I : Fin C.M) (s : ↥(C.base I)) (u : Fin (C.n I + 1) → �
 /-- The fibre measure transported to the normal space along the frame. -/
 noncomputable def normalFibreMeasure (I : Fin C.M) (s : ↥(C.base I)) (N : ℝ) :
     Measure (D.N (C.strat I) s.1) :=
-  ((C.adapted.chart I).fibreMeasure s N).map (C.frame I s : (Fin (C.n I + 1) → ℝ) →L[ℝ] _)
+  ((C.cores.chart I).fibreMeasure s N).map (C.frame I s : (Fin (C.n I + 1) → ℝ) →L[ℝ] _)
 
 omit [T2Space U] [BorelSpace U] in
 theorem integrable_norm_pow_normalFibreMeasure (I : Fin C.M) {N : ℝ} (hN : 0 ≤ N)
@@ -124,8 +128,8 @@ the box moment pairing of the fibre observable. -/
 theorem pair_exactMoment_normalDifferential (I : Fin C.M) {N : ℝ} (hN : 0 ≤ N)
     (s : ↥(C.base I)) (r : ℕ) :
     (C.exactMoment I hN s r).pair (D.normalDifferential φ (C.strat I) s.1 r) =
-      ∫ u, normalJet ((C.adapted.chart I).obsFibre s) r (fun _ => u)
-        ∂(C.adapted.chart I).fibreMeasure s N := by
+      ∫ u, normalJet ((C.cores.chart I).obsFibre s) r (fun _ => u)
+        ∂(C.cores.chart I).fibreMeasure s N := by
   unfold exactMoment MomentTensor.pair
   rw [normalMoment_apply]
   unfold normalFibreMeasure
@@ -136,7 +140,7 @@ theorem pair_exactMoment_normalDifferential (I : Fin C.M) {N : ℝ} (hN : 0 ≤ 
   have h := rawNormalJet_comp_equiv (D.N (C.strat I)) (D.Φ (C.strat I)) (φ ∘ R.π) s.1
     (C.frame I s) r
   have hfun : (fun v : Fin (C.n I + 1) → ℝ => (φ ∘ R.π) (D.Φ (C.strat I) s.1 (C.frame I s v))) =
-      (C.adapted.chart I).obsFibre s := by
+      (C.cores.chart I).obsFibre s := by
     funext v
     rw [C.obsFibre_eq]
     rfl
@@ -178,28 +182,28 @@ Only the strata, the normal differentials, the exact moment tensors, the stratum
 theorem globalLaplace_eq_tsum_stratumContraction {N : ℝ} (hN : 0 ≤ N) :
     globalLaplace W K (fun w => φ w * ϕ w) N =
       ∑ I, (∫ s, ∑' r : ℕ, (r.factorial : ℝ)⁻¹ *
-        (C.exactMoment I hN s r).pair (D.normalDifferential φ (C.strat I) s.1 r) ∂C.adapted.ν I) +
-      C.adapted.tail N := by
-  rw [C.globalLaplace_eq_Z hK hϕ hϕ0 hφ N, C.adapted.Z_eq_moment_series C.T C.β_pos.le hN]
+        (C.exactMoment I hN s r).pair (D.normalDifferential φ (C.strat I) s.1 r) ∂C.cores.ν I) +
+      C.cores.resid N := by
+  rw [C.globalLaplace_eq_Z hK hϕ hϕ0 hφ N, C.cores.Z_eq_moment_series C.T C.β_pos.le hN]
   congr 1
   refine Finset.sum_congr rfl fun I _ => integral_congr_ae (Eventually.of_forall fun s => ?_)
   refine tsum_congr fun r => ?_
   rw [C.pair_exactMoment_normalDifferential I hN s r]
 
 omit [T2Space U] [BorelSpace U] [MeasurableSpace A] [BorelSpace A] in
-/-- **The tail is exponentially small.** -/
-theorem abs_tail_le {N : ℝ} (hN : 0 ≤ N) :
-    |C.adapted.tail N| ≤ (∫ z, |C.L.obs z| ∂C.L.μ) * Real.exp (-C.L.δ * N) :=
-  C.adapted.tail_bound hN
+/-- **The residual is exponentially small** (phase gap on the tail). -/
+theorem abs_resid_le {N : ℝ} (hN : 0 ≤ N) :
+    |C.cores.resid N| ≤ (∫ z, |C.L.obs z| ∂C.cores.tail) * Real.exp (-C.cores.δ₀ * N) :=
+  C.cores.resid_bound hN
 
 omit [MeasurableSpace A] [BorelSpace A] in
 include hK hϕ hϕ0 hφ in
 /-- ★★ **The full power–log cutoff expansion of the original integral** with the assembled
 canonical coefficients (`thm:expectation_expansion`, conditional form). -/
 theorem cutoffExpansion_globalLaplace :
-    CutoffExpansion (commonQ C.adapted.k) (commonD C.n) (globalLaplace W K fun w => φ w * ϕ w)
-      (gCoeff C.adapted.ν C.adapted.h C.adapted.k C.β C.adapted.b C.adapted.x) := by
-  have h := C.adapted.cutoffExpansion C.β_pos
+    CutoffExpansion (commonQ C.cores.k) (commonD C.n) (globalLaplace W K fun w => φ w * ϕ w)
+      (gCoeff C.cores.ν C.cores.h C.cores.k C.β C.cores.b C.cores.x) := by
+  have h := C.cores.cutoffExpansion C.β_pos
   have heq : (globalLaplace W K fun w => φ w * ϕ w) = C.L.Z :=
     funext fun N => C.globalLaplace_eq_Z hK hϕ hϕ0 hφ N
   rwa [heq]
@@ -207,12 +211,12 @@ theorem cutoffExpansion_globalLaplace :
 omit [MeasurableSpace A] [BorelSpace A] in
 /-- **The moment series carries the same canonical coefficients.** -/
 theorem cutoffExpansion_stratumContraction :
-    CutoffExpansion (commonQ C.adapted.k) (commonD C.n)
+    CutoffExpansion (commonQ C.cores.k) (commonD C.n)
       (fun N => ∑ I, ∫ s, ∑' r : ℕ, (r.factorial : ℝ)⁻¹ *
-        ∫ u, normalJet ((C.adapted.chart I).obsFibre s) r (fun _ => u)
-          ∂(C.adapted.chart I).fibreMeasure s N ∂C.adapted.ν I)
-      (gCoeff C.adapted.ν C.adapted.h C.adapted.k C.β C.adapted.b C.adapted.x) :=
-  C.adapted.momentSeries_cutoffExpansion C.T C.β_pos
+        ∫ u, normalJet ((C.cores.chart I).obsFibre s) r (fun _ => u)
+          ∂(C.cores.chart I).fibreMeasure s N ∂C.cores.ν I)
+      (gCoeff C.cores.ν C.cores.h C.cores.k C.β C.cores.b C.cores.x) :=
+  C.cores.momentSeries_cutoffExpansion C.T C.β_pos
 
 end ResolvedCertificate
 

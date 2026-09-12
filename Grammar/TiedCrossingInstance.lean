@@ -259,8 +259,9 @@ noncomputable def certificate :
   isCompact_base := fun _ => isCompact_univ
   β := 1
   β_pos := one_pos
-  adapted := ⟨partition f hf b hb, fun _ => chart f hf b hb⟩
-  T := fun _ => presentation f hf b hb
+  cores := (⟨partition f hf b hb, fun _ => chart f hf b hb⟩ :
+    AdaptedStrataData (locData f hf b hb) 1 (fun _ => Base) (fun _ => 1) 1).toCoreDecomposition
+  T := fun _ => (presentation f hf b hb).toCore
   frame := fun _ _ => frameUniv 2
   Φ_eq := fun _ s u => by
     change u = normalData.Φ Finset.univ s.1 (frameUniv 2 u)
@@ -279,7 +280,7 @@ noncomputable def coeffCertificate : (certificate f hf b hb).CoefficientCertific
       CoeffFamily.conv (OneDim.deltaFamily 2) (jetFamily 1 (polyD f))
     rw [toEta_datum, jetFamily_polyD f hf, OneDim.conv_deltaFamily]
 
-theorem commonQ_certificate : commonQ (certificate f hf b hb).adapted.k = 2 := by
+theorem commonQ_certificate : commonQ (certificate f hf b hb).cores.k = 2 := by
   change ∏ _ : Fin 1, (2 * ∏ _ : Fin 2, (1 : ℕ)) = 2
   simp
 

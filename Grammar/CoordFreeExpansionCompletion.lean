@@ -112,22 +112,22 @@ variable {C : ResolvedCertificate R D W K ϕ φ} (Cc : C.CoefficientCertificate)
 theorem hasCoordFreeExpansion_le (hK : Measurable K) (hϕ : Measurable ϕ) (hϕ0 : ∀ w, 0 ≤ ϕ w)
     (hφ : Measurable φ) :
     D.HasCoordFreeExpansion C.stratumMeasure Cc.field
-      (spectrumLe (commonQ C.adapted.k) (commonD C.n)) W K ϕ φ := by
+      (spectrumLe (commonQ C.cores.k) (commonD C.n)) W K ϕ φ := by
   intro Ac
   have h := Cc.hasCoordFreeExpansion hK hϕ hϕ0 hφ Ac
   set c : PowerLogIndex → ℝ := fun q => D.expansionCoefficient C.stratumMeasure Cc.field φ q
     with hc
-  have hsplit : ∀ n : ℝ, ∑ q ∈ spectrumBelow (commonQ C.adapted.k) (commonD C.n) Ac,
+  have hsplit : ∀ n : ℝ, ∑ q ∈ spectrumBelow (commonQ C.cores.k) (commonD C.n) Ac,
       c q * q.scale n =
-      ∑ q ∈ spectrumLe (commonQ C.adapted.k) (commonD C.n) Ac, c q * q.scale n +
-      ∑ q ∈ (spectrumBelow (commonQ C.adapted.k) (commonD C.n) Ac).filter
+      ∑ q ∈ spectrumLe (commonQ C.cores.k) (commonD C.n) Ac, c q * q.scale n +
+      ∑ q ∈ (spectrumBelow (commonQ C.cores.k) (commonD C.n) Ac).filter
         (fun q => ¬ q.exponent ≤ Ac), c q * q.scale n := fun n =>
     (Finset.sum_filter_add_sum_filter_not _ _ _).symm
-  have htail : (fun n : ℝ => ∑ q ∈ (spectrumBelow (commonQ C.adapted.k) (commonD C.n) Ac).filter
+  have htail : (fun n : ℝ => ∑ q ∈ (spectrumBelow (commonQ C.cores.k) (commonD C.n) Ac).filter
       (fun q => ¬ q.exponent ≤ Ac), c q * q.scale n) =o[atTop] fun n : ℝ => n ^ (-Ac) := by
     have hsum := IsLittleO.sum (l := atTop) (g' := fun n : ℝ => n ^ (-Ac))
       (A := fun q : PowerLogIndex => fun n : ℝ => c q * q.scale n)
-      (s := (spectrumBelow (commonQ C.adapted.k) (commonD C.n) Ac).filter
+      (s := (spectrumBelow (commonQ C.cores.k) (commonD C.n) Ac).filter
         fun q => ¬ q.exponent ≤ Ac) fun q hq => by
       have hq' : Ac < q.exponent := not_le.1 (Finset.mem_filter.1 hq).2
       exact ((isLittleO_scale_of_lt hq' q.logDegree).congr_left fun n =>
@@ -135,10 +135,10 @@ theorem hasCoordFreeExpansion_le (hK : Measurable K) (hϕ : Measurable ϕ) (hϕ0
     refine hsum.congr_left fun n => ?_
     rw [Finset.sum_apply]
   have hfun : (fun n : ℝ => globalLaplace W K (fun w => φ w * ϕ w) n -
-      ∑ q ∈ spectrumLe (commonQ C.adapted.k) (commonD C.n) Ac, c q * q.scale n) =
+      ∑ q ∈ spectrumLe (commonQ C.cores.k) (commonD C.n) Ac, c q * q.scale n) =
       fun n : ℝ => (globalLaplace W K (fun w => φ w * ϕ w) n -
-        ∑ q ∈ spectrumBelow (commonQ C.adapted.k) (commonD C.n) Ac, c q * q.scale n) +
-      ∑ q ∈ (spectrumBelow (commonQ C.adapted.k) (commonD C.n) Ac).filter
+        ∑ q ∈ spectrumBelow (commonQ C.cores.k) (commonD C.n) Ac, c q * q.scale n) +
+      ∑ q ∈ (spectrumBelow (commonQ C.cores.k) (commonD C.n) Ac).filter
         (fun q => ¬ q.exponent ≤ Ac), c q * q.scale n := by
     funext n
     rw [hsplit n]

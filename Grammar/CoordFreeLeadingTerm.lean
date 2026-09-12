@@ -67,7 +67,7 @@ variable (C : ResolvedCertificate R D W K ϕ φ)
 /-- The admissible power–log indices of a certificate: exponents in `commonQ⁻¹ℕ`, log degrees
 `≤ commonD`. -/
 def AdmissibleIndex (q : PowerLogIndex) : Prop :=
-  (∃ m : ℕ, q.exponent = (m : ℝ) / commonQ C.adapted.k) ∧ q.logDegree ≤ commonD C.n
+  (∃ m : ℕ, q.exponent = (m : ℝ) / commonQ C.cores.k) ∧ q.logDegree ≤ commonD C.n
 
 namespace CoefficientCertificate
 
@@ -84,7 +84,7 @@ theorem hasLeadingTerm_expansionCoefficient (hK : Measurable K) (hϕ : Measurabl
     HasLeadingTerm (globalLaplace W K fun w => φ w * ϕ w)
       (D.expansionCoefficient C.stratumMeasure Cc.field φ q) q.exponent q.logDegree := by
   rw [Cc.expansionCoefficient_eq_gCoeff]
-  refine CutoffExpansion.hasLeadingTerm_of_first (commonQ_pos _ C.adapted.k_pos)
+  refine CutoffExpansion.hasLeadingTerm_of_first (commonQ_pos _ C.cores.k_pos)
     (C.cutoffExpansion_globalLaplace hK hϕ hϕ0 hφ) hq.1 hq.2 fun p hp hpre => ?_
   have := hfirst ⟨p.1, p.2⟩ ⟨hp.1, hp.2⟩ hpre
   rwa [Cc.expansionCoefficient_eq_gCoeff] at this
@@ -112,9 +112,9 @@ theorem exists_first_nonzero_expansionCoefficient (hK : Measurable K) (hϕ : Mea
         D.expansionCoefficient C.stratumMeasure Cc.field φ q *
           powLogScale q.exponent q.logDegree N := by
   obtain ⟨q, hq, hq0⟩ := hne
-  have hQ := commonQ_pos _ C.adapted.k_pos
-  set c := gCoeff C.adapted.ν C.adapted.h C.adapted.k C.β C.adapted.b C.adapted.x with hc
-  have hmem : (q.exponent, q.logDegree) ∈ indexSet (commonD C.n) (commonQ C.adapted.k)
+  have hQ := commonQ_pos _ C.cores.k_pos
+  set c := gCoeff C.cores.ν C.cores.h C.cores.k C.β C.cores.b C.cores.x with hc
+  have hmem : (q.exponent, q.logDegree) ∈ indexSet (commonD C.n) (commonQ C.cores.k)
       (q.exponent + 1) := by
     unfold indexSet
     obtain ⟨⟨m, hm⟩, hj⟩ := hq

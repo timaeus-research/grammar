@@ -63,19 +63,19 @@ Cauchy product `cc ⋆ jetFamily`. -/
 structure CoefficientCertificate where
   /-- The factorisation family at the base point `s` (intended: the Taylor family of `c(s, ·)`). -/
   cc : ∀ J, ↥(C.base J) → CoeffFamily (C.n J + 1)
-  cc_abs : ∀ J s, AbsSummableAt (cc J s) (C.adapted.b J)
+  cc_abs : ∀ J s, AbsSummableAt (cc J s) (C.cores.b J)
   /-- The observable's Taylor family on the box is `b`-weighted ℓ¹. -/
   jet_abs : ∀ J s,
-    AbsSummableAt (jetFamily (C.n J) ((C.adapted.chart J).obsFibre s)) (C.adapted.b J)
+    AbsSummableAt (jetFamily (C.n J) ((C.cores.chart J).obsFibre s)) (C.cores.b J)
   /-- The amplitude datum is the Cauchy product of the density family and the observable's
   Taylor family. -/
-  datum_eq : ∀ J s, toEta (C.adapted.b J) ((C.adapted.chart J).x s) =
-    CoeffFamily.conv (cc J s) (jetFamily (C.n J) ((C.adapted.chart J).obsFibre s))
+  datum_eq : ∀ J s, toEta (C.cores.b J) ((C.cores.chart J).x s) =
+    CoeffFamily.conv (cc J s) (jetFamily (C.n J) ((C.cores.chart J).obsFibre s))
 
 /-! ### Stratum measures -/
 
 omit [T2Space U] [BorelSpace U] [MeasurableSpace A] [BorelSpace A] in
-theorem b_eq (J : Fin C.M) : C.adapted.b J = (C.adapted.chart J).b := rfl
+theorem b_eq (J : Fin C.M) : C.cores.b J = (C.cores.chart J).b := rfl
 
 omit [MeasurableSpace A] [BorelSpace A] in
 theorem measurableSet_base (J : Fin C.M) : MeasurableSet (C.base J) :=
@@ -88,7 +88,7 @@ theorem measurableEmbedding_val (J : Fin C.M) :
 
 /-- The pushforward of the chart base measure to its stratum. -/
 noncomputable def pushedMeasure (J : Fin C.M) : Measure (R.Stratum (C.strat J)) :=
-  (C.adapted.ν J).map Subtype.val
+  (C.cores.ν J).map Subtype.val
 
 instance (J : Fin C.M) : IsFiniteMeasure (C.pushedMeasure J) := Measure.isFiniteMeasure_map _ _
 
@@ -201,7 +201,7 @@ variable {C} (Cc : C.CoefficientCertificate)
 frame. -/
 noncomputable def chartTensor (J : Fin C.M) (s : ↥(C.base J)) (r : ℕ) (q : PowerLogIndex) :
     MomentTensor (D.N (C.strat J) s.1) r :=
-  (chartMomentCoeff (C.n J) (C.adapted.h J) (C.adapted.k J) C.β (C.adapted.b J) q.exponent
+  (chartMomentCoeff (C.n J) (C.cores.h J) (C.cores.k J) C.β (C.cores.b J) q.exponent
     q.logDegree (Cc.cc J s) r).pushFrame
     (C.frame J s : (Fin (C.n J + 1) → ℝ) →L[ℝ] D.N (C.strat J) s.1)
 
@@ -210,8 +210,8 @@ omit [T2Space U] [BorelSpace U] [MeasurableSpace A] [BorelSpace A] in
 the box pairing with the normal jet of the fibre observable. -/
 theorem chartTensor_pair (J : Fin C.M) (s : ↥(C.base J)) (r : ℕ) (q : PowerLogIndex) :
     (Cc.chartTensor J s r q).pair (D.normalDifferential φ (C.strat J) s.1 r) =
-      chartMomentCoeff (C.n J) (C.adapted.h J) (C.adapted.k J) C.β (C.adapted.b J) q.exponent
-        q.logDegree (Cc.cc J s) r (normalJet ((C.adapted.chart J).obsFibre s) r) := by
+      chartMomentCoeff (C.n J) (C.cores.h J) (C.cores.k J) C.β (C.cores.b J) q.exponent
+        q.logDegree (Cc.cc J s) r (normalJet ((C.cores.chart J).obsFibre s) r) := by
   unfold chartTensor
   rw [MomentTensor.pushFrame_pair]
   unfold MomentTensor.pair
@@ -219,7 +219,7 @@ theorem chartTensor_pair (J : Fin C.M) (s : ↥(C.base J)) (r : ℕ) (q : PowerL
   have h := rawNormalJet_comp_equiv (D.N (C.strat J)) (D.Φ (C.strat J)) (φ ∘ R.π) s.1
     (C.frame J s) r
   have hfun : (fun v : Fin (C.n J + 1) → ℝ => (φ ∘ R.π) (D.Φ (C.strat J) s.1 (C.frame J s v))) =
-      (C.adapted.chart J).obsFibre s := by
+      (C.cores.chart J).obsFibre s := by
     funext v
     rw [C.obsFibre_eq]
     rfl
@@ -233,20 +233,20 @@ normal-order series of the pairings of the normal differentials with the coeffic
 theorem hasSum_chartTensor_pair (J : Fin C.M) (s : ↥(C.base J)) (q : PowerLogIndex) :
     HasSum (fun r : ℕ => (r.factorial : ℝ)⁻¹ *
         (Cc.chartTensor J s r q).pair (D.normalDifferential φ (C.strat J) s.1 r))
-      (dataBoxCoeff (C.n J) (C.adapted.h J) (C.adapted.k J) C.β (C.adapted.b J)
-        ((C.adapted.chart J).x s) q.exponent q.logDegree) := by
+      (dataBoxCoeff (C.n J) (C.cores.h J) (C.cores.k J) C.β (C.cores.b J)
+        ((C.cores.chart J).x s) q.exponent q.logDegree) := by
   unfold dataBoxCoeff
-  rw [toXi_eq_zero ((C.adapted.chart J).fluct_zero s), Cc.datum_eq J s]
-  have h := hasSum_inv_factorial_mul_chartMomentCoeff (C.n J) (C.adapted.h J) (C.adapted.k J)
-    C.β (C.adapted.b J) q.exponent q.logDegree (C.adapted.k_pos J) C.β_pos (C.adapted.b_pos J)
+  rw [toXi_eq_zero ((C.cores.chart J).fluct_zero s), Cc.datum_eq J s]
+  have h := hasSum_inv_factorial_mul_chartMomentCoeff (C.n J) (C.cores.h J) (C.cores.k J)
+    C.β (C.cores.b J) q.exponent q.logDegree (C.cores.k_pos J) C.β_pos (C.cores.b_pos J)
     (Cc.cc_abs J s) (Cc.jet_abs J s)
   refine h.congr_fun fun r => ?_
   rw [Cc.chartTensor_pair]
 
 omit [T2Space U] [BorelSpace U] [MeasurableSpace A] [BorelSpace A] in
 theorem dataBoxCoeff_eq_tsum (J : Fin C.M) (s : ↥(C.base J)) (q : PowerLogIndex) :
-    dataBoxCoeff (C.n J) (C.adapted.h J) (C.adapted.k J) C.β (C.adapted.b J)
-        ((C.adapted.chart J).x s) q.exponent q.logDegree =
+    dataBoxCoeff (C.n J) (C.cores.h J) (C.cores.k J) C.β (C.cores.b J)
+        ((C.cores.chart J).x s) q.exponent q.logDegree =
       ∑' r : ℕ, (r.factorial : ℝ)⁻¹ *
         (Cc.chartTensor J s r q).pair (D.normalDifferential φ (C.strat J) s.1 r) :=
   (Cc.hasSum_chartTensor_pair J s q).tsum_eq.symm
@@ -279,8 +279,8 @@ theorem summable_chartTensorExt_pair (J : Fin C.M) (s : R.Stratum (C.strat J)) (
 
 omit [T2Space U] [BorelSpace U] [MeasurableSpace A] [BorelSpace A] in
 theorem chartSeries_val (J : Fin C.M) (q : PowerLogIndex) (s : ↥(C.base J)) :
-    Cc.chartSeries J q s.1 = dataBoxCoeff (C.n J) (C.adapted.h J) (C.adapted.k J) C.β
-      (C.adapted.b J) ((C.adapted.chart J).x s) q.exponent q.logDegree := by
+    Cc.chartSeries J q s.1 = dataBoxCoeff (C.n J) (C.cores.h J) (C.cores.k J) C.β
+      (C.cores.b J) ((C.cores.chart J).x s) q.exponent q.logDegree := by
   rw [Cc.dataBoxCoeff_eq_tsum]
   unfold chartSeries
   refine tsum_congr fun r => ?_
@@ -293,20 +293,20 @@ theorem integrable_chartSeries (J : Fin C.M) (q : PowerLogIndex) :
   unfold ResolvedCertificate.pushedMeasure
   rw [(C.measurableEmbedding_val J).integrable_map_iff]
   have heq : Cc.chartSeries J q ∘ (Subtype.val : ↥(C.base J) → R.Stratum (C.strat J)) =
-      fun s => dataBoxCoeff (C.n J) (C.adapted.h J) (C.adapted.k J) C.β (C.adapted.b J)
-        ((C.adapted.chart J).x s) q.exponent q.logDegree :=
+      fun s => dataBoxCoeff (C.n J) (C.cores.h J) (C.cores.k J) C.β (C.cores.b J)
+        ((C.cores.chart J).x s) q.exponent q.logDegree :=
     funext fun s => Cc.chartSeries_val J q s
   rw [heq]
-  exact integrable_dataBoxCoeff_tan (C.adapted.ν J) (C.n J) (C.adapted.h J) (C.adapted.k J)
-    (C.adapted.k_pos J) C.β C.β_pos (C.adapted.b_pos J) _ _ _
+  exact integrable_dataBoxCoeff_tan (C.cores.ν J) (C.n J) (C.cores.h J) (C.cores.k J)
+    (C.cores.k_pos J) C.β C.β_pos (C.cores.b_pos J) _ _ _
 
 omit [MeasurableSpace A] [BorelSpace A] in
 /-- The chart integral of the normal-order series is the chart's integrated canonical
 coefficient. -/
 theorem integral_chartSeries (J : Fin C.M) (q : PowerLogIndex) :
     ∫ s, Cc.chartSeries J q s ∂C.pushedMeasure J =
-      tanCoeff (C.adapted.ν J) (C.n J) (C.adapted.h J) (C.adapted.k J) C.β (C.adapted.b J)
-        (C.adapted.x.chart J) q.exponent q.logDegree := by
+      tanCoeff (C.cores.ν J) (C.n J) (C.cores.h J) (C.cores.k J) C.β (C.cores.b J)
+        (C.cores.x.chart J) q.exponent q.logDegree := by
   unfold ResolvedCertificate.pushedMeasure
   rw [(C.measurableEmbedding_val J).integral_map]
   unfold tanCoeff
@@ -364,8 +364,8 @@ omit [MeasurableSpace A] [BorelSpace A] in
 theorem integral_weight_mul (I : Finset R.Component) (q : PowerLogIndex) (J : Fin C.M)
     (hJ : C.strat J = I) :
     ∫ s, C.weight hJ s * C.transportFun hJ (Cc.chartSeries J q) s ∂C.stratumMeasure I =
-      tanCoeff (C.adapted.ν J) (C.n J) (C.adapted.h J) (C.adapted.k J) C.β (C.adapted.b J)
-        (C.adapted.x.chart J) q.exponent q.logDegree := by
+      tanCoeff (C.cores.ν J) (C.n J) (C.cores.h J) (C.cores.k J) C.β (C.cores.b J)
+        (C.cores.x.chart J) q.exponent q.logDegree := by
   have := C.isFiniteMeasure_transportMeasure hJ (C.pushedMeasure J)
   have := integral_rnDeriv_smul (C.pushed_ac hJ) (f := C.transportFun hJ (Cc.chartSeries J q))
   simp only [smul_eq_mul] at this
@@ -376,14 +376,14 @@ omit [MeasurableSpace A] [BorelSpace A] in
 /-- ★★ **The coordinate-free expansion coefficients are the assembled canonical coefficients.** -/
 theorem expansionCoefficient_eq_gCoeff (q : PowerLogIndex) :
     D.expansionCoefficient C.stratumMeasure Cc.field φ q =
-      gCoeff C.adapted.ν C.adapted.h C.adapted.k C.β C.adapted.b C.adapted.x q.exponent
+      gCoeff C.cores.ν C.cores.h C.cores.k C.β C.cores.b C.cores.x q.exponent
         q.logDegree := by
   unfold ResolvedNormalData.expansionCoefficient gCoeff
   have hI : ∀ I : Finset R.Component,
       ∫ s, ∑' r : ℕ, (r.factorial : ℝ)⁻¹ * (Cc.field I r q s).pair (D.normalDifferential φ I s r)
         ∂C.stratumMeasure I =
-      ∑ J, if hJ : C.strat J = I then tanCoeff (C.adapted.ν J) (C.n J) (C.adapted.h J)
-        (C.adapted.k J) C.β (C.adapted.b J) (C.adapted.x.chart J) q.exponent q.logDegree
+      ∑ J, if hJ : C.strat J = I then tanCoeff (C.cores.ν J) (C.n J) (C.cores.h J)
+        (C.cores.k J) C.β (C.cores.b J) (C.cores.x.chart J) q.exponent q.logDegree
         else 0 := by
     intro I
     simp_rw [Cc.tsum_field_pair I q]
@@ -399,8 +399,8 @@ theorem expansionCoefficient_eq_gCoeff (q : PowerLogIndex) :
   simp_rw [hI]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun J _ => ?_
-  exact Fintype.sum_dite_eq (C.strat J) fun I _ => tanCoeff (C.adapted.ν J) (C.n J)
-    (C.adapted.h J) (C.adapted.k J) C.β (C.adapted.b J) (C.adapted.x.chart J) q.exponent
+  exact Fintype.sum_dite_eq (C.strat J) fun I _ => tanCoeff (C.cores.ν J) (C.n J)
+    (C.cores.h J) (C.cores.k J) C.β (C.cores.b J) (C.cores.x.chart J) q.exponent
     q.logDegree
 
 end CoefficientCertificate
@@ -496,14 +496,14 @@ asymptotic uniqueness), and this is the expansion of the unnormalised integral. 
 theorem hasCoordFreeExpansion (hK : Measurable K) (hϕ : Measurable ϕ) (hϕ0 : ∀ w, 0 ≤ ϕ w)
     (hφ : Measurable φ) :
     D.HasCoordFreeExpansion C.stratumMeasure Cc.field
-      (spectrumBelow (commonQ C.adapted.k) (commonD C.n)) W K ϕ φ := by
+      (spectrumBelow (commonQ C.cores.k) (commonD C.n)) W K ϕ φ := by
   intro Ac
   have hcut : 0 < cutoffExponent Ac := lt_of_lt_of_le one_pos (le_max_right _ _)
   obtain ⟨Kc, hKc⟩ := C.cutoffExpansion_globalLaplace hK hϕ hϕ0 hφ (cutoffExponent Ac) hcut
-  have hsum : ∀ n : ℝ, ∑ q ∈ spectrumBelow (commonQ C.adapted.k) (commonD C.n) Ac,
+  have hsum : ∀ n : ℝ, ∑ q ∈ spectrumBelow (commonQ C.cores.k) (commonD C.n) Ac,
       D.expansionCoefficient C.stratumMeasure Cc.field φ q * q.scale n =
-      absSpectralSum (commonQ C.adapted.k) (commonD C.n)
-        (gCoeff C.adapted.ν C.adapted.h C.adapted.k C.β C.adapted.b C.adapted.x)
+      absSpectralSum (commonQ C.cores.k) (commonD C.n)
+        (gCoeff C.cores.ν C.cores.h C.cores.k C.β C.cores.b C.cores.x)
         (cutoffExponent Ac) n := by
     intro n
     rw [← sum_spectrumBelow]
