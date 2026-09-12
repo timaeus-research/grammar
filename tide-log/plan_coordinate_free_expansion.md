@@ -164,14 +164,30 @@ analyticity is NOT part of this phase.
 | P4 | `HolomorphicOriginalFaceSeries` (CCCXXXI) | recentred family `G s z = H(complexify s + L_I z)`; containment, holomorphicity, joint continuity, bounds; common-radius `OriginalFaceSeries` producer (`exists_originalFaceSeries_of_holomorphicBoxExtension`) | done |
 | P5 | `AnalyticCoordinateBoxExpansion` (CCCXXXII) | composition: holomorphic box extension ⇒ coordinate-free expansion for some collar level (★★★ `hasCoordFreeExpansion_of_holomorphicBoxExtension`, `_nonneg_on`); real-neighbourhood wrapper `ofRealNhd` | done |
 
-Status: main `41fc8bf`, 633 modules; PHASE 3 STOPPING GATE MET (complex neighbourhood → unchanged closed-face interface → existing certificates and expansion). Not included: complexification from real analyticity; box-only agreement (chosen extensions); optimal (lcm) spectral lattice; general SNC geometry.
+| H-A | `ExpansionCongruence` (CCCXXXIII) | the expansion depends on `(ϕ,φ)` only through `∫_W` and the `ν_I`-a.e. germs of `φ` (`normalDifferential_congr`, `expansionCoefficient_congr`, ★ `HasCoordFreeExpansion.congr`); stratum measures of a certificate live on its bases (`ae_stratumMeasure`, `ae_stratumMeasure_mem_box`) | done |
+| H1–H3 | `LocalAnalyticInputs` (CCCXXXIV) | real domain, measurable representatives `1_U·Re H∘complexify`, `toRep` packet, boundedness and weighted integrability on the box; ★★★ `hasCoordFreeExpansion_of_holomorphicBoxExtension_local` (hypotheses: packet, `0<d`, `0<a`, prior `≥ 0` on the box) with named `producedCertificate`/`producedCoeffCertificate` | done |
+| gate 5 | `PolynomialBoxInstance` (CCCXXXV) | polynomial packets `ofPolynomials`, `flatPolynomial`; ★★ `hasCoordFreeExpansion_polynomial`, ★★ `hasCoordFreeExpansion_flat_polynomial`; `▸` casts in certificate arguments replaced by the named `integrable_posPart` (kernel timeout otherwise) | done |
+
+Status: main `f8df720`, 636 modules; phase 3 and the hygiene phase (consult #99) CLOSED — the public coordinate-model theorem assumes only the holomorphic packet near the box, `0<d`, `0<a` and nonnegativity of the prior on the box. Next: phase G (signed coordinates `[−a,a]^d`, consult #100), then a discharged geometric instance (E).
 
 ## 6. Hypotheses that remain at the end
 
-Certified resolved geometry with a compatible monomial atlas (a.e.-disjoint or multiplicity-corrected
-change of variables, exact core transport, tail gap, unit handling), analytic admissibility of `φ`
-(radii, majorants), uniform integrable bounds for the base integrals. Everything else — the strata,
-the normal differentials, the moment coefficients, the densities, the expansion — is a theorem.
+Two levels (consult #99 §A5).
+
+*Coordinate-model endpoint* (phases 1–3 and the hygiene phase): for the monomial phase on the compact
+positive box the only hypotheses are the holomorphic extension packet on a complex neighbourhood of
+the box (real-part agreement on its real slice, or on a real neighbourhood), `0 < d`, `0 < a`, and
+nonnegativity of the prior on the box. The face radii, majorants, collar level, certificates, stratum
+measures and coefficient field are produced. Not produced: the extensions themselves from real
+analyticity; the box-only agreement theorem (chosen extensions); the optimal spectral lattice.
+
+*General resolved application*: certified resolved geometry with a compatible monomial atlas
+(a.e.-disjoint or multiplicity-corrected change of variables, exact core transport, tail gap, unit
+handling), analytic admissibility of `φ` in the form of holomorphic extensions near the strata, and
+uniform integrable bounds for the base integrals remain CERTIFICATE INTERFACES. Given them, the strata,
+the normal differentials, the moment coefficients, the densities and the expansion are theorems; the
+compact-box producer is the local model, and the geometry beyond the coordinate model (signed
+coordinates, blow-up instances, a compatible SNC atlas) is the remaining programme.
 
 ## 7. Bookkeeping
 
