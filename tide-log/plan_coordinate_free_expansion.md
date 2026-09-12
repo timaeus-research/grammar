@@ -137,12 +137,13 @@ normal-unit normalisation → analytic-normal collar decomposition → general c
 | F2 weighted-ℓ¹ families are analytic; Taylor family = coefficient family | `AnalyticSeriesFamily` (CCCXVII) | done |
 | F3 rectangular series producer (★★★ `SeriesBox.hasCoordFreeExpansion_box`, no certificate hypotheses) | `CoordinateBoxCoreCertificate` (CCCXVIII) | done |
 | F4 parameterised series datum, continuous in the ℓ¹ data topology | `ParameterisedSeriesDatum` (CCCXIX) | done |
-| F5 normal-unit normalisation (tangential unit `∏_{j∉I} s_j^{2k_j}` absorbed into normal widths) | — | next (consult #96) |
-| F6 finite analytic-normal collar decomposition (exact positive measure decomposition, uniform tail gap) | — | pending |
-| F7 general compact-box producer | — | pending |
-| F8 SNC/tubular compatibility structures, verified on the coordinate model | — | pending |
+| F5 normal-unit normalisation: fibrewise diagonal transport + the normalised box core at a coordinate stratum | `DiagonalBoxTransport` (CCCXX), `NormalisedBoxCore` (CCCXXI) | done |
+| F6 water-filling collar (consult #96): compact bases in the exact strata, common side `b_I`, `β = 1`; covering + disjointness off thresholds; exact decomposition `μ = Σ μ|_{C_I} + tail`, gap `δ` | `WaterFillingCollar` (CCCXXII), `CollarDecomposition` (CCCXXIII) | done |
+| F7 general compact-box producer from local normal series (★★★ `WaterFilling.hasCoordFreeExpansion_collar`, all nonempty coordinate strata) | `CoordinateBoxCertificate` (CCCXXIV) | done |
+| F8 SNC/tubular compatibility structures (patchwise field lists of consult #96 §5), constructive then interpretive consumers | — | next (consult #97) |
+| F9 analytic-neighbourhood → uniform face-series bridge (5b) | — | optional |
 
-Status: main `cfcd013`, 620 modules; mirror pin `cfcd013`.
+Status: main `24d3cc1`, 625 modules; consult #96 stopping theorem (compact box, all strata, local normal series) LANDED as CCCXXIV; mirror pin `24d3cc1`.
 
 ## 6. Hypotheses that remain at the end
 
