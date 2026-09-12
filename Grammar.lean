@@ -601,3 +601,4 @@ import Grammar.ResolvedNormalData
 import Grammar.ResolvedMomentRepresentation
 import Grammar.ZeroFluctSpectralKernel
 import Grammar.ChartCoefficientTensors
+import Grammar.ResolvedCoordFreeExpansion

@@ -141,11 +141,15 @@ noncomputable def stratumCoefficient (ν : ∀ I : Finset R.Component, Measure (
     (B : ∀ s : R.Stratum I, MomentTensor (D.N I s) r) : ℝ :=
   (r.factorial : ℝ)⁻¹ * ∫ s, (B s).pair (D.normalDifferential φ I s r) ∂ν I
 
-/-- **The expansion coefficient of a power–log index**: the sum over the strata and over all normal
-orders of the stratum coefficients. -/
+/-- **The expansion coefficient of a power–log index**: the sum over the strata of the stratum
+integrals of the normal-order series `∑_r (1/r!) ⟨D^r_⊥(φ∘π)(s), B_{I,r,q}(s)⟩`. (The series is
+summed pointwise inside the stratum integral: at a tied crossing the normal order is not locally
+finite, and the pointwise series is the object the fibre analysis controls; when the summands are
+integrable with summable integrals this is `∑_I ∑_r stratumCoefficient`.) -/
 noncomputable def expansionCoefficient (ν : ∀ I : Finset R.Component, Measure (R.Stratum I))
     (B : D.MomentCoefficientField) (φ : (Fin d → ℝ) → ℝ) (q : PowerLogIndex) : ℝ :=
-  ∑ I : Finset R.Component, ∑' r : ℕ, D.stratumCoefficient ν φ I r (B I r q)
+  ∑ I : Finset R.Component, ∫ s, ∑' r : ℕ,
+    (r.factorial : ℝ)⁻¹ * (B I r q s).pair (D.normalDifferential φ I s r) ∂ν I
 
 /-- ★ **The coordinate-free expansion** of the original integral `∫_W φ ϕ e^{−nK}`: for every cutoff
 `A`, subtracting the terms `expansionCoefficient(q) · n^{−α}(log n)^j` over the finite spectrum

@@ -129,15 +129,14 @@ theorem inv_factorial_mul_chartMomentCoeff_apply (cc : CoeffFamily (n + 1))
 
 /-! ### The termwise identity -/
 
-/-- ★★ **The termwise identity**: the canonical `(μ,j)` coefficient of the chart integral with
-amplitude family `cc ⋆ jetFamily F` is the absolutely convergent sum over the normal degree of the
-pairings of the normal jets with the chart coefficient tensors,
-`boxCoeff 0 (cc ⋆ jetFamily F) μ j = ∑'_r (1/r!) ⟨D^rF(0), B_{r,μ,j}⟩`. -/
-theorem boxCoeff_conv_jetFamily_eq_tsum (hk : ∀ i, 0 < k i) (hβ : 0 < β) (hb : 0 < b)
+/-- **The termwise identity, summation form**: the normal-degree series
+`∑_r (1/r!) ⟨D^rF(0), B_{r,μ,j}⟩` converges to the canonical coefficient
+`boxCoeff 0 (cc ⋆ jetFamily F) μ j`. -/
+theorem hasSum_inv_factorial_mul_chartMomentCoeff (hk : ∀ i, 0 < k i) (hβ : 0 < β) (hb : 0 < b)
     {cc : CoeffFamily (n + 1)} (hcc : AbsSummableAt cc b) {F : (Fin (n + 1) → ℝ) → ℝ}
     (hF : AbsSummableAt (jetFamily n F) b) :
-    boxCoeff n h k β b 0 (CoeffFamily.conv cc (jetFamily n F)) μ j =
-      ∑' r, (r.factorial : ℝ)⁻¹ * chartMomentCoeff n h k β b μ j cc r (normalJet F r) := by
+    HasSum (fun r => (r.factorial : ℝ)⁻¹ * chartMomentCoeff n h k β b μ j cc r (normalJet F r))
+      (boxCoeff n h k β b 0 (CoeffFamily.conv cc (jetFamily n F)) μ j) := by
   set K := boxSpectralKernel n h k β b μ j with hKdef
   set jf := jetFamily n F with hjf
   set S := shiftedKernel n h k β b μ j cc with hS
@@ -222,6 +221,17 @@ theorem boxCoeff_conv_jetFamily_eq_tsum (hk : ∀ i, 0 < k i) (hβ : 0 < β) (hb
     convert hs using 1
     rw [Finset.sum_subtype_eq_sum_filter (f := fun δ => jf δ * S δ),
       Finset.filter_true_of_mem fun δ hδ => Finset.Nat.mem_antidiagonalTuple.1 hδ]
-  exact (hdeg.sigma hfib).tsum_eq.symm
+  exact hdeg.sigma hfib
+
+/-- ★★ **The termwise identity**: the canonical `(μ,j)` coefficient of the chart integral with
+amplitude family `cc ⋆ jetFamily F` is the absolutely convergent sum over the normal degree of the
+pairings of the normal jets with the chart coefficient tensors,
+`boxCoeff 0 (cc ⋆ jetFamily F) μ j = ∑'_r (1/r!) ⟨D^rF(0), B_{r,μ,j}⟩`. -/
+theorem boxCoeff_conv_jetFamily_eq_tsum (hk : ∀ i, 0 < k i) (hβ : 0 < β) (hb : 0 < b)
+    {cc : CoeffFamily (n + 1)} (hcc : AbsSummableAt cc b) {F : (Fin (n + 1) → ℝ) → ℝ}
+    (hF : AbsSummableAt (jetFamily n F) b) :
+    boxCoeff n h k β b 0 (CoeffFamily.conv cc (jetFamily n F)) μ j =
+      ∑' r, (r.factorial : ℝ)⁻¹ * chartMomentCoeff n h k β b μ j cc r (normalJet F r) :=
+  (hasSum_inv_factorial_mul_chartMomentCoeff n h k β b μ j hk hβ hb hcc hF).tsum_eq.symm
 
 end Grammar
