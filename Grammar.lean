@@ -600,3 +600,4 @@ import Grammar.ResolvedGeometry
 import Grammar.ResolvedNormalData
 import Grammar.ResolvedMomentRepresentation
 import Grammar.ZeroFluctSpectralKernel
+import Grammar.ChartCoefficientTensors
