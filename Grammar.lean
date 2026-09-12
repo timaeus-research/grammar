@@ -560,3 +560,4 @@ import Grammar.LeadingAtlas
 import Grammar.VariableUnitPieceAtlas
 import Grammar.ProductChartVar
 import Grammar.ProductChartVarPosterior
+import Grammar.VariableUnitSquareExample
