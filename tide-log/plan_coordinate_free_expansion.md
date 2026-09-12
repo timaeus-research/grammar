@@ -91,10 +91,11 @@ incidence — a separate upstream programme (Astra #92 §5).
 | 5 | `ZeroFluctSpectralKernel` | the canonical box coefficients are ℓ¹ kernel pairings of the amplitude family (`monoKernel`, `boxSpectralKernel`, uniform bounds, `AbsSummableAt.conv`) | CCCI |
 | 6 | `ChartCoefficientTensors` | `shiftedKernel`, `chartMomentCoeff` (coefficient tensor of the exact fibre moment tensor), `jetFamily`, ★★ termwise identity `boxCoeff 0 (cc ⋆ jetFamily F) μ j = Σ'_r (1/r!)⟨D^rF(0), B_r⟩`; `MomentTensor.pushFrame` | CCCII |
 | 7 | `ResolvedCoordFreeExpansion` | `CoefficientCertificate`; chart tensors on the strata via frames; per-point identity; `stratumMeasure` (pushforward sums), `field` (Radon–Nikodym-weighted tensor fields, no disjointness); ★★ `expansionCoefficient_eq_gCoeff`; ★★★ `hasCoordFreeExpansion` — **THE TARGET THEOREM**, conditional on the two certificates | CCCIII |
-| 8 | certificate instances | first instances of `ResolvedCertificate` + `CoefficientCertificate` (isolated zero `K = |x|²` via the blow-up cube; one-chart product example); `jetFamily ↔ monoFamily p` identification so `jet_abs` follows from `NormalMomentPresentation` | next (Astra #93) |
-| 9 | `ProjectorBlowup*` | `U = {(x,P) : P symmetric idempotent of trace 1, Px = x}` as a `ResolvedGeometry` with certificate | planned |
-| 10 | `ResolvedLeadingMeasure` | leading corollary from `hasCoordFreeExpansion`; equality with the CCXC–CCXCIII leading measure | planned |
-| 11 | uniqueness / examples | uniqueness of `CutoffExpansion` coefficients (canonicity of the total functionals); tied-crossing non-local-finiteness regression | planned |
+| 8 | certificate instances | `OneDimResolvedGeometry` (CCCV: `ℝ¹`, `π = id`, `{x = 0}`, normal data, frames), `OneDimPolynomialSeries` (CCCVI: `jetFamily_poly`), ★★ `OneDimCoordFreeInstance` (CCCVII: both certificates for `∫_0^ρ P(x)e^{−nx²}dx`, `hasCoordFreeExpansion_poly` with spectrum `½ℕ`); `JetFamilyOfSeries` (CCCIX: `jetFamily = monoFamily p` in every dimension, `CoefficientCertificate.ofSeries`) | CCCV–CCCVII, CCCIX |
+| 9 | `ProjectorBlowup*` | `U = {(x,P) : P symmetric idempotent of trace 1, Px = x}` as a `ResolvedGeometry` with certificate (Astra #93: after the certificate API stabilises; 6–12 modules) | planned |
+| 10 | `CoordFreeLeadingTerm` | ★★ `hasLeadingTerm_expansionCoefficient` (first admissible index with vanishing predecessors ⇒ leading term), `exists_first_nonzero_expansionCoefficient`, ★★ `expansionCoefficient_eq_integral_leadingMeasure` (bridge to the CCXC leading measure for bounded continuous `φϕ`) | CCCX |
+| 11 | `CutoffExpansionUniqueness` | ★★★ `CutoffExpansion.coeff_unique`/`coeff_eq_of_lattices`; ★★★ `expansionCoefficient_eq_of_certificates` — two certificate pairs for the same original integral give the same coordinate-free coefficients at every index (canonicity of the assembled scalar coefficients) | CCCVIII |
+| 12 | further examples | tied-crossing (two-variable) regression for the infinite normal-order sum; two-sided interval (two charts); closed-form coefficient values for the 1D instance (`monoKernel` evaluation) | planned |
 
 Gates 9 and 10 of the original plan (integrable tensor coefficients; summable interchange over `r`)
 were passed by design: the coefficient tensors are constructed explicitly from the chart kernels
@@ -103,15 +104,18 @@ analytic on the box), and the normal-order series is summed pointwise inside the
 so no interchange with the integral is required. `expansionCoefficient` was accordingly redefined as
 `Σ_I ∫_{S_I} Σ'_r (1/r!)⟨D^r_⊥(φ∘π)(s), B_{I,r,q}(s)⟩ dν_I`.
 
-## 5a. Status (2026-09-12, after unit 7; main `9a75b0a`, 604 modules)
+## 5a. Status (2026-09-12, after consult #93 A–D; main `c4ad71b`, 611 modules)
 
-★★★ `Grammar.ResolvedCertificate.CoefficientCertificate.hasCoordFreeExpansion`:
-for `C : ResolvedCertificate R D W K ϕ φ`, `Cc : C.CoefficientCertificate`, `K ϕ φ` measurable, `ϕ ≥ 0`,
-`D.HasCoordFreeExpansion C.stratumMeasure Cc.field (spectrumBelow Q D) W K ϕ φ`, i.e. for every `A`,
-`∫_W φ ϕ e^{−nK} − Σ_{α∈Q⁻¹ℕ, α<max(A+1,1), j≤D} n^{−α}(log n)^j Σ_I ∫_{S_I} Σ'_r (1/r!)⟨D^r_⊥(φ∘π)(s), B_{I,r,α,j}(s)⟩ dν_I(s) = o(n^{−A})`.
-The formula mentions only the strata, the normal differentials, the coefficient tensor fields, the
-stratum densities and `π`. Hypotheses: the two certificates (charts live there). Remaining work:
-instances of the certificates, the leading corollary, canonicity of the total functionals.
+★★★ `hasCoordFreeExpansion`/`hasCoordFreeExpansion_le` (CCCIII–CCCIV): the coordinate-free expansion of
+`∫_W φ ϕ e^{−nK}` conditional on `ResolvedCertificate` + `CoefficientCertificate`, with the normal-order
+series summed pointwise inside the stratum integrals (pointwise convergent, integrable sum) and the
+truncation to exponents `≤ A`. Astra #93 audit: a certified coordinate-free REPRESENTATION, not an
+intrinsic final theorem — headline and docstrings corrected (fields chosen, `cc` a factorisation family,
+unnormalised integral). Then: ★★ first instance `∫_0^ρ P(x)e^{−nx²}dx` (CCCV–CCCVII); ★★★ canonicity of
+the assembled scalar coefficients across certificates (CCCVIII); `jetFamily = monoFamily p` and
+`CoefficientCertificate.ofSeries` (CCCIX); leading term and the bridge to the CCXC leading measure
+(CCCX). Remaining: projector blow-up model (E), tied-crossing regression, two-sided interval, explicit
+coefficient values.
 
 ## 6. Hypotheses that remain at the end
 
