@@ -140,10 +140,11 @@ normal-unit normalisation → analytic-normal collar decomposition → general c
 | F5 normal-unit normalisation: fibrewise diagonal transport + the normalised box core at a coordinate stratum | `DiagonalBoxTransport` (CCCXX), `NormalisedBoxCore` (CCCXXI) | done |
 | F6 water-filling collar (consult #96): compact bases in the exact strata, common side `b_I`, `β = 1`; covering + disjointness off thresholds; exact decomposition `μ = Σ μ|_{C_I} + tail`, gap `δ` | `WaterFillingCollar` (CCCXXII), `CollarDecomposition` (CCCXXIII) | done |
 | F7 general compact-box producer from local normal series (★★★ `WaterFilling.hasCoordFreeExpansion_collar`, all nonempty coordinate strata) | `CoordinateBoxCertificate` (CCCXXIV) | done |
-| F8 SNC/tubular compatibility structures (patchwise field lists of consult #96 §5), constructive then interpretive consumers | — | next (consult #97) |
-| F9 analytic-neighbourhood → uniform face-series bridge (5b) | — | optional |
+| F7′ public inputs: original-variable closed-face series adapter (`OriginalFaceSeries.toFaceSeries`, ★★★ `hasCoordFreeExpansion_collar_of_face`) and box-local nonnegativity (`posPart`, ★★★ `hasCoordFreeExpansion_collar_of_nonneg_on`); log degree `commonD = d − 1` | `CoordinateBoxInputs` (CCCXXV), CCCXXIV addendum | done |
+| F8 coordinate normal compatibility (consult #97 §2): diagonal conormal frames with scale `λ_i(s)`, tubular identity, constructive consumer `produceCore_of_coordinateCompat`, fixed-germ jets (★★ `normalJet_stratumCore_eq_normalDifferential`: chart jets = coordinate-free normal differentials along the frame) | `CoordinateNormalCompatibility` (CCCXXVI) | done |
+| F9 analytic-neighbourhood → uniform face-series bridge (5b): complex neighbourhood + Cauchy estimates with radius shrink | — | phase 3 (consult #98) |
 
-Status: main `24d3cc1`, 625 modules; consult #96 stopping theorem (compact box, all strata, local normal series) LANDED as CCCXXIV; mirror pin `24d3cc1`.
+Status: main `7e5cc68`, 627 modules; consult #97's stopping gate for phase 2 MET (original-face input produces the collar-base series; coordinate conormals evaluate the diagonal frames with scale `λ_i(s)`; tubular-frame series construct a core without assuming transport or the phase normal form; fibre jets identified with the fixed normal germ through the frame; all instantiated on the water-filling certificate). PHASE 2 CLOSED. Mirror pin `7e5cc68`.
 
 ## 6. Hypotheses that remain at the end
 
