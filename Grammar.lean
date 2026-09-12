@@ -611,3 +611,4 @@ import Grammar.JetFamilyOfSeries
 import Grammar.CoordFreeLeadingTerm
 import Grammar.PolynomialTaylorFamily
 import Grammar.OneDimExplicitCoefficients
+import Grammar.CoordinateResolvedGeometry
