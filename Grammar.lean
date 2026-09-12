@@ -570,3 +570,4 @@ import Grammar.VariableUnitResidualExample
 import Grammar.VariableNoActiveAssembly
 import Grammar.MonomialChartProductBox
 import Grammar.LocalExplicitCoefficient
+import Grammar.PartitionAssemblyRegression
