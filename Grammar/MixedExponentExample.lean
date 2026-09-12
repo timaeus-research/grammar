@@ -476,15 +476,28 @@ noncomputable def Jmin : Finset (Fin ((Finset.univ : Finset (Fin 2)).card - 1 + 
     (minRatio (normalExp Finset.univ Finset.univ_nonempty (Ps ()).h)
       (normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e))
 
-/-- **The tied sum of the `{0,1}`-piece is `2Γ(1/4)`** (residual formula:
-`2^{|J|} · Σ_{τ} Γ(1/4)/4 · ∫_{(0,1]²} u₀^{−1/2} du = 2 · 2 · Γ(1/4)/4 · 2`). -/
-theorem tiedSum_univ
+/-- **The tied sum of the `{0,1}`-piece for an observable with residual face integral `R`**
+(residual formula: `2^{|J|} · Σ_{τ} Γ(1/4)/4 · R = Γ(1/4) · R`, where
+`R = ∫_{(0,1]²} pieceAmp(z, σ·faceProj u) u₀^{−1/2} du` is independent of `z` and `σ`). -/
+theorem tiedSum_univ_of_inner {F : (Fin 2 → ℝ) → ℝ} (hFm : Measurable F)
+    (hF : Integrable (fun x => F x * one.w x)
+      (volume.restrict (⋃ i, (ResolutionCover.ofChart chart).image i))) (R : ℝ)
+    (hinner : (∀ a, 0 < normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e a) →
+      ∀ (z : Fin (2 - ((Finset.univ : Finset (Fin 2)).card - 1 + 1)) → ℝ)
+        (σ : Fin ((Finset.univ : Finset (Fin 2)).card - 1 + 1) → Bool),
+        ∫ u in unitBox ((Finset.univ : Finset (Fin 2)).card - 1 + 1),
+          (ResolutionCover.ofChart chart).pieceAmp () Finset.univ Finset.univ_nonempty (Ps ()).h
+            (Ps ()).v (F := F) (p := one) z
+            (reflect σ ((1 : ℝ) • faceProj (normalExp Finset.univ Finset.univ_nonempty (Ps ()).h)
+              (normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e) (1 / 4) u)) *
+            residualWeight (normalExp Finset.univ Finset.univ_nonempty (Ps ()).h)
+              (normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e) (1 / 4) u = R)
     {At : FiniteScalarUnitAtlas (2 - ((Finset.univ : Finset (Fin 2)).card - 1 + 1))
       ((ResolutionCover.ofChart chart).pieceIntegral (fun i => (Ps i).e.support) 1 () Finset.univ
-        (fun _ => (1 : ℝ)) K one)}
+        F K one)}
     (hAt : (Ps ()).IsPieceAtlasData K_nonneg one_pos (hεb' ()) rfl hFm hF hK' Finset.univ
       univ_subset_support Finset.univ_nonempty At) :
-    ∑ σ ∈ At.tied (1 / 4) 0, (At.cell σ).coeff = 2 * Real.Gamma (1 / 4) := by
+    ∑ σ ∈ At.tied (1 / 4) 0, (At.cell σ).coeff = Real.Gamma (1 / 4) * R := by
   obtain ⟨q', A', hq'c, hq'pos, hA'c, hk, hbase, hβ, hamp', hphase', hq', hA', rfl⟩ := hAt
   rw [(ResolutionCover.ofChart chart).pieceAtlas_sum_tied_residual () (fun i => (Ps i).e.support)
     one_pos Finset.univ Finset.univ_nonempty _ hbase hβ rfl _ _ hk q' hq'c hq'pos A' hA'c hamp'
@@ -496,7 +509,7 @@ theorem tiedSum_univ
       one_pos Finset.univ Finset.univ_nonempty _ hbase hβ
       (normalExp Finset.univ Finset.univ_nonempty (Ps ()).h)
       (normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e) hk q' hq'c hq'pos A'
-      hA'c).reflected σ).coeff = Real.Gamma (1 / 4) / 2 := fun σ => by
+      hA'c).reflected σ).coeff = Real.Gamma (1 / 4) / 4 * R := fun σ => by
     refine (ScalarUnitCell.reflected_coeff_eq ((ResolutionCover.ofChart chart).pieceCell ()
       (fun i => (Ps i).e.support) one_pos Finset.univ Finset.univ_nonempty
       ((Ps ()).pieceDensity (D := fun i => (Ps i).e.support) one_pos (hεb' ()) rfl Finset.univ
@@ -541,7 +554,7 @@ theorem tiedSum_univ
               (Ps ()).h) (normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e) (1 / 4) u)) *
               residualWeight (normalExp Finset.univ Finset.univ_nonempty (Ps ()).h)
                 (normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e) (1 / 4) u))) =
-        Real.Gamma (1 / 4) / 2 := fun z => by
+        Real.Gamma (1 / 4) / 4 * R := fun z => by
       have hz : z ∈ ((Ps ()).pieceDensity (D := fun i => (Ps i).e.support) one_pos (hεb' ()) rfl
           Finset.univ univ_subset_support Finset.univ_nonempty one).base := by
         rw [base_univ_eq]; exact mem_univ z
@@ -549,14 +562,14 @@ theorem tiedSum_univ
           A' z (reflect σ ((1 : ℝ) • faceProj (normalExp Finset.univ Finset.univ_nonempty
             (Ps ()).h) (normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e) (1 / 4) u)) *
             residualWeight (normalExp Finset.univ Finset.univ_nonempty (Ps ()).h)
-              (normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e) (1 / 4) u = 2 := by
-        rw [← integral_residualWeight hk]
+              (normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e) (1 / 4) u = R := by
+        rw [← hinner hk z σ]
         refine setIntegral_congr_fun (measurableSet_unitBox _) fun u hu => ?_
-        rw [hA' z hz _ (reflect_faceProj_mem_closedBall _ _ _ σ hu), pieceAmp_eq_one, one_mul]
+        rw [hA' z hz _ (reflect_faceProj_mem_closedBall _ _ _ σ hu)]
       rw [ProductMonomialChart.pieceDensity_beta, planeSplit_univ_zero,
         Set.indicator_of_mem zero_mem_pieceFootSet, hq' z hz, scalarPhase_eq_one, Real.one_rpow,
         hinner]
-      change (1 : ℝ) * (1 * (1 * (Real.Gamma (1 / 4) / 4 * 2))) = _
+      change (1 : ℝ) * (1 * (1 * (Real.Gamma (1 / 4) / 4 * R))) = _
       ring
     rw [setIntegral_congr_fun (base_univ_eq ▸ MeasurableSet.univ) fun z _ => hint z, base_univ_eq,
       Measure.restrict_univ, integral_const, measureReal_def, volume_univ_base]
@@ -571,7 +584,7 @@ theorem tiedSum_univ
       one_pos Finset.univ Finset.univ_nonempty _ hbase hβ
       (normalExp Finset.univ Finset.univ_nonempty (Ps ()).h)
       (normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e) hk q' hq'c hq'pos A'
-      hA'c).reflected (extendFalse Jmin τ)).coeff = Real.Gamma (1 / 4) / 2 :=
+      hA'c).reflected (extendFalse Jmin τ)).coeff = Real.Gamma (1 / 4) / 4 * R :=
     fun τ => hterm _
   have hsum : ∑ τ : {a // a ∉ Jmin} → Bool,
       (((ResolutionCover.ofChart chart).pieceCell () (fun i => (Ps i).e.support)
@@ -579,24 +592,53 @@ theorem tiedSum_univ
       (normalExp Finset.univ Finset.univ_nonempty (Ps ()).h)
       (normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e) hk q' hq'c hq'pos A'
       hA'c).reflected (extendFalse Jmin τ)).coeff =
-      ∑ _τ : {a // a ∉ Jmin} → Bool, Real.Gamma (1 / 4) / 2 :=
+      ∑ _τ : {a // a ∉ Jmin} → Bool, Real.Gamma (1 / 4) / 4 * R :=
     Finset.sum_congr rfl fun τ _ => hterm' τ
   have hfinal : (2 : ℝ) ^ (Jmin).card *
-      ∑ _τ : {a // a ∉ Jmin} → Bool, Real.Gamma (1 / 4) / 2 =
-        2 * Real.Gamma (1 / 4) := by
+      ∑ _τ : {a // a ∉ Jmin} → Bool, Real.Gamma (1 / 4) / 4 * R =
+        Real.Gamma (1 / 4) * R := by
     rw [Finset.sum_const, nsmul_eq_mul, hJ, pow_one]
     push_cast at hcount ⊢
-    linear_combination (-(Real.Gamma (1 / 4) / 2)) * hcount
+    linear_combination (-(Real.Gamma (1 / 4) / 4 * R)) * hcount
   exact (congrArg (fun x => (2 : ℝ) ^ (Jmin).card * x) hsum).trans hfinal
 
-/-- **The leading coefficient of the mixed-exponent example is `2Γ(1/4)`.** -/
-theorem productCoeffD_eq :
-    (ResolutionCover.ofChart chart).productCoeffD Ps K_nonneg one_pos hεb' hFc' hpc' hFm hF hK'
+/-- **The tied sum of the `{0,1}`-piece for the observable `1` is `2Γ(1/4)`.** -/
+theorem tiedSum_univ
+    {At : FiniteScalarUnitAtlas (2 - ((Finset.univ : Finset (Fin 2)).card - 1 + 1))
+      ((ResolutionCover.ofChart chart).pieceIntegral (fun i => (Ps i).e.support) 1 () Finset.univ
+        (fun _ => (1 : ℝ)) K one)}
+    (hAt : (Ps ()).IsPieceAtlasData K_nonneg one_pos (hεb' ()) rfl hFm hF hK' Finset.univ
+      univ_subset_support Finset.univ_nonempty At) :
+    ∑ σ ∈ At.tied (1 / 4) 0, (At.cell σ).coeff = 2 * Real.Gamma (1 / 4) := by
+  rw [tiedSum_univ_of_inner hFm hF 2 (fun hk z σ => by
+    rw [← integral_residualWeight hk]
+    exact setIntegral_congr_fun (measurableSet_unitBox _) fun u _ => by
+      rw [pieceAmp_eq_one, one_mul]) hAt]
+  ring
+
+/-- **The total coefficient for an observable with residual face integral `R`** is `Γ(1/4) · R`:
+the `{1}`-piece is null and the `{0,1}`-piece gives `Γ(1/4) · R`. -/
+theorem productCoeffD_eq_of_inner {F : (Fin 2 → ℝ) → ℝ}
+    (hFc : ∀ i, ContinuousOn (fun y => F (((ResolutionCover.ofChart chart).chart i).φ y)) (Ps i).W)
+    (hFm : Measurable F)
+    (hF : Integrable (fun x => F x * one.w x)
+      (volume.restrict (⋃ i, (ResolutionCover.ofChart chart).image i))) (R : ℝ)
+    (hinner : (∀ a, 0 < normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e a) →
+      ∀ (z : Fin (2 - ((Finset.univ : Finset (Fin 2)).card - 1 + 1)) → ℝ)
+        (σ : Fin ((Finset.univ : Finset (Fin 2)).card - 1 + 1) → Bool),
+        ∫ u in unitBox ((Finset.univ : Finset (Fin 2)).card - 1 + 1),
+          (ResolutionCover.ofChart chart).pieceAmp () Finset.univ Finset.univ_nonempty (Ps ()).h
+            (Ps ()).v (F := F) (p := one) z
+            (reflect σ ((1 : ℝ) • faceProj (normalExp Finset.univ Finset.univ_nonempty (Ps ()).h)
+              (normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e) (1 / 4) u)) *
+            residualWeight (normalExp Finset.univ Finset.univ_nonempty (Ps ()).h)
+              (normalHalfExp Finset.univ Finset.univ_nonempty (Ps ()).e) (1 / 4) u = R) :
+    (ResolutionCover.ofChart chart).productCoeffD Ps K_nonneg one_pos hεb' hFc hpc' hFm hF hK'
       ((ResolutionCover.ofChart chart).coverLam Ps hact)
-      ((ResolutionCover.ofChart chart).coverDeg Ps hact) = 2 * Real.Gamma (1 / 4) := by
+      ((ResolutionCover.ofChart chart).coverDeg Ps hact) = Real.Gamma (1 / 4) * R := by
   have hsum : ∀ f : Unit → ℝ, ∑ i, f i = f () := fun f => Fintype.sum_unique f
   rw [(ResolutionCover.ofChart chart).productCoeffD_extremal_eq_sum_tied Ps hact K_nonneg one_pos
-    hεb' hFc' hpc' hFm hF hK', hsum]
+    hεb' hFc hpc' hFm hF hK', hsum]
   have hS : (((Ps ()).e.support.powerset.filter fun I => I.Nonempty).filter
       (fun I => (Ps ()).minimalSet ((ResolutionCover.ofChart chart).coverLam Ps hact) ⊆ I ∧
         ((Ps ()).minimalSet ((ResolutionCover.ofChart chart).coverLam Ps hact)).card =
@@ -605,7 +647,7 @@ theorem productCoeffD_eq :
     rw [minimalSet_eq, coverDeg_eq, show (Ps ()).e = ex from rfl, ex_support]
     decide
   have hzero : ResolutionCover.scalarAtlasPieceCoeff'
-      ((ResolutionCover.ofChart chart).productAtlasesD Ps K_nonneg one_pos hεb' hFc' hpc' hFm hF
+      ((ResolutionCover.ofChart chart).productAtlasesD Ps K_nonneg one_pos hεb' hFc hpc' hFm hF
         hK')
       ((ResolutionCover.ofChart chart).coverLam Ps hact)
       ((ResolutionCover.ofChart chart).coverDeg Ps hact) () {1} = 0 := by
@@ -613,20 +655,32 @@ theorem productCoeffD_eq :
       (Finset.singleton_nonempty 1)]
     exact (Ps ()).tiedSum_eq_zero_of_null K_nonneg one_pos (hεb' ()) rfl hFm hF hK' {1}
       one_subset_support (Finset.singleton_nonempty 1) _ _ base_singleton_null
-      ((Ps ()).pieceAtlasD_data K_nonneg one_pos (hεb' ()) rfl (hFc' ()) (hpc' ()) hFm hF hK' {1}
+      ((Ps ()).pieceAtlasD_data K_nonneg one_pos (hεb' ()) rfl (hFc ()) (hpc' ()) hFm hF hK' {1}
         one_subset_support (Finset.singleton_nonempty 1))
   have huniv : ResolutionCover.scalarAtlasPieceCoeff'
-      ((ResolutionCover.ofChart chart).productAtlasesD Ps K_nonneg one_pos hεb' hFc' hpc' hFm hF
+      ((ResolutionCover.ofChart chart).productAtlasesD Ps K_nonneg one_pos hεb' hFc hpc' hFm hF
         hK')
       ((ResolutionCover.ofChart chart).coverLam Ps hact)
       ((ResolutionCover.ofChart chart).coverDeg Ps hact) () Finset.univ =
-      2 * Real.Gamma (1 / 4) := by
+      Real.Gamma (1 / 4) * R := by
     rw [ResolutionCover.scalarAtlasPieceCoeff'_of_mem _ _ _ () Finset.univ univ_subset_support
       Finset.univ_nonempty, coverLam_eq, coverDeg_eq]
-    exact tiedSum_univ ((Ps ()).pieceAtlasD_data K_nonneg one_pos (hεb' ()) rfl (hFc' ()) (hpc' ())
-      hFm hF hK' Finset.univ univ_subset_support Finset.univ_nonempty)
+    exact tiedSum_univ_of_inner hFm hF R hinner ((Ps ()).pieceAtlasD_data K_nonneg one_pos
+      (hεb' ()) rfl (hFc ()) (hpc' ()) hFm hF hK' Finset.univ univ_subset_support
+      Finset.univ_nonempty)
   rw [hS, Finset.sum_pair (by decide : ({1} : Finset (Fin 2)) ≠ Finset.univ), hzero, huniv,
     zero_add]
+
+/-- **The leading coefficient of the mixed-exponent example is `2Γ(1/4)`.** -/
+theorem productCoeffD_eq :
+    (ResolutionCover.ofChart chart).productCoeffD Ps K_nonneg one_pos hεb' hFc' hpc' hFm hF hK'
+      ((ResolutionCover.ofChart chart).coverLam Ps hact)
+      ((ResolutionCover.ofChart chart).coverDeg Ps hact) = 2 * Real.Gamma (1 / 4) := by
+  rw [productCoeffD_eq_of_inner hFc' hFm hF 2 (fun hk z σ => by
+    rw [← integral_residualWeight hk]
+    exact setIntegral_congr_fun (measurableSet_unitBox _) fun u _ => by
+      rw [pieceAmp_eq_one, one_mul])]
+  ring
 
 /-- ★ **The unequal-exponent regression example**:
 `∫_{[−1,1]²} e^{−N y₀² y₁⁴} dy ~ 2Γ(1/4) · N^{−1/4}`. -/
