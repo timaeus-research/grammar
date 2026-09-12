@@ -630,3 +630,4 @@ import Grammar.AnalyticUniformSeries
 import Grammar.ComplexNormalInsertion
 import Grammar.HolomorphicBoxBuffer
 import Grammar.HolomorphicOriginalFaceSeries
+import Grammar.AnalyticCoordinateBoxExpansion
