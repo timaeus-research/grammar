@@ -616,3 +616,4 @@ import Grammar.TiedCrossingInstance
 import Grammar.TiedCrossingLogCoefficient
 import Grammar.CoreNormalMomentRepresentation
 import Grammar.AnalyticSeriesFamily
+import Grammar.CoordinateBoxCoreCertificate
