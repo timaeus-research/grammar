@@ -612,3 +612,4 @@ import Grammar.CoordFreeLeadingTerm
 import Grammar.PolynomialTaylorFamily
 import Grammar.OneDimExplicitCoefficients
 import Grammar.CoordinateResolvedGeometry
+import Grammar.TiedCrossingInstance
