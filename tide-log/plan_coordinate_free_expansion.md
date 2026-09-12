@@ -80,25 +80,38 @@ incidence — a separate upstream programme (Astra #92 §5).
    compatibility, localisation compatibility; separately `AnalyticExpansionAdmissible φ` (Taylor
    radii, majorants, summable bounds). No conclusion of the theorem may be a field.
 
-## 5. Units (order of execution; sizes are targets; gates in bold)
+## 5. Units (as executed; gates in bold)
 
-| # | Unit | Content | Gate |
+| # | Unit | Content | Status |
 |---|---|---|---|
-| 1 | `NormalDifferentialConvention` (CCXCVII, DONE) | `D^r_⊥ := rawNormalJet`, `r! • T_r = D^r_⊥`, germ locality, linearity | — |
-| 2 | `ResolvedGeometry` | structure, strata, incidence combinatorics, stratum pair | no asymptotic fields |
-| 3 | `ResolvedNormalData` | normal/tubular interface, `normalDifferential` of `φ∘π`, symmetry, bridge to `IsGlobalNormalSection` | reuse existing bundle API |
-| 4 | `ResolvedIntegrationData` | `localisedIntegral_eq_stratum_fibreIntegral`, away piece, change of variables `π_* μ_U = μ_W` | genuine change of variables |
-| 5 | `ResolvedMonomialCertificate` | certificate structures; chart integral = stored localised integral | quantitative hypotheses explicit |
-| 6 | `ProjectorBlowupGeometry` | `U = {(x,P) : P symmetric idempotent of trace 1, Px = x}`, `π(x,P) = x`, divisor `{x = 0}`, properness, explicit chart equivalences on `P_ii > 0` | matrix lemmas suffice |
-| 7 | `ProjectorBlowupCertificate` | `K = |x|²`: `k = 1` (order 2), `h = d−1`, tubular normal family, density compatibility | first substantive instance |
-| 8 | `ResolvedExactMoments` | `pair_exactMoment_eq_integral`, `localisedIntegral_eq_tsum_stratumContraction` | analytic domination, dependent-fibre measurability |
-| 9 | `StratumMomentCoefficients` | construct `B_{I,r,α,j}` from chart results (finite parts of #91 as engine), gluing, integrability | **integrable tensor coefficients under adapted localisation** |
-| 10 | `ResolvedCutoffExpansion` | `expectation_expansion` (the target), summable interchange over `r` | **tied-crossing infinite-`r` test** |
-| 11 | `ResolvedLeadingMeasure` | leading corollary; `geometricLeadingMeasure = leadingMeasure` of CCXC | constants and `c₀` restriction |
-| 12 | `ResolvedNormalCrossingExamples` | cube and tied normal-crossing instances; non-local-finiteness regression | ordinary integrability vs finite part |
+| 1 | `NormalDifferentialConvention` | `D^r_⊥ := rawNormalJet`, `r! • T_r = D^r_⊥`, linearity | CCXCVII |
+| 2 | `ResolvedGeometry` | `U`, proper `π`, components `E i`, strata `S_I`, incidence, `stratumLam`, `IsResolutionOf` | CCXCVIII |
+| 3 | `ResolvedNormalData` | normal spaces, labelled conormal differentials + splitting, tubular germs, `normalDifferential (φ∘π)`, `MomentTensor`, `HasCoordFreeExpansion` | CCXCIX |
+| 4 | `ResolvedMomentRepresentation` | `ResolvedCertificate` = the library's `AdaptedStrataData` (conditional geometric main theorem) on compact stratum pieces + frames `ℝ^{n+1} ≃ N_s`; exact moment tensors; ★★★ `∫_W φϕe^{−NK} = Σ_I ∫_{S_I} Σ'_r (1/r!)⟨D^r_⊥(φ∘π), M̂_{I,r}(N)⟩ dν_I + tail`; `cutoffExpansion_globalLaplace` | CCC |
+| 5 | `ZeroFluctSpectralKernel` | the canonical box coefficients are ℓ¹ kernel pairings of the amplitude family (`monoKernel`, `boxSpectralKernel`, uniform bounds, `AbsSummableAt.conv`) | CCCI |
+| 6 | `ChartCoefficientTensors` | `shiftedKernel`, `chartMomentCoeff` (coefficient tensor of the exact fibre moment tensor), `jetFamily`, ★★ termwise identity `boxCoeff 0 (cc ⋆ jetFamily F) μ j = Σ'_r (1/r!)⟨D^rF(0), B_r⟩`; `MomentTensor.pushFrame` | CCCII |
+| 7 | `ResolvedCoordFreeExpansion` | `CoefficientCertificate`; chart tensors on the strata via frames; per-point identity; `stratumMeasure` (pushforward sums), `field` (Radon–Nikodym-weighted tensor fields, no disjointness); ★★ `expansionCoefficient_eq_gCoeff`; ★★★ `hasCoordFreeExpansion` — **THE TARGET THEOREM**, conditional on the two certificates | CCCIII |
+| 8 | certificate instances | first instances of `ResolvedCertificate` + `CoefficientCertificate` (isolated zero `K = |x|²` via the blow-up cube; one-chart product example); `jetFamily ↔ monoFamily p` identification so `jet_abs` follows from `NormalMomentPresentation` | next (Astra #93) |
+| 9 | `ProjectorBlowup*` | `U = {(x,P) : P symmetric idempotent of trace 1, Px = x}` as a `ResolvedGeometry` with certificate | planned |
+| 10 | `ResolvedLeadingMeasure` | leading corollary from `hasCoordFreeExpansion`; equality with the CCXC–CCXCIII leading measure | planned |
+| 11 | uniqueness / examples | uniqueness of `CutoffExpansion` coefficients (canonicity of the total functionals); tied-crossing non-local-finiteness regression | planned |
 
-If gate 9 or 10 fails, the statement is adjusted (tensor-valued distributions with intrinsic
-regularisation), never patched with an axiom asserting the missing theorem.
+Gates 9 and 10 of the original plan (integrable tensor coefficients; summable interchange over `r`)
+were passed by design: the coefficient tensors are constructed explicitly from the chart kernels
+(no finite-part regularisation is needed for the CERTIFIED presentations, whose densities are
+analytic on the box), and the normal-order series is summed pointwise inside the stratum integral,
+so no interchange with the integral is required. `expansionCoefficient` was accordingly redefined as
+`Σ_I ∫_{S_I} Σ'_r (1/r!)⟨D^r_⊥(φ∘π)(s), B_{I,r,q}(s)⟩ dν_I`.
+
+## 5a. Status (2026-09-12, after unit 7; main `9a75b0a`, 604 modules)
+
+★★★ `Grammar.ResolvedCertificate.CoefficientCertificate.hasCoordFreeExpansion`:
+for `C : ResolvedCertificate R D W K ϕ φ`, `Cc : C.CoefficientCertificate`, `K ϕ φ` measurable, `ϕ ≥ 0`,
+`D.HasCoordFreeExpansion C.stratumMeasure Cc.field (spectrumBelow Q D) W K ϕ φ`, i.e. for every `A`,
+`∫_W φ ϕ e^{−nK} − Σ_{α∈Q⁻¹ℕ, α<max(A+1,1), j≤D} n^{−α}(log n)^j Σ_I ∫_{S_I} Σ'_r (1/r!)⟨D^r_⊥(φ∘π)(s), B_{I,r,α,j}(s)⟩ dν_I(s) = o(n^{−A})`.
+The formula mentions only the strata, the normal differentials, the coefficient tensor fields, the
+stratum densities and `π`. Hypotheses: the two certificates (charts live there). Remaining work:
+instances of the certificates, the leading corollary, canonicity of the total functionals.
 
 ## 6. Hypotheses that remain at the end
 
@@ -110,4 +123,4 @@ the normal differentials, the moment coefficients, the densities, the expansion 
 ## 7. Bookkeeping
 
 Each unit: `Grammar/<Name>.lean`, HEADLINES row, README count, THEOREM_MAP chain, gated build,
-axiom probe, merge to main; mirror paragraph and pin bump at milestones (after unit 5, 7, 10, 11).
+axiom probe, merge to main; mirror paragraph and pin bump at milestones (after unit 7 — done with CCCIII —, 10, 11).
