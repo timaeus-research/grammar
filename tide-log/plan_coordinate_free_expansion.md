@@ -158,11 +158,13 @@ analyticity is NOT part of this phase.
 | unit | module | content | status |
 |---|---|---|---|
 | P0 | `CollarDeltaSelection` (CCCXXVII) | small-level selection `exists_delta`; `hasCoordFreeExpansion_collar_of_face_exists` | done |
-| P1 | `AnalyticUniformSeries` | radius-parametric Cauchy → `UniformSeriesFamily X m ρ` for `0 < ρ < r < R` (`polyRealCoeff m r`, majorant `M r^{-|γ|}`, weighted geometric summability, reconstruction `evalF = Re F` for `‖u‖ < ρ`) | next |
-| P2 | `ComplexNormalInsertion` | `complexify`, insertion CLM `L_I : ℂ^m →L ℂ^d`, `‖L_I z‖ ≤ ‖z‖`, compatibility with `originalNormalMap`, `isCompact_faceSet` | pending |
-| P3 | `HolomorphicBoxBuffer` | uniform buffer `∃ R > 0, ∀ w ∈ W, ∀ z, ‖z‖ ≤ R → complexify w + z ∈ Ω`, compact tube, uniform bounds | pending |
-| P4 | `HolomorphicOriginalFaceSeries` | recentred family `G s z = H(complexify s + L_I z)`; containment, holomorphicity, joint continuity, bounds; common-radius `OriginalFaceSeries` producer | pending |
-| P5 | `AnalyticCoordinateBoxExpansion` | composition: holomorphic box extension ⇒ coordinate-free expansion (global and box-local nonnegativity) | pending |
+| P1 | `AnalyticUniformSeries` (CCCXXVIII) | radius-parametric Cauchy → `UniformSeriesFamily X m ρ` for `0 < ρ < r < R` (`polyRealCoeff m r`, majorant `M r^{-|γ|}`, weighted geometric summability, reconstruction `evalF = Re F` on the real ball of radius `r`) | done |
+| P2 | `ComplexNormalInsertion` (CCCXXIX) | `complexify`, insertion CLM `L_I : ℂ^m →L ℂ^d`, `‖L_I z‖ ≤ ‖z‖`, compatibility with `originalNormalMap`, `isCompact_faceSet` | done |
+| P3 | `HolomorphicBoxBuffer` (CCCXXX) | `HolomorphicBoxExtension` packet; uniform buffer `∃ R > 0, ∀ w ∈ W, ∀ z, ‖z‖ ≤ R → complexify w + z ∈ Ω` (closed thickening), compact tube, uniform bounds | done |
+| P4 | `HolomorphicOriginalFaceSeries` (CCCXXXI) | recentred family `G s z = H(complexify s + L_I z)`; containment, holomorphicity, joint continuity, bounds; common-radius `OriginalFaceSeries` producer (`exists_originalFaceSeries_of_holomorphicBoxExtension`) | done |
+| P5 | `AnalyticCoordinateBoxExpansion` (CCCXXXII) | composition: holomorphic box extension ⇒ coordinate-free expansion for some collar level (★★★ `hasCoordFreeExpansion_of_holomorphicBoxExtension`, `_nonneg_on`); real-neighbourhood wrapper `ofRealNhd` | done |
+
+Status: main `41fc8bf`, 633 modules; PHASE 3 STOPPING GATE MET (complex neighbourhood → unchanged closed-face interface → existing certificates and expansion). Not included: complexification from real analyticity; box-only agreement (chosen extensions); optimal (lcm) spectral lattice; general SNC geometry.
 
 ## 6. Hypotheses that remain at the end
 
