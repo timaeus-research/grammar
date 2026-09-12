@@ -478,6 +478,52 @@ theorem tendsto_expectation_of_eq_on_zeroSet :
   rw [Real.dist_eq]
   linarith
 
+omit [T2Space W] [MeasurableSpace W] in
+include hS hK0 hKc in
+/-- **Neighbourhoods of the zero set contain sublevels**: on a compact `S` with `K ≥ 0` continuous,
+an open `U` containing `S ∩ {K = 0}` contains `S ∩ {K < κ}` for some `κ > 0` (the compact set
+`S \ U` carries a positive minimum of `K`). -/
+theorem exists_sublevel_subset_of_isOpen {U : Set W} (hU : IsOpen U)
+    (hU0 : ∀ w ∈ S, K w = 0 → w ∈ U) : ∃ κ > 0, ∀ w ∈ S, K w < κ → w ∈ U := by
+  have hBc : IsCompact (S \ U) := hS.diff hU
+  by_cases hne : (S \ U).Nonempty
+  · obtain ⟨w₀, hw₀, hmin⟩ := hBc.exists_isMinOn hne (hKc.mono sdiff_subset)
+    have hpos : 0 < K w₀ := by
+      rcases (hK0 w₀).lt_or_eq with h | h
+      · exact h
+      · exact absurd (hU0 w₀ hw₀.1 h.symm) hw₀.2
+    refine ⟨K w₀, hpos, fun w hw hlt => ?_⟩
+    by_contra hcon
+    exact absurd (hmin ⟨hw, hcon⟩) (not_le.2 hlt)
+  · refine ⟨1, one_pos, fun w hw _ => ?_⟩
+    by_contra hcon
+    exact hne ⟨w, hw, hcon⟩
+
+omit [T2Space W] in
+include hS hπS hK0 hKm hKc hpos hKhm hunif in
+/-- ★ **Concentration on every neighbourhood of the zero set**: on a compact set carrying the
+prior, with `K` continuous, the empirical posterior mass of the complement of any open
+neighbourhood of `S ∩ {K = 0}` tends to `0` under uniform convergence of the empirical phases. -/
+theorem tendsto_mass_compl_of_isOpen {U : Set W} (hU : IsOpen U)
+    (hU0 : ∀ w ∈ S, K w = 0 → w ∈ U) :
+    Tendsto (fun n : ℕ => mass π (Kh n) n Uᶜ) atTop (𝓝 0) := by
+  obtain ⟨κ, hκ, hκU⟩ := exists_sublevel_subset_of_isOpen hS hK0 hKc hU hU0
+  have hmass := tendsto_gibbsMass_ge π hK0 hKm hpos Kh hKhm hunif hκ
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hmass
+    (Eventually.of_forall fun n => ?_) ?_
+  · unfold mass
+    exact div_nonneg (setIntegral_nonneg_of_ae_restrict (Eventually.of_forall fun w =>
+      (Real.exp_pos _).le)) (integral_nonneg fun w => (Real.exp_pos _).le)
+  · filter_upwards [hunif 1 one_pos] with n hn
+    unfold mass
+    refine div_le_div_of_nonneg_right ?_ (integral_nonneg fun w => (Real.exp_pos _).le)
+    refine setIntegral_mono_set ((integrable_exp π hK0 (hKhm n) hn
+      (Nat.cast_nonneg n)).integrableOn) (Eventually.of_forall fun w => (Real.exp_pos _).le) ?_
+    filter_upwards [hπS] with w hw
+    intro hwU
+    by_contra hlt
+    exact hwU (hκU w hw (not_le.1 hlt))
+
 end Gibbs
 
 /-! ### Coefficient consistency -/
