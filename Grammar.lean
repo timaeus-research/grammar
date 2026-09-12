@@ -623,3 +623,4 @@ import Grammar.NormalisedBoxCore
 import Grammar.WaterFillingCollar
 import Grammar.CollarDecomposition
 import Grammar.CoordinateBoxCertificate
+import Grammar.CoordinateBoxInputs
