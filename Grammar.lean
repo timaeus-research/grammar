@@ -562,3 +562,4 @@ import Grammar.ProductChartVar
 import Grammar.ProductChartVarPosterior
 import Grammar.VariableUnitSquareExample
 import Grammar.ProductChartVarCompat
+import Grammar.PartitionLocalisation
