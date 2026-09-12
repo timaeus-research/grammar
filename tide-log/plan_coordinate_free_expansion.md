@@ -120,6 +120,30 @@ named example, a functional-level statement, or a new existence/transport interf
 are I (core + phase-gap certificate for curved sublevel sets), J (observable-independent coefficient
 functional on an observable class), E (projector blow-up model), G (two-sided interval).
 
+## 5b. Phase 2 — fundamentals of the certified resolved geometry (user request 2026-09-12; consult #95)
+
+Goal: PRODUCE certificates from geometry and series data rather than assume them, with cores + phase-gap
+tails as the primary interface, then genuine tubular/divisor compatibility. Astra #95
+(`tide-log/gpt6_bigpicture_v95.md`): keep the structures backward-compatible; add separate compatibility
+structures later (normal quotient identification, labelled defining equations, tubular map from the total
+normal bundle, `incident_eq`, monomial-phase unit, full-dimensional density change of variables, chart
+`label`/`k_eq`/`h_eq`/`frame_conormal`); producer sequence rectangular series → parameterised series →
+normal-unit normalisation → analytic-normal collar decomposition → general compact-box producer.
+
+| unit | module | status |
+|---|---|---|
+| F1 core moment representation + adapters | `CoreNormalMomentRepresentation` (CCCXVI) | done |
+| F1' refactor `ResolvedCertificate` onto `cores : AnalyticCoreDecomposition` | `ResolvedMomentRepresentation` (7a8ef2d) | done |
+| F2 weighted-ℓ¹ families are analytic; Taylor family = coefficient family | `AnalyticSeriesFamily` (CCCXVII) | done |
+| F3 rectangular series producer (★★★ `SeriesBox.hasCoordFreeExpansion_box`, no certificate hypotheses) | `CoordinateBoxCoreCertificate` (CCCXVIII) | done |
+| F4 parameterised series datum, continuous in the ℓ¹ data topology | `ParameterisedSeriesDatum` (CCCXIX) | done |
+| F5 normal-unit normalisation (tangential unit `∏_{j∉I} s_j^{2k_j}` absorbed into normal widths) | — | next (consult #96) |
+| F6 finite analytic-normal collar decomposition (exact positive measure decomposition, uniform tail gap) | — | pending |
+| F7 general compact-box producer | — | pending |
+| F8 SNC/tubular compatibility structures, verified on the coordinate model | — | pending |
+
+Status: main `cfcd013`, 620 modules; mirror pin `cfcd013`.
+
 ## 6. Hypotheses that remain at the end
 
 Certified resolved geometry with a compatible monomial atlas (a.e.-disjoint or multiplicity-corrected
