@@ -564,3 +564,4 @@ import Grammar.VariableUnitSquareExample
 import Grammar.ProductChartVarCompat
 import Grammar.PartitionLocalisation
 import Grammar.PartitionAssembly
+import Grammar.LeadingTermConsequences
