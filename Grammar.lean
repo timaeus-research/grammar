@@ -592,3 +592,4 @@ import Grammar.GlobalLaplaceMeasureBasic
 import Grammar.FacePieceMeasure
 import Grammar.SourceFaceMeasure
 import Grammar.ChartLeadingMeasure
+import Grammar.GlobalCompactTheta
