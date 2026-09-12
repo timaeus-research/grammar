@@ -587,3 +587,4 @@ import Grammar.CoefficientLocality
 import Grammar.SeparableBallRegression
 import Grammar.PosteriorPerturbationTransfer
 import Grammar.EmpiricalConcentration
+import Grammar.GibbsJointRatio
