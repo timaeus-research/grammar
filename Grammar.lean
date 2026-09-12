@@ -625,3 +625,4 @@ import Grammar.CollarDecomposition
 import Grammar.CoordinateBoxCertificate
 import Grammar.CoordinateBoxInputs
 import Grammar.CoordinateNormalCompatibility
+import Grammar.CollarDeltaSelection
