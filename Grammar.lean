@@ -580,3 +580,4 @@ import Grammar.AEDisjointSourceAssembly
 import Grammar.CertifiedResolutionExplicitCoefficient
 import Grammar.BlowUpWedgeRegression
 import Grammar.WholeBoxSourceCertificate
+import Grammar.BoxFamilyAssembly
