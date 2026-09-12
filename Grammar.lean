@@ -556,3 +556,4 @@ import Grammar.VariableUnitKernel
 import Grammar.VariableUnitCertificate
 import Grammar.SymmetricVariableUnitCells
 import Grammar.VariableUnitCellRegressions
+import Grammar.LeadingAtlas
