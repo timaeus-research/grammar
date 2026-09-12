@@ -552,3 +552,4 @@ import Grammar.ResidualFaceCoefficient
 import Grammar.MixedExponentExample
 import Grammar.MixedExponentPosterior
 import Grammar.PositiveUnitRangePartition
+import Grammar.VariableUnitKernel
