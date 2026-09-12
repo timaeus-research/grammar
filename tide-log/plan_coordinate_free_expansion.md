@@ -170,6 +170,25 @@ analyticity is NOT part of this phase.
 
 Status: main `f8df720`, 636 modules; phase 3 and the hygiene phase (consult #99) CLOSED — the public coordinate-model theorem assumes only the holomorphic packet near the box, `0<d`, `0<a` and nonnegativity of the prior on the box. Next: phase G (signed coordinates `[−a,a]^d`, consult #100), then a discharged geometric instance (E).
 
+## 5d. Phase G — the signed box `[−a,a]^d` (consult #100; CCCXXXVI–CCCXLI, main 64696c5, 642 modules)
+
+Design (#100): reflection cover `[−a,a]^d = ⋃_σ R_σ [0,a]^d`; transport EXPANSIONS (not certificates) along
+`R_σ`; assemble with summed stratum measures and Radon–Nikodym-weighted fields (reflected bases with the
+same off-`I` signs but different normal signs live at the SAME base points, so full-sign piecewise gluing
+fails and the fields must be averaged in one fibre).
+
+| Unit | Module | Content | Status |
+|---|---|---|---|
+| G1 | `SignedBoxPackets` (CCCXXXVI) | signs, reflections, orthant pieces, signed packet + pullbacks, common collar level, at-level local theorem | done |
+| G2 | `OrthantDecomposition` (CCCXXXVII) | a.e. unique orthant; `∫_{[−a,a]^d} = ∑_σ ∫_{orthant σ}`; Laplace decomposition for even phases | done |
+| G3 | `NormalReflectionTransport` (CCCXXXVIII) | `reflNormal : N_I ≃L N_I`, `reflStratum`, `refl_Φ`, unconditional jet identity, `reflField`, `reflMeasure`, ★★ `hasCoordFreeExpansion_refl` | done |
+| G5 | `CertificateSeriesRegularity` (CCCXXXIX) | field pairing depends only on germs at the bases; summability everywhere; integrability | done |
+| G4 | `ExpansionAssembly` (CCCXL) | `sumMeasure`, `rnWeight`, `glueField`, ★ `expansionCoefficient_glue`, ★★ `HasCoordFreeExpansion.sum` | done |
+| G6 | `SignedBoxExpansion` (CCCXLI) | ★★★ `hasCoordFreeExpansion_of_holomorphicSignedBoxExtension_local`; `signedStratumMeasure = ∑_σ (R_σ)_* ν_σ`, `signedMomentField`, specs (finite, support, coefficient sum), spectrum normalisation `coordCommonQ k`, polynomial instance | done |
+
+Status: PHASE G LANDED; stopping-gate items 1–6, 8 met; item 7 (reflection-sensitive regression checks)
+pending consult #101. Not included: Jacobian orders `h ≠ 0`; nonconstant analytic unit; general chart gluing.
+
 ## 6. Hypotheses that remain at the end
 
 Two levels (consult #99 §A5).
