@@ -55,11 +55,13 @@ namespace ResolvedCertificate
 
 variable (C : ResolvedCertificate R D W K ϕ φ)
 
-/-- **A coefficient certificate**: along every chart, a `b`-weighted ℓ¹ Taylor family of the
-density factor, the `b`-weighted ℓ¹ summability of the observable's Taylor family, and the
-identification of the chart's amplitude datum with their Cauchy product. -/
+/-- **A coefficient certificate**: along every chart, a `b`-weighted ℓ¹ **factorisation family**
+`cc` (the intended reading is the Taylor family of the density factor `c(s, ·)`, but the
+certificate only asks for the factorisation below), the `b`-weighted ℓ¹ summability of the
+observable's Taylor family, and the identification of the chart's amplitude datum with the
+Cauchy product `cc ⋆ jetFamily`. -/
 structure CoefficientCertificate where
-  /-- The Taylor family of the density factor `c(s, ·)` at the base point `s`. -/
+  /-- The factorisation family at the base point `s` (intended: the Taylor family of `c(s, ·)`). -/
   cc : ∀ J, ↥(C.base J) → CoeffFamily (C.n J + 1)
   cc_abs : ∀ J s, AbsSummableAt (cc J s) (C.adapted.b J)
   /-- The observable's Taylor family on the box is `b`-weighted ℓ¹. -/
@@ -486,8 +488,11 @@ cutoff `A`, with the stratum densities `ν_I` and the moment coefficient fields 
 determined by the certificates,
 `∫_W φ ϕ e^{−nK} − ∑_{(α,j), α < max(A+1,1), j ≤ D} n^{−α}(log n)^j
   ∑_I ∫_{S_I} ∑'_r (1/r!) ⟨D^r_⊥(φ∘π)(s), B_{I,r,α,j}(s)⟩ dν_I(s) = o(n^{−A})`.
-No coordinates occur in the statement: only the strata of the exceptional divisor, the normal
-differentials, the coefficient tensor fields, the stratum densities and `π`. -/
+The coefficient formula uses only the strata of the exceptional divisor, the normal differentials
+(chosen normal jets), the coefficient tensor fields, the stratum densities and `π`; the charts enter
+the certificates and the construction of `(ν_I, B_{I,r,α,j})`. Independence of the individual fields
+from the chart choices is NOT asserted (only the assembled scalar coefficients are candidates for
+asymptotic uniqueness), and this is the expansion of the unnormalised integral. -/
 theorem hasCoordFreeExpansion (hK : Measurable K) (hϕ : Measurable ϕ) (hϕ0 : ∀ w, 0 ≤ ϕ w)
     (hφ : Measurable φ) :
     D.HasCoordFreeExpansion C.stratumMeasure Cc.field

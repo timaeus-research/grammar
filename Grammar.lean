@@ -602,3 +602,4 @@ import Grammar.ResolvedMomentRepresentation
 import Grammar.ZeroFluctSpectralKernel
 import Grammar.ChartCoefficientTensors
 import Grammar.ResolvedCoordFreeExpansion
+import Grammar.CoordFreeExpansionCompletion

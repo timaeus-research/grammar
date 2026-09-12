@@ -91,6 +91,7 @@ structure ResolvedNormalData (R : ResolvedGeometry d U) (A : Type*) [NormedAddCo
   /-- The normal space at a point of the stratum `S_I`. -/
   N : ∀ I : Finset R.Component, R.Stratum I → Submodule ℝ A
   finrank_N : ∀ (I : Finset R.Component) (s : R.Stratum I), Module.finrank ℝ (N I s) = I.card
+  finiteDimensional_N : ∀ (I : Finset R.Component) (s : R.Stratum I), FiniteDimensional ℝ (N I s)
   /-- The labelled conormal differentials `du_i(s)`, `i ∈ I`. -/
   du : ∀ (I : Finset R.Component) (s : R.Stratum I), I → Module.Dual ℝ (N I s)
   du_linearIndependent : ∀ (I : Finset R.Component) (s : R.Stratum I), LinearIndependent ℝ (du I s)
@@ -152,9 +153,11 @@ noncomputable def expansionCoefficient (ν : ∀ I : Finset R.Component, Measure
     (r.factorial : ℝ)⁻¹ * (B I r q s).pair (D.normalDifferential φ I s r) ∂ν I
 
 /-- ★ **The coordinate-free expansion** of the original integral `∫_W φ ϕ e^{−nK}`: for every cutoff
-`A`, subtracting the terms `expansionCoefficient(q) · n^{−α}(log n)^j` over the finite spectrum
-`spec A` (all indices with exponent `≤ A`) leaves `o(n^{−A})`. Only the strata, the normal
-differentials, the moment-tensor coefficients, the stratum densities and `π` occur. -/
+`A`, subtracting the terms `expansionCoefficient(q) · n^{−α}(log n)^j` over the finite index set
+`spec A` leaves `o(n^{−A})`. The index sets `spec A` are an indexing envelope supplied together with
+the expansion (no spectral condition is imposed on them here; the truncation to exponents `≤ A` is a
+corollary, `hasCoordFreeExpansion_le`). The coefficient formula uses only the strata, the normal
+differentials, the moment-tensor coefficient fields, the stratum densities and `π`. -/
 def HasCoordFreeExpansion (ν : ∀ I : Finset R.Component, Measure (R.Stratum I))
     (B : D.MomentCoefficientField) (spec : ℝ → Finset PowerLogIndex) (W : Set (Fin d → ℝ))
     (K ϕ φ : (Fin d → ℝ) → ℝ) : Prop :=
