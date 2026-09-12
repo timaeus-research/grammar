@@ -599,3 +599,4 @@ import Grammar.NormalDifferentialConvention
 import Grammar.ResolvedGeometry
 import Grammar.ResolvedNormalData
 import Grammar.ResolvedMomentRepresentation
+import Grammar.ZeroFluctSpectralKernel
