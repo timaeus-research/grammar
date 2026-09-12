@@ -605,3 +605,4 @@ import Grammar.ResolvedCoordFreeExpansion
 import Grammar.CoordFreeExpansionCompletion
 import Grammar.OneDimResolvedGeometry
 import Grammar.OneDimPolynomialSeries
+import Grammar.OneDimCoordFreeInstance
