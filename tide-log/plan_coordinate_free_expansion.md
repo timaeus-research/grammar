@@ -95,7 +95,7 @@ incidence — a separate upstream programme (Astra #92 §5).
 | 9 | `ProjectorBlowup*` | `U = {(x,P) : P symmetric idempotent of trace 1, Px = x}` as a `ResolvedGeometry` with certificate (Astra #93: after the certificate API stabilises; 6–12 modules) | planned |
 | 10 | `CoordFreeLeadingTerm` | ★★ `hasLeadingTerm_expansionCoefficient` (first admissible index with vanishing predecessors ⇒ leading term), `exists_first_nonzero_expansionCoefficient`, ★★ `expansionCoefficient_eq_integral_leadingMeasure` (bridge to the CCXC leading measure for bounded continuous `φϕ`) | CCCX |
 | 11 | `CutoffExpansionUniqueness` | ★★★ `CutoffExpansion.coeff_unique`/`coeff_eq_of_lattices`; ★★★ `expansionCoefficient_eq_of_certificates` — two certificate pairs for the same original integral give the same coordinate-free coefficients at every index (canonicity of the assembled scalar coefficients) | CCCVIII |
-| 12 | further examples | tied-crossing (two-variable) regression for the infinite normal-order sum; two-sided interval (two charts); closed-form coefficient values for the 1D instance (`monoKernel` evaluation) | planned |
+| 12 | examples and regressions | CCCXI `PolynomialTaylorFamily` (`jetFamily_polyD`, every dimension); ★★ CCCXII `OneDimExplicitCoefficients` (`expansionCoefficient_oneDim = Γ((m+1)/2)/2 · f_m`; `√π/2`, `a√π/4`; `hasLeadingTerm_quad`); CCCXIII `CoordinateResolvedGeometry` (`ℝ^d` resolving `∏ u_i^{2k_i}`); ★★ CCCXIV `TiedCrossingInstance` (`∫_{[0,b]²} P e^{−nx²y²}`, spectrum ½ℕ, log degree ≤ 1); ★★ CCCXV `TiedCrossingLogCoefficient` (`n^{−1/2} log n` coefficient `√π/4 · P(0)`, `hasLeadingTerm_log_tied`) | CCCXI–CCCXV |
 
 Gates 9 and 10 of the original plan (integrable tensor coefficients; summable interchange over `r`)
 were passed by design: the coefficient tensors are constructed explicitly from the chart kernels
@@ -104,18 +104,21 @@ analytic on the box), and the normal-order series is summed pointwise inside the
 so no interchange with the integral is required. `expansionCoefficient` was accordingly redefined as
 `Σ_I ∫_{S_I} Σ'_r (1/r!)⟨D^r_⊥(φ∘π)(s), B_{I,r,q}(s)⟩ dν_I`.
 
-## 5a. Status (2026-09-12, after consult #93 A–D; main `c4ad71b`, 611 modules)
+## 5a. Status (2026-09-12, after consults #93–#94; main `efb8929`, 616 modules) — PROGRAMME CLOSED AT ASTRA'S RECOMMENDED STOPPING POINT
 
 ★★★ `hasCoordFreeExpansion`/`hasCoordFreeExpansion_le` (CCCIII–CCCIV): the coordinate-free expansion of
-`∫_W φ ϕ e^{−nK}` conditional on `ResolvedCertificate` + `CoefficientCertificate`, with the normal-order
-series summed pointwise inside the stratum integrals (pointwise convergent, integrable sum) and the
-truncation to exponents `≤ A`. Astra #93 audit: a certified coordinate-free REPRESENTATION, not an
-intrinsic final theorem — headline and docstrings corrected (fields chosen, `cc` a factorisation family,
-unnormalised integral). Then: ★★ first instance `∫_0^ρ P(x)e^{−nx²}dx` (CCCV–CCCVII); ★★★ canonicity of
-the assembled scalar coefficients across certificates (CCCVIII); `jetFamily = monoFamily p` and
-`CoefficientCertificate.ofSeries` (CCCIX); leading term and the bridge to the CCXC leading measure
-(CCCX). Remaining: projector blow-up model (E), tied-crossing regression, two-sided interval, explicit
-coefficient values.
+`∫_W φ ϕ e^{−nK}` conditional on `ResolvedCertificate` + `CoefficientCertificate`, normal-order series summed
+pointwise inside the stratum integrals (convergent, integrable), truncation to exponents `≤ A`. Audits (#93,
+#94): a certified coordinate-free REPRESENTATION, not an intrinsic final theorem; docstrings/headline state the
+non-claims (fields chosen, `cc` a factorisation family, unnormalised integral, no certificate existence from
+the hironaka interface). Landed on top: ★★★ canonicity of the assembled scalar coefficients across
+certificates (CCCVIII); `jetFamily = monoFamily p` and `CoefficientCertificate.ofSeries` (CCCIX); the leading
+term and the bridge to the CCXC leading measure (CCCX); instances with closed-form coefficients — the
+one-dimensional `∫_0^ρ P e^{−nx²}` (CCCV–VII, CCCXII: `Γ((m+1)/2)/2 · f_m`) and the tied crossing
+`∫_{[0,b]²} P e^{−nx²y²}` (CCCXIII–XV: `√π/4 · P(0)` at `n^{−1/2} log n`). Astra #94: further work should buy a
+named example, a functional-level statement, or a new existence/transport interface; candidates (deferred)
+are I (core + phase-gap certificate for curved sublevel sets), J (observable-independent coefficient
+functional on an observable class), E (projector blow-up model), G (two-sided interval).
 
 ## 6. Hypotheses that remain at the end
 
