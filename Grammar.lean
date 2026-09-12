@@ -586,3 +586,4 @@ import Grammar.BlowUpCubeGaussian
 import Grammar.CoefficientLocality
 import Grammar.SeparableBallRegression
 import Grammar.PosteriorPerturbationTransfer
+import Grammar.EmpiricalConcentration
