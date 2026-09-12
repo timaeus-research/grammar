@@ -614,3 +614,4 @@ import Grammar.OneDimExplicitCoefficients
 import Grammar.CoordinateResolvedGeometry
 import Grammar.TiedCrossingInstance
 import Grammar.TiedCrossingLogCoefficient
+import Grammar.CoreNormalMomentRepresentation
