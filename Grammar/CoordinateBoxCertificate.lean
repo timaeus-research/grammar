@@ -421,6 +421,40 @@ theorem hasCoordFreeExpansion_collar :
   (coeffCertificate k hk a δ hδ ϕ φ hϕm hϕ0 hφint hd ha hδa F).hasCoordFreeExpansion_le
     (measurable_phase d k) hϕm hϕ0 hφm
 
+/-! ### The log degree of the collar -/
+
+omit k hk a δ in
+/-- The maximal normal dimension minus one over the collar is `d − 1`, attained at the deepest
+stratum `I = univ`. -/
+theorem commonD_collar (hd : 0 < d) :
+    commonD (fun i : Fin (numCores d) => nI (coreIdx i)) = d - 1 := by
+  apply le_antisymm
+  · refine Finset.sup_le fun i _ => ?_
+    have h := Finset.card_le_univ (coreIdx i).1
+    rw [Fintype.card_fin] at h
+    exact Nat.sub_le_sub_right h 1
+  · have hne : (Finset.univ : Finset (Fin d)).Nonempty := ⟨⟨0, hd⟩, Finset.mem_univ _⟩
+    unfold commonD
+    have h := Finset.le_sup (f := fun i : Fin (numCores d) => nI (coreIdx i))
+      (Finset.mem_univ ((coreIdx (d := d)).symm ⟨Finset.univ, hne⟩))
+    simp only [Equiv.apply_symm_apply, nI, Finset.card_univ, Fintype.card_fin] at h
+    exact h
+
+include hφm in
+/-- ★★★ The compact-box expansion with the explicit log degree `d − 1`: the spectrum is
+`{(α, j) : α ∈ Q⁻¹ℕ, α ≤ A, j ≤ d − 1}` for the cores' common lattice `Q`. -/
+theorem hasCoordFreeExpansion_collar' :
+    (normalData d k (zeroOrders d) hk).HasCoordFreeExpansion
+      (certificate k hk a δ hδ ϕ φ hϕm hϕ0 hφint hd ha hδa F).stratumMeasure
+      (coeffCertificate k hk a δ hδ ϕ φ hϕm hϕ0 hφint hd ha hδa F).field
+      (spectrumLe (commonQ (certificate k hk a δ hδ ϕ φ hϕm hϕ0 hφint hd ha hδa F).cores.k)
+        (d - 1))
+      (piBox d (Icc 0 a)) (CoordModel.phase d k) ϕ φ := by
+  have h := hasCoordFreeExpansion_collar k hk a δ hδ ϕ φ hϕm hϕ0 hφm hφint hd ha hδa F
+  have hD : commonD (certificate k hk a δ hδ ϕ φ hϕm hϕ0 hφint hd ha hδa F).n = d - 1 :=
+    commonD_collar hd
+  rwa [hD] at h
+
 end WaterFilling
 
 end Grammar
