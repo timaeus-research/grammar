@@ -549,3 +549,4 @@ import Grammar.ProductChartPosterior
 import Grammar.ProductChartTiedStrata
 import Grammar.OneChartProductExample
 import Grammar.ResidualFaceCoefficient
+import Grammar.MixedExponentExample
