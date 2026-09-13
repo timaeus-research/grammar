@@ -641,3 +641,5 @@ import Grammar.CertificateSeriesRegularity
 import Grammar.ExpansionAssembly
 import Grammar.SignedBoxExpansion
 import Grammar.SignedBoxRegression
+import Grammar.ChartModelGeometry
+import Grammar.BlowUpCubeChartModel
