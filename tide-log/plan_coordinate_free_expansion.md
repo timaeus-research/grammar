@@ -254,10 +254,12 @@ the prior's face-series coefficients are `rfl`-independent of the observable's e
 | J1 | `MomentKernelData` (observable-free kernel: bases, `ν`, `h, k, β, b`, frames, `cc`), its `field`/`stratumMeasure`, the jet functional `coefficient Kd ψ q` for every `ψ`; `Cc.field = Cc.kernelData.field` by `rfl` | CCCL |
 | J2 | explicit coordinate kernel `coordKernelData` (`kernelData_coeffCertificate` by `rfl`), `withObs`, `producedKernel_withObs`, ★★ `hasCoordFreeExpansion_withObs` (every observable with an extension on the packet's neighbourhood: same measures, same field) | CCCLI |
 | J3 | `normalDifferential_add/smul`, `expansionCoefficient_add/smul`, `Covered`/`field_eq_zero_of_not_covered`, `SmoothObs`, `Certified`, `coefficient_add/smul`; `contDiffAt_obs_base`, `certified`; `obsSpace Ω` (a real subspace), `certified_of_mem`, ★★★ `jetFunctional : obsSpace A.Ω →ₗ[ℝ] ℝ`, ★★★ `hasCoordFreeExpansion_obsSpace` | CCCLII–CCCLIII |
-| J4 | finite-order seminorm bound / distribution | NOT DONE — structural obstruction: at a stratum of codimension ≥ 2 the box kernel at a fixed exponent `μ` receives contributions from all multi-indices `γ` with `min_i (h_i+γ_i+1)/(2k_i) = μ` (the other normal coordinates are unconstrained), so the field has INFINITE normal order in `r`; the functional is an ANALYTIC jet functional (ℓ¹-weighted in the jets), not a finite-order distribution. Mirror terminology: "analytic jet functional". |
+| J4 | finite-order seminorm bound / distribution | REJECTED TARGET (consult #105): the exact-moment representation need not truncate at an observable-independent normal order — at a fixed spectral index it can involve arbitrarily high normal derivatives (on the unit square `∫∫ x^a y^b e^{−Nx²y²} = (J_a − J_b)/(b−a)` contributes to `N^{−(a+1)/2}` for every `b > a`; nonminimal candidate exponents also contribute subleading terms). Terminology: "linear coefficient functional on analytic observables, represented by a convergent series of normal-jet pairings" (analytic jet functional); no topology/continuity/distribution asserted. The optional one-unit absolute-majorant estimate was NOT taken. |
 
-J-min CLOSED at the jet-functional theorem (Astra's stopping rule). Next: consult #105 — paper-claim closure
-check and the transition to the companion note.
+J-min CLOSED at the jet-functional theorem (Astra's stopping rule; #105 accepted). Paper closure gate (#105): a
+wording pass on the mirror (distribution / support / expectation / general resolution / canonical / finite order),
+repin + audit, Overleaf push (user authorisation), then the Lean-facing paper programme is CLOSED. Next: consult
+#106 — claim-and-dependency survey of the companion note `averaging_dataset.tex`.
 
 ## 6. Hypotheses that remain at the end
 

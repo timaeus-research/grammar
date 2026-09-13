@@ -18,10 +18,13 @@ point, `Certified.congr`). Hence the **linear jet functional**
 `ψ ↦ ∑_I ∫_{S_I} ∑'_r (1/r!)⟨D^r_⊥ψ, B_{I,r,q}⟩ dν_I` with the prior's stratum measures and
 coefficient field, and ★★★ `hasCoordFreeExpansion_obsSpace`: for every `ψ ∈ obsSpace A.Ω`,
 `∫_{[0,a]^d} ψ ϕ e^{−nK} = ∑_q (jetFunctional q ψ) · q.scale n + o(n^{−A})` on the coordinate
-lattice — the observable-independent finite-order coefficient functional of
-consult #104 §3 (J3 gate: one kernel, a linear functional on a genuine vector space of observables;
-canonicity of its scalar values across certificates is CCCVIII). Not included: the continuity
-(finite-order seminorm) bound and the smooth test-function extension (J4).
+lattice — the observable-independent coefficient functional of consult #104 §3 (J3 gate: one
+kernel, a linear functional on a genuine real vector space of observables; canonicity of its scalar
+values across certificates is CCCVIII). Terminology (consult #105): a **linear coefficient
+functional on analytic observables, represented by a convergent series of normal-jet pairings**
+("analytic jet functional"). The exact-moment representation need not have finite normal order (at
+a fixed spectral index it can involve arbitrarily high normal derivatives); no topology or
+continuity on a smooth test-function space, and no distributional extension, is asserted.
 -/
 
 open MeasureTheory Set Filter Topology
