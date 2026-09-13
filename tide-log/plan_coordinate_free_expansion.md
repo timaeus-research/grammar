@@ -333,3 +333,35 @@ closure + genuine geometry closure + transport fidelity + statement audit (#109 
 | I | I3 leading probability measure and the cube regression `E_n[F] → F(0)` (Q4) | planned |
 
 TRACK B CLOSED 2026-09-13 (CCCLXI–CCCLXVIII, main `9f33370`).
+
+## 9. Consults #110–#111 phase (2026-09-13): the certificate producer from a DOMAIN-sector atlas — LANDED
+
+User directives: work on the certificate producer, then the product-sector atlas work (Track I set aside);
+the domain `W = {π_j ≥ 0}` is resolved JOINTLY with `K` (Watanabe) and read as selected coordinate orthants
+per chart — NO frontier-positivity hypothesis; standing hypothesis `K ≥ 0` on an open neighbourhood of `W`
+(even phase orders). hironaka work in the LOCAL copy (`lean/hironaka`, branch `sector-atlas`, fork only).
+
+| Unit | Content | Status |
+|---|---|---|
+| A/B (hironaka) | `DomainSectorAtlas extends ProductSectorAtlas` (`W`, `signs`, `domain_ae`, `sector`, `sectorMeasure`, ★ `domainTransport`); constructors `ofBoundaryMonomials` (boundary functions `π_j ∘ φ_i = u_{ij}·y^{m_{ij}}`, admissible signs) and `ofAll` | 078766c64 (fork) |
+| C | compact-sheet spike: `Sheet.Space A = Σ_i ↥(dom i)`, proper `π`, `Sheet.geometry`, `Sheet.normalData` (clamp germs), `mapAmbient_ae` | CCCLXX |
+| D | active-coordinate water-filling with inactive coordinates as parameters (`ChartCollar`) | CCCLXXI |
+| E | parameterised tangential-unit weighted collar, chart-box certificate (`certificate`, `coeffCertificate`, ★★★ `hasCoordFreeExpansion_chart`) | CCCLXXII |
+| F | analytic inputs from holomorphic packets (`toChartFaceSeries`, `exists_delta_chart`, `hasCoordFreeExpansion_chart_of_holomorphicBoxExtension`) | CCCLXXIII |
+| G | orthant pieces on the symmetric box (`pieceCert`, `map_refl_pieceMeasure`, `exists_delta_pieces`) | CCCLXXIV |
+| H1 | `LocalisationData.map_ae`, `reindexAll`, ★ `AnalyticCoreDecomposition.sigma` | CCCLXXV |
+| H2 | `SheetInputs`; piece integrability FROM the domain (`hφint`); per-chart level with fibre-ball bound; `Ψ_p = incl_i ∘ R_σ`, phase/obs compatibilities, `pieceDatum`, `pieceCores`, `bmap`/`baseHomeo` onto sheet strata | CCCLXXVI |
+| H3 | `datum`, ★ `datum_map_π`, `cores` (sigma), `pieceT`, `frameS`, ★ `Φ_eq`; ★★★ `cert`, ★★ `coeffCert`, ★★★ `hasCoordFreeExpansion` / `hasCoordFreeExpansion_of_domainSectorAtlas` | CCCLXXVII |
+| I | cube regression through the general producer: `cubeInputs`, ★★ `cube_hasCoordFreeExpansion_generic`, log degree 0 | CCCLXXVIII |
+
+Main `5e9babc` (680 modules). Hypotheses of the producer (`SheetInputs`): a `DomainSectorAtlas d K Ω`
+with symmetric chart boxes `[−a,a]^d`, every chart with a nonempty active set, continuous tangential
+phase units (`phaseUnit i` independent of the active coordinates) bounded below by `c_i > 0` on the box,
+measurable charts and Jacobian units, a nonnegative measurable prior, an observable integrable for the
+prior measure on `W`, holomorphic signed-box packets of `|jacUnit_i|·prior∘φ_i` and `obs∘φ_i` on every
+chart box, nonempty `signs i`. Non-claims: the EXISTENCE of such an atlas for a general analytic `K` on a
+semi-analytic `W` is not proved (the named open theorem, #110 §4); rectangular boxes (origin-preserving
+scaling), charts with empty active set (all-tail), packets by composition with holomorphic chart data,
+and the tangential-unit normal form of Watanabe's units are the remaining adapters. Next: consult #112 —
+the atlas-existence programme from hironaka's exports (`WatanabeModificationOn`, `WatanabeEvenChartAt`,
+`AnalyticQChartPacket`) with the boundary functions in the joint resolution.
