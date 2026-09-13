@@ -196,7 +196,7 @@ variable (a : ℝ)
 
 /-- **The signed analytic packet**: holomorphic extensions of the prior and the observable on a
 complex neighbourhood of the signed box `[−a,a]^d`, agreeing with them (as real parts) on its real
-slice. -/
+slice. (Same convention as `HolomorphicBoxExtension`: real parts of holomorphic representatives.) -/
 structure HolomorphicSignedBoxExtension (ϕ φ : (Fin d → ℝ) → ℝ) where
   /-- the complex neighbourhood -/
   Ω : Set (Fin d → ℂ)

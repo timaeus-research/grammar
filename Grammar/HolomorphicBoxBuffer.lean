@@ -31,7 +31,10 @@ namespace WaterFilling
 variable {d : ℕ} (a : ℝ)
 
 /-- **Holomorphic box extension**: holomorphic extensions of the prior and the observable on a
-complex neighbourhood of the box, agreeing with them on its real slice. -/
+complex neighbourhood of the box, agreeing with them on its real slice. Convention: the
+extensions are holomorphic REPRESENTATIVES whose real parts agree
+with `ϕ, φ` on the real slice of `Ω` (`ϕ w = Re Hϕ (complexify w)`), not complex-valued identities;
+the imaginary parts on the real slice are unconstrained. -/
 structure HolomorphicBoxExtension (ϕ φ : (Fin d → ℝ) → ℝ) where
   /-- the complex neighbourhood -/
   Ω : Set (Fin d → ℂ)

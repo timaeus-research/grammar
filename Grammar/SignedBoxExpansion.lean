@@ -18,7 +18,11 @@ collar level, CCCXXXVIII), and the `2^d` pieces assemble (CCCXL) into ONE expans
 box with the **assembled stratum measures** `ν_I = ∑_σ (R_σ)_* ν_{σ,I}` (`signedStratumMeasure`) and
 the **assembled moment field** `∑_σ w_σ • (R_σ)_* B_σ` with Radon–Nikodym weights
 (`signedMomentField`) — contributions from all normal sides at a stratum point are averaged in one
-fibre, on the unchanged full coordinate strata and the unchanged spectrum:
+(a.e. with respect to the summed measure; the assembled measures and field depend on the packet,
+the collar level and the producer, and the coefficient sum is the proved specification)
+fibre, on the unchanged full coordinate strata and the unchanged spectrum (the same coordinate
+lattice `coordCommonQ k` and log-degree bound `d − 1` as the positive pieces — an indexing envelope,
+not a claim of minimality or of nonvanishing coefficients):
 ★★★ `hasCoordFreeExpansion_of_holomorphicSignedBoxExtension_local` (hypotheses: the signed packet,
 `0 < d`, `0 < a`, nonnegativity of the prior on the signed box) and its at-level form
 `hasCoordFreeExpansion_signed_at`. Specifications: the measures are finite, supported a.e. in the
