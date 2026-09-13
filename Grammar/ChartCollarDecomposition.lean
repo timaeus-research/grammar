@@ -161,13 +161,15 @@ theorem isCompact_baseStratum (I : Idx A) : IsCompact (baseStratum A k h hkA u a
 
 /-! ### Box coordinates -/
 
+/-- The core index as a nonempty ambient index set (the vocabulary of CCCXXIV–XXV). -/
+noncomputable def toNonemptyIdx (I : Idx A) : NonemptyIdx d := ⟨amb A I, amb_nonempty A I⟩
+
 /-- The normal dimension minus one. -/
-abbrev nI (I : Idx A) : ℕ := I.1.card - 1
+noncomputable abbrev nI (I : Idx A) : ℕ := WaterFilling.nI (toNonemptyIdx A I)
 
 /-- Box coordinates ↔ normal coordinates of the stratum `I`. -/
 noncomputable def σI (I : Idx A) : Fin (nI A I + 1) ≃ Nrm (amb A I) :=
-  (finCongr (by rw [Nat.sub_add_cancel I.2.card_pos, card_amb])).trans
-    (Finset.equivFin (amb A I)).symm
+  WaterFilling.σI (toNonemptyIdx A I)
 
 /-! ### The weighted core data -/
 
