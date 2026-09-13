@@ -656,3 +656,4 @@ import Grammar.FiniteQuartetTransfer
 import Grammar.QuartetObservableTransfer
 import Grammar.PredictiveRemainder
 import Grammar.GaussianQuadraticTilt
+import Grammar.NormalLocationRemainder

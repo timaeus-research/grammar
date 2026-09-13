@@ -127,7 +127,7 @@ theorem tiltKappa3_eq_centred [IsProbabilityMeasure μ] (ht : t ∈ interior (in
       simpa [tiltMoment] using this
     simp only [tiltKappa3, hp, tiltMean, tiltMoment, pow_zero, one_mul, pow_one]
     field_simp
-    ring
+    ring_nf
   · exact integrable_tilt ht 3
   · exact (integrable_tilt ht 2).const_mul _
   · exact (integrable_tilt ht 3).sub ((integrable_tilt ht 2).const_mul _)

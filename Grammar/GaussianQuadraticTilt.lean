@@ -18,8 +18,8 @@ the tilt is integrable (`integrable_exp_quadratic_gaussianReal`), tilted integra
 integrals against the tilted Gaussian (`integral_mul_exp_quadratic_gaussianReal`), and the
 quadratic observable `X(w) = −(w²/2 − x w)` (the negative excess loss of the normal-location model)
 has `[0,1]` in the interior of its exponential-integrability set under every Gaussian
-(`Icc_subset_interior_integrableExpSet_quadratic`), with tilted mean and absolute centred third
-moment those of the tilted Gaussian (`tiltMean_quadratic_eq`, `tiltAbsThird_quadratic_eq`). This is
+(`Icc_subset_interior_integrableExpSet_negLoss`), with tilted mean and absolute centred third
+moment those of the tilted Gaussian (`tiltMean_negLoss_eq`, `tiltAbsThird_negLoss_eq`). This is
 the reusable calculation behind the normal-location discharge of the predictive-remainder
 certificate (part 2).
 -/
