@@ -98,9 +98,6 @@ noncomputable def cubeInputs : SheetInputs d where
     simp
   φ_m := fun (β : Fin d) => (continuous_φ β).measurable
   jacUnit_m := fun _ => measurable_const
-  act_nonempty := fun (β : Fin d) => ⟨β, Finset.mem_filter.2 ⟨Finset.mem_univ _, by
-    change 0 < (if β = β then 1 else 0)
-    simp⟩⟩
   hu_cont := fun (β : Fin d) => continuous_unit β
   hu_tan := fun (β : Fin d) w w' h => unit_tan β w w' fun j hj => h j (by
     change ¬ 0 < (if j = β then 1 else 0)

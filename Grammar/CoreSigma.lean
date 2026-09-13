@@ -95,7 +95,7 @@ variable {U : Type*} [MeasurableSpace U] {ι : Type*} [Fintype ι] {D : ι → L
 
 /-- ★ **Assembly of multi-core decompositions**: the cores of all the summands relabelled along
 `e : Fin N ≃ Σ i, Fin (M i)`, the tails summed, the phase gap the minimum of the gaps. -/
-noncomputable def AnalyticCoreDecomposition.sigma [Nonempty ι]
+noncomputable def AnalyticCoreDecomposition.sigma
     (A : ∀ i, AnalyticCoreDecomposition (D i) (M i) (K i) (n i) β) {N : ℕ}
     (e : Fin N ≃ Σ i, Fin (M i)) :
     AnalyticCoreDecomposition (LocalisationData.finsum D phase obs hpm hp ho δ hδ) N
@@ -108,24 +108,27 @@ noncomputable def AnalyticCoreDecomposition.sigma [Nonempty ι]
     congr 1
     exact ((Fintype.sum_sigma fun p : Σ i, Fin (M i) => (A p.1).core p.2).symm.trans
       (Equiv.sum_comp e fun p : Σ i, Fin (M i) => (A p.1).core p.2).symm)
-  δ₀ := Finset.univ.inf' Finset.univ_nonempty fun i => (A i).δ₀
-  δ₀_pos := (Finset.lt_inf'_iff _).2 fun i _ => (A i).δ₀_pos
+  δ₀ := if h : (Finset.univ : Finset ι).Nonempty then Finset.univ.inf' h fun i => (A i).δ₀ else 1
+  δ₀_pos := by
+    split_ifs with h
+    · exact (Finset.lt_inf'_iff _).2 fun i _ => (A i).δ₀_pos
+    · exact one_pos
   gap := by
     change ∀ᵐ z ∂(∑ i, (A i).tail), _ ≤ phase z
     rw [← Measure.sum_fintype, Measure.ae_sum_iff]
     intro i
     refine (A i).gap.mono fun z hz => ?_
-    rw [← hp i]
+    rw [← hp i, dif_pos ⟨i, Finset.mem_univ i⟩]
     exact (Finset.inf'_le _ (Finset.mem_univ i)).trans hz
   chart := fun k => ((A (e k).1).chart (e k).2).congrData _ (hp _).symm (ho _).symm
 
-theorem AnalyticCoreDecomposition.sigma_core [Nonempty ι]
+theorem AnalyticCoreDecomposition.sigma_core
     (A : ∀ i, AnalyticCoreDecomposition (D i) (M i) (K i) (n i) β) {N : ℕ}
     (e : Fin N ≃ Σ i, Fin (M i)) (k : Fin N) :
     (AnalyticCoreDecomposition.sigma (hpm := hpm) (hp := hp) (ho := ho) (hδ := hδ) A e).core k =
       (A (e k).1).core (e k).2 := rfl
 
-theorem AnalyticCoreDecomposition.sigma_chart [Nonempty ι]
+theorem AnalyticCoreDecomposition.sigma_chart
     (A : ∀ i, AnalyticCoreDecomposition (D i) (M i) (K i) (n i) β) {N : ℕ}
     (e : Fin N ≃ Σ i, Fin (M i)) (k : Fin N) :
     (AnalyticCoreDecomposition.sigma (hpm := hpm) (hp := hp) (ho := ho) (hδ := hδ) A e).chart k =

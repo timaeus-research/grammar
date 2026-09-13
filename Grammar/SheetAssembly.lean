@@ -21,7 +21,8 @@ per-chart collar level) and their frames the chart frames reflected onto the she
 coefficient certificate `coeffCert`, and the stopping theorem
 ★★★ `hasCoordFreeExpansion`: the domain integral `∫_W obs · prior · e^{−n K}` has the
 coordinate-free expansion on the sheet strata with produced certificates, for every domain-sector
-atlas with the stated (symmetric box, tangential unit, packet) hypotheses. Zero `sorry`/`axiom`.
+atlas with the stated (symmetric box, tangential unit, packet) hypotheses; charts with empty
+active set (the phase is a unit there) contribute tails. Zero `sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Filter Topology
@@ -40,10 +41,10 @@ namespace SheetInputs
 /-! ### The fibre balls stay inside the symmetric box -/
 
 /-- The chart core parametrisation is the frame translate. -/
-theorem chart_Φ_eq (p : X.PIdx) (I : Fin (numCores (X.act p.1)))
+theorem chart_Φ_eq (p : X.PIdx) (hA : (X.act p.1).Nonempty) (I : Fin (numCores (X.act p.1)))
     (s : KI (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.uP p) X.a (X.δ p.1)
       (coreIdx (X.act p.1) I)) (u : Fin (nI (X.act p.1) (coreIdx (X.act p.1) I) + 1) → ℝ) :
-    ((X.pieceCertP p).cores.chart I).Φ (s, u) = fun j => s.1.1 j +
+    ((X.pieceCertP p hA).cores.chart I).Φ (s, u) = fun j => s.1.1 j +
       ((frameI (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.hk0 p.1) (X.uP p) X.a (X.δ p.1)
         (X.δ_pos p.1) (X.hc p.1) (unitR_lb (X.hu_lb p.1) p.2.1) X.ha (coreIdx (X.act p.1) I) s u :
           normalSpace d (amb (X.act p.1) (coreIdx (X.act p.1) I))) : Amb d).ofLp j := by
@@ -55,12 +56,12 @@ theorem chart_Φ_eq (p : X.PIdx) (I : Fin (numCores (X.act p.1)))
   rfl
 
 /-- On the fibre balls the chart core parametrisation stays in the symmetric box. -/
-theorem chart_Φ_mem_symBox (p : X.PIdx) (I : Fin (numCores (X.act p.1)))
+theorem chart_Φ_mem_symBox (p : X.PIdx) (hA : (X.act p.1).Nonempty) (I : Fin (numCores (X.act p.1)))
     (v : KI (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.uP p) X.a (X.δ p.1)
       (coreIdx (X.act p.1) I)) (u : Fin (nI (X.act p.1) (coreIdx (X.act p.1) I) + 1) → ℝ)
     (hu : u ∈ Metric.eball (0 : Fin (nI (X.act p.1) (coreIdx (X.act p.1) I) + 1) → ℝ)
-      (((X.pieceCertP p).T I).R v)) :
-    ((X.pieceCertP p).cores.chart I).Φ (v, u) ∈ piBox d (Icc (-X.a) X.a) := by
+      (((X.pieceCertP p hA).T I).R v)) :
+    ((X.pieceCertP p hA).cores.chart I).Φ (v, u) ∈ piBox d (Icc (-X.a) X.a) := by
   change u ∈ Metric.eball (0 : Fin (nI (X.act p.1) (coreIdx (X.act p.1) I) + 1) → ℝ)
     (ENNReal.ofReal (2 * side (X.A.k p.1) (amb (X.act p.1) (coreIdx (X.act p.1) I)) (X.δ p.1)))
     at hu
@@ -85,20 +86,20 @@ theorem chart_Φ_mem_symBox (p : X.PIdx) (I : Fin (numCores (X.act p.1)))
   · exact X.symBox_subset (X.base_mem_box p (coreIdx (X.act p.1) I) v) j (mem_univ _)
 
 /-- On the fibre balls the transported observable is the piece's observable. -/
-theorem obs_compat_ball (p : X.PIdx) (I : Fin (numCores (X.act p.1)))
+theorem obs_compat_ball (p : X.PIdx) (hA : (X.act p.1).Nonempty) (I : Fin (numCores (X.act p.1)))
     (v : KI (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.uP p) X.a (X.δ p.1)
       (coreIdx (X.act p.1) I)) (u : Fin (nI (X.act p.1) (coreIdx (X.act p.1) I) + 1) → ℝ)
     (hu : u ∈ Metric.eball (0 : Fin (nI (X.act p.1) (coreIdx (X.act p.1) I) + 1) → ℝ)
-      (((X.pieceCertP p).T I).R v)) :
-    (X.obs ∘ Sheet.π X.SA) (X.Ψ p (((X.pieceCertP p).cores.chart I).Φ (v, u))) =
-      (X.pieceCertP p).L.obs (((X.pieceCertP p).cores.chart I).Φ (v, u)) :=
-  X.obs_compat p (X.chart_Φ_mem_symBox p I v u hu)
+      (((X.pieceCertP p hA).T I).R v)) :
+    (X.obs ∘ Sheet.π X.SA) (X.Ψ p (((X.pieceCertP p hA).cores.chart I).Φ (v, u))) =
+      (X.pieceCertP p hA).L.obs (((X.pieceCertP p hA).cores.chart I).Φ (v, u)) :=
+  X.obs_compat p (X.chart_Φ_mem_symBox p hA I v u hu)
 
 /-- The transported and reindexed normal-moment presentation of a piece core. -/
-noncomputable def pieceT (p : X.PIdx) (I : Fin (numCores (X.act p.1))) :
-    CoreNormalMomentPresentation ((X.pieceCores' p).chart I) :=
-  (((X.pieceCertP p).T I).mapAmbient_ae (X.Ψ p) (X.measurable_Ψ p) (X.pieceDatum p)
-    (X.chart_hp p I) (X.chart_ho p I) (X.obs_compat_ball p I)).reindex
+noncomputable def pieceT (p : X.PIdx) (hA : (X.act p.1).Nonempty) (I : Fin (numCores (X.act p.1))) :
+    CoreNormalMomentPresentation ((X.pieceCores' p hA).chart I) :=
+  (((X.pieceCertP p hA).T I).mapAmbient_ae (X.Ψ p) (X.measurable_Ψ p) (X.pieceDatum p)
+    (X.chart_hp p hA I) (X.chart_ho p hA I) (X.obs_compat_ball p hA I)).reindex
     (X.baseHomeo p (coreIdx (X.act p.1) I))
 
 /-! ### The frames on the sheet -/
@@ -137,10 +138,10 @@ theorem Φ_incl (i : X.A.ι) {y : Fin d → ℝ} (hy : y ∈ X.A.dom i)
 
 /-- ★ **The tubular identity on the sheet**: the transported chart core map is the sheet tubular
 germ along the reflected frame at the transported base point. -/
-theorem Φ_eq (p : X.PIdx) (I : Fin (numCores (X.act p.1)))
+theorem Φ_eq (p : X.PIdx) (hA : (X.act p.1).Nonempty) (I : Fin (numCores (X.act p.1)))
     (s : ↥(X.baseSetS p (coreIdx (X.act p.1) I)))
     (u : Fin (nI (X.act p.1) (coreIdx (X.act p.1) I) + 1) → ℝ) :
-    ((X.pieceCores' p).chart I).Φ (s, u) =
+    ((X.pieceCores' p hA).chart I).Φ (s, u) =
       (Sheet.normalData X.SA).Φ (X.J p (coreIdx (X.act p.1) I)) s.1
         (X.frameS p (coreIdx (X.act p.1) I) s u) := by
   have hs : (s.1 : Sheet.Space X.SA) = Sheet.incl X.SA p.1
@@ -149,7 +150,7 @@ theorem Φ_eq (p : X.PIdx) (I : Fin (numCores (X.act p.1)))
   rw [X.Φ_incl p.1 (X.mem_dom_of_mem_box p.1 p.2.1
     (X.base_mem_box p (coreIdx (X.act p.1) I) ((X.baseHomeo p (coreIdx (X.act p.1) I)).symm s)))
     s.1 hs, X.pieceCores'_chart_Φ,
-    X.chart_Φ_eq p I ((X.baseHomeo p (coreIdx (X.act p.1) I)).symm s) u]
+    X.chart_Φ_eq p hA I ((X.baseHomeo p (coreIdx (X.act p.1) I)).symm s) u]
   change Sheet.incl X.SA p.1 (refl p.2.1 _) = _
   congr 1
   funext j
@@ -158,7 +159,7 @@ theorem Φ_eq (p : X.PIdx) (I : Fin (numCores (X.act p.1)))
 /-! ### The assembled datum, cores and transport -/
 
 /-- **The assembled localisation datum on the sheet space**: the sum of the transported piece
-data, phase `K ∘ π`, observable `obs ∘ π`, level `1`. -/
+data over ALL pieces (active or not), phase `K ∘ π`, observable `obs ∘ π`, level `1`. -/
 noncomputable def datum : LocalisationData (Sheet.Space X.SA) :=
   LocalisationData.finsum (fun p : X.PIdx => X.pieceDatum p) (X.K ∘ Sheet.π X.SA)
     (X.obs ∘ Sheet.π X.SA) X.measurable_Kπ (fun _ => rfl) (fun _ => rfl) 1 one_pos
@@ -166,29 +167,107 @@ noncomputable def datum : LocalisationData (Sheet.Space X.SA) :=
 theorem datum_μ :
     X.datum.μ = ∑ p : X.PIdx, (pieceMeasure (X.A.h p.1) X.a (X.ϕ p.1) p.2.1).map (X.Ψ p) := rfl
 
+/-- The active pieces: those whose chart has a nonempty active set. -/
+abbrev APIdx : Type := {p : X.PIdx // (X.act p.1).Nonempty}
+
 /-- The number of cores. -/
-noncomputable abbrev N : ℕ := Fintype.card (Σ p : X.PIdx, Fin (numCores (X.act p.1)))
+noncomputable abbrev N : ℕ := Fintype.card (Σ p : X.APIdx, Fin (numCores (X.act p.1.1)))
 
 /-- The enumeration of the cores. -/
-noncomputable def coreEnum : Fin X.N ≃ Σ p : X.PIdx, Fin (numCores (X.act p.1)) :=
+noncomputable def coreEnum : Fin X.N ≃ Σ p : X.APIdx, Fin (numCores (X.act p.1.1)) :=
   (Fintype.equivFin _).symm
 
 /-- The piece of a core. -/
-noncomputable abbrev pOf (k : Fin X.N) : X.PIdx := (X.coreEnum k).1
+noncomputable abbrev pOf (k : Fin X.N) : X.PIdx := (X.coreEnum k).1.1
+
+theorem act_pOf_nonempty (k : Fin X.N) : (X.act (X.pOf k).1).Nonempty := (X.coreEnum k).1.2
 
 /-- The chart stratum of a core. -/
 noncomputable abbrev IOf (k : Fin X.N) : Idx (X.act (X.pOf k).1) :=
   coreIdx (X.act (X.pOf k).1) (X.coreEnum k).2
 
-/-- **The assembled core decomposition**: all transported cores of all pieces. -/
+/-- The datum of the active pieces. -/
+noncomputable def activeDatum : LocalisationData (Sheet.Space X.SA) :=
+  LocalisationData.finsum (fun p : X.APIdx => X.pieceDatum p.1) (X.K ∘ Sheet.π X.SA)
+    (X.obs ∘ Sheet.π X.SA) X.measurable_Kπ (fun _ => rfl) (fun _ => rfl) 1 one_pos
+
+/-- **The cores of the active pieces**, collected. -/
+noncomputable def activeCores :
+    AnalyticCoreDecomposition X.activeDatum X.N
+      (fun k => ↥(X.baseSetS (X.pOf k) (X.IOf k))) (fun k => nI (X.act (X.pOf k).1) (X.IOf k)) 1 :=
+  AnalyticCoreDecomposition.sigma (fun p : X.APIdx => X.pieceCores' p.1 p.2) X.coreEnum
+
+/-- Adding a tail with a phase gap to a core decomposition (the datum's measure grows by the
+tail, the phase and observable are unchanged). -/
+noncomputable def _root_.Grammar.AnalyticCoreDecomposition.addTail {U : Type*}
+    [MeasurableSpace U] {D : LocalisationData U} {M : ℕ} {K : Fin M → Type*}
+    [∀ I, TopologicalSpace (K I)] [∀ I, MeasurableSpace (K I)] {n : Fin M → ℕ} {β : ℝ}
+    (A : AnalyticCoreDecomposition D M K n β) (D' : LocalisationData U) (ν : Measure U)
+    (hμ : D'.μ = D.μ + ν) (hp : D'.phase = D.phase) (ho : D'.obs = D.obs) (δ' : ℝ)
+    (hδ' : 0 < δ') (hgap : ∀ᵐ z ∂ν, δ' ≤ D.phase z) : AnalyticCoreDecomposition D' M K n β where
+  core := A.core
+  tail := A.tail + ν
+  measure_eq := by rw [hμ, A.measure_eq, add_assoc]
+  δ₀ := min A.δ₀ δ'
+  δ₀_pos := lt_min A.δ₀_pos hδ'
+  gap := by
+    rw [hp, ae_add_measure_iff]
+    exact ⟨A.gap.mono fun z hz => (min_le_left _ _).trans hz,
+      hgap.mono fun z hz => (min_le_right _ _).trans hz⟩
+  chart := fun I => (A.chart I).congrData D' hp ho
+
+/-- The measure of the inactive pieces (charts with empty active set). -/
+noncomputable def inactiveMeasure : Measure (Sheet.Space X.SA) :=
+  ∑ p : {p : X.PIdx // ¬ (X.act p.1).Nonempty}, (X.pieceDatum p.1).μ
+
+theorem datum_μ_split : X.datum.μ = X.activeDatum.μ + X.inactiveMeasure :=
+  (Fintype.sum_subtype_add_sum_subtype (fun p : X.PIdx => (X.act p.1).Nonempty)
+    fun p => (X.pieceDatum p).μ).symm
+
+/-- The common lower bound of the units. -/
+noncomputable def cmin : ℝ := Finset.univ.inf' (Finset.univ_nonempty_iff.2 X.ι_nonempty) X.c
+
+theorem cmin_pos : 0 < X.cmin := (Finset.lt_inf'_iff _).2 fun i _ => X.hc i
+
+theorem cmin_le (i : X.A.ι) : X.cmin ≤ X.c i := Finset.inf'_le _ (Finset.mem_univ i)
+
+/-- **The inactive pieces are tails**: on a chart with empty active set the phase is the unit,
+bounded below by `c_i`. -/
+theorem inactive_gap : ∀ᵐ z ∂X.inactiveMeasure, X.cmin ≤ (X.K ∘ Sheet.π X.SA) z := by
+  unfold inactiveMeasure
+  rw [← Measure.sum_fintype, Measure.ae_sum_iff]
+  intro p
+  rw [pieceDatum_μ, ae_map_iff (X.measurable_Ψ p.1).aemeasurable
+    (measurableSet_le measurable_const X.measurable_Kπ)]
+  refine (X.ae_mem_box' p.1).mono fun z hz => ?_
+  have hd := X.mem_dom_of_mem_box p.1.1 p.1.2.1 hz
+  change X.cmin ≤ X.K (Sheet.π X.SA (X.Ψ p.1 z))
+  rw [X.π_Ψ p.1 (X.symBox_subset hz), X.A.phase_eq p.1.1 _ (X.A.dom_subset_V p.1.1 hd)]
+  have hk : ∀ j, X.A.k p.1.1 j = 0 := fun j => X.hk0 p.1.1 j fun hj => p.2 ⟨j, hj⟩
+  have hprod : ∏ j, (refl p.1.2.1 z) j ^ (2 * X.A.k p.1.1 j) = 1 :=
+    Finset.prod_eq_one fun j _ => by rw [hk j, mul_zero, pow_zero]
+  rw [hprod, mul_one]
+  exact (X.cmin_le p.1.1).trans (X.hu_lb p.1.1 _ (X.refl_mem_symBox _ (X.symBox_subset hz)))
+
+/-- **The assembled core decomposition**: the cores of the active pieces, the inactive pieces
+added to the tail. -/
 noncomputable def cores :
     AnalyticCoreDecomposition X.datum X.N
       (fun k => ↥(X.baseSetS (X.pOf k) (X.IOf k))) (fun k => nI (X.act (X.pOf k).1) (X.IOf k)) 1 :=
-  AnalyticCoreDecomposition.sigma (fun p => X.pieceCores' p) X.coreEnum
+  X.activeCores.addTail X.datum X.inactiveMeasure X.datum_μ_split rfl rfl X.cmin X.cmin_pos
+    X.inactive_gap
+
+theorem activeCores_chart (k : Fin X.N) :
+    X.activeCores.chart k = ((X.pieceCores' (X.pOf k) (X.act_pOf_nonempty k)).chart
+      (X.coreEnum k).2).congrData X.activeDatum rfl rfl := rfl
+
+theorem cores_chart (k : Fin X.N) :
+    X.cores.chart k = (X.activeCores.chart k).congrData X.datum rfl rfl := rfl
 
 /-- The normal-moment presentations of the assembled cores. -/
 noncomputable def T (k : Fin X.N) : CoreNormalMomentPresentation (X.cores.chart k) :=
-  (X.pieceT (X.pOf k) (X.coreEnum k).2).congrData X.datum rfl rfl
+  ((X.pieceT (X.pOf k) (X.act_pOf_nonempty k) (X.coreEnum k).2).congrData X.activeDatum rfl
+    rfl).congrData X.datum rfl rfl
 
 /-- The transported piece measure pushed to the domain is the weighted analytic prior on the
 orthant box, pushed by the chart. -/
@@ -199,9 +278,7 @@ theorem map_Ψ_eq (p : X.PIdx) :
   rw [Measure.map_map (Sheet.continuous_π X.SA).measurable (X.measurable_Ψ p),
     ← map_refl_pieceMeasure, Measure.map_map (X.φ_m p.1) (measurable_refl _)]
   refine Measure.map_congr ?_
-  have h := X.ae_mem_box p
-  rw [pieceCertP_L_μ] at h
-  exact h.mono fun z hz => X.π_Ψ p (X.symBox_subset hz)
+  exact (X.ae_mem_box' p).mono fun z hz => X.π_Ψ p (X.symBox_subset hz)
 
 /-- The orthant pieces of a chart sum to the sector measure of the prior. -/
 theorem sum_withDensity_orthant (i : X.A.ι) :
@@ -248,39 +325,40 @@ noncomputable def cert :
   cores := X.cores
   T := X.T
   frame := fun k s => X.frameS (X.pOf k) (X.IOf k) s
-  Φ_eq := fun k s u => X.Φ_eq (X.pOf k) (X.coreEnum k).2 s u
+  Φ_eq := fun k s u => X.Φ_eq (X.pOf k) (X.act_pOf_nonempty k) (X.coreEnum k).2 s u
 
 theorem cert_cores_b (k : Fin X.N) :
-    X.cert.cores.b k = (X.pieceCertP (X.pOf k)).cores.b (X.coreEnum k).2 := rfl
+    X.cert.cores.b k = (X.pieceCertP (X.pOf k) (X.act_pOf_nonempty k)).cores.b (X.coreEnum k).2 :=
+  rfl
 
 /-- ★★ **The coefficient certificate on the sheet**: the piece factorisation families and
 observable jets, transported. -/
 noncomputable def coeffCert : X.cert.CoefficientCertificate where
-  cc := fun k s => (X.pieceCoeffP (X.pOf k)).cc (X.coreEnum k).2
+  cc := fun k s => (X.pieceCoeffP (X.pOf k) (X.act_pOf_nonempty k)).cc (X.coreEnum k).2
     ((X.baseHomeo (X.pOf k) (X.IOf k)).symm s)
-  cc_abs := fun k s => (X.pieceCoeffP (X.pOf k)).cc_abs (X.coreEnum k).2 _
+  cc_abs := fun k s => (X.pieceCoeffP (X.pOf k) (X.act_pOf_nonempty k)).cc_abs (X.coreEnum k).2 _
   jet_abs := fun k s => by
     change (jetFamily (nI (X.act (X.pOf k).1) (X.IOf k))
       ((X.cores.chart k).obsFibre s)).AbsSummableAt
-        ((X.pieceCertP (X.pOf k)).cores.b (X.coreEnum k).2)
+        ((X.pieceCertP (X.pOf k) (X.act_pOf_nonempty k)).cores.b (X.coreEnum k).2)
     rw [jetFamily_eq_monoFamily ((X.T k).analytic s)]
-    have h := (X.pieceCoeffP (X.pOf k)).jet_abs (X.coreEnum k).2
+    have h := (X.pieceCoeffP (X.pOf k) (X.act_pOf_nonempty k)).jet_abs (X.coreEnum k).2
       ((X.baseHomeo (X.pOf k) (X.IOf k)).symm s)
-    rw [jetFamily_eq_monoFamily (((X.pieceCertP (X.pOf k)).T (X.coreEnum k).2).analytic
-      ((X.baseHomeo (X.pOf k) (X.IOf k)).symm s))] at h
+    rw [jetFamily_eq_monoFamily (((X.pieceCertP (X.pOf k) (X.act_pOf_nonempty k)).T
+      (X.coreEnum k).2).analytic ((X.baseHomeo (X.pOf k) (X.IOf k)).symm s))] at h
     exact h
   datum_eq := fun k s => by
-    change toEta ((X.pieceCertP (X.pOf k)).cores.b (X.coreEnum k).2)
+    change toEta ((X.pieceCertP (X.pOf k) (X.act_pOf_nonempty k)).cores.b (X.coreEnum k).2)
       ((X.cores.chart k).x s) = CoeffFamily.conv _
         (jetFamily (nI (X.act (X.pOf k).1) (X.IOf k))
           ((X.cores.chart k).obsFibre s))
     rw [jetFamily_eq_monoFamily ((X.T k).analytic s)]
-    have h := (X.pieceCoeffP (X.pOf k)).datum_eq (X.coreEnum k).2
+    have h := (X.pieceCoeffP (X.pOf k) (X.act_pOf_nonempty k)).datum_eq (X.coreEnum k).2
       ((X.baseHomeo (X.pOf k) (X.IOf k)).symm s)
-    rw [jetFamily_eq_monoFamily (((X.pieceCertP (X.pOf k)).T (X.coreEnum k).2).analytic
-      ((X.baseHomeo (X.pOf k) (X.IOf k)).symm s))] at h
+    rw [jetFamily_eq_monoFamily (((X.pieceCertP (X.pOf k) (X.act_pOf_nonempty k)).T
+      (X.coreEnum k).2).analytic ((X.baseHomeo (X.pOf k) (X.IOf k)).symm s))] at h
     have hx : (X.cores.chart k).x s =
-        ((X.pieceCertP (X.pOf k)).cores.chart (X.coreEnum k).2).x
+        ((X.pieceCertP (X.pOf k) (X.act_pOf_nonempty k)).cores.chart (X.coreEnum k).2).x
           ((X.baseHomeo (X.pOf k) (X.IOf k)).symm s) :=
       CorePresentation.reindex_x _ _ _
     rw [hx]
@@ -289,8 +367,8 @@ noncomputable def coeffCert : X.cert.CoefficientCertificate where
 /-! ### The coordinate-free expansion -/
 
 /-- ★★★ **The coordinate-free expansion of a domain integral through a domain-sector atlas**: for
-a domain-sector atlas with symmetric chart boxes, nonempty active sets, positive tangential phase
-units and holomorphic signed-box packets of the analytic prior factor and the observable, the
+a domain-sector atlas with symmetric chart boxes, positive tangential phase units and holomorphic
+signed-box packets of the analytic prior factor and the observable, the
 domain integral `∫_W obs · prior · e^{−n K}` has the coordinate-free expansion on the sheet strata
 with produced certificates. -/
 theorem hasCoordFreeExpansion :

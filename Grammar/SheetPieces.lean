@@ -11,7 +11,7 @@ import Monomialize.Transport.DomainSectorAtlasBoundary
 /-!
 # The pieces of a domain-sector atlas on the sheet geometry (unit H, part 2)
 
-For a domain-sector atlas with symmetric chart boxes `[−a,a]^d`, nonempty active sets, positive
+For a domain-sector atlas with symmetric chart boxes `[−a,a]^d`, positive
 tangential units and holomorphic signed-box packets for the analytic prior factor
 `|jacUnit_i| · prior ∘ φ_i` and the observable `obs ∘ φ_i` (`SheetInputs`), every selected orthant
 `σ ∈ signs i` of every chart `i` is a piece (`PIdx`) with its chart-box certificate (CCCLXXIV) at
@@ -36,8 +36,8 @@ open Monomialize.VolumeScaling NormalisedBox WaterFilling CoordModel ChartCollar
 
 /-! ### The inputs -/
 
-/-- The inputs of the sheet assembly: a domain-sector atlas with symmetric chart boxes, nonempty
-active sets, positive tangential units, measurable chart data, a nonnegative measurable prior, an
+/-- The inputs of the sheet assembly: a domain-sector atlas with symmetric chart boxes, positive
+tangential units, measurable chart data, a nonnegative measurable prior, an
 observable integrable for the prior measure on the domain, and holomorphic signed-box packets for
 the analytic prior factor and the observable of every chart. -/
 structure SheetInputs (d : ℕ) where
@@ -55,7 +55,6 @@ structure SheetInputs (d : ℕ) where
   hi_eq : ∀ i j, A.hi i j = a
   φ_m : ∀ i, Measurable (A.φ i)
   jacUnit_m : ∀ i, Measurable (A.jacUnit i)
-  act_nonempty : ∀ i : A.ι, (Finset.univ.filter fun j => 0 < A.k i j).Nonempty
   hu_cont : ∀ i, Continuous (A.phaseUnit i)
   hu_tan : ∀ i (w w' : Fin d → ℝ), (∀ j, ¬ 0 < A.k i j → w j = w' j) →
     A.phaseUnit i w = A.phaseUnit i w'
@@ -270,21 +269,24 @@ theorem exists_delta_chart' (i : X.A.ι) :
         2 * (δ / X.c i) ^ (((X.act i).card : ℝ)⁻¹ *
           ((2 * X.A.k i (σI (X.act i) I l).1 : ℕ) : ℝ)⁻¹) <
           (((X.P i).pullback σ).faceSeries X.a (toNonemptyIdx (X.act i) I)).ρ := by
-  have hS := X.signs_nonempty i
-  set ρmin := (X.A.signs i).inf' hS fun σ => ((X.P i).pullback σ).radius X.a with hρ
-  have hmin : 0 < min ρmin X.a := by
-    refine lt_min ?_ X.ha
-    rw [hρ, Finset.lt_inf'_iff]
-    exact fun σ _ => ((X.P i).pullback σ).radius_pos X.a
-  obtain ⟨δ, hδ, hδa, hsm⟩ := exists_delta_chart (X.act i) (X.A.k i) (X.hkA i) X.a (X.c i)
-    (X.hc i) X.ha (X.act_nonempty i) hmin
-  refine ⟨δ, hδ, hδa, fun j hj => (hsm j hj).trans_le (min_le_right _ _), fun σ hσ I l => ?_⟩
-  change 2 * (δ / X.c i) ^ (((X.act i).card : ℝ)⁻¹ *
-    ((2 * X.A.k i (σI (X.act i) I l).1 : ℕ) : ℝ)⁻¹) < ((X.P i).pullback σ).radius X.a
-  refine ((hsm (σI (X.act i) I l).1 (amb_subset (X.act i) I (σI (X.act i) I l).2)).trans_le
-    (min_le_left _ _)).trans_le ?_
-  rw [hρ]
-  exact Finset.inf'_le _ hσ
+  by_cases hA : (X.act i).Nonempty
+  · have hS := X.signs_nonempty i
+    set ρmin := (X.A.signs i).inf' hS fun σ => ((X.P i).pullback σ).radius X.a with hρ
+    have hmin : 0 < min ρmin X.a := by
+      refine lt_min ?_ X.ha
+      rw [hρ, Finset.lt_inf'_iff]
+      exact fun σ _ => ((X.P i).pullback σ).radius_pos X.a
+    obtain ⟨δ, hδ, hδa, hsm⟩ := exists_delta_chart (X.act i) (X.A.k i) (X.hkA i) X.a (X.c i)
+      (X.hc i) X.ha hA hmin
+    refine ⟨δ, hδ, hδa, fun j hj => (hsm j hj).trans_le (min_le_right _ _), fun σ hσ I l => ?_⟩
+    change 2 * (δ / X.c i) ^ (((X.act i).card : ℝ)⁻¹ *
+      ((2 * X.A.k i (σI (X.act i) I l).1 : ℕ) : ℝ)⁻¹) < ((X.P i).pullback σ).radius X.a
+    refine ((hsm (σI (X.act i) I l).1 (amb_subset (X.act i) I (σI (X.act i) I l).2)).trans_le
+      (min_le_left _ _)).trans_le ?_
+    rw [hρ]
+    exact Finset.inf'_le _ hσ
+  · refine ⟨1, one_pos, fun j hj => absurd ⟨j, hj⟩ hA, fun j hj => absurd ⟨j, hj⟩ hA,
+      fun _ _ I _ => absurd ((amb_nonempty (X.act i) I).mono (amb_subset (X.act i) I)) hA⟩
 
 /-- The collar level of chart `i`. -/
 noncomputable def δ (i : X.A.ι) : ℝ := (X.exists_delta_chart' i).choose
@@ -310,6 +312,12 @@ theorem δ_small (p : X.PIdx) : ∀ (I : Idx (X.act p.1)) (l : Fin (nI (X.act p.
       (((X.P p.1).pullback p.2.1).faceSeries X.a (toNonemptyIdx (X.act p.1) I)).ρ :=
   (X.exists_delta_chart' p.1).choose_spec.2.2.2 p.2.1 p.2.2
 
+theorem ae_mem_box' (p : X.PIdx) :
+    ∀ᵐ z ∂pieceMeasure (X.A.h p.1) X.a (X.ϕ p.1) p.2.1, z ∈ piBox d (Icc 0 X.a) := by
+  unfold pieceMeasure
+  exact mem_ae_iff.2 ((withDensity_absolutelyContinuous _ _)
+    (mem_ae_iff.1 (ae_restrict_mem (measurableSet_W X.a))))
+
 /-! ### The piece certificates -/
 
 /-- The reflected unit of a piece. -/
@@ -325,35 +333,35 @@ noncomputable def F (p : X.PIdx) (I : Idx (X.act p.1)) :
     (((X.P p.1).pullback p.2.1).faceSeries X.a (toNonemptyIdx (X.act p.1) I)) (X.δ_small p I)
 
 /-- ★★ **The chart-box certificate of a piece** (CCCLXXIV), at the chart's collar level. -/
-noncomputable def pieceCertP (p : X.PIdx) :=
+noncomputable def pieceCertP (p : X.PIdx) (hA : (X.act p.1).Nonempty) :=
   pieceCert (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.hk0 p.1) (X.A.phaseUnit p.1) X.a
     (X.δ p.1) (X.δ_pos p.1) (X.hu_cont p.1) (X.ϕ p.1) (X.obs ∘ X.A.φ p.1) (X.hu_tan' p.1) (X.c p.1)
     (X.hc p.1) (X.hu_lb p.1) X.ha (X.δ_lt p.1) (X.ϕ_m p.1) (X.ϕ_nonneg p.1) (X.P p.1) p.2.1
-    (X.hφint p) (X.δ_small p) (X.act_nonempty p.1)
+    (X.hφint p) (X.δ_small p) hA
 
 /-- The coefficient certificate of a piece. -/
-noncomputable def pieceCoeffP (p : X.PIdx) : (X.pieceCertP p).CoefficientCertificate :=
+noncomputable def pieceCoeffP (p : X.PIdx) (hA : (X.act p.1).Nonempty) :
+    (X.pieceCertP p hA).CoefficientCertificate :=
   pieceCoeff (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.hk0 p.1) (X.A.phaseUnit p.1) X.a
     (X.δ p.1) (X.δ_pos p.1) (X.hu_cont p.1) (X.ϕ p.1) (X.obs ∘ X.A.φ p.1) (X.hu_tan' p.1) (X.c p.1)
     (X.hc p.1) (X.hu_lb p.1) X.ha (X.δ_lt p.1) (X.ϕ_m p.1) (X.ϕ_nonneg p.1) (X.P p.1) p.2.1
-    (X.hφint p) (X.δ_small p) (X.act_nonempty p.1)
+    (X.hφint p) (X.δ_small p) hA
 
-theorem pieceCertP_L_μ (p : X.PIdx) :
-    (X.pieceCertP p).L.μ = pieceMeasure (X.A.h p.1) X.a (X.ϕ p.1) p.2.1 := rfl
+theorem pieceCertP_L_μ (p : X.PIdx) (hA : (X.act p.1).Nonempty) :
+    (X.pieceCertP p hA).L.μ = pieceMeasure (X.A.h p.1) X.a (X.ϕ p.1) p.2.1 := rfl
 
-theorem pieceCertP_L_phase (p : X.PIdx) :
-    (X.pieceCertP p).L.phase = ChartModel.phase d (X.act p.1) (X.A.k p.1) (X.uP p) := rfl
+theorem pieceCertP_L_phase (p : X.PIdx) (hA : (X.act p.1).Nonempty) :
+    (X.pieceCertP p hA).L.phase = ChartModel.phase d (X.act p.1) (X.A.k p.1) (X.uP p) := rfl
 
-theorem pieceCertP_L_obs (p : X.PIdx) :
-    (X.pieceCertP p).L.obs = (X.obs ∘ X.A.φ p.1) ∘ refl p.2.1 := rfl
+theorem pieceCertP_L_obs (p : X.PIdx) (hA : (X.act p.1).Nonempty) :
+    (X.pieceCertP p hA).L.obs = (X.obs ∘ X.A.φ p.1) ∘ refl p.2.1 := rfl
 
-theorem pieceCertP_β (p : X.PIdx) : (X.pieceCertP p).β = 1 := rfl
+theorem pieceCertP_β (p : X.PIdx) (hA : (X.act p.1).Nonempty) : (X.pieceCertP p hA).β = 1 := rfl
 
-theorem ae_mem_box (p : X.PIdx) : ∀ᵐ z ∂(X.pieceCertP p).L.μ, z ∈ piBox d (Icc 0 X.a) := by
+theorem ae_mem_box (p : X.PIdx) (hA : (X.act p.1).Nonempty) :
+    ∀ᵐ z ∂(X.pieceCertP p hA).L.μ, z ∈ piBox d (Icc 0 X.a) := by
   rw [pieceCertP_L_μ]
-  unfold pieceMeasure
-  exact mem_ae_iff.2 ((withDensity_absolutelyContinuous _ _)
-    (mem_ae_iff.1 (ae_restrict_mem (measurableSet_W X.a))))
+  exact X.ae_mem_box' p
 
 instance instCompactKI (p : X.PIdx) (I : Idx (X.act p.1)) :
     CompactSpace (KI (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.uP p) X.a (X.δ p.1) I) :=
@@ -362,10 +370,10 @@ instance instCompactKI (p : X.PIdx) (I : Idx (X.act p.1)) :
 
 /-- The core parametrisation of every stratum of a piece lands in the box, a.e. on the chart
 measure. -/
-theorem chart_Φ_mem (p : X.PIdx) (I : Fin (numCores (X.act p.1))) :
-    ∀ᵐ q ∂chartMeasure ((X.pieceCertP p).cores.chart I).ν ((X.pieceCertP p).n I)
-      ((X.pieceCertP p).cores.chart I).b,
-      ((X.pieceCertP p).cores.chart I).Φ q ∈ piBox d (Icc 0 X.a) :=
+theorem chart_Φ_mem (p : X.PIdx) (hA : (X.act p.1).Nonempty) (I : Fin (numCores (X.act p.1))) :
+    ∀ᵐ q ∂chartMeasure ((X.pieceCertP p hA).cores.chart I).ν ((X.pieceCertP p hA).n I)
+      ((X.pieceCertP p hA).cores.chart I).b,
+      ((X.pieceCertP p hA).cores.chart I).Φ q ∈ piBox d (Icc 0 X.a) :=
   stratumCore_Φ_mem_box (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.hk0 p.1) (X.uP p) X.a
     (X.δ p.1) (X.δ_pos p.1) (continuous_unitR (X.hu_cont p.1) p.2.1) (X.ϕ p.1 ∘ refl p.2.1)
     ((X.obs ∘ X.A.φ p.1) ∘ refl p.2.1) (unitR_tan (X.hu_tan' p.1) p.2.1) (X.c p.1) (X.hc p.1) X.ha
@@ -405,12 +413,25 @@ theorem obs_compat (p : X.PIdx) {z : Fin d → ℝ} (hz : z ∈ piBox d (Icc (-X
   rfl
 
 /-- **The transported piece datum** on the sheet space: measure `μ_p.map Ψ_p`, phase `K ∘ π`,
-observable `obs ∘ π`. -/
-noncomputable def pieceDatum (p : X.PIdx) : LocalisationData (Sheet.Space X.SA) :=
-  (X.pieceCertP p).L.map_ae (X.Ψ p) (X.measurable_Ψ p) (X.K ∘ Sheet.π X.SA) (X.obs ∘ Sheet.π X.SA)
-    X.measurable_Kπ ((X.ae_mem_box p).mono fun _ hz => X.phase_compat p hz)
-    (X.obs_m.comp (Sheet.continuous_π X.SA).measurable).aestronglyMeasurable
-    ((X.ae_mem_box p).mono fun _ hz => X.obs_compat p (X.symBox_subset hz))
+observable `obs ∘ π`, level `1` (defined for every piece, active or not). -/
+noncomputable def pieceDatum (p : X.PIdx) : LocalisationData (Sheet.Space X.SA) where
+  μ := (pieceMeasure (X.A.h p.1) X.a (X.ϕ p.1) p.2.1).map (X.Ψ p)
+  phase := X.K ∘ Sheet.π X.SA
+  obs := X.obs ∘ Sheet.π X.SA
+  phase_measurable := X.measurable_Kπ
+  phase_nonneg := by
+    rw [ae_map_iff (X.measurable_Ψ p).aemeasurable
+      (measurableSet_le measurable_const X.measurable_Kπ)]
+    refine (X.ae_mem_box' p).mono fun z hz => ?_
+    change 0 ≤ X.K (Sheet.π X.SA (X.Ψ p z))
+    rw [X.π_Ψ p (X.symBox_subset hz)]
+    exact X.SA.phase_nonneg p.1 (X.A.dom_subset_V p.1 (X.mem_dom_of_mem_box p.1 p.2.1 hz))
+  obs_integrable :=
+    (integrable_map_measure (X.obs_m.comp (Sheet.continuous_π X.SA).measurable).aestronglyMeasurable
+      (X.measurable_Ψ p).aemeasurable).2 ((X.hφint p).congr
+        ((X.ae_mem_box' p).mono fun z hz => (X.obs_compat p (X.symBox_subset hz)).symm))
+  δ := 1
+  δ_pos := one_pos
 
 theorem pieceDatum_μ (p : X.PIdx) :
     (X.pieceDatum p).μ = (pieceMeasure (X.A.h p.1) X.a (X.ϕ p.1) p.2.1).map (X.Ψ p) := rfl
@@ -419,34 +440,34 @@ theorem pieceDatum_phase (p : X.PIdx) : (X.pieceDatum p).phase = X.K ∘ Sheet.�
 
 theorem pieceDatum_obs (p : X.PIdx) : (X.pieceDatum p).obs = X.obs ∘ Sheet.π X.SA := rfl
 
-theorem chart_hp (p : X.PIdx) (I : Fin (numCores (X.act p.1))) :
-    ∀ᵐ q ∂chartMeasure ((X.pieceCertP p).cores.chart I).ν ((X.pieceCertP p).n I)
-      ((X.pieceCertP p).cores.chart I).b,
-      (X.K ∘ Sheet.π X.SA) (X.Ψ p (((X.pieceCertP p).cores.chart I).Φ q)) =
-        (X.pieceCertP p).L.phase (((X.pieceCertP p).cores.chart I).Φ q) :=
-  (X.chart_Φ_mem p I).mono fun _ hq => X.phase_compat p hq
+theorem chart_hp (p : X.PIdx) (hA : (X.act p.1).Nonempty) (I : Fin (numCores (X.act p.1))) :
+    ∀ᵐ q ∂chartMeasure ((X.pieceCertP p hA).cores.chart I).ν ((X.pieceCertP p hA).n I)
+      ((X.pieceCertP p hA).cores.chart I).b,
+      (X.K ∘ Sheet.π X.SA) (X.Ψ p (((X.pieceCertP p hA).cores.chart I).Φ q)) =
+        (X.pieceCertP p hA).L.phase (((X.pieceCertP p hA).cores.chart I).Φ q) :=
+  (X.chart_Φ_mem p hA I).mono fun _ hq => X.phase_compat p hq
 
-theorem chart_ho (p : X.PIdx) (I : Fin (numCores (X.act p.1))) :
-    ∀ᵐ q ∂chartMeasure ((X.pieceCertP p).cores.chart I).ν ((X.pieceCertP p).n I)
-      ((X.pieceCertP p).cores.chart I).b,
-      (X.obs ∘ Sheet.π X.SA) (X.Ψ p (((X.pieceCertP p).cores.chart I).Φ q)) =
-        (X.pieceCertP p).L.obs (((X.pieceCertP p).cores.chart I).Φ q) :=
-  (X.chart_Φ_mem p I).mono fun _ hq => X.obs_compat p (X.symBox_subset hq)
+theorem chart_ho (p : X.PIdx) (hA : (X.act p.1).Nonempty) (I : Fin (numCores (X.act p.1))) :
+    ∀ᵐ q ∂chartMeasure ((X.pieceCertP p hA).cores.chart I).ν ((X.pieceCertP p hA).n I)
+      ((X.pieceCertP p hA).cores.chart I).b,
+      (X.obs ∘ Sheet.π X.SA) (X.Ψ p (((X.pieceCertP p hA).cores.chart I).Φ q)) =
+        (X.pieceCertP p hA).L.obs (((X.pieceCertP p hA).cores.chart I).Φ q) :=
+  (X.chart_Φ_mem p hA I).mono fun _ hq => X.obs_compat p (X.symBox_subset hq)
 
-theorem htail (p : X.PIdx) :
-    ∀ᵐ z ∂(X.pieceCertP p).cores.tail,
-      (X.K ∘ Sheet.π X.SA) (X.Ψ p z) = (X.pieceCertP p).L.phase z :=
-  Filter.le_def.1 (Measure.absolutelyContinuous_of_le (X.pieceCertP p).cores.tail_le).ae_le _
-    ((X.ae_mem_box p).mono fun _ hz => X.phase_compat p hz)
+theorem htail (p : X.PIdx) (hA : (X.act p.1).Nonempty) :
+    ∀ᵐ z ∂(X.pieceCertP p hA).cores.tail,
+      (X.K ∘ Sheet.π X.SA) (X.Ψ p z) = (X.pieceCertP p hA).L.phase z :=
+  Filter.le_def.1 (Measure.absolutelyContinuous_of_le (X.pieceCertP p hA).cores.tail_le).ae_le _
+    ((X.ae_mem_box p hA).mono fun _ hz => X.phase_compat p hz)
 
 /-- The transported core decomposition of a piece (bases still the chart strata). -/
-noncomputable def pieceCores (p : X.PIdx) :
+noncomputable def pieceCores (p : X.PIdx) (hA : (X.act p.1).Nonempty) :
     AnalyticCoreDecomposition (X.pieceDatum p) (numCores (X.act p.1))
       (fun I => KI (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.uP p) X.a (X.δ p.1)
         (coreIdx (X.act p.1) I))
       (fun I => nI (X.act p.1) (coreIdx (X.act p.1) I)) 1 :=
-  (X.pieceCertP p).cores.mapAmbient_ae (X.Ψ p) (X.measurable_Ψ p) (X.pieceDatum p) rfl
-    (X.chart_hp p) (X.htail p) (X.chart_ho p)
+  (X.pieceCertP p hA).cores.mapAmbient_ae (X.Ψ p) (X.measurable_Ψ p) (X.pieceDatum p) rfl
+    (X.chart_hp p hA) (X.htail p hA) (X.chart_ho p hA)
 
 /-! ### The bases on the sheet strata -/
 
@@ -545,17 +566,18 @@ theorem baseHomeo_symm_spec (p : X.PIdx) (I : Idx (X.act p.1)) (s : ↥(X.baseSe
   exact this.symm
 
 /-- The transported core decomposition of a piece, based on the sheet strata. -/
-noncomputable def pieceCores' (p : X.PIdx) :
+noncomputable def pieceCores' (p : X.PIdx) (hA : (X.act p.1).Nonempty) :
     AnalyticCoreDecomposition (X.pieceDatum p) (numCores (X.act p.1))
       (fun I => ↥(X.baseSetS p (coreIdx (X.act p.1) I)))
       (fun I => nI (X.act p.1) (coreIdx (X.act p.1) I)) 1 :=
-  (X.pieceCores p).reindexAll fun I => X.baseHomeo p (coreIdx (X.act p.1) I)
+  (X.pieceCores p hA).reindexAll fun I => X.baseHomeo p (coreIdx (X.act p.1) I)
 
-theorem pieceCores'_chart_Φ (p : X.PIdx) (I : Fin (numCores (X.act p.1)))
+theorem pieceCores'_chart_Φ (p : X.PIdx) (hA : (X.act p.1).Nonempty)
+    (I : Fin (numCores (X.act p.1)))
     (q : ↥(X.baseSetS p (coreIdx (X.act p.1) I)) ×
       (Fin (nI (X.act p.1) (coreIdx (X.act p.1) I) + 1) → ℝ)) :
-    ((X.pieceCores' p).chart I).Φ q =
-      X.Ψ p (((X.pieceCertP p).cores.chart I).Φ
+    ((X.pieceCores' p hA).chart I).Φ q =
+      X.Ψ p (((X.pieceCertP p hA).cores.chart I).Φ
         ((X.baseHomeo p (coreIdx (X.act p.1) I)).symm q.1, q.2)) := rfl
 
 end SheetInputs

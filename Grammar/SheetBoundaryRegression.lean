@@ -100,7 +100,6 @@ noncomputable def boundaryInputs [NeZero n] : SheetInputs n where
   hi_eq _ _ := rfl
   φ_m _ := measurable_id
   jacUnit_m _ := measurable_const
-  act_nonempty _ := ⟨0, Finset.mem_filter.2 ⟨Finset.mem_univ _, hk 0⟩⟩
   hu_cont _ := continuous_const
   hu_tan _ _ _ _ := rfl
   c _ := 1
@@ -119,63 +118,67 @@ noncomputable def boundaryInputs [NeZero n] : SheetInputs n where
   ι_nonempty := ⟨()⟩
 
 theorem boundaryInputs_W [NeZero n] :
-    (boundaryInputs k hk ha c P Q hP).A.W =
+    (boundaryInputs k ha c P Q hP).A.W =
       centeredBox n a ∩ {y : Fin n → ℝ | ∀ j, 0 ≤ y (c j)} := rfl
 
 theorem boundaryInputs_signs [NeZero n] (i : Unit) (σ : WaterFilling.CoordSign n) :
-    σ ∈ (boundaryInputs k hk ha c P Q hP).A.signs i ↔ ∀ j, σ (c j) = true :=
+    σ ∈ (boundaryInputs k ha c P Q hP).A.signs i ↔ ∀ j, σ (c j) = true :=
   mem_signs_monomialHalfBoxAtlas k ha c i σ
 
 /-- ★★ **Boundary regression**: the coordinate-free expansion of
 `∫_{[−a,a]^n ∩ {y_{c j} ≥ 0}} Q · P · e^{−n ∏ y^{2k}}` through the domain-sector producer. -/
 theorem boundary_hasCoordFreeExpansion [NeZero n] :
     (Sheet.normalData (monomialBoxAtlas k ha)).HasCoordFreeExpansion
-      (boundaryInputs k hk ha c P Q hP).cert.stratumMeasure
-      (boundaryInputs k hk ha c P Q hP).coeffCert.field
-      (spectrumLe (commonQ (boundaryInputs k hk ha c P Q hP).cert.cores.k)
-        (commonD (boundaryInputs k hk ha c P Q hP).cert.n))
+      (boundaryInputs k ha c P Q hP).cert.stratumMeasure
+      (boundaryInputs k ha c P Q hP).coeffCert.field
+      (spectrumLe (commonQ (boundaryInputs k ha c P Q hP).cert.cores.k)
+        (commonD (boundaryInputs k ha c P Q hP).cert.n))
       (centeredBox n a ∩ {y : Fin n → ℝ | ∀ j, 0 ≤ y (c j)}) (monoPhase k)
       (fun w => eval w P) (fun w => eval w Q) :=
-  (boundaryInputs k hk ha c P Q hP).hasCoordFreeExpansion
+  (boundaryInputs k ha c P Q hP).hasCoordFreeExpansion
 
 /-! ### The logarithmic degree -/
 
+include hk in
 /-- Every coordinate is active. -/
 theorem boundaryInputs_act [NeZero n] (i : Unit) :
-    (boundaryInputs k hk ha c P Q hP).act i = Finset.univ := by
+    (boundaryInputs k ha c P Q hP).act i = Finset.univ := by
   unfold SheetInputs.act
   exact Finset.filter_true_of_mem fun j _ => hk j
 
-theorem boundaryInputs_n_le [NeZero n] (l : Fin (boundaryInputs k hk ha c P Q hP).N) :
-    (boundaryInputs k hk ha c P Q hP).cert.n l ≤ n - 1 := by
-  change (amb ((boundaryInputs k hk ha c P Q hP).act _) _).card - 1 ≤ n - 1
+theorem boundaryInputs_n_le [NeZero n] (l : Fin (boundaryInputs k ha c P Q hP).N) :
+    (boundaryInputs k ha c P Q hP).cert.n l ≤ n - 1 := by
+  change (amb ((boundaryInputs k ha c P Q hP).act _) _).card - 1 ≤ n - 1
   exact Nat.sub_le_sub_right ((Finset.card_le_univ _).trans_eq (Fintype.card_fin n)) 1
 
 /-- The crossing core: the deepest stratum of the (unique) chart, all signs positive. -/
-noncomputable def crossingCore [NeZero n] : Fin (boundaryInputs k hk ha c P Q hP).N :=
-  (boundaryInputs k hk ha c P Q hP).coreEnum.symm
-    ⟨⟨(), ⟨fun _ => true, (boundaryInputs_signs k hk ha c P Q hP () _).2 fun _ => rfl⟩⟩,
-      (coreIdx ((boundaryInputs k hk ha c P Q hP).act ())).symm
+noncomputable def crossingCore [NeZero n] : Fin (boundaryInputs k ha c P Q hP).N :=
+  (boundaryInputs k ha c P Q hP).coreEnum.symm
+    ⟨⟨⟨(), ⟨fun _ => true, (boundaryInputs_signs k ha c P Q hP () _).2 fun _ => rfl⟩⟩,
+      ⟨0, Finset.mem_filter.2 ⟨Finset.mem_univ _, hk 0⟩⟩⟩,
+      (coreIdx ((boundaryInputs k ha c P Q hP).act ())).symm
         ⟨Finset.univ, Finset.univ_nonempty_iff.2 ⟨⟨0, by
-          rw [boundaryInputs_act]; exact Finset.mem_univ _⟩⟩⟩⟩
+          rw [boundaryInputs_act k hk ha c P Q hP]; exact Finset.mem_univ _⟩⟩⟩⟩
 
 theorem n_crossingCore [NeZero n] :
-    (boundaryInputs k hk ha c P Q hP).cert.n (crossingCore k hk ha c P Q hP) = n - 1 := by
-  change nI ((boundaryInputs k hk ha c P Q hP).act
-      ((boundaryInputs k hk ha c P Q hP).coreEnum (crossingCore k hk ha c P Q hP)).1.1)
-    (coreIdx _ ((boundaryInputs k hk ha c P Q hP).coreEnum (crossingCore k hk ha c P Q hP)).2) =
+    (boundaryInputs k ha c P Q hP).cert.n (crossingCore k hk ha c P Q hP) = n - 1 := by
+  change nI ((boundaryInputs k ha c P Q hP).act
+      ((boundaryInputs k ha c P Q hP).coreEnum (crossingCore k hk ha c P Q hP)).1.1.1)
+    (coreIdx _ ((boundaryInputs k ha c P Q hP).coreEnum (crossingCore k hk ha c P Q hP)).2) =
       n - 1
   rw [crossingCore, Equiv.apply_symm_apply, Equiv.apply_symm_apply]
-  change (amb ((boundaryInputs k hk ha c P Q hP).act ()) _).card - 1 = n - 1
+  change (amb ((boundaryInputs k ha c P Q hP).act ()) _).card - 1 = n - 1
   rw [card_amb]
-  change (Finset.univ : Finset ↥((boundaryInputs k hk ha c P Q hP).act ())).card - 1 = n - 1
-  rw [Finset.card_univ, Fintype.card_coe, boundaryInputs_act, Finset.card_univ, Fintype.card_fin]
+  change (Finset.univ : Finset ↥((boundaryInputs k ha c P Q hP).act ())).card - 1 = n - 1
+  rw [Finset.card_univ, Fintype.card_coe, boundaryInputs_act k hk ha c P Q hP, Finset.card_univ,
+    Fintype.card_fin]
 
+include hk in
 /-- ★ **The full logarithmic degree**: `commonD = n − 1` (the crossing of all `n` coordinate
 divisors), in contrast with the cube's `0`. -/
 theorem boundaryInputs_commonD [NeZero n] :
-    commonD (boundaryInputs k hk ha c P Q hP).cert.n = n - 1 :=
-  le_antisymm (Finset.sup_le fun l _ => boundaryInputs_n_le k hk ha c P Q hP l)
+    commonD (boundaryInputs k ha c P Q hP).cert.n = n - 1 :=
+  le_antisymm (Finset.sup_le fun l _ => boundaryInputs_n_le k ha c P Q hP l)
     ((n_crossingCore k hk ha c P Q hP).symm.le.trans (le_commonD _))
 
 end SheetAssembly
