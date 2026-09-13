@@ -662,3 +662,4 @@ import Grammar.L1SeqSynthesis
 import Grammar.BlowUpSpace
 import Grammar.BlowUpNormalData
 import Grammar.CoreTransport
+import Grammar.CoreFinsum
