@@ -214,6 +214,14 @@ per orthant (the cube's is invariant).
 Stop after E4 for the paper ("assembled chart expansions of the cube integral"); the projector space and
 intrinsic gluing are a separately gated phase.
 
+Status (2026-09-13, main `d8853e3`, 648 modules): E0a = CCCXLIV (`BlowUpCubeChartModel`), E1 = CCCXLIII
+(`ChartModelGeometry`), E2 = CCCXLV (`WeightedNormalisedBoxCore`), E3 = CCCXLVI (`SingletonChartCertificate`,
+generalised to a positive-part prior representative), E4 = CCCXLVII (`BlowUpCubeExpansion`:
+★★★ `BlowUpCube.cube_hasExpansion`, spectrum `spectrumLe 2 0`, exact decomposition
+`cube_integral_eq_sum_pieces`) — ALL LANDED, axiom-clean. The E4 gate items (leading coefficient = CCXCV, odd
+normal orders vanish, constant packet has no higher coefficients) are open follow-ups, not blockers; E5 not
+started. Phase E is at the stopping point pending the audit consult (#103).
+
 ## 6. Hypotheses that remain at the end
 
 Two levels (consult #99 §A5).
