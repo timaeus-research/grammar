@@ -674,3 +674,6 @@ import Grammar.ChartCollarDecomposition
 import Grammar.ChartBoxCertificate
 import Grammar.ChartBoxInputs
 import Grammar.ChartPieces
+import Grammar.CoreSigma
+import Grammar.SheetPieces
+import Grammar.SheetAssembly

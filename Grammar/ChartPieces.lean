@@ -129,9 +129,8 @@ variable (A : Finset (Fin d)) (k h : Fin d → ℕ) (hkA : ∀ i ∈ A, 0 < k i)
   (c : ℝ) (hc : 0 < c) (hu_lb : ∀ w ∈ piBox d (Icc (-a) a), c ≤ u w) (ha : 0 < a)
   (hδa : ∀ i ∈ A, (δ / c) ^ ((A.card : ℝ)⁻¹) < a ^ (2 * k i))
   (hϕm : Measurable ϕ) (hϕ0 : ∀ w, 0 ≤ ϕ w) (hφm : Measurable φ)
-  (hφint : Integrable φ ((volume.restrict (piBox d (Icc (-a) a))).withDensity
-    fun w => ENNReal.ofReal (wgt h w * ϕ w)))
   (P : HolomorphicSignedBoxExtension a ϕ φ) (σ : CoordSign d)
+  (hφint : Integrable (φ ∘ refl σ) (pieceMeasure h a ϕ σ))
   (hsmall : ∀ (I : Idx A) (i : Fin (nI A I + 1)),
     2 * (δ / c) ^ ((A.card : ℝ)⁻¹ * ((2 * k (σI A I i).1 : ℕ) : ℝ)⁻¹) <
       ((P.pullback σ).faceSeries a (toNonemptyIdx A I)).ρ)
@@ -146,46 +145,46 @@ noncomputable def pieceCert :
       (fun w => wgt h w * (ϕ ∘ refl σ) w) (φ ∘ refl σ) :=
   certificate A k h hkA hk0 (unitR u σ) a δ hδ (continuous_unitR hu_cont σ) (ϕ ∘ refl σ)
     (φ ∘ refl σ) (unitR_tan hu_tan σ) hc (unitR_lb hu_lb σ) ha hδa
-    (hϕm.comp (measurable_refl σ)) (fun _ => hϕ0 _) (integrable_piece h a ϕ φ hφm hφint σ)
+    (hϕm.comp (measurable_refl σ)) (fun _ => hϕ0 _) hφint
     (fun I => toChartFaceSeries A k h hkA hk0 (unitR u σ) a δ hδ (continuous_unitR hu_cont σ) c hc
       (unitR_lb hu_lb σ) ha ((P.pullback σ).faceSeries a (toNonemptyIdx A I)) (hsmall I)) hA
 
 include hk0 hδ hu_cont hu_tan hc hu_lb ha hδa hϕm hϕ0 hφm hφint hsmall hA in
 /-- The coefficient certificate of the piece. -/
 noncomputable def pieceCoeff :
-    (pieceCert A k h hkA hk0 u a δ hδ hu_cont ϕ φ hu_tan c hc hu_lb ha hδa hϕm hϕ0 hφm hφint P σ
+    (pieceCert A k h hkA hk0 u a δ hδ hu_cont ϕ φ hu_tan c hc hu_lb ha hδa hϕm hϕ0 P σ hφint
       hsmall hA).CoefficientCertificate :=
   coeffCertificate A k h hkA hk0 (unitR u σ) a δ hδ (continuous_unitR hu_cont σ) (ϕ ∘ refl σ)
     (φ ∘ refl σ) (unitR_tan hu_tan σ) hc (unitR_lb hu_lb σ) ha hδa
-    (hϕm.comp (measurable_refl σ)) (fun _ => hϕ0 _) (integrable_piece h a ϕ φ hφm hφint σ)
+    (hϕm.comp (measurable_refl σ)) (fun _ => hϕ0 _) hφint
     (fun I => toChartFaceSeries A k h hkA hk0 (unitR u σ) a δ hδ (continuous_unitR hu_cont σ) c hc
       (unitR_lb hu_lb σ) ha ((P.pullback σ).faceSeries a (toNonemptyIdx A I)) (hsmall I)) hA
 
-include hk0 hδ hu_cont hu_tan hc hu_lb ha hδa hϕm hϕ0 hφm hφint hsmall hA in
+include hk0 hδ hu_cont hu_tan hc hu_lb ha hδa hϕm hϕ0 hφint hsmall hA in
 theorem pieceCert_L_μ :
-    (pieceCert A k h hkA hk0 u a δ hδ hu_cont ϕ φ hu_tan c hc hu_lb ha hδa hϕm hϕ0 hφm hφint P σ
+    (pieceCert A k h hkA hk0 u a δ hδ hu_cont ϕ φ hu_tan c hc hu_lb ha hδa hϕm hϕ0 P σ hφint
       hsmall hA).L.μ = pieceMeasure h a ϕ σ := rfl
 
 include hk0 hδ hu_cont hu_tan hc hu_lb ha hδa hϕm hϕ0 hφm hφint hsmall hA in
 /-- ★★ **The expansion of the piece**: log degree `|A| − 1`. -/
 theorem piece_expansion :
     (ChartModel.normalData d A k h hkA).HasCoordFreeExpansion
-      (pieceCert A k h hkA hk0 u a δ hδ hu_cont ϕ φ hu_tan c hc hu_lb ha hδa hϕm hϕ0 hφm hφint P
-        σ hsmall hA).stratumMeasure
-      (pieceCoeff A k h hkA hk0 u a δ hδ hu_cont ϕ φ hu_tan c hc hu_lb ha hδa hϕm hϕ0 hφm hφint P
-        σ hsmall hA).field
+      (pieceCert A k h hkA hk0 u a δ hδ hu_cont ϕ φ hu_tan c hc hu_lb ha hδa hϕm hϕ0 P
+        σ hφint hsmall hA).stratumMeasure
+      (pieceCoeff A k h hkA hk0 u a δ hδ hu_cont ϕ φ hu_tan c hc hu_lb ha hδa hϕm hϕ0 P
+        σ hφint hsmall hA).field
       (spectrumLe (commonQ (pieceCert A k h hkA hk0 u a δ hδ hu_cont ϕ φ hu_tan c hc hu_lb ha hδa
-        hϕm hϕ0 hφm hφint P σ hsmall hA).cores.k) (A.card - 1))
+        hϕm hϕ0 P σ hφint hsmall hA).cores.k) (A.card - 1))
       (piBox d (Icc 0 a)) (ChartModel.phase d A k (unitR u σ))
       (fun w => wgt h w * (ϕ ∘ refl σ) w) (φ ∘ refl σ) :=
   hasCoordFreeExpansion_chart_of_face A k h hkA hk0 (unitR u σ) a δ hδ (continuous_unitR hu_cont σ)
     (unitR_tan hu_tan σ) c hc (unitR_lb hu_lb σ) ha hδa (hϕm.comp (measurable_refl σ))
-    (fun _ => hϕ0 _) (hφm.comp (measurable_refl σ)) (integrable_piece h a ϕ φ hφm hφint σ) hA
+    (fun _ => hϕ0 _) (hφm.comp (measurable_refl σ)) hφint hA
     (fun I => (P.pullback σ).faceSeries a (toNonemptyIdx A I)) hsmall
 
 /-! ### The cores lie in the box -/
 
-omit hφm P σ hsmall hA in
+omit hφm P σ hφint hsmall hA in
 include hk0 hδ hu_cont hu_tan hc ha hϕm hϕ0 in
 /-- The core parametrisation of every stratum lands in the box, a.e. on the chart measure. -/
 theorem stratumCore_Φ_mem_box (hu_lb' : ∀ w ∈ piBox d (Icc 0 a), c ≤ u w)
@@ -211,7 +210,7 @@ theorem stratumCore_Φ_mem_box (hu_lb' : ∀ w ∈ piBox d (Icc 0 a), c ≤ u w)
 
 /-! ### A common collar level for finitely many pieces -/
 
-omit hδ hu_cont hu_tan hu_lb hδa hϕm hϕ0 hφm hφint P σ hsmall in
+omit hδ hu_cont hu_tan hu_lb hδa hϕm hϕ0 P σ hφint hsmall in
 include hkA hc ha hA in
 /-- ★ **A common level for a finite set of orthants**: one `δ` below all the packet radii. -/
 theorem exists_delta_pieces (P : HolomorphicSignedBoxExtension a ϕ φ) (S : Finset (CoordSign d))
