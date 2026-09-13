@@ -25,8 +25,14 @@ little-o statements gives ★★★ `cube_hasExpansion`: for every cutoff `A`,
 `∫_{[−1,1]^d} F p e^{−N|x|²} − ∑_{q : α ∈ ℕ/2, α ≤ A} (∑_β ∑_σ C_{β,σ}(q)) N^{−α} = o(N^{−A})`, with
 coefficients `C_{β,σ}(q)` the strata integrals of the chart certificates (the "assembled chart
 expansions" of the original integral: all orders, coefficients as strata integrals in the blow-up
-chart domains). Not included: the intrinsic gluing of the chart strata into the exceptional divisor;
-the identification of the leading coefficient with CCXCV. Zero `sorry`/`axiom`.
+chart domains). The expansion is indexed by the AMBIENT half-integer lattice `spectrumLe 2 0`; this
+statement does not identify its minimal support (CCCXLVIII: the coefficients below `d/2` vanish and
+`C(d/2) = π^{d/2} F(0) p(0)` for `1 < d`). Its coefficients are sums of strata integrals on
+independently constructed chart-model geometries with identity projection (ambient chart strata
+`{y_β = 0}` and its complement; each certificate is localised to `[0,1]^d` with compact base its
+closed `β`-face); no global blow-up geometry or intrinsic gluing is asserted. The certificate
+densities are the positive-part representatives (agreeing with the pulled-back prior on the box),
+the coefficient tensors come from the analytic series prior. Zero `sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Filter Topology Asymptotics

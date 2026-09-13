@@ -685,8 +685,12 @@ noncomputable def coeffCert :
 
 include ha hu_cont hc hu_lb hu_tan hbb' hb'ρ hba hϕ'eq hϕm hϕ0 hφm hφint in
 /-- ★★★ **The coordinate-free expansion of the singleton chart**: the weighted integral
-`∫_{[0,a]^d} φ · |y_β|^{h₀} ϕ · e^{−n u(y) y_β²}` has the coordinate-free expansion on the chart
-strata, with produced certificates and the spectrum of one normal coordinate. -/
+`∫_{[0,a]^d} φ · |y_β|^{h₀} ϕ' · e^{−n u(y) y_β²}` with density `|y_β|^{h₀} ϕ'`, where the
+measurable nonnegative `ϕ'` agrees on the box with the analytic series prior `ϕ` (the coefficient
+tensors come from `ϕ`, not from derivatives of `ϕ'`), has the coordinate-free expansion on the
+ambient chart strata (`{y_β = 0}` and its complement; compact base the closed `β`-face of the box),
+with produced certificates and the spectrum of one normal coordinate. In the normalised normal
+variable the weight contributes `λ^{h₀+1} = u^{−(h₀+1)/2}` to the analytic amplitude. -/
 theorem hasCoordFreeExpansion_singleton :
     (N β h₀).HasCoordFreeExpansion
       (cert β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba ϕ' hϕ'eq hϕm hϕ0

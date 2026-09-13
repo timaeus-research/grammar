@@ -646,3 +646,4 @@ import Grammar.BlowUpCubeChartModel
 import Grammar.WeightedNormalisedBoxCore
 import Grammar.SingletonChartCertificate
 import Grammar.BlowUpCubeExpansion
+import Grammar.BlowUpCubeLeadingCoefficient
