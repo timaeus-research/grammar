@@ -302,3 +302,23 @@ coordinates, blow-up instances, a compatible SNC atlas) is the remaining program
 
 Each unit: `Grammar/<Name>.lean`, HEADLINES row, README count, THEOREM_MAP chain, gated build,
 axiom probe, merge to main; mirror paragraph and pin bump at milestones (after unit 7 — done with CCCIII —, 10, 11).
+
+## 8. Consult #109 phase (2026-09-13): the plan reopened
+
+The user set the companion note aside and asked for the remaining gaps of THIS plan; Astra #109
+(`gpt6_bigpicture_v109.md`) ranked them. Two tracks are in scope; the stopping rule is expectation
+closure + genuine geometry closure + transport fidelity + statement audit (#109 §6).
+
+| Track | Unit | Status |
+|---|---|---|
+| B | B0 feasibility (nontrivial normal line, local divisor equation, tubular from the total normal bundle — no global coorientation assumed) | passed (reading of `ResolvedGeometry`/`ResolvedNormalData`) |
+| B | B1 projector blow-up space and charts | CCCLXI `BlowUpSpace` |
+| B | B2 genuine normal data (tautological line, tubular map) | CCCLXII `BlowUpNormalData` |
+| B | B3 transport toolkit (pushforward, base reindexing, finite sums of data and decompositions) | CCCLXIII `CoreTransport`, CCCLXIV `CoreFinsum` |
+| B | B4 assembly: measure-level chart decomposition, piece bases and frames, ONE `ResolvedCertificate` on the genuine blow-up | CCCLXV–CCCLXVII (★★★ `cubeCert`, `cube_hasCoordFreeExpansion_blowUp`) |
+| B | B5 transport fidelity: original packet, scalar canonicity with `cube_hasExpansion`, leading coefficient `π^{d/2}F(0)p(0)` | CCCLXVIII (★★★ `blowUpCoefficient_eq_cubeCoefficient`) |
+| I | I1 scalar rational-log quotient theorem (Q1+Q2: `quotNum` recursion `S_{m+1} = Q_{m+1}P_0^{m+1} − Σ P_{β+1} S_{m−β} P_0^β`, `R_m = S_m/P_0^{m+1}`; inputs beyond the output cutoff) | next |
+| I | I2 certificate integration (Q3: numerator and denominator from one kernel, `N_n[φ]/N_n[1]`, `φ = 1 ↦ 1`, linearity) | planned |
+| I | I3 leading probability measure and the cube regression `E_n[F] → F(0)` (Q4) | planned |
+
+TRACK B CLOSED 2026-09-13 (CCCLXI–CCCLXVIII, main `9f33370`).
