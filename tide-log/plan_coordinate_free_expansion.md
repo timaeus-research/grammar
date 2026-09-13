@@ -222,6 +222,23 @@ generalised to a positive-part prior representative), E4 = CCCXLVII (`BlowUpCube
 normal orders vanish, constant packet has no higher coefficients) are open follow-ups, not blockers; E5 not
 started. Phase E is at the stopping point pending the audit consult (#103).
 
+### 5f. Phase E4F — coefficient fidelity (consult #103: phase E ACCEPTED; bounded gate)
+
+| Unit | Deliverable | Status |
+|---|---|---|
+| F0 | scope/parity/density documentation; observable germ bridge (`obsRep_piece_eventuallyEq`, `normalDifferential_obsRep_piece`) | CCCXLVIII |
+| F1 | below-leading vanishing + leading coefficient `C(d/2) = π^{d/2} F(0)p(0)` by uniqueness of a finite power sum against the leading remainder (CCXCV, `1 < d`); wrapper over `d/2 ≤ α ≤ A` | CCCXLVIII |
+| F2 step 1 | singleton support: coefficients vanish unless `α = (d+ℓ)/2` (kernel candidate exponents; every `d ≥ 1`); packet independence on the declared spectrum | CCCXLIX |
+| F2 steps 2–3 | parity cancellation between paired normal-sign pieces (support `d/2 + ℕ`) | DEFERRED (needs the prior-coefficient/observable-jet convolution under the sign flip — a new bridge; time-box reached) |
+| F3 | directional-derivative/Gamma coefficient formula | deferred (#103) |
+
+Status (2026-09-13, main `cf32d46`, 650 modules): E4F closed at Astra's stopping point ("F1, preferably F2").
+Paper may claim: singleton chart certificates in the signed blow-up coordinates assembled into an all-order
+expansion of the original cube integral, indexed by the ambient half-integer lattice, with coefficients
+vanishing below `d/2`, leading coefficient `π^{d/2}F(0)p(0)` (`d ≥ 2`), support `(d+ℓ)/2`, packet-independent.
+Not claimed: a global resolved geometry for the blow-up / intrinsic coefficient field on the exceptional divisor;
+parity cancellation; the Gamma formula. Next gate: consult #104 (closure + direction: J vs E5 vs gluing).
+
 ## 6. Hypotheses that remain at the end
 
 Two levels (consult #99 §A5).
