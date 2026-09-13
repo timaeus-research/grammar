@@ -669,3 +669,4 @@ import Grammar.BlowUpCubeCertificate
 import Grammar.BlowUpCubeFidelity
 import Grammar.HironakaChartForm
 import Grammar.SheetGeometry
+import Grammar.ChartCollar
