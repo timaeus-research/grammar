@@ -655,3 +655,4 @@ import Grammar.CoordinateJetFunctional
 import Grammar.FiniteQuartetTransfer
 import Grammar.QuartetObservableTransfer
 import Grammar.PredictiveRemainder
+import Grammar.GaussianQuadraticTilt
