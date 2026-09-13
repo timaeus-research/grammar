@@ -666,3 +666,4 @@ import Grammar.CoreFinsum
 import Grammar.BlowUpCubeMeasure
 import Grammar.BlowUpCubeBase
 import Grammar.BlowUpCubeCertificate
+import Grammar.BlowUpCubeFidelity
