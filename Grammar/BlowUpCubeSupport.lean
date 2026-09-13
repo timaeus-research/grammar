@@ -18,7 +18,9 @@ coordinate with `k = 1`, `h = d − 1` (`pieceCert_cores_h`), so their candidate
 `(d + ℓ)/2`, `ℓ ∈ ℕ` (`not_candidateExp_piece`). Hence ★★ `pieceCoefficient_eq_zero_of_not_support`,
 ★★ `cubeCoefficient_eq_zero_of_not_support` and, for EVERY `d ≥ 1` and without the leading-measure
 theorem, ★★ `cubeCoefficient_eq_zero_of_lt'` (vanishing below `d/2`) with the paper-facing wrapper
-★★ `cube_hasExpansion_support` (the sum runs over `α = (d+ℓ)/2 ≤ A` only). This closes the
+★★ `cube_hasExpansion_support` (the sum runs over `α = (d+ℓ)/2 ≤ A` only), and the packet
+independence ★★ `cubeCoefficient_eq_of_packets` (two packets for the same `p, F` give the same
+coefficients on the declared spectrum, by uniqueness). This closes the
 one-dimensional gap of CCCXLVIII for the vanishing statements (the leading value `C(d/2)` still
 uses `1 < d`).
 
@@ -132,6 +134,27 @@ theorem cube_hasExpansion_support (A' : ℝ) :
   obtain ⟨-, hne⟩ := Finset.mem_filter.1 hq
   push Not at hne
   rw [cubeCoefficient_eq_zero_of_not_support A hp0 hne, zero_mul]
+
+omit β in
+/-- ★★ **Packet independence**: two analytic packets representing the same `p, F` give the same
+cube coefficients on the declared spectrum (uniqueness of the finite power sum against the same
+original integral). -/
+theorem cubeCoefficient_eq_of_packets (A' : HolomorphicSignedBoxExtension 1 p F) {B : ℝ}
+    {q : PowerLogIndex} (hq : q ∈ spectrumLe 2 0 B) :
+    cubeCoefficient A hp0 q = cubeCoefficient A' hp0 q := by
+  have h := (cube_hasExpansion A' hp0 B).sub (cube_hasExpansion A hp0 B)
+  refine sub_eq_zero.1 (coeff_eq_zero_of_isLittleO_powSum (e := PowerLogIndex.exponent)
+    (c := fun q => cubeCoefficient A hp0 q - cubeCoefficient A' hp0 q)
+    (exponent_injOn_spectrumLe_zero two_pos _)
+    (fun q hq => ((mem_spectrumLe_zero_iff two_pos _ _).1 hq).2.2) (h.congr_left fun n => ?_) q hq)
+  have hsc : ∀ q ∈ spectrumLe 2 0 B,
+      (cubeCoefficient A hp0 q - cubeCoefficient A' hp0 q) * n ^ (-q.exponent) =
+        cubeCoefficient A hp0 q * q.scale n - cubeCoefficient A' hp0 q * q.scale n :=
+    fun q hq => by
+      rw [scale_of_logDegree_zero ((mem_spectrumLe_zero_iff two_pos _ _).1 hq).2.1]
+      ring
+  rw [Finset.sum_congr rfl hsc, Finset.sum_sub_distrib]
+  ring
 
 end Cube
 
