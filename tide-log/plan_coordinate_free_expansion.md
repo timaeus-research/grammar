@@ -256,6 +256,22 @@ the prior's face-series coefficients are `rfl`-independent of the observable's e
 | J3 | `normalDifferential_add/smul`, `expansionCoefficient_add/smul`, `Covered`/`field_eq_zero_of_not_covered`, `SmoothObs`, `Certified`, `coefficient_add/smul`; `contDiffAt_obs_base`, `certified`; `obsSpace Ω` (a real subspace), `certified_of_mem`, ★★★ `jetFunctional : obsSpace A.Ω →ₗ[ℝ] ℝ`, ★★★ `hasCoordFreeExpansion_obsSpace` | CCCLII–CCCLIII |
 | J4 | finite-order seminorm bound / distribution | REJECTED TARGET (consult #105): the exact-moment representation need not truncate at an observable-independent normal order — at a fixed spectral index it can involve arbitrarily high normal derivatives (on the unit square `∫∫ x^a y^b e^{−Nx²y²} = (J_a − J_b)/(b−a)` contributes to `N^{−(a+1)/2}` for every `b > a`; nonminimal candidate exponents also contribute subleading terms). Terminology: "linear coefficient functional on analytic observables, represented by a convergent series of normal-jet pairings" (analytic jet functional); no topology/continuity/distribution asserted. The optional one-unit absolute-majorant estimate was NOT taken. |
 
+### 5i. Paper closure (#105) and the companion note (#106)
+
+Paper: Lean-facing programme CLOSED after the wording pass (pin `32cdbf6`; Overleaf push pending the user's
+authorisation). Companion note `averaging_dataset.tex` (consult #106 ledger, `gpt6_bigpicture_v106.md`; G0 sheet
+`g0_signature_sheet.md`): ten mandatory wording repairs applied; units:
+
+| Rank | Unit | Status |
+|---|---|---|
+| 0 | G0 signature-and-composition audit (CLT/tail law constructed by `ClosureEndpoint`; consumed: certified chart data, sub-Gaussian proxy, bounded amplitude mass, `𝔼|A_n Rem_n| → 0`) | DONE (sheet) |
+| 1 | finite-resolution quartet expectation transfer, every `β, λ > 0` | CCCLIV |
+| 2 | expected quartet coefficients from `L¹` observable transfer (`expected_quartet_of_L1_transfer`) | CCCLV |
+| 3 | predictive Taylor remainder `n 𝔼 sup_t ⟨|f|³⟩_{n,x,t} → 0 ⇒ n 𝔼|R_n| → 0`, then one controlled model | open |
+| 4 | CLT/tail closure packaging (only if a gap remains after G0 — none found) | closed by G0 |
+| 5 | `GaussianField.ofL1TaylorLimit` (compact field from the Taylor-data law + a bounded evaluation map) | open |
+| 6 | ratio first-correction algebra | optional |
+
 J-min CLOSED at the jet-functional theorem (Astra's stopping rule; #105 accepted). Paper closure gate (#105): a
 wording pass on the mirror (distribution / support / expectation / general resolution / canonical / finite order),
 repin + audit, Overleaf push (user authorisation), then the Lean-facing paper programme is CLOSED. Next: consult
