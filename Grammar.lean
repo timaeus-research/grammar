@@ -659,3 +659,4 @@ import Grammar.GaussianQuadraticTilt
 import Grammar.NormalLocationRemainder
 import Grammar.L1SeqGaussianLaw
 import Grammar.L1SeqSynthesis
+import Grammar.BlowUpSpace
