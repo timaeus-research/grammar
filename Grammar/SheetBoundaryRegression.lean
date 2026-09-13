@@ -31,14 +31,6 @@ namespace SheetAssembly
 
 open Monomialize.VolumeScaling WaterFilling ChartCollar
 
-/-- Transport of a signed packet along equalities of the prior and observable. -/
-def _root_.Grammar.WaterFilling.HolomorphicSignedBoxExtension.congr {d : ℕ} {a : ℝ}
-    {ϕ φ ϕ' φ' : (Fin d → ℝ) → ℝ} (A : HolomorphicSignedBoxExtension a ϕ φ) (hϕ : ϕ' = ϕ)
-    (hφ : φ' = φ) : HolomorphicSignedBoxExtension a ϕ' φ' := by
-  subst hϕ
-  subst hφ
-  exact A
-
 /-- A continuous observable is integrable for the measure with a continuous nonnegative density on
 a subset of a compact set. -/
 theorem integrable_of_continuous_of_subset_compact {d : ℕ} {p F : (Fin d → ℝ) → ℝ}

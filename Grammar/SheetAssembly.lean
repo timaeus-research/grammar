@@ -388,6 +388,16 @@ theorem hasCoordFreeExpansion_of_domainSectorAtlas (X : SheetInputs d) :
         (spectrumLe (commonQ C.cores.k) (commonD C.n)) X.A.W X.K X.prior X.obs :=
   ⟨X.cert, X.coeffCert, X.hasCoordFreeExpansion⟩
 
+/-! ### Packet congruence -/
+
+/-- Transport of a signed packet along equalities of the prior and observable. -/
+def _root_.Grammar.WaterFilling.HolomorphicSignedBoxExtension.congr {d : ℕ} {a : ℝ}
+    {ϕ φ ϕ' φ' : (Fin d → ℝ) → ℝ} (A : HolomorphicSignedBoxExtension a ϕ φ) (hϕ : ϕ' = ϕ)
+    (hφ : φ' = φ) : HolomorphicSignedBoxExtension a ϕ' φ' := by
+  subst hϕ
+  subst hφ
+  exact A
+
 end SheetAssembly
 
 end Grammar
