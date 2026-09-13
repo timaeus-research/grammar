@@ -269,7 +269,7 @@ authorisation). Companion note `averaging_dataset.tex` (consult #106 ledger, `gp
 | 2 | expected quartet coefficients from `L¹` observable transfer (`expected_quartet_of_L1_transfer`) | CCCLV |
 | 3 | predictive Taylor remainder: `|R| ≤ S/6` from tilted absolute centred third moments ≤ S on [0,1]; `n𝔼S_n → 0 ⇒ n𝔼|R_n| → 0` (CCCLVI); one controlled model test (#107: normal location; posterior `N(m_n, d_n⁻¹)`, envelope `4(C₃|x−m|³v^{3/2}+C₆(v/2)³)`, `𝔼|R_n| ≤ (32C₃²d_n^{−3/2}+C₆d_n^{−3}/2)/6`, fresh-point and training certificates; marginal laws only) | CCCLVI (lemma); CCCLVII–CCCLVIII (model test DONE; thin quartet instantiation not attempted) |
 | 4 | CLT/tail closure packaging (only if a gap remains after G0 — none found) | closed by G0 |
-| 5 | `GaussianField.ofL1TaylorLimit` (compact field from the Taylor-data law + a bounded evaluation map) | open |
+| 5 | `GaussianField.ofL1TaylorLimit` (compact field from the Taylor-data law + a bounded evaluation map): the ℓ¹ CLT law is `IsGaussian` (CCCLIX `clt_l1_isGaussian`), the synthesis map `∑ a_r φ_r` is bounded for `sup‖φ_r‖ ≤ M`, and the field with kernel `∫T(a)(y)T(a)(z)dν` exists through the Banach-law adapter (CCCLX `exists_gaussianField_of_clt`) | CCCLIX–CCCLX DONE (double-series kernel identification not claimed) |
 | 6 | ratio first-correction algebra | optional |
 
 J-min CLOSED at the jet-functional theorem (Astra's stopping rule; #105 accepted). Paper closure gate (#105): a
