@@ -653,3 +653,4 @@ import Grammar.CoordinateKernel
 import Grammar.JetFunctionalLinear
 import Grammar.CoordinateJetFunctional
 import Grammar.FiniteQuartetTransfer
+import Grammar.QuartetObservableTransfer
