@@ -643,3 +643,4 @@ import Grammar.SignedBoxExpansion
 import Grammar.SignedBoxRegression
 import Grammar.ChartModelGeometry
 import Grammar.BlowUpCubeChartModel
+import Grammar.WeightedNormalisedBoxCore
