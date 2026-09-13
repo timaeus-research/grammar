@@ -660,3 +660,4 @@ import Grammar.NormalLocationRemainder
 import Grammar.L1SeqGaussianLaw
 import Grammar.L1SeqSynthesis
 import Grammar.BlowUpSpace
+import Grammar.BlowUpNormalData
