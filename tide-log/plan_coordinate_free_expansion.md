@@ -298,6 +298,17 @@ the normal differentials, the moment coefficients, the densities and the expansi
 compact-box producer is the local model, and the geometry beyond the coordinate model (signed
 coordinates, blow-up instances, a compatible SNC atlas) is the remaining programme.
 
+*Domain hypothesis (consult #110 §1.1, 2026-09-13).* Compactness of `W` alone does not give power–log
+asymptotics: for `K = x²`, `φ = ϕ = 1` and `W = {0} ∪ ⋃_{j≥0} [4^{−j}/2, 4^{−j}]` one has
+`I(16n) = I(n)/4 + O(e^{−4n})`, so `n^{1/2} I(n)` is asymptotically log-periodic and non-constant
+(`G(1) ≈ 0.4518`, `G(2) ≈ 0.4641`, `G(4) ≈ 0.4344`, `G(8) ≈ 0.4222`, `G(1)+G(4) = √π/2`): no leading
+coefficient, no expansion. The producers therefore assume the zero set of `K` in `W` lies in the
+interior of `W` (`K > 0` on the frontier; the boundary region is then a tail by compactness). Two
+further exclusions: `K` identically zero on an open set carrying prior mass; boundaries touching the
+zero set (a transversal analytic boundary `{π ≥ 0}` is the planned EXTENSION: resolve `K·π`, read the
+domain as sign conditions on chart coordinates through the signed-box producers). Neither is part of
+the present statements.
+
 ## 7. Bookkeeping
 
 Each unit: `Grammar/<Name>.lean`, HEADLINES row, README count, THEOREM_MAP chain, gated build,
