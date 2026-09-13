@@ -191,6 +191,29 @@ fails and the fields must be averaged in one fibre).
 Status: PHASE G CLOSED (consult #101 audit passed; gate item 7 met by G7). Main 94bd4be, 643 modules. Next (consult #101 §B): E0 obligation table for the projector blow-up chart, then a Jacobian-weighted producer (E1–E5). Not included: Jacobian orders `h ≠ 0`; nonconstant analytic unit; general chart gluing.
 pending consult #101. Not included: Jacobian orders `h ≠ 0`; nonconstant analytic unit; general chart gluing.
 
+## 5e. Phase E — the cube blow-up as a chart model (consult #102)
+
+The blow-up cover of the cube for `K = |x|²` exists at leading order (CCLXXXIII–CCXCV). The all-order
+expansion needs the producer generalised from "every coordinate is a divisor" to a CHART MODEL: active set
+`A ⊆ Fin d` (components `↥A`), `k_i > 0`, orders `h_i` on `A`, phase `u₀(y|_{Aᶜ})·∏_{i∈A} y_i^{2k_i}` with a
+positive analytic unit depending only on the INACTIVE coordinates, weight `∏_{i∈A}|y_i|^{h_i}`, signed box.
+Corrections from #102: the absolute Jacobian `|y_β|^{d−1}` is even for every `d` (the determinant is not);
+at `I ⊊ A` the weight also has active-tangential factors `∏_{j∈A∖I}|t_j|^{h_j}`; the full chart map is not
+proper (keep `π = id` + an exact change-of-variables adapter); a general tangential unit must be reflected
+per orthant (the cube's is invariant).
+
+| Unit | Scope | Gate |
+|---|---|---|
+| E0a | executable obligation fixture: singleton active data of the cube, unit through inactive coordinates, absolute-Jacobian/reflection identities, exact chart integral adapter | compiles with no producer assumptions |
+| E1 | partial-active geometry and normal data (`ChartModel.geometry d A k h`); full-active adapter | old coordinate geometry recovered; deepest stratum `≅ ℝ^{d−|A|}` |
+| E2 | weighted abstract normalised core: general `h`, `c_h = J·H_I·L_I·fϕ`, `xData`/coefficient compatibility | `h = 0` recovery; nonzero-order core; `I ⊊ A` test |
+| E3 | singleton tangential-unit producer: one core `n = 0`, `λ = u^{-1/(2k)}`, compact tangential base, common collar, negligible complement | arbitrary `d`, one active coordinate, explicit `h`, nonconstant unit |
+| E4 | signed blow-up charts + exact finite-sum assembly of the ORIGINAL cube integral (all orders) | leading coefficient = CCXCV; odd normal orders vanish; constant packet has no higher coefficients |
+| E5 (optional) | general partial-active water-filling collar | recovers G (full active, unit 1) and E3 (singleton) |
+
+Stop after E4 for the paper ("assembled chart expansions of the cube integral"); the projector space and
+intrinsic gluing are a separately gated phase.
+
 ## 6. Hypotheses that remain at the end
 
 Two levels (consult #99 §A5).
