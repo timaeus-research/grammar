@@ -258,6 +258,7 @@ theorem continuousOn_lam : ContinuousOn (lam β u) (range (e β a h₀)) := by
 
 variable (ϕ φ : (Fin d → ℝ) → ℝ) (O : OriginalFaceSeries a ϕ φ (Iβ β)) (b b' : ℝ) (hb : 0 < b)
   (hbb' : b < b') (hb'ρ : Lb c * b' ≤ O.ρ) (hba : Lb c * b ≤ a)
+  (ϕ' : (Fin d → ℝ) → ℝ) (hϕ'eq : ∀ w ∈ piBox d (Icc 0 a), ϕ' w = ϕ w)
 
 /-- The base point as a point of the closed face. -/
 def toFaceK (s : K β a h₀) : ↥(WaterFilling.faceSet a (Iβ β).1) := ⟨s.1.1, s.2⟩
@@ -384,9 +385,11 @@ theorem hnorm {t : Tan (Iβ β).1 → ℝ} (ht : t ∈ range (e β a h₀)) :
     rw [hd, kS_self, mul_one, lam_sq β u a h₀ ha c hc hu_lb ht]
   rw [h1, h2, one_mul, mul_inv_cancel₀ (unitT_pos β u a h₀ ha c hc hu_lb ht).ne']
 
-include ha hu_cont hc hu_lb hbb' hb'ρ hba in
-/-- ★ **The weighted data of the singleton chart.** -/
-noncomputable def data : WData (kS β) (Iβ β).1 (nI (Iβ β)) (K β a h₀) (piBox d (Icc 0 a)) ϕ φ where
+include ha hu_cont hc hu_lb hbb' hb'ρ hba hϕ'eq in
+/-- ★ **The weighted data of the singleton chart**, for a prior `ϕ'` agreeing with the series'
+prior `ϕ` on the box. -/
+noncomputable def data :
+    WData (kS β) (Iβ β).1 (nI (Iβ β)) (K β a h₀) (piBox d (Icc 0 a)) ϕ' φ where
   σ := σI (Iβ β)
   e := e β a h₀
   he := continuous_e β a h₀
@@ -405,27 +408,31 @@ noncomputable def data : WData (kS β) (Iβ β).1 (nI (Iβ β)) (K β a h₀) (p
   hW := image_subset_box β u a h₀ ha c hc hu_lb b hb hba
   Fϕ := Fϕ β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ
   Fφ := Fφ β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ
-  hϕ_eq := fun s _ hv => hϕ_eq β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ s hv
+  hϕ_eq := fun s _ hv =>
+    (hϕ'eq _ (image_subset_box β u a h₀ ha c hc hu_lb b hb hba
+      (mem_image_Φ (Iβ β).1 (σI (Iβ β)) (e β a h₀) (lam β u)
+        (fun _ ht j => lam_pos β u a h₀ ha c hc hu_lb ht j) s hv))).trans
+      (hϕ_eq β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ s hv)
   hφ_eq := fun s _ hv => hφ_eq β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ s hv
 
 /-! ### The localisation datum, the core and the core decomposition -/
 
-variable (hϕm : Measurable ϕ) (hϕ0 : ∀ w, 0 ≤ ϕ w) (hφm : Measurable φ)
+variable (hϕm : Measurable ϕ') (hϕ0 : ∀ w, 0 ≤ ϕ' w) (hφm : Measurable φ)
   (hφint : Integrable φ ((volume.restrict (piBox d (Icc 0 a))).withDensity
-    fun w => ENNReal.ofReal (wgt (hS β h₀) w * ϕ w)))
+    fun w => ENNReal.ofReal (wgt (hS β h₀) w * ϕ' w)))
 
 include hu_cont hc hu_lb hφint in
 /-- The localisation datum: the weighted prior measure on the box, the chart phase, the
 observable. -/
 noncomputable def locData : LocalisationData (Fin d → ℝ) where
   μ := (volume.restrict (piBox d (Icc 0 a))).withDensity
-    fun w => ENNReal.ofReal (wgt (hS β h₀) w * ϕ w)
+    fun w => ENNReal.ofReal (wgt (hS β h₀) w * ϕ' w)
   phase := Kc β u
   obs := φ
   phase_measurable := hu_cont.measurable.mul ((measurable_pi_apply β).pow_const 2)
   phase_nonneg := by
     have h1 : ∀ᵐ y ∂((volume.restrict (piBox d (Icc 0 a))).withDensity
-        fun w => ENNReal.ofReal (wgt (hS β h₀) w * ϕ w)), y ∈ piBox d (Icc 0 a) :=
+        fun w => ENNReal.ofReal (wgt (hS β h₀) w * ϕ' w)), y ∈ piBox d (Icc 0 a) :=
       mem_ae_iff.2 ((withDensity_absolutelyContinuous _ _)
         (mem_ae_iff.1 (ae_restrict_mem (measurableSet_W a))))
     exact h1.mono fun y hy => mul_nonneg (hc.le.trans (hu_lb y hy)) (sq_nonneg _)
@@ -435,33 +442,33 @@ noncomputable def locData : LocalisationData (Fin d → ℝ) where
 
 include hu_cont hc hu_lb hφint hu_tan in
 theorem locData_phase (y : Fin d → ℝ) :
-    (locData β u a h₀ hu_cont c hc hu_lb ϕ φ hφint).phase y =
+    (locData β u a h₀ hu_cont c hc hu_lb φ ϕ' hφint).phase y =
       unitT β u (tan (Iβ β).1 y) * CoordModel.phase d (kS β) y := by
   change Kc β u y = _
   rw [unitT_tan β u hu_tan, coordPhase_kS]
   rfl
 
-include ha hu_cont hc hu_lb hu_tan hbb' hb'ρ hba hϕm hϕ0 hφint in
+include ha hu_cont hc hu_lb hu_tan hbb' hb'ρ hba hϕ'eq hϕm hϕ0 hφint in
 /-- The weighted core of the singleton chart. -/
 noncomputable def core :=
   NormalisedBox.wcore (hkI β) (measurableSet_W a) hϕm (fun w _ => hϕ0 w)
-    (locData β u a h₀ hu_cont c hc hu_lb ϕ φ hφint)
-    (data β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba) (h := hS β h₀) rfl
-    (locData_phase β u hu_tan a h₀ hu_cont c hc hu_lb ϕ φ hφint) rfl
+    (locData β u a h₀ hu_cont c hc hu_lb φ ϕ' hφint)
+    (data β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba ϕ' hϕ'eq) (h := hS β h₀) rfl
+    (locData_phase β u hu_tan a h₀ hu_cont c hc hu_lb φ ϕ' hφint) rfl
 
 include ha hu_cont hc hu_lb hu_tan hb hφint in
 /-- Off the collar the phase is at least `b²`, a.e. -/
 theorem gap_aux :
-    ∀ᵐ z ∂(locData β u a h₀ hu_cont c hc hu_lb ϕ φ hφint).μ.restrict
+    ∀ᵐ z ∂(locData β u a h₀ hu_cont c hc hu_lb φ ϕ' hφint).μ.restrict
       (image (Iβ β).1 (e β a h₀) (lam β u) b)ᶜ,
-      b ^ 2 ≤ (locData β u a h₀ hu_cont c hc hu_lb ϕ φ hφint).phase z := by
+      b ^ 2 ≤ (locData β u a h₀ hu_cont c hc hu_lb φ ϕ' hφint).phase z := by
   rw [ae_restrict_iff' (measurableSet_image (Iβ β).1 b
     (measurableEmbedding_e (Iβ β).1 (e β a h₀) (continuous_e β a h₀) (e_injective β a h₀))
     (measurable_lam β u hu_cont)).compl]
-  have h1 : ∀ᵐ y ∂(locData β u a h₀ hu_cont c hc hu_lb ϕ φ hφint).μ, y ∈ piBox d (Icc 0 a) :=
+  have h1 : ∀ᵐ y ∂(locData β u a h₀ hu_cont c hc hu_lb φ ϕ' hφint).μ, y ∈ piBox d (Icc 0 a) :=
     mem_ae_iff.2 ((withDensity_absolutelyContinuous _ _)
       (mem_ae_iff.1 (ae_restrict_mem (measurableSet_W a))))
-  have h2 : ∀ᵐ y ∂(locData β u a h₀ hu_cont c hc hu_lb ϕ φ hφint).μ, y β ≠ 0 :=
+  have h2 : ∀ᵐ y ∂(locData β u a h₀ hu_cont c hc hu_lb φ ϕ' hφint).μ, y β ≠ 0 :=
     mem_ae_iff.2 ((withDensity_absolutelyContinuous _ _)
       (mem_ae_iff.1 (ae_restrict_of_ae (ae_coord_ne_zero.mono fun y hy => hy β))))
   filter_upwards [h1, h2] with y hy hyβ hnot
@@ -486,14 +493,14 @@ theorem gap_aux :
   rw [← mul_assoc, mul_inv_cancel₀ hu_pos.ne', one_mul] at this
   exact this.le
 
-include ha hu_cont hc hu_lb hu_tan hbb' hb'ρ hba hϕm hϕ0 hφint in
+include ha hu_cont hc hu_lb hu_tan hbb' hb'ρ hba hϕ'eq hϕm hϕ0 hφint in
 /-- The one-core decomposition: the collar and the phase-gap tail. -/
 noncomputable def cores :
-    AnalyticCoreDecomposition (locData β u a h₀ hu_cont c hc hu_lb ϕ φ hφint) 1
+    AnalyticCoreDecomposition (locData β u a h₀ hu_cont c hc hu_lb φ ϕ' hφint) 1
       (fun _ => K β a h₀) (fun _ => nI (Iβ β)) 1 where
-  core := fun _ => (locData β u a h₀ hu_cont c hc hu_lb ϕ φ hφint).μ.restrict
+  core := fun _ => (locData β u a h₀ hu_cont c hc hu_lb φ ϕ' hφint).μ.restrict
     (image (Iβ β).1 (e β a h₀) (lam β u) b)
-  tail := (locData β u a h₀ hu_cont c hc hu_lb ϕ φ hφint).μ.restrict
+  tail := (locData β u a h₀ hu_cont c hc hu_lb φ ϕ' hφint).μ.restrict
     (image (Iβ β).1 (e β a h₀) (lam β u) b)ᶜ
   measure_eq := by
     rw [Fin.sum_univ_one, Measure.restrict_add_restrict_compl (measurableSet_image (Iβ β).1 b
@@ -501,8 +508,9 @@ noncomputable def cores :
       (measurable_lam β u hu_cont))]
   δ₀ := b ^ 2
   δ₀_pos := pow_pos hb 2
-  gap := gap_aux β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ b hb hφint
-  chart := fun _ => core β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba hϕm hϕ0
+  gap := gap_aux β u hu_tan a h₀ ha hu_cont c hc hu_lb φ b hb ϕ' hφint
+  chart := fun _ => core β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba ϕ'
+     hϕ'eq hϕm hϕ0
     hφint
 
 /-! ### The frame -/
@@ -616,13 +624,13 @@ theorem Φ_eq_frame (s : K β a h₀) (v : Fin (nI (Iβ β) + 1) → ℝ) :
 
 /-! ### The certificate and the expansion -/
 
-include ha hu_cont hc hu_lb hu_tan hbb' hb'ρ hba hϕm hϕ0 hφint in
+include ha hu_cont hc hu_lb hu_tan hbb' hb'ρ hba hϕ'eq hϕm hϕ0 hφint in
 /-- ★★ **The resolved certificate of the singleton chart**: one core on the closed face, the
 phase-gap tail, the frame `v ↦ λ(s) v e_β`; prior `|y_β|^{h₀} ϕ`. -/
 noncomputable def cert :
     ResolvedCertificate (G β h₀) (N β h₀) (piBox d (Icc 0 a)) (Kc β u)
-      (fun w => wgt (hS β h₀) w * ϕ w) φ where
-  L := locData β u a h₀ hu_cont c hc hu_lb ϕ φ hφint
+      (fun w => wgt (hS β h₀) w * ϕ' w) φ where
+  L := locData β u a h₀ hu_cont c hc hu_lb φ ϕ' hφint
   obs_eq := rfl
   phase_eq := rfl
   transport := Measure.map_id
@@ -633,18 +641,19 @@ noncomputable def cert :
   isCompact_base := fun _ => isCompact_base β a h₀
   β := 1
   β_pos := one_pos
-  cores := cores β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba hϕm hϕ0 hφint
+  cores := cores β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba ϕ' hϕ'eq hϕm
+     hϕ0 hφint
   T := fun _ => NormalisedBox.wpresentation (hkI β) (measurableSet_W a) hϕm (fun w _ => hϕ0 w)
-    (locData β u a h₀ hu_cont c hc hu_lb ϕ φ hφint)
-    (data β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba) (h := hS β h₀) rfl
-    (locData_phase β u hu_tan a h₀ hu_cont c hc hu_lb ϕ φ hφint) rfl
+    (locData β u a h₀ hu_cont c hc hu_lb φ ϕ' hφint)
+    (data β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba ϕ' hϕ'eq) (h := hS β h₀) rfl
+    (locData_phase β u hu_tan a h₀ hu_cont c hc hu_lb φ ϕ' hφint) rfl
   frame := fun _ s => frame β u a h₀ ha c hc hu_lb s
   Φ_eq := fun _ s v => Φ_eq_frame β u a h₀ ha c hc hu_lb s v
 
-include ha hu_cont hc hu_lb hu_tan hbb' hb'ρ hba hϕm hϕ0 hφint in
+include ha hu_cont hc hu_lb hu_tan hbb' hb'ρ hba hϕ'eq hϕm hϕ0 hφint in
 /-- ★★ **The coefficient certificate**: density family `J H L · fϕ`, observable jets `fφ`. -/
 noncomputable def coeffCert :
-    (cert β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba hϕm hϕ0
+    (cert β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba ϕ' hϕ'eq hϕm hϕ0
       hφint).CoefficientCertificate where
   cc := fun _ s γ => JW (hS β h₀) (Iβ β).1 (e β a h₀) (lam β u) s *
     (Fϕ β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ).f s γ
@@ -657,38 +666,39 @@ noncomputable def coeffCert :
         (continuousOn_lam β u a h₀ ha hu_cont c hc hu_lb))).absSummableAt_of_le hb.le hbb'.le s
   jet_abs := fun _ s => by
     have h := NormalisedBox.jetFamily_obsFibre_w (hkI β) (measurableSet_W a) hϕm (fun w _ => hϕ0 w)
-      (locData β u a h₀ hu_cont c hc hu_lb ϕ φ hφint)
-      (data β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba) (h := hS β h₀) rfl
-      (locData_phase β u hu_tan a h₀ hu_cont c hc hu_lb ϕ φ hφint) rfl s
+      (locData β u a h₀ hu_cont c hc hu_lb φ ϕ' hφint)
+      (data β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba ϕ' hϕ'eq) (h := hS β h₀) rfl
+      (locData_phase β u hu_tan a h₀ hu_cont c hc hu_lb φ ϕ' hφint) rfl s
     exact (congrArg (fun f => AbsSummableAt f b) h).mpr
       ((Fφ β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ).absSummableAt_of_le hb.le
         hbb'.le s)
   datum_eq := fun _ s => by
     have h := NormalisedBox.jetFamily_obsFibre_w (hkI β) (measurableSet_W a) hϕm (fun w _ => hϕ0 w)
-      (locData β u a h₀ hu_cont c hc hu_lb ϕ φ hφint)
-      (data β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba) (h := hS β h₀) rfl
-      (locData_phase β u hu_tan a h₀ hu_cont c hc hu_lb ϕ φ hφint) rfl s
+      (locData β u a h₀ hu_cont c hc hu_lb φ ϕ' hφint)
+      (data β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba ϕ' hϕ'eq) (h := hS β h₀) rfl
+      (locData_phase β u hu_tan a h₀ hu_cont c hc hu_lb φ ϕ' hφint) rfl s
     have h1 := NormalisedBox.toEta_wcore_x (hkI β) (measurableSet_W a) hϕm (fun w _ => hϕ0 w)
-      (locData β u a h₀ hu_cont c hc hu_lb ϕ φ hφint)
-      (data β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba) (h := hS β h₀) rfl
-      (locData_phase β u hu_tan a h₀ hu_cont c hc hu_lb ϕ φ hφint) rfl s
+      (locData β u a h₀ hu_cont c hc hu_lb φ ϕ' hφint)
+      (data β u a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba ϕ' hϕ'eq) (h := hS β h₀) rfl
+      (locData_phase β u hu_tan a h₀ hu_cont c hc hu_lb φ ϕ' hφint) rfl s
     exact h1.trans (congrArg (CoeffFamily.conv _) h.symm)
 
-include ha hu_cont hc hu_lb hu_tan hbb' hb'ρ hba hϕm hϕ0 hφm hφint in
+include ha hu_cont hc hu_lb hu_tan hbb' hb'ρ hba hϕ'eq hϕm hϕ0 hφm hφint in
 /-- ★★★ **The coordinate-free expansion of the singleton chart**: the weighted integral
 `∫_{[0,a]^d} φ · |y_β|^{h₀} ϕ · e^{−n u(y) y_β²}` has the coordinate-free expansion on the chart
 strata, with produced certificates and the spectrum of one normal coordinate. -/
 theorem hasCoordFreeExpansion_singleton :
     (N β h₀).HasCoordFreeExpansion
-      (cert β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba hϕm hϕ0
+      (cert β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba ϕ' hϕ'eq hϕm hϕ0
         hφint).stratumMeasure
-      (coeffCert β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba hϕm hϕ0
+      (coeffCert β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba ϕ' hϕ'eq hϕm hϕ0
         hφint).field
       (spectrumLe (commonQ (cert β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba
-        hϕm hϕ0 hφint).cores.k) (commonD (cert β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b'
-        hb hbb' hb'ρ hba hϕm hϕ0 hφint).n))
-      (piBox d (Icc 0 a)) (Kc β u) (fun w => wgt (hS β h₀) w * ϕ w) φ :=
-  (coeffCert β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba hϕm hϕ0
+        ϕ' hϕ'eq hϕm hϕ0 hφint).cores.k) (commonD (cert β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ
+     φ O b b'
+        hb hbb' hb'ρ hba ϕ' hϕ'eq hϕm hϕ0 hφint).n))
+      (piBox d (Icc 0 a)) (Kc β u) (fun w => wgt (hS β h₀) w * ϕ' w) φ :=
+  (coeffCert β u hu_tan a h₀ ha hu_cont c hc hu_lb ϕ φ O b b' hb hbb' hb'ρ hba ϕ' hϕ'eq hϕm hϕ0
     hφint).hasCoordFreeExpansion_le (hu_cont.measurable.mul ((measurable_pi_apply β).pow_const 2))
     ((measurable_wgt _).mul hϕm) (fun w => mul_nonneg (wgt_nonneg _ _) (hϕ0 w)) hφm
 
