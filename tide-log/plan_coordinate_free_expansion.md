@@ -365,3 +365,33 @@ scaling), charts with empty active set (all-tail), packets by composition with h
 and the tangential-unit normal form of Watanabe's units are the remaining adapters. Next: consult #112 —
 the atlas-existence programme from hironaka's exports (`WatanabeModificationOn`, `WatanabeEvenChartAt`,
 `AnalyticQChartPacket`) with the boundary functions in the joint resolution.
+
+## 10. Consult #112 (2026-09-13): atlas existence — verdict and the recorded stopping point
+
+Astra #112 (`gpt6_bigpicture_v112.md`): the exported local resolution theorem (Watanabe's triple: manifold `U`,
+proper `g`, LOCAL even charts) does NOT give a finite a.e.-disjoint box atlas; multiplicity correction does not
+repair this while preserving the holomorphic-box hypotheses; the "real zero set in coordinate hyperplanes ⇒
+unit·monomial" lemma is FALSE over ℝ (`x²+y²`) — the right algebraic core for joint monomialisation is the
+factor-of-monomial germ lemma (`a·b = u·y^N ⇒ a = v·y^α, b = w·y^β`); complexification of real-analytic data
+near a compact box is a separate project; the general route from a proper modification is SMOOTH LOCALISATION
+on the resolved manifold, which needs a new smooth-amplitude expansion engine (G5), not a wrapper.
+
+Executed (Astra's H1–H3 / G1–G4 list, stopping rule met):
+
+| Unit | Content | Status |
+|---|---|---|
+| H2 | `MonomialBoxAtlas` (hironaka): `PartialResolution.ofId`, `monomialBoxAtlas`, `monomialHalfBoxAtlas` (coordinate half-spaces through `ofBoundaryMonomials`) | fork ca4a10a2b |
+| G2 | boundary regression: `boundaryInputs`, ★★ `boundary_hasCoordFreeExpansion` (proper orthant subset, crossing divisor), `boundaryInputs_commonD = n − 1` | CCCLXXIX |
+| G3 | inactive charts are tails: `SheetInputs` without `act_nonempty`; `addTail`, `inactive_gap`; `sigma` without a nonempty index | CCCLXXX |
+| H3 | `ProductSectorAtlasRescale` (hironaka): centred boxes → `[−a,a]^n`, units × scaling constants, images unchanged, `DomainSectorAtlas.rescale` | fork 5890cebb7 |
+| G1/G4 | `SheetRescale`: `compDiag`, `mulConst`, `CentredInputs → SheetInputs`, ★★ `hasCoordFreeExpansion_of_centred` (the conditional joint packet IS `CentredInputs`/`DomainSectorAtlas`) | CCCLXXXI |
+
+Main `b9c4b13` (682 modules). RECORDED (Astra's wording): explicit and conditional jointly monomial
+domain-sector atlases feed the coordinate-free expansion theorem; general extraction of finite exact box
+transport from a proper analytic modification remains unproved. Open continuations (user decision): (i) H4–H7
+local joint normal form (analytic coordinate division, factor-of-monomial germs, finite-factor neighbourhood
+extraction, positive-unit absorption, properness-to-finite-cover) — real analytic-germ algebra, does NOT close
+the transport gap by itself; (ii) G5 smoothly localised box expansion (new engine: smooth amplitudes with
+Taylor remainders, all orders) — the standard general route; (iii) complexification of compact real-analytic
+data (independent infrastructure). Deferred adapters: packets by composition with polynomial/rational charts
+(generalising `pullbackChart`), a second boundary regression `π = xy` (same-sign orthants).
