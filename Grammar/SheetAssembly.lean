@@ -388,6 +388,35 @@ theorem hasCoordFreeExpansion_of_domainSectorAtlas (X : SheetInputs d) :
         (spectrumLe (commonQ C.cores.k) (commonD C.n)) X.A.W X.K X.prior X.obs :=
   ⟨X.cert, X.coeffCert, X.hasCoordFreeExpansion⟩
 
+/-! ### Integrability from continuity on a compact set -/
+
+/-- A continuous observable is integrable for the measure with a continuous nonnegative density on
+a subset of a compact set. -/
+theorem integrable_of_continuous_of_subset_compact {d : ℕ} {p F : (Fin d → ℝ) → ℝ}
+    (hp : Continuous p) (hF : Continuous F) {W Kc : Set (Fin d → ℝ)} (hKc : IsCompact Kc)
+    (hW : W ⊆ Kc) (hWm : MeasurableSet W) :
+    Integrable F ((volume.restrict W).withDensity fun w => ENNReal.ofReal (p w)) := by
+  obtain ⟨Cp, hCp⟩ := hKc.exists_bound_of_continuousOn hp.continuousOn
+  obtain ⟨CF, hCF⟩ := hKc.exists_bound_of_continuousOn hF.continuousOn
+  have : IsFiniteMeasure ((volume.restrict W).withDensity fun w => ENNReal.ofReal (p w)) := by
+    refine isFiniteMeasure_withDensity (ne_of_lt ?_)
+    calc ∫⁻ w, ENNReal.ofReal (p w) ∂(volume.restrict W)
+        ≤ ∫⁻ _, ENNReal.ofReal Cp ∂(volume.restrict W) := by
+          refine lintegral_mono_ae ?_
+          rw [ae_restrict_iff' hWm]
+          refine Eventually.of_forall fun w hw => ENNReal.ofReal_le_ofReal ?_
+          have := hCp w (hW hw)
+          rw [Real.norm_eq_abs] at this
+          exact (le_abs_self _).trans this
+      _ = ENNReal.ofReal Cp * volume W := by rw [lintegral_const, Measure.restrict_apply_univ]
+      _ < ∞ := ENNReal.mul_lt_top ENNReal.ofReal_lt_top
+          ((measure_mono hW).trans_lt hKc.measure_lt_top)
+  refine (integrable_const CF).mono' hF.measurable.aestronglyMeasurable ?_
+  refine Filter.le_def.1 (withDensity_absolutelyContinuous _ _).ae_le _ ?_
+  change ∀ᵐ w ∂volume.restrict W, ‖F w‖ ≤ CF
+  rw [ae_restrict_iff' hWm]
+  exact Eventually.of_forall fun w hw => hCF w (hW hw)
+
 /-! ### Packet congruence -/
 
 /-- Transport of a signed packet along equalities of the prior and observable. -/

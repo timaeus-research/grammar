@@ -680,3 +680,4 @@ import Grammar.SheetAssembly
 import Grammar.SheetCubeRegression
 import Grammar.SheetBoundaryRegression
 import Grammar.SheetRescale
+import Grammar.SheetCentredCubeRegression
