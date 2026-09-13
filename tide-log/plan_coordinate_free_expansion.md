@@ -186,7 +186,9 @@ fails and the fields must be averaged in one fibre).
 | G4 | `ExpansionAssembly` (CCCXL) | `sumMeasure`, `rnWeight`, `glueField`, ★ `expansionCoefficient_glue`, ★★ `HasCoordFreeExpansion.sum` | done |
 | G6 | `SignedBoxExpansion` (CCCXLI) | ★★★ `hasCoordFreeExpansion_of_holomorphicSignedBoxExtension_local`; `signedStratumMeasure = ∑_σ (R_σ)_* ν_σ`, `signedMomentField`, specs (finite, support, coefficient sum), spectrum normalisation `coordCommonQ k`, polynomial instance | done |
 
-Status: PHASE G LANDED; stopping-gate items 1–6, 8 met; item 7 (reflection-sensitive regression checks)
+| G7 | `SignedBoxRegression` (CCCXLII) | reflection-sensitive checks: transported evaluation tensors pick up the sign product; deepest stratum = plain sum of piece measures; synthetic `d = 1` assembly: odd observable cancels (`+1 − 1 = 0`), order zero gives `2` | done |
+
+Status: PHASE G CLOSED (consult #101 audit passed; gate item 7 met by G7). Main 94bd4be, 643 modules. Next (consult #101 §B): E0 obligation table for the projector blow-up chart, then a Jacobian-weighted producer (E1–E5). Not included: Jacobian orders `h ≠ 0`; nonconstant analytic unit; general chart gluing.
 pending consult #101. Not included: Jacobian orders `h ≠ 0`; nonconstant analytic unit; general chart gluing.
 
 ## 6. Hypotheses that remain at the end
