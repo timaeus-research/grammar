@@ -239,6 +239,26 @@ vanishing below `d/2`, leading coefficient `π^{d/2}F(0)p(0)` (`d ≥ 2`), suppo
 Not claimed: a global resolved geometry for the blow-up / intrinsic coefficient field on the exceptional divisor;
 parity cancellation; the Gamma formula. Next gate: consult #104 (closure + direction: J vs E5 vs gluing).
 
+### 5h. Programme J-min — observable-independent coefficient functionals (consult #104 §3; main `fbbccc2`, 654 modules)
+
+J0 finding: in a coefficient certificate the field `B_{I,r,q}` is built from bases, base measures, orders, sides,
+frames and the PRIOR's density families only — the observable enters the coefficients only through
+`D^r_⊥(φ∘π)` paired against it (definitional, `field_eq_kernelData := rfl`). The abstract certificate does
+entangle observable and prior in the amplitude datum (`amplitude_eq : evalF x = c · obs∘Φ`, no separate density
+identity), so re-observabling an abstract certificate is not possible; the route is the producer level with a
+fixed extension domain (packet `withObs`: same `Ω`, same prior extension; the produced kernel is unchanged since
+the prior's face-series coefficients are `rfl`-independent of the observable's extension).
+
+| Unit | Deliverable | Status |
+|---|---|---|
+| J1 | `MomentKernelData` (observable-free kernel: bases, `ν`, `h, k, β, b`, frames, `cc`), its `field`/`stratumMeasure`, the jet functional `coefficient Kd ψ q` for every `ψ`; `Cc.field = Cc.kernelData.field` by `rfl` | CCCL |
+| J2 | explicit coordinate kernel `coordKernelData` (`kernelData_coeffCertificate` by `rfl`), `withObs`, `producedKernel_withObs`, ★★ `hasCoordFreeExpansion_withObs` (every observable with an extension on the packet's neighbourhood: same measures, same field) | CCCLI |
+| J3 | `normalDifferential_add/smul`, `expansionCoefficient_add/smul`, `Covered`/`field_eq_zero_of_not_covered`, `SmoothObs`, `Certified`, `coefficient_add/smul`; `contDiffAt_obs_base`, `certified`; `obsSpace Ω` (a real subspace), `certified_of_mem`, ★★★ `jetFunctional : obsSpace A.Ω →ₗ[ℝ] ℝ`, ★★★ `hasCoordFreeExpansion_obsSpace` | CCCLII–CCCLIII |
+| J4 | finite-order seminorm bound / distribution | NOT DONE — structural obstruction: at a stratum of codimension ≥ 2 the box kernel at a fixed exponent `μ` receives contributions from all multi-indices `γ` with `min_i (h_i+γ_i+1)/(2k_i) = μ` (the other normal coordinates are unconstrained), so the field has INFINITE normal order in `r`; the functional is an ANALYTIC jet functional (ℓ¹-weighted in the jets), not a finite-order distribution. Mirror terminology: "analytic jet functional". |
+
+J-min CLOSED at the jet-functional theorem (Astra's stopping rule). Next: consult #105 — paper-claim closure
+check and the transition to the companion note.
+
 ## 6. Hypotheses that remain at the end
 
 Two levels (consult #99 §A5).
