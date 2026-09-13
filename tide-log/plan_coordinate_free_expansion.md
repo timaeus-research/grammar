@@ -395,3 +395,7 @@ the transport gap by itself; (ii) G5 smoothly localised box expansion (new engin
 Taylor remainders, all orders) — the standard general route; (iii) complexification of compact real-analytic
 data (independent infrastructure). Deferred adapters: packets by composition with polynomial/rational charts
 (generalising `pullbackChart`), a second boundary regression `π = xy` (same-sign orthants).
+Addendum: CCCLXXXII `SheetCentredCubeRegression` (main `6c3be29`, 683 modules) — the `ρ`-cube (centred, non-symmetric
+boxes) through `CentredInputs` with polynomial packets by substitution (`chartPoly`, `bind₁`): the end-to-end test of H3.
+Mirror `grammar_lean.tex` local commit 634e45e (not pushed): domain paragraph rewritten to the landed state, pins bumped,
+`\leanrefH` macro for the hironaka fork.
