@@ -650,3 +650,4 @@ import Grammar.BlowUpCubeLeadingCoefficient
 import Grammar.BlowUpCubeSupport
 import Grammar.MomentKernelData
 import Grammar.CoordinateKernel
+import Grammar.JetFunctionalLinear
