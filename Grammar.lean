@@ -673,3 +673,4 @@ import Grammar.ChartCollar
 import Grammar.ChartCollarDecomposition
 import Grammar.ChartBoxCertificate
 import Grammar.ChartBoxInputs
+import Grammar.ChartPieces
