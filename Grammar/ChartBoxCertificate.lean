@@ -17,7 +17,8 @@ cores (E2), and the coefficient certificate with density family `J H L · fϕ` a
 `fφ`. Hence ★★★ `hasCoordFreeExpansion_chart`: for a chart with active set `A`, orders `(k, h)`,
 positive tangential unit `u ≥ c` on `[0,a]^d` and local normal series of the prior and the
 observable at every stratum, the weighted integral
-`∫_{[0,a]^d} φ · ∏|y_i|^{h_i} ϕ · e^{−n u ∏ y^{2k}}` has the coordinate-free expansion on the chart strata. Zero `sorry`/`axiom`.
+`∫_{[0,a]^d} φ · ∏|y_i|^{h_i} ϕ · e^{−n u ∏ y^{2k}}` has the coordinate-free expansion on the
+chart strata. Zero `sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Filter Topology
