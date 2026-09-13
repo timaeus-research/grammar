@@ -267,7 +267,7 @@ authorisation). Companion note `averaging_dataset.tex` (consult #106 ledger, `gp
 | 0 | G0 signature-and-composition audit (CLT/tail law constructed by `ClosureEndpoint`; consumed: certified chart data, sub-Gaussian proxy, bounded amplitude mass, `𝔼|A_n Rem_n| → 0`) | DONE (sheet) |
 | 1 | finite-resolution quartet expectation transfer, every `β, λ > 0` | CCCLIV |
 | 2 | expected quartet coefficients from `L¹` observable transfer (`expected_quartet_of_L1_transfer`) | CCCLV |
-| 3 | predictive Taylor remainder `n 𝔼 sup_t ⟨|f|³⟩_{n,x,t} → 0 ⇒ n 𝔼|R_n| → 0`, then one controlled model | open |
+| 3 | predictive Taylor remainder: `|R| ≤ S/6` from tilted absolute centred third moments ≤ S on [0,1]; `n𝔼S_n → 0 ⇒ n𝔼|R_n| → 0` (CCCLVI); one controlled model test | CCCLVI (lemma); model test open |
 | 4 | CLT/tail closure packaging (only if a gap remains after G0 — none found) | closed by G0 |
 | 5 | `GaussianField.ofL1TaylorLimit` (compact field from the Taylor-data law + a bounded evaluation map) | open |
 | 6 | ratio first-correction algebra | optional |
