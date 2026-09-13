@@ -657,3 +657,5 @@ import Grammar.QuartetObservableTransfer
 import Grammar.PredictiveRemainder
 import Grammar.GaussianQuadraticTilt
 import Grammar.NormalLocationRemainder
+import Grammar.L1SeqGaussianLaw
+import Grammar.L1SeqSynthesis
