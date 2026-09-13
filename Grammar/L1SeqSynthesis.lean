@@ -13,10 +13,10 @@ import Grammar.CompactBaseGaussian
 Given basis functions `φ_r ∈ C(K,ℝ)` on a compact base with a uniform bound `‖φ_r‖ ≤ M`, the
 synthesis map `T(a) = ∑_r a_r φ_r` is a bounded linear map `ℓ¹ → C(K,ℝ)` with `‖T a‖ ≤ M‖a‖`
 (`synthesisCLM`, `norm_synthesisCLM_le`, `synthesisCLM_eval`). For a law `ν` on `ℓ¹` with a
-finite second moment the covariance `C(y,z) = ∫ T(a)(y) T(a)(z) dν` is a continuous positive
-semidefinite kernel (`synthesisKernel`), and when `ν` is a centred Gaussian measure (as the `ℓ¹`
-CLT limit is, `clt_l1_isGaussian`) the random continuous function `T` under `ν` is a
-`GaussianField` with that kernel (`GaussianField.ofL1TaylorLimit`), through the Banach-law
+finite second moment the second-moment kernel `C(y,z) = ∫ T(a)(y) T(a)(z) dν` is a continuous
+positive semidefinite kernel (`synthesisKernel`), and when `ν` is a centred Gaussian measure (as the
+`ℓ¹` CLT limit is, `clt_l1_isGaussian`) the random continuous function `T` under `ν` is a
+`GaussianField` with that kernel, its covariance (`GaussianField.ofL1TaylorLimit`), through the Banach-law
 adapter `GaussianField.ofIsGaussianCertificates`. The compact-base identities then apply to it
 (`integral_compactH_ofL1TaylorLimit`), and the field exists for the CLT limit law itself
 (`exists_gaussianField_of_clt`).
@@ -133,8 +133,10 @@ theorem integrable_synthesis_mul (y z : K) :
     _ = M * M * ‖a‖ ^ 2 := by ring
 
 omit [Countable ι] in
-/-- ★ **The covariance kernel of the synthesised field**, `C(y,z) = ∫ T(a)(y) T(a)(z) dν`: a
-continuous positive semidefinite kernel on the compact base. -/
+/-- ★ **The second-moment kernel of the synthesised field**, `C(y,z) = ∫ T(a)(y) T(a)(z) dν`: a
+continuous positive semidefinite kernel on the compact base for every law `ν` with a finite second
+moment. It is the covariance kernel of the field when `ν` is centred (the case of
+`GaussianField.ofL1TaylorLimit`). -/
 noncomputable def synthesisKernel : PSDKernel K where
   C y z := ∫ a, synthesisCLM φ hφ a y * synthesisCLM φ hφ a z ∂ν
   symm y z := by simp_rw [mul_comm]
