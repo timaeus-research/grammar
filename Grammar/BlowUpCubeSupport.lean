@@ -18,7 +18,9 @@ coordinate with `k = 1`, `h = d − 1` (`pieceCert_cores_h`), so their candidate
 `(d + ℓ)/2`, `ℓ ∈ ℕ` (`not_candidateExp_piece`). Hence ★★ `pieceCoefficient_eq_zero_of_not_support`,
 ★★ `cubeCoefficient_eq_zero_of_not_support` and, for EVERY `d ≥ 1` and without the leading-measure
 theorem, ★★ `cubeCoefficient_eq_zero_of_lt'` (vanishing below `d/2`) with the paper-facing wrapper
-★★ `cube_hasExpansion_support` (the sum runs over `α = (d+ℓ)/2 ≤ A` only), and the packet
+★★ `cube_hasExpansion_support` (the sum runs over `α = (d+ℓ)/2 ≤ A` only; on the log-free
+half-integer spectrum this restriction is the removal of the exponents below `d/2` — it does NOT
+thin alternate half-integer orders), and the packet
 independence ★★ `cubeCoefficient_eq_of_packets` (two packets for the same `p, F` give the same
 coefficients on the declared spectrum, by uniqueness). This closes the
 one-dimensional gap of CCCXLVIII for the vanishing statements (the leading value `C(d/2)` still
@@ -42,8 +44,9 @@ variable {M : ℕ} {K : Fin M → Type*} [∀ I, TopologicalSpace (K I)] [∀ I,
   {n : Fin M → ℕ} (ν : (I : Fin M) → Measure (K I))
   (h k : (I : Fin M) → Fin (n I + 1) → ℕ) (β : ℝ) (b : Fin M → ℝ) (x : JointData K n)
 
-/-- ★ **Support of the assembled canonical coefficients**: `gCoeff μ j = 0` unless `μ` is a
-candidate exponent `(h_i + r + 1)/(2k_i)` of some chart. -/
+/-- ★ **Support of the assembled canonical coefficients**: `gCoeff μ j = 0` if `μ` is a candidate
+exponent `(h_i + r + 1)/(2k_i)` of NO chart (the support lies in the union of the charts' candidate
+sets). -/
 theorem gCoeff_eq_zero_of_not_candidate (hk : ∀ I i, 0 < k I i) (hβ : 0 < β) (hb : ∀ I, 0 < b I)
     {μ : ℝ} (hμ : ∀ I, ¬ candidateExp (h I) (k I) μ) (j : ℕ) : gCoeff ν h k β b x μ j = 0 := by
   unfold gCoeff
@@ -118,6 +121,12 @@ theorem cubeCoefficient_eq_zero_of_lt' {q : PowerLogIndex} (hlt : q.exponent < d
     linarith
 
 omit β in
+/-- ★★ **Vanishing below `d/2`** (public name; every `d ≥ 1`, structural). -/
+theorem cubeCoefficient_eq_zero_of_exponent_lt_half_dim {q : PowerLogIndex}
+    (hlt : q.exponent < d / 2) : cubeCoefficient A hp0 q = 0 :=
+  cubeCoefficient_eq_zero_of_lt' A hp0 hlt
+
+omit β in
 open Classical in
 /-- ★★ **The paper-facing expansion on the support**: the sum runs over the exponents
 `(d + ℓ)/2 ≤ A` only, for every `d ≥ 1`. -/
@@ -138,7 +147,8 @@ theorem cube_hasExpansion_support (A' : ℝ) :
 omit β in
 /-- ★★ **Packet independence**: two analytic packets representing the same `p, F` give the same
 cube coefficients on the declared spectrum (uniqueness of the finite power sum against the same
-original integral). -/
+original integral). Scope: independence of the packet for FIXED `p, F`; nothing is claimed about
+the local tensor fields, nor about other decompositions of the cube. -/
 theorem cubeCoefficient_eq_of_packets (A' : HolomorphicSignedBoxExtension 1 p F) {B : ℝ}
     {q : PowerLogIndex} (hq : q ∈ spectrumLe 2 0 B) :
     cubeCoefficient A hp0 q = cubeCoefficient A' hp0 q := by

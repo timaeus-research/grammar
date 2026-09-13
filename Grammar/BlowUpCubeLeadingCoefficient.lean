@@ -307,8 +307,9 @@ theorem cubeCoefficient_eq_zero_of_lt {B : ℝ} {q : PowerLogIndex} (hq : q ∈ 
 
 omit β in
 include hd in
-/-- ★★ **The leading coefficient of the cube expansion is `π^{d/2} F(0) p(0)`** (CCXCV through
-the certificates). -/
+/-- ★★ **The coefficient at the leading candidate exponent `d/2` is `π^{d/2} F(0) p(0)`** (CCXCV
+through the certificates). It may vanish, so it is not necessarily the first nonzero term; the
+`1 < d` hypothesis is that of the leading-measure theorem of the blow-up cover. -/
 theorem cubeCoefficient_leading :
     cubeCoefficient A hp0 (leadingIndex d) = Real.pi ^ (d / 2 : ℝ) * (F 0 * p 0) := by
   have h := corrected_coeff_eq_zero hd A hp0 _ leadingIndex_mem

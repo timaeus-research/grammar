@@ -11,9 +11,10 @@ import Grammar.LocalAnalyticInputs
 /-!
 # The all-order expansion of the cube integral through the blow-up charts (CCCXLVII; phase E, E4)
 
-Consult #102 §6–7. For the quadratic phase `K = |x|²` on the unit cube and a signed analytic
+Consult #102 §6–7. For the quadratic phase `K = |x|²` on the unit cube and a signed-box analytic
 packet for the prior `p` and the observable `F` (holomorphic representatives on a complex
-neighbourhood of the cube, `p ≥ 0` on the cube), the cube integral decomposes exactly into the
+neighbourhood of the cube; "signed" refers to the box `[−1,1]^d` and the orthant pieces, the prior
+itself satisfies `p ≥ 0` on the cube), the cube integral decomposes exactly into the
 `d · 2^d` pieces `∫_{[0,1]^d} F(φ_β(R_σ z)) p(φ_β(R_σ z)) |z_β|^{d−1} e^{−N unit_β(z) z_β²} dz`
 (CCCXLIV's chart adapter, CCCXXXVII's orthant decomposition, the reflection-invariant unit and
 weight: `cube_integral_eq_sum_Lap`). Each piece is a singleton chart (CCCXLVI): the packet pulled
