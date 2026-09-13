@@ -272,6 +272,8 @@ authorisation). Companion note `averaging_dataset.tex` (consult #106 ledger, `gp
 | 5 | `GaussianField.ofL1TaylorLimit` (compact field from the Taylor-data law + a bounded evaluation map): the ℓ¹ CLT law is `IsGaussian` (CCCLIX `clt_l1_isGaussian`), the synthesis map `∑ a_r φ_r` is bounded for `sup‖φ_r‖ ≤ M`, and the field with kernel `∫T(a)(y)T(a)(z)dν` exists through the Banach-law adapter (CCCLX `exists_gaussianField_of_clt`) | CCCLIX–CCCLX DONE (double-series kernel identification not claimed) |
 | 6 | ratio first-correction algebra | optional |
 
+COMPANION NOTE PROGRAMME CLOSED 2026-09-13 (consult #108, `gpt6_bigpicture_v108.md`): model test and Rank 5 accepted; closure wording pass applied to the note (pin `9a8cdc9`); no Lean units required. Deferred on downstream demand only: the thin normal-location quartet instantiation (≈2–4 units; two-sign identification sanity-checked in #108 but the actual prior gives finite-n rate β + a/n and marginal laws do not give Z_n ⇒ N(0,1)) and the coefficient-covariance double-series identification of `synthesisKernel` (≈1–2 units). Overleaf push of mirror and note awaits the user's authorisation.
+
 J-min CLOSED at the jet-functional theorem (Astra's stopping rule; #105 accepted). Paper closure gate (#105): a
 wording pass on the mirror (distribution / support / expectation / general resolution / canonical / finite order),
 repin + audit, Overleaf push (user authorisation), then the Lean-facing paper programme is CLOSED. Next: consult
