@@ -649,3 +649,4 @@ import Grammar.BlowUpCubeExpansion
 import Grammar.BlowUpCubeLeadingCoefficient
 import Grammar.BlowUpCubeSupport
 import Grammar.MomentKernelData
+import Grammar.CoordinateKernel
