@@ -666,3 +666,10 @@ agent, `DomainBridgeFinal`: `exists_normalisedDomainCoreTransport_of_analyticOnN
 `K·∏π` vanishes at 0, ≢ 0 near 0; `Wdom = W ∩ {π ≥ 0}` compact; smooth prior with compact support in W; smooth obs;
 Measurable K) and the certificate form with `C.D ≤ d − 1`. NEXT: consult #121 (audit of Target B; cleanups — remove
 `Measurable K`, translation/positive-phase wrappers as for Target A; ball-inequality regression; mirror paragraph; closure).
+Consult #121 (`gpt6_bigpicture_v121.md`): TARGET B AUDIT PASSED. Domain class = compact BASIC analytic-inequality domains
+`D = A ∩ ⋂{π_ℓ ≥ 0}` inside a connected open analytic ambient `A` (not arbitrary compact semianalytic sets — finite gluing of
+overlapping basic domains is out of scope). Identically-zero chart factors excluded by the product form on raw Watanabe
+charts (not by image openness). PROJECT CLOSED after a Target B façade (agent, tide/targetB2): arbitrary phase-zero anchor,
+positive-phase branch, local prior/observable via cutoff, no Measurable K, named domain. Non-claims: no general semianalytic
+front end; no zero-phase/disconnected-ambient treatment; no RLCT identification of the leading nonzero exponent; no nonzero
+leading coefficient for arbitrary observables; no coefficient algorithm.
