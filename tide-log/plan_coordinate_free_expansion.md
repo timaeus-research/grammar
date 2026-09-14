@@ -566,3 +566,17 @@ delegated): hironaka `shiftedAtlasOf τ` for an arbitrary partition function (fo
 `activeRamp` depends on the active coordinate, ★ `activeRamp_not_ω_indep` (analytic producer's hypothesis FAILS),
 ★★ `smoothOverlap_hasSmoothCoordFreeExpansion`, ★★ `coeff_eq_of_ramp` / `coeff_active_eq_coeff_tangential`.
 Remaining optional items: d = 0 regression; cube blow-up with radial weight `χ(‖x‖²)`; audit consult #118.
+
+### 13.4 CLOSURE 2026-09-14 (Astra #118 audit: "close U1–U6c")
+Audit verdict: the smooth engine is complete as a CONDITIONAL asymptotic theorem (conditional on `SmoothSheetInputs`);
+the remaining gaps are geometric, not analytic: (a) resolution-space → weighted-transport bridge (partition of unity
+on the RESOLVED space, chartwise change of variables, null sets, a.e. injectivity), very large unless hironaka exports it;
+(b) domain rectification (inequalities defining `W`); (c) unit normalisation (`hu_tan`; the paper's local coordinate
+change `u₁ ↦ ε^{1/2k₁} u₁` — no cheap amplitude workaround: `e^{−N(u−β)y^{2k}}` makes the amplitude `N`-dependent);
+(d) neighbourhood smoothness of chart data (wrapper); (e) zero-phase components (constant summand — now `const`+`add`).
+Checks done: log convention positive (`scaleCoeff` uses `(log β)^{j−q}` for `N^{−μ}(log N)^q` scales); active dimension
+`0` = positive phase, exponentially small (d = 0 regression). CDI `SmoothClosure` (const certificate, chart-wise
+support). Coefficient functional: scalar linear functional is the final form; optional future target
+`coeff_eq_of_equal_finiteJets` (∃ R independent of f, g). Mirror paragraph: Astra's §4 wording adapted into
+`grammar_lean.tex` (local commit only). NEXT PROJECT (separate name/acceptance): "a smooth weighted normalised atlas
+from resolution data", starting with the resolution-space-to-weighted-transport bridge.

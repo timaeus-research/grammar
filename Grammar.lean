@@ -709,3 +709,4 @@ import Grammar.SmoothSheetProducer
 import Grammar.SmoothExtension
 import Grammar.SmoothCoefficientLinearity
 import Grammar.SmoothOverlapRegression
+import Grammar.SmoothClosure
