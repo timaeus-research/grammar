@@ -769,3 +769,14 @@ C4s after C5: `JetBound`-uniform remainder `|Zdist N f − S_A(N,f)| ≤ C·M·N
 plus the finite band `S_{A'} − S_A` (all log powers at each `μ ≤ A`); `remainderOrder X L := sup_P Σ_j remainderDepth`.
 Execution: agents C5a (`tide/c5a`), C5d-generic (`tide/c5d`: compact-set smooth functional → distribution, tangential jet bounds);
 Zdist + cheap additions in `tide/smooth`; then C5c/C5e.
+### 16.3 Status 2026-09-14 — C5 in progress
+Landed: CDXIX `ProductJetDistribution` (agent; general-`E` `Distribution.ofJetBoundOn`, slices `norm_iteratedFDeriv_slice_le`,
+`TangentialJetBound`, `Distribution.ofTangentialJetBound`, compact support from neighbourhood vanishing) · CDXX
+`SmoothPartitionDistribution` (`Zdist`, lattice/degree vanishing, `isVanishingOn_of_subset_nonzero`, `coeffLinearMap`) · CDXXII
+`SmoothFaceDistribution` (algebraic C5c/C5e: `face`, `pdMulti_lK_eqOn_face`, `renormFunctional_eqOn_face` (face factorisation via
+`renormFunctional_congr` — no operator identity needed), `projK`, `cyl`, `FaceSpace`, `faceJet` + `contDiff_faceJet`, `faceFunctional`,
+★★★ `coeff_eq_sum_faceFunctional`, `coeffDistribution_eq_sum_faceFunctional`). In flight: C5a `FaceRestrictionOperators` (agent,
+`tide/c5a`; ι-generalised operators, restriction identities — now optional for the reconstruction, still useful for the tangential
+bound) and C5g `ParametricCoordinateDerivative` (agent, `tide/c5g`; `pdMulti_slice_eq_iteratedFDeriv`, joint continuity,
+`SmoothAmplitudeFamily.ofSlice`) — needed for the analytic part: integrability of `s ↦ renormFunctional … (cyl u s)` ⇒ linearity of
+`faceFunctional`; tangential finite-order bound ⇒ `faceDistribution : 𝓓'(PieceFaceSpace)` with support in the closed face box.

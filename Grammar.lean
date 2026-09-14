@@ -728,4 +728,5 @@ import Grammar.SmoothObservableCoeff
 import Grammar.SmoothCoeffJetBound
 import Grammar.SmoothCoeffDistribution
 import Grammar.SmoothPartitionDistribution
+import Grammar.SmoothFaceDistribution
 import Grammar.ProductJetDistribution
