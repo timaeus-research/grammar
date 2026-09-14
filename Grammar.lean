@@ -706,3 +706,4 @@ import Grammar.SmoothAffineFamily
 import Grammar.SmoothSheetTransport
 import Grammar.SmoothSheetPieces
 import Grammar.SmoothSheetProducer
+import Grammar.SmoothOverlapRegression
