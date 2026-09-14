@@ -707,3 +707,4 @@ import Grammar.SmoothSheetTransport
 import Grammar.SmoothSheetPieces
 import Grammar.SmoothSheetProducer
 import Grammar.SmoothExtension
+import Grammar.SmoothCoefficientLinearity
