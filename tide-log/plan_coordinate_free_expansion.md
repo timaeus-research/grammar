@@ -707,3 +707,29 @@ CDX `ShallowStratumRegression` LANDED (main 18c0fca, 722 modules): `xM_isEquival
 Remaining (Astra #122): Unit 3 finite-order `C^R` bound (continuity of the coefficient functional), Unit 6 global distributional
 packaging (XL), Unit 7 ordinary-kernel specialisation under extra hypotheses; paper-facing remark on the finite-part reading of
 eq:thm_coordfree; mirror paragraph.
+
+## 16. PROJECT: Theorem C — the coefficient functional as a distribution (opened 2026-09-14; user: "proceed with this larger project"; consult #123 = design)
+Astra #123 (`tide-log/gpt6_bigpicture_v123.md`): statement of record = (a) + Theorem B: for each `(μ,q)` the coefficient
+functional `f ↦ coeff of ∫ prior·f·e^{−nK}` is an INTRINSIC, compactly supported distribution `T_{μ,q} ∈ 𝓓'(ℝ^d)` (Mathlib
+`Distribution ⊤ ℝ ⊤`, smooth test functions; NO extension to `𝓓^{R}` — density of `C^∞_c` in `C^R_c` is not in Mathlib) with an
+explicit finite-order estimate `|T f| ≤ C·M` for `JetBound R (coreImage X) f M` (`R = engineOrder X μ = max_P Σ_ℓ p_{P,ℓ}` the SUM
+of the engine depths, NOT the max coordinate depth; `≤ max_i chartJetTotal i μ` by arithmetic), `dsupport T ⊆ wallImage X ∩ tsupport
+prior ⊆ K⁻¹0 ∩ tsupport prior` (wall image `⋃ ψ_i(activeWalls i)` is COMPACT, so no continuity of `K` needed; Theorem A against
+the zero observable; prior support by the scalar integral vanishing), intrinsicness (two bridge presentations of the same phase
+and prior give the same distribution, by certificate uniqueness). Then (b) chart-face distributions `B_{P,J,a,μ,q}` on the
+tangential Euclidean space (base × K-coordinates), support in the CLOSED face box, compact-support pairing with a cutoff (chart maps
+need not be proper), `T(f) = Σ_{P,J,a} faceW·⟨B, ∂^a_J (f∘ψ∘T_P)|_{v_J=0}⟩` — PRESENTATION DATA (individual terms depend on
+weights; only the sum is intrinsic; density-splitting lemma is the only checkable independence); NO carrier type (c), NO `Sym^r`
+tensors. (d) `Z_n` as a distribution with the WEAK (test-function-wise) expansion; the seminorm-uniform remainder is a separate
+L–XL unit needing a full quantitative audit (remainder depths, strict exponent margin for critical logs, tail ≤ prior·vol).
+Units: C0a coefficient linearity (S–M) · C0b compact core/wall images, wall ⊆ zero set (S–M) · C0c `pdMulti` ↔ `iteratedFDeriv`
+bridge `|pdMulti m l f x| ≤ ‖iteratedFDeriv ℝ (Σ m) f x‖` (M–L) · C1a `|smoothCoeffAtDepth F| ≤ coeffBoundConstant · M` for
+`RectBound F p b M` with an EXPLICIT constant (absolute majorants; M–L) · C1b product `2^{Σp}`, LOCAL chain rule for `f∘ψ_i`
+(ψ smooth only near the box), affine transfer (L) · C1c global `JetBound` estimate + order comparison (M–L) · C2 distribution
+via `TestFunction.mkCLM`/`limitCLM` + `Seminorm` continuity, finite-order theorem (M) · C3 support + intrinsicness (S–M) · C4w
+`Z_n` weak expansion (M) · C5a face factorisation + tangential bounds (L) · C5b face distributions, cutoff pairing,
+presentation (L–XL) · C4s uniform remainder (L–XL) · C6 regression: finite part `F(u) = ∫_0^1 (u(x)−u(0))/x dx` — exists,
+linear, `|F u| ≤ sup|u'|`, support `[0,1]`, NO order-0 bound (`F(u_ε) ≥ log(1/ε)`), `F(x^M) = 1/M` (M). First release boundary:
+C2 + C3 + intrinsicness with Theorem B as the presentation. Non-claims: minimal order, `C^R` extension, resolved manifold,
+intrinsic per-stratum tensors, measure coefficients, chart-transition compatibility, strong-topology expansion.
+Execution 2026-09-14: agents on C0c (`tide/c0c`), C1a (`tide/c1a`), C6 (`tide/c6`); C0a/C0b/C1b/C1c/C2/C3 in `tide/smooth`.
