@@ -701,3 +701,4 @@ CDIX `SmoothJetDetermination` LANDED (Theorem A; agent): `smoothCoeff_congr` (je
 walls), `SmoothCoreDecomposition.coeff_congr`, ★★★ `BridgeInputs.coeff_congr_of_jets` (order `chartJetOrder i μ` on active
 walls). In flight: Theorem B `SmoothRenormalisedStrata` (agent, tide/jets2): `renormFunctional`, `smoothCoeffAtDepth_mul_eq`,
 family/decomposition level, `BridgeInputs.coeff_eq_renormSum`.
+CDX `ShallowStratumRegression` LANDED (main 18c0fca, 722 modules): `xM_isEquivalent`, `no_finite_cornerJet_formula`.
