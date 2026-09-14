@@ -745,3 +745,27 @@ Landed (all axiom-clean, gated): CDXII `CoordinateFrechetBridge` (C0c: `pdMulti_
 `isCompact_dsupport_coeffDistribution`, `hasSmoothCoordFreeExpansion_partitionObs`). 729 modules. Mirror paragraph appended.
 Remaining: C5a/C5b chart-face distributions and the pairing presentation (L–XL); C4s seminorm-uniform remainder / `Z_n` as a
 distribution (L–XL); paper-facing wording. Next: consult #124 audit of the release boundary + C5 design.
+### 16.2 Consult #124 (2026-09-14): AUDIT of the release boundary — PASSED; C5 design
+Astra #124 (`tide-log/gpt6_bigpicture_v124.md`): the first release boundary is reached (intrinsic coefficient distribution on
+the original space, concrete finite-order estimate, compact support, wall-image support theorem, testwise expansion; Theorem B =
+chart-face presentation). Qualifications: `{K = 0}` need not be closed for measurable `K` (containment is fine; "vanishes on the open
+complement" needs open subsets of `{K ≠ 0}`); `engineOrder` is a presentation-dependent UPPER bound, not the order; `Ω = ⊤` only;
+`commonQ/commonD` are admissible presentation lattice data. Cheap additions: (A) `coeffDistribution = 0` off the lattice / above the
+log degree (from `coeff_support`, keep `d = 0` honest); (B) `coeffLinearMap` alias; (C) `IsVanishingOn` on open `U ⊆ {K ≠ 0}`;
+`Zdist X N (hN : 0 ≤ N) : 𝓓'(Ω,ℝ)` (order 0, `|Z_N f| ≤ (∫ prior)·M`, support ⊆ tsupport prior, `Zdist_eq_of_eq`) — land now (S);
+C4w restated via `Zdist_apply`. NOT cheap: order-0 of the top log coefficient (needs leading exponent/multiplicity identification).
+C5 design: `FaceSpace P J := BaseSpace P × (Tangential P J → ℝ)` (ambient Euclidean, `faceBox` compact = baseBox × [0,b]^K); face
+factorisation as an OPERATOR IDENTITY `remList p (lK J) F (glue J 0 w) = remList p_K (finRange K) (F ∘ glue J 0) w` (C5a, first
+unit, independent); tangential density `H_{s,m,a} = ∂^{m−a}_J ρ_{P,s} ∘ glue J 0`; `faceFunctional P J a μ q : SmoothFace →ₗ ℝ`
+(no topology; `faceW J a` kept OUTSIDE) with density-splitting identity `= ∫_s renormFunctional (ρfam P s) … (u(s, ·) ∘ proj) dν`;
+tangential order `R_{P,J} = Σ_{k∈K} p_k`, anisotropic `TangentialJetBound` (no base derivatives); `faceDistribution :
+𝓓'(FaceSpace)` by restriction; support via `u =ᶠ[𝓝ˢ faceBox] 0 → B u = 0` (NOT "integral over the box": remList has Taylor
+subtraction terms); face-jet REPRESENTATIVES (chart pullback smooth only near the box: use `obsExt`/cutoff, prove independence);
+reconstruction `coeffDistribution X μ q f = Σ_{P,J,a} faceW J a * faceFunctional … (faceJet X P J a f)` from Theorem B on
+`X.withObs f`; regrouping `|a| = r` optional, `1/r!` tensor normalisation OUT of scope. Units: C5a restriction/remList algebra (M) ·
+C5b face geometry, joint→tangential jet bound (S–M) · C5c functional, integrability, linearity, density splitting (M) · C5d tangential
+bound, distribution constructor, support (M) · C5e face-jet representatives, independence, reconstruction (M) · C5f regrouping (S).
+C4s after C5: `JetBound`-uniform remainder `|Zdist N f − S_A(N,f)| ≤ C·M·N^{−A}(log N)^L` for `N ≥ N₀ ≥ 2`; little-o via `A' > A`
+plus the finite band `S_{A'} − S_A` (all log powers at each `μ ≤ A`); `remainderOrder X L := sup_P Σ_j remainderDepth`.
+Execution: agents C5a (`tide/c5a`), C5d-generic (`tide/c5d`: compact-set smooth functional → distribution, tangential jet bounds);
+Zdist + cheap additions in `tide/smooth`; then C5c/C5e.
