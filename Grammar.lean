@@ -704,3 +704,5 @@ import Grammar.SmoothExpansionCertificate
 import Grammar.SmoothCoreCertificate
 import Grammar.SmoothAffineFamily
 import Grammar.SmoothSheetTransport
+import Grammar.SmoothSheetPieces
+import Grammar.SmoothSheetProducer
