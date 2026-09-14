@@ -264,6 +264,72 @@ theorem pdPow_coordRem {G : (Fin d → ℝ) → ℝ} (hG : ContDiff ℝ ∞ G) {
   | zero => rfl
   | succ q ih => rw [pdPow_succ, pd_coordRem hG hij, ih (contDiff_pd hG j), pdPow_succ]
 
+theorem coordTaylor_apply (i : Fin d) (p : ℕ) (G : (Fin d → ℝ) → ℝ) (v : Fin d → ℝ) :
+    coordTaylor i p G v = ∑ m ∈ Finset.range p,
+      ((m.factorial : ℝ)⁻¹ * v i ^ m) * pdPow i m G (Function.update v i 0) := rfl
+
+theorem pdPow_coordTaylor {G : (Fin d → ℝ) → ℝ} (hG : ContDiff ℝ ∞ G) {i j : Fin d} (hij : j ≠ i)
+    (p q : ℕ) : pdPow j q (coordTaylor i p G) = coordTaylor i p (pdPow j q G) := by
+  induction q generalizing G with
+  | zero => rfl
+  | succ q ih => rw [pdPow_succ, pd_coordTaylor hG hij, ih (contDiff_pd hG j), pdPow_succ]
+
+/-- The double Taylor polynomial as a double sum over the jets at `v[i := 0][j := 0]`. -/
+theorem coordTaylor_coordTaylor_apply {G : (Fin d → ℝ) → ℝ} (hG : ContDiff ℝ ∞ G) {i j : Fin d}
+    (hij : j ≠ i) (p q : ℕ) (v : Fin d → ℝ) :
+    coordTaylor j q (coordTaylor i p G) v = ∑ m ∈ Finset.range q, ∑ n ∈ Finset.range p,
+      ((m.factorial : ℝ)⁻¹ * v j ^ m) * (((n.factorial : ℝ)⁻¹ * v i ^ n) *
+        pdPow i n (pdPow j m G) (Function.update (Function.update v j 0) i 0)) := by
+  rw [coordTaylor_apply]
+  refine Finset.sum_congr rfl fun m _ => ?_
+  rw [pdPow_coordTaylor hG hij, coordTaylor_apply, Finset.mul_sum,
+    Function.update_of_ne hij.symm]
+
+/-- Coordinate Taylor polynomials in different coordinates commute. -/
+theorem coordTaylor_comm {G : (Fin d → ℝ) → ℝ} (hG : ContDiff ℝ ∞ G) {i j : Fin d} (hij : j ≠ i)
+    (p q : ℕ) : coordTaylor j q (coordTaylor i p G) = coordTaylor i p (coordTaylor j q G) := by
+  funext v
+  rw [coordTaylor_coordTaylor_apply hG hij, coordTaylor_coordTaylor_apply hG hij.symm,
+    Finset.sum_comm]
+  refine Finset.sum_congr rfl fun m _ => Finset.sum_congr rfl fun n _ => ?_
+  rw [Function.update_comm hij (0 : ℝ) (0 : ℝ) v, pdPow_comm hG]
+  ring
+
+/-- `T_j (R_i G) = T_j G − T_j T_i G`. -/
+theorem coordTaylor_coordRem {G : (Fin d → ℝ) → ℝ} (hG : ContDiff ℝ ∞ G) {i j : Fin d}
+    (hij : j ≠ i) (p q : ℕ) (v : Fin d → ℝ) :
+    coordTaylor j q (coordRem i p G) v =
+      coordTaylor j q G v - coordTaylor j q (coordTaylor i p G) v := by
+  rw [coordTaylor_apply, coordTaylor_apply, coordTaylor_apply, ← Finset.sum_sub_distrib]
+  refine Finset.sum_congr rfl fun m _ => ?_
+  rw [pdPow_coordRem hG hij, pdPow_coordTaylor hG hij]
+  simp only [coordRem]
+  ring
+
+/-- Taylor polynomials and remainders in different coordinates commute. -/
+theorem coordTaylor_coordRem_comm {G : (Fin d → ℝ) → ℝ} (hG : ContDiff ℝ ∞ G) {i j : Fin d}
+    (hij : j ≠ i) (p q : ℕ) :
+    coordTaylor j q (coordRem i p G) = coordRem i p (coordTaylor j q G) := by
+  funext v
+  rw [coordTaylor_coordRem hG hij]
+  change _ = coordTaylor j q G v - coordTaylor i p (coordTaylor j q G) v
+  rw [coordTaylor_comm hG hij]
+
+/-- ★ **The tensor decomposition** in two coordinates `j ≠ i`:
+`G = T_j T_i G + T_j R_i G + T_i R_j G + R_j R_i G`. -/
+theorem tensor_decomp {G : (Fin d → ℝ) → ℝ} (hG : ContDiff ℝ ∞ G) {i j : Fin d} (hij : j ≠ i)
+    (p q : ℕ) (v : Fin d → ℝ) :
+    G v = coordTaylor j q (coordTaylor i p G) v + coordTaylor j q (coordRem i p G) v +
+      coordTaylor i p (coordRem j q G) v + coordRem j q (coordRem i p G) v := by
+  have h1 := coordTaylor_coordRem hG hij p q v
+  have h2 := coordTaylor_coordRem hG hij.symm q p v
+  have h3 := coordTaylor_comm hG hij p q
+  have h4 : coordRem j q (coordRem i p G) v =
+      coordRem i p G v - coordTaylor j q (coordRem i p G) v := rfl
+  have h5 : coordRem i p G v = G v - coordTaylor i p G v := rfl
+  rw [h4, h1, h2, h5, h3]
+  ring
+
 /-! ### Iterated remainders over a list of coordinates -/
 
 variable (p : Fin d → ℕ)

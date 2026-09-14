@@ -687,3 +687,5 @@ import Grammar.SmoothCoordTaylor
 import Grammar.SmoothOneDim
 import Grammar.SmoothLogIntegrable
 import Grammar.SmoothFaceTheorem
+import Grammar.SmoothInnerMonomial
+import Grammar.SmoothTwoDim
