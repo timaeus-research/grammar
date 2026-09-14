@@ -735,5 +735,6 @@ import Grammar.SmoothFaceDistributionAnalytic
 import Grammar.SmoothFaceDistributionClosure
 import Grammar.SmoothUniformRemainder
 import Grammar.NormalCrossingWallInvariance
+import Grammar.SmoothResolvedConsumer
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
