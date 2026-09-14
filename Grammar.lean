@@ -689,3 +689,5 @@ import Grammar.SmoothLogIntegrable
 import Grammar.SmoothFaceTheorem
 import Grammar.SmoothInnerMonomial
 import Grammar.SmoothTwoDim
+import Grammar.SmoothFiniteUniqueness
+import Grammar.SmoothFaceMonomial
