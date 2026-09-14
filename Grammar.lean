@@ -733,5 +733,6 @@ import Grammar.SmoothFaceDistribution
 import Grammar.SmoothFaceFunctionalBound
 import Grammar.SmoothFaceDistributionAnalytic
 import Grammar.SmoothFaceDistributionClosure
+import Grammar.SmoothUniformRemainder
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

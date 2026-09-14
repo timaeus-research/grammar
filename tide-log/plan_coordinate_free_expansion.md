@@ -807,3 +807,12 @@ CDXXV `SmoothFaceDistributionClosure`: neighbourhood congruence, closed-box cong
 (`faceFunctional_faceJetOf_eq`), cutoff pairing (`faceFunctional_eq_faceDistribution_mulCutoff`, `exists_cutoff_faceBox`), and
 `coeffDistribution_eq_sum_faceDistribution` (pairing of compactly supported face distributions with normal jets, cutoff-independent).
 737 modules. Not done (recorded non-claims): C4s uniform remainder; C5f regrouping; minimal orders; canonical stratification.
+### 16.7 C4s DONE 2026-09-14 (user: "just get the distribution thing done")
+CDXXVI `SmoothUniformRemainder`: `smooth_expansion_at_depth_linear`, `smooth_uniform_cutoff_linear`, `family_uniform_cutoff_linear`,
+`absSpectralSum_eq_of_dvd/_of_le/_finset_sum`, `exp_neg_mul_le_rpow_profile`, bridge piece data at a cutoff (`remDepth`, `remOrder`,
+`chartConstL`, `densityBoundL`, `rectBound_mul_rem`, `chartInt_eq_mul`, `familyCoeff_amp_eq_mul`, `abs_tailInt_le`), ★★★
+`uniform_remainder_cutoff`, `uniform_remainder_spectrumLe` (explicit gap `latticeGap`), `uniform_remainder_Zdist`. Astra's five-point
+audit satisfied: one depth (`remDepth`), one jet order (`remOrder`), one compact set (`coreImage ∪ tsupport prior`), `f`-free constants,
+threshold `N ≥ 1`; little-o via truncation at `cutoffExponent A` plus the finite band (all log powers at each `μ ≤ A`). The theorem is
+proved for the bridge's own observable (`uniform_remainder_cutoff_aux`) and instantiated at `X.withObs f` — this avoids mixed-type rewrites.
+Open (not planned): the statement in Mathlib's compact-convergence topology on `𝓓'`. 738 modules.
