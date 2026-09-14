@@ -725,3 +725,4 @@ import Grammar.ShallowStratumRegression
 import Grammar.FinitePartRegression
 import Grammar.SmoothRenormalisedStrata
 import Grammar.SmoothObservableCoeff
+import Grammar.SmoothCoeffJetBound
