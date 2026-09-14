@@ -737,5 +737,6 @@ import Grammar.SmoothUniformRemainder
 import Grammar.NormalCrossingWallInvariance
 import Grammar.SmoothResolvedConsumer
 import Grammar.SmoothResolvedCoefficient
+import Grammar.ResolvedDepth
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
