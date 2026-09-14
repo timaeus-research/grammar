@@ -629,3 +629,8 @@ analytic local ring: coordinate germs prime; zero-set containment is NOT enough 
 `NormalisedDomainCoreTransport` with `sectors`, source restricted to selected orthants, target `vol|_{Wdom}·prior`; bridge:
 cutoffs unchanged, exceptional set = zero sets of ALL factors; consumer: existing per-(chart, orthant) presentations. hironaka
 sector-atlas d5ae59da5 (regressions merged, ProdId linter fix; the Monomialize root builds). BM89 export audit in flight (agent).
+hironaka sector-atlas 1c1bf695b: `DomainCoreTransport` (Target B interface `NormalisedDomainCoreTransport d K prior Wdom` with
+`sectors`, `sectorSource`; `DomainChartData` (+ `domain_ae`), `χ_eq_zero_ae` off the domain, `map_sectorSource_restrict`,
+★★ `assembleDomain`). In flight (agents): BM89 export audit (what hironaka provides towards ONE modification with individual
+factor forms); grammar Target A cleanups (tide/targetA2); grammar domain consumer `SmoothDomainConsumer` (tide/domainconsumer,
+worktree grammar-tide-phase7).
