@@ -697,3 +697,7 @@ packaging. Units: 1 face-trace dependency of `remList`/`faceAmp` (M); 2 intrinsi
 `C^R` bound (M–L); 4 Leibniz-separated formula (L); 5 choice comparison by uniqueness (S–M); 6 global (XL); 7 ordinary-kernel
 specialisation under extra hypotheses. Regressions: `c_{1/2,1}(P) = √π/4·P(0,0)` (CCCXV), `c_{1/2,0}(x^M) = √π/(2M)`,
 axis-subtraction form of the constant coefficient, weight Leibniz. Non-claims recorded per §8 of the consult.
+CDIX `SmoothJetDetermination` LANDED (Theorem A; agent): `smoothCoeff_congr` (jets of order `depthOf h k (cutoffOf h μ)` on the
+walls), `SmoothCoreDecomposition.coeff_congr`, ★★★ `BridgeInputs.coeff_congr_of_jets` (order `chartJetOrder i μ` on active
+walls). In flight: Theorem B `SmoothRenormalisedStrata` (agent, tide/jets2): `renormFunctional`, `smoothCoeffAtDepth_mul_eq`,
+family/decomposition level, `BridgeInputs.coeff_eq_renormSum`.
