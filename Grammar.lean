@@ -742,5 +742,6 @@ import Grammar.ResolvedDepthLocal
 import Grammar.SmoothLeadingTerm
 import Grammar.SmoothResolvedLeading
 import Grammar.SmoothResolvedResonant
+import Grammar.SmoothResolvedLeadingOne
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
