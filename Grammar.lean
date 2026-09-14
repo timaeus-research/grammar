@@ -739,5 +739,7 @@ import Grammar.SmoothResolvedConsumer
 import Grammar.SmoothResolvedCoefficient
 import Grammar.ResolvedDepth
 import Grammar.ResolvedDepthLocal
+import Grammar.SmoothLeadingTerm
+import Grammar.SmoothResolvedLeading
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
