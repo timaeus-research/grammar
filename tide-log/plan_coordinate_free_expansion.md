@@ -673,3 +673,10 @@ charts (not by image openness). PROJECT CLOSED after a Target B façade (agent, 
 positive-phase branch, local prior/observable via cutoff, no Measurable K, named domain. Non-claims: no general semianalytic
 front end; no zero-phase/disconnected-ambient treatment; no RLCT identification of the leading nonzero exponent; no nonzero
 leading coefficient for arbitrary observables; no coefficient algorithm.
+★★★ PROJECT CLOSED 2026-09-14: main `b183f46` (720 modules). CDVIII `SmoothTargetBFacade` (agent):
+`exists_smoothExpansionCertificate_domain` (any zero anchor, no Measurable K, pure-tail branch, local data wrapper, named
+domain, interval regression). Mirror `grammar_lean.tex` commit 1140ae4 (Overleaf clone, LOCAL, ahead 4; pins b183f46 /
+hironaka 9ca3ad986; all 1100+ dots verified). Candidate next projects (Astra #121): (1) general compact semianalytic front
+end — finite gluing of overlapping basic domains (M+); (2) RLCT identification of the leading nonzero exponent via
+hironaka's E5 readout (separate readout project; S/M only if the leading asymptotic aligns exactly); (3) disconnected
+ambient / identically zero phase components (M).
