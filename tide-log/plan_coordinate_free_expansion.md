@@ -504,3 +504,16 @@ continuous and base-only near the divisor), not yet formalised (a.e. positivity 
 measurability, the partition identity a.e.). The two-stage composite was not attempted. Lake note: an olean
 built in another worktree may not be materialised (artifact cache `synthetic` trace without the file); fix by
 hard-linking `$LAKE_CACHE_DIR/artifacts/<hash>.olean` into `.lake/build/lib/lean/Grammar/`.
+Status 2026-09-14 (main `d68cf78`, 687 modules). Smooth engine landed: U0 CCCLXXXIII `SmoothFaceRegression`
+(★ `faceRegression`: face integral `(√π/2)N^{−1/2}∫f/x`, corner jets vanish); U1 CCCLXXXV `SmoothCoordTaylor`
+(coordinate derivatives with symmetry, `coordRem_bound`, commutation, ★★ `remList_bound`); U2 milestone 1
+CCCLXXXVII `SmoothOneDim` (★★ `oneDim_smooth` with explicit constants; `flat_bound` without logarithmic loss;
+half-line monomial integral and tail). Q1-α agent (§12): CCCLXXXIV weighted-atlas producer
+(`hasCoordFreeExpansion_of_weightedDomainAtlas`, hironaka `WeightedDomainAtlas`, `hasWeightedTransport_of_partition`),
+CCCLXXXVI `SheetOverlapRegression` (two overlapping shifted charts with ramp weights); the enlarged dominant-coordinate
+blow-up cover is OBSTRUCTED as stated ("ears": points whose dominant coordinate exceeds the box lie only in a
+non-dominant chart; a direction-only partition cannot exist) — a tail-supported normal cutoff repairs it (weights
+need only be measurable/bounded globally, base-only near the divisor) but was not formalised. Next (smooth engine):
+milestone 2 = the generic one-flat-complement face theorem (inner monomial integral with the two-regime estimate
+integrated against a product-flat outer amplitude), milestone 3 = `d = 2` tensor expansion (U0 compatibility), then
+U3 general `d`, U4 D2 adapter (radius margin), U5/U6.
