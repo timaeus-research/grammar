@@ -474,3 +474,33 @@ subset sum externally + list induction internally; parameters via a wrapper (joi
 finite `ν`); U4 by the radius margin (`sup|∂^α A_c| ≤ C‖c‖_{ℓ¹_{b'}}`), new `WeightedCorePresentation` exposing the
 same expansion interface. Milestones: (1) the 1D smooth theorem (coefficients `Σ_{m<p} F^{(m)}(0)/m! c^{(m)}_{μ,0}`,
 NOT Gamma identification), (2) the generic one-flat-complement face theorem, (3) `d = 2` tensor expansion (U0 check).
+
+## 12. Q1-α executed (2026-09-14, Q1-α agent): the weighted-atlas producer and the overlap regression
+
+Landed (main `5059e8f`, 686 modules; hironaka fork `sector-atlas` 98b308864):
+- hironaka: `ProductSectorAtlas` split into `ProductChartAtlas` (chart data, no disjointness) + `aeDisjoint`;
+  `WeightedSectorAtlas` (weights `ω_i`, `HasWeightedTransport`), `WeightedDomainAtlas` (+ `W`, orthants;
+  ★ `weightedDomainTransport`), ★ `hasWeightedTransport_of_partition` (weights `χ_i ∘ φ_i` from a partition
+  of unity a.e. on the resolved set), `congr_ae`, `toWeighted` embeddings; `ShiftedBoxAtlas` (two translated
+  identity charts, ramp weights, `shiftWeight_sum`, ★★ `shiftedAtlas : WeightedDomainAtlas`).
+- grammar CCCLXXXIV: `Sheet.*` over `ProductChartAtlas`; `SheetInputs` over `WeightedDomainAtlas` with the
+  stratum-adapted hypotheses `t₀`, `ω_indep`, `ω_contOn`; base weight `gw`, ★ `ω_Φ_eq` (weight constant on
+  every core, via `ω_eq_of_agree` and the collar level `δ_t₀`), face series `F := F₀.Fϕ.smul gw`, chart-box
+  certificates of CCCLXXII called directly; ★★★ `hasCoordFreeExpansion_of_weightedDomainAtlas`;
+  `hasCoordFreeExpansion_of_domainSectorAtlas` = weights 1 (all earlier regressions unchanged via `toWeighted`).
+  Units 1–6 of #113 done (base-weight adapter, weighted transport, adapted partition structure, weighted
+  producer, tails (already per chart + inactive charts), compatibility).
+- grammar CCCLXXXVI: unit 7 in the honest form that exists: `overlapInputs`, positive-measure overlap,
+  nonconstant continuous tangential weights, partition identity, ★★ `overlap_hasCoordFreeExpansion`.
+
+NOT done, with the reason: Astra's single-blow-up instance (dominant-coordinate charts with tangentially
+enlarged boxes `|y_γ| ≤ 1+ε`). With box charts of finite normal extent the union of the images is a star with
+"ears" (points whose dominant coordinate exceeds 1 lie only in a non-dominant chart); a direction-only
+partition subordinate to that cover cannot exist (at a direction with two near-maximal coordinates both
+weights are forced to vanish). Repair: a normal cutoff `θ(|x_β|)` supported in the tail `K ≥ δ`; then the
+pulled-back weight is base-only near the divisor but DISCONTINUOUS at the outer face of the box where the
+normalising sum vanishes — admissible for the producer (weights need only be measurable and bounded globally,
+continuous and base-only near the divisor), not yet formalised (a.e. positivity of the normaliser on the star,
+measurability, the partition identity a.e.). The two-stage composite was not attempted. Lake note: an olean
+built in another worktree may not be materialised (artifact cache `synthetic` trace without the file); fix by
+hard-linking `$LAKE_CACHE_DIR/artifacts/<hash>.olean` into `.lake/build/lib/lean/Grammar/`.
