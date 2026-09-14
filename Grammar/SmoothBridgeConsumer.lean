@@ -83,11 +83,11 @@ theorem obs_int : Integrable X.obs X.priorMeasure := by
 
 /-- The phase is nonnegative a.e. on every transported core: it is the monomial there. -/
 theorem K_nonneg_core (i : X.T.ι) :
-    ∀ᵐ y ∂((coreSource (X.T.ψ i) (X.T.ω i) X.T.a X.prior).map (X.T.ψ i)), 0 ≤ X.K y := by
+    ∀ᵐ y ∂((coreSource (X.T.ψ i) (X.T.ω i) (X.T.a i) X.prior).map (X.T.ψ i)), 0 ≤ X.K y := by
   rw [ae_map_iff (X.T.ψ_measurable i).aemeasurable (measurableSet_le measurable_const X.K_m)]
   unfold coreSource
   refine (withDensity_absolutelyContinuous _ _).ae_le ?_
-  refine (ae_restrict_mem X.T.measurableSet_box).mono fun u hu => ?_
+  refine (ae_restrict_mem (X.T.measurableSet_box i)).mono fun u hu => ?_
   change 0 ≤ X.K (X.T.ψ i u)
   rw [X.T.phase_eq i u (X.T.box_subset_V i hu)]
   exact mul_nonneg (X.T.phaseConst_pos i).le
@@ -118,7 +118,8 @@ theorem D_obs : X.D.obs = X.obs := rfl
 
 /-! ### The chart densities, extended to globally smooth functions -/
 
-theorem box_eq : centeredBox d X.T.a = piBox d (Icc (-X.T.a) X.T.a) := centeredBox_eq_pi d X.T.a
+theorem box_eq (i : X.T.ι) : centeredBox d (X.T.a i) = piBox d (Icc (-(X.T.a i)) (X.T.a i)) :=
+  centeredBox_eq_pi d (X.T.a i)
 
 /-- The local nonnegative density factor `ω · |b| · prior ∘ ψ` of chart `i`, smooth on `V i`. -/
 noncomputable def ρloc (i : X.T.ι) (u : Fin d → ℝ) : ℝ :=
@@ -142,9 +143,9 @@ theorem contDiffOn_Gloc (i : X.T.ι) : ContDiffOn ℝ ∞ (X.Gloc i) (X.T.V i) :
   (X.contDiffOn_ρloc i).mul (X.obs_smooth.comp_contDiffOn (X.contDiffOn_ψ i))
 
 theorem exists_ρf (i : X.T.ι) : ∃ g : (Fin d → ℝ) → ℝ, ContDiff ℝ ∞ g ∧
-    EqOn g (X.ρloc i) (centeredBox d X.T.a) ∧ ∀ x, 0 ≤ g x := by
+    EqOn g (X.ρloc i) (centeredBox d (X.T.a i)) ∧ ∀ x, 0 ≤ g x := by
   obtain ⟨g, hg, heq, hnn⟩ := exists_contDiff_eqOn_of_contDiffOn (X.T.V_open i)
-    (isCompact_centeredBox d X.T.a).isClosed (X.T.box_subset_V i) (X.contDiffOn_ρloc i)
+    (isCompact_centeredBox d (X.T.a i)).isClosed (X.T.box_subset_V i) (X.contDiffOn_ρloc i)
   exact ⟨g, hg, heq, hnn fun x _ => X.ρloc_nonneg i x⟩
 
 /-- The globally smooth nonnegative transport density of chart `i`, equal to `ω · |b| · prior ∘ ψ`
@@ -153,7 +154,7 @@ noncomputable def ρf (i : X.T.ι) : (Fin d → ℝ) → ℝ := Classical.choose
 
 theorem contDiff_ρf (i : X.T.ι) : ContDiff ℝ ∞ (X.ρf i) := (Classical.choose_spec (X.exists_ρf i)).1
 
-theorem ρf_eq (i : X.T.ι) {u : Fin d → ℝ} (hu : u ∈ centeredBox d X.T.a) :
+theorem ρf_eq (i : X.T.ι) {u : Fin d → ℝ} (hu : u ∈ centeredBox d (X.T.a i)) :
     X.ρf i u = X.ρloc i u := (Classical.choose_spec (X.exists_ρf i)).2.1 hu
 
 theorem ρf_nonneg (i : X.T.ι) (u : Fin d → ℝ) : 0 ≤ X.ρf i u :=
@@ -162,9 +163,9 @@ theorem ρf_nonneg (i : X.T.ι) (u : Fin d → ℝ) : 0 ≤ X.ρf i u :=
 theorem measurable_ρf (i : X.T.ι) : Measurable (X.ρf i) := (X.contDiff_ρf i).continuous.measurable
 
 theorem exists_G (i : X.T.ι) : ∃ g : (Fin d → ℝ) → ℝ, ContDiff ℝ ∞ g ∧
-    EqOn g (X.Gloc i) (centeredBox d X.T.a) := by
+    EqOn g (X.Gloc i) (centeredBox d (X.T.a i)) := by
   obtain ⟨g, hg, heq, -⟩ := exists_contDiff_eqOn_of_contDiffOn (X.T.V_open i)
-    (isCompact_centeredBox d X.T.a).isClosed (X.T.box_subset_V i) (X.contDiffOn_Gloc i)
+    (isCompact_centeredBox d (X.T.a i)).isClosed (X.T.box_subset_V i) (X.contDiffOn_Gloc i)
   exact ⟨g, hg, heq⟩
 
 /-- The globally smooth amplitude of chart `i`, equal to `ω · |b| · prior ∘ ψ · obs ∘ ψ` on the
@@ -173,18 +174,18 @@ noncomputable def G (i : X.T.ι) : (Fin d → ℝ) → ℝ := Classical.choose (
 
 theorem contDiff_G (i : X.T.ι) : ContDiff ℝ ∞ (X.G i) := (Classical.choose_spec (X.exists_G i)).1
 
-theorem G_eq (i : X.T.ι) {u : Fin d → ℝ} (hu : u ∈ centeredBox d X.T.a) :
+theorem G_eq (i : X.T.ι) {u : Fin d → ℝ} (hu : u ∈ centeredBox d (X.T.a i)) :
     X.G i u = X.Gloc i u := (Classical.choose_spec (X.exists_G i)).2 hu
 
 /-! ### The core sources as weighted box measures, split over the orthants -/
 
 /-- The core source of chart `i` is the box measure with density `|u|^h · ρf`. -/
-theorem coreSource_eq (i : X.T.ι) : coreSource (X.T.ψ i) (X.T.ω i) X.T.a X.prior =
-    (volume.restrict (centeredBox d X.T.a)).withDensity fun u =>
+theorem coreSource_eq (i : X.T.ι) : coreSource (X.T.ψ i) (X.T.ω i) (X.T.a i) X.prior =
+    (volume.restrict (centeredBox d (X.T.a i))).withDensity fun u =>
       ENNReal.ofReal (NormalisedBox.wgt (X.T.h i) u * X.ρf i u) := by
   unfold coreSource
   refine withDensity_congr_ae ?_
-  rw [Filter.EventuallyEq, ae_restrict_iff' X.T.measurableSet_box]
+  rw [Filter.EventuallyEq, ae_restrict_iff' (X.T.measurableSet_box i)]
   refine Eventually.of_forall fun u hu => ?_
   rw [absDet, X.T.jac_eq i u (X.T.box_subset_V i hu), abs_mul, Finset.abs_prod,
     ← ENNReal.ofReal_mul (mul_nonneg (X.prior_nonneg _) (X.T.ω_nonneg i u)), X.ρf_eq i hu]
@@ -223,17 +224,17 @@ abbrev PIdx : Type := Σ _ : X.T.ι, WaterFilling.CoordSign d
 
 /-- The core measure of a piece: the weighted orthant-box measure pushed along the chart. -/
 noncomputable def coreMeasure (p : X.PIdx) : Measure (Fin d → ℝ) :=
-  ((volume.restrict (WaterFilling.orthantBox p.2 X.T.a)).withDensity fun w =>
+  ((volume.restrict (WaterFilling.orthantBox p.2 (X.T.a p.1))).withDensity fun w =>
     ENNReal.ofReal (NormalisedBox.wgt (X.T.h p.1) w * X.ρf p.1 w)).map (X.T.ψ p.1)
 
 /-- The pieces of a chart exhaust its transported core source. -/
 theorem sum_coreMeasure_chart (i : X.T.ι) :
     ∑ σ : WaterFilling.CoordSign d, X.coreMeasure ⟨i, σ⟩ =
-      (coreSource (X.T.ψ i) (X.T.ω i) X.T.a X.prior).map (X.T.ψ i) := by
+      (coreSource (X.T.ψ i) (X.T.ω i) (X.T.a i) X.prior).map (X.T.ψ i) := by
   unfold coreMeasure
-  rw [← SmoothSheetInputs.map_finset_sum' _ _ (X.T.ψ_measurable i), X.coreSource_eq, X.box_eq,
+  rw [← SmoothSheetInputs.map_finset_sum' _ _ (X.T.ψ_measurable i), X.coreSource_eq, X.box_eq i,
     restrict_signedBox_eq, ← Measure.sum_fintype fun σ : WaterFilling.CoordSign d =>
-      volume.restrict (WaterFilling.orthantBox σ X.T.a), withDensity_sum, Measure.sum_fintype]
+      volume.restrict (WaterFilling.orthantBox σ (X.T.a i)), withDensity_sum, Measure.sum_fintype]
 
 /-- ★ **The pieces and the tail exhaust the prior measure** (the transport identity). -/
 theorem sum_coreMeasure : ∑ p : X.PIdx, X.coreMeasure p + X.T.tail = X.priorMeasure := by
@@ -254,7 +255,7 @@ noncomputable def eqv (p : X.PIdx) : Fin (X.da p) ≃ {j // inJ (X.act p.1) j} :
   (Fintype.equivFin _).symm
 
 /-- The reflected inactive coordinates of a base point. -/
-def sc (p : X.PIdx) (s : Base (X.act p.1) X.T.a) : {j // ¬ inJ (X.act p.1) j} → ℝ :=
+def sc (p : X.PIdx) (s : Base (X.act p.1) (X.T.a p.1)) : {j // ¬ inJ (X.act p.1) j} → ℝ :=
   fun j => WaterFilling.sgn p.2 j.1 * s.1 j
 
 theorem continuous_sc (p : X.PIdx) : Continuous (X.sc p) :=
@@ -262,12 +263,12 @@ theorem continuous_sc (p : X.PIdx) : Continuous (X.sc p) :=
 
 /-- The chart coordinate of a piece: reflected active coordinates `v`, reflected inactive
 coordinates `s`. -/
-noncomputable def Tm (p : X.PIdx) (s : Base (X.act p.1) X.T.a) (v : Fin (X.da p) → ℝ) :
+noncomputable def Tm (p : X.PIdx) (s : Base (X.act p.1) (X.T.a p.1)) (v : Fin (X.da p) → ℝ) :
     Fin d → ℝ :=
   affineMap (X.eqv p) p.2 (X.sc p s) v
 
-theorem Tm_eq_refl_glueE (p : X.PIdx) (s : Base (X.act p.1) X.T.a) (v : Fin (X.da p) → ℝ) :
-    X.Tm p s v = WaterFilling.refl p.2 (glueE (X.act p.1) X.T.a (X.eqv p) s v) := by
+theorem Tm_eq_refl_glueE (p : X.PIdx) (s : Base (X.act p.1) (X.T.a p.1)) (v : Fin (X.da p) → ℝ) :
+    X.Tm p s v = WaterFilling.refl p.2 (glueE (X.act p.1) (X.T.a p.1) (X.eqv p) s v) := by
   funext j
   rw [WaterFilling.refl_apply]
   by_cases hj : j ∈ X.act p.1
@@ -278,8 +279,8 @@ theorem Tm_eq_refl_glueE (p : X.PIdx) (s : Base (X.act p.1) X.T.a) (v : Fin (X.d
     rfl
 
 /-- For active coordinates in `[0,a]` the chart coordinate lies in the orthant box. -/
-theorem Tm_mem_orthantBox (p : X.PIdx) (s : Base (X.act p.1) X.T.a) {v : Fin (X.da p) → ℝ}
-    (hv : ∀ j, v j ∈ Icc 0 X.T.a) : X.Tm p s v ∈ WaterFilling.orthantBox p.2 X.T.a := by
+theorem Tm_mem_orthantBox (p : X.PIdx) (s : Base (X.act p.1) (X.T.a p.1)) {v : Fin (X.da p) → ℝ}
+    (hv : ∀ j, v j ∈ Icc 0 (X.T.a p.1)) : X.Tm p s v ∈ WaterFilling.orthantBox p.2 (X.T.a p.1) := by
   rw [Tm_eq_refl_glueE, WaterFilling.mem_orthantBox]
   intro j
   rw [WaterFilling.refl_apply, ← mul_assoc, WaterFilling.sgn_mul_self, one_mul]
@@ -290,22 +291,22 @@ theorem Tm_mem_orthantBox (p : X.PIdx) (s : Base (X.act p.1) X.T.a) {v : Fin (X.
   · rw [glueE_apply_inactive _ _ _ _ _ hj]
     exact ⟨Base_val_nonneg _ _ s _, Base_val_le _ _ s _⟩
 
-theorem Tm_mem_box (p : X.PIdx) (s : Base (X.act p.1) X.T.a) {v : Fin (X.da p) → ℝ}
-    (hv : ∀ j, v j ∈ Icc 0 X.T.a) : X.Tm p s v ∈ centeredBox d X.T.a := by
-  rw [X.box_eq]
+theorem Tm_mem_box (p : X.PIdx) (s : Base (X.act p.1) (X.T.a p.1)) {v : Fin (X.da p) → ℝ}
+    (hv : ∀ j, v j ∈ Icc 0 (X.T.a p.1)) : X.Tm p s v ∈ centeredBox d (X.T.a p.1) := by
+  rw [X.box_eq p.1]
   exact WaterFilling.orthantBox_subset _ _ (X.Tm_mem_orthantBox p s hv)
 
-theorem Tm_mem_V (p : X.PIdx) (s : Base (X.act p.1) X.T.a) {v : Fin (X.da p) → ℝ}
-    (hv : ∀ j, v j ∈ Icc 0 X.T.a) : X.Tm p s v ∈ X.T.V p.1 :=
+theorem Tm_mem_V (p : X.PIdx) (s : Base (X.act p.1) (X.T.a p.1)) {v : Fin (X.da p) → ℝ}
+    (hv : ∀ j, v j ∈ Icc 0 (X.T.a p.1)) : X.Tm p s v ∈ X.T.V p.1 :=
   X.T.box_subset_V p.1 (X.Tm_mem_box p s hv)
 
 theorem continuous_Tm (p : X.PIdx) :
-    Continuous fun z : Base (X.act p.1) X.T.a × (Fin (X.da p) → ℝ) => X.Tm p z.1 z.2 :=
+    Continuous fun z : Base (X.act p.1) (X.T.a p.1) × (Fin (X.da p) → ℝ) => X.Tm p z.1 z.2 :=
   (continuous_affineMap_pair (X.eqv p) p.2).comp
     ((X.continuous_sc p).comp continuous_fst |>.prodMk continuous_snd)
 
 /-- The monomial phase at the chart coordinate is the active monomial. -/
-theorem prod_Tm_pow (p : X.PIdx) (s : Base (X.act p.1) X.T.a) (v : Fin (X.da p) → ℝ) :
+theorem prod_Tm_pow (p : X.PIdx) (s : Base (X.act p.1) (X.T.a p.1)) (v : Fin (X.da p) → ℝ) :
     ∏ j, X.Tm p s v j ^ (2 * X.T.k p.1 j) = mono (fun j => 2 * X.T.k p.1 (X.eqv p j).1) v := by
   rw [← Fintype.prod_subtype_mul_prod_subtype (inJ (X.act p.1))]
   have h2 : ∏ j : {j // ¬ inJ (X.act p.1) j}, X.Tm p s v j ^ (2 * X.T.k p.1 j) = 1 :=
@@ -321,8 +322,8 @@ theorem prod_Tm_pow (p : X.PIdx) (s : Base (X.act p.1) X.T.a) (v : Fin (X.da p) 
 /-- The amplitude family of a piece: the pull-back of the extended amplitude along the chart
 coordinate. -/
 noncomputable def amp (p : X.PIdx) :
-    SmoothAmplitudeFamily (Base (X.act p.1) X.T.a) (X.da p) X.T.a :=
-  SmoothAmplitudeFamily.ofAffine (X.continuous_sc p) (X.eqv p) p.2 (X.contDiff_G p.1) X.T.a
+    SmoothAmplitudeFamily (Base (X.act p.1) (X.T.a p.1)) (X.da p) (X.T.a p.1) :=
+  SmoothAmplitudeFamily.ofAffine (X.continuous_sc p) (X.eqv p) p.2 (X.contDiff_G p.1) (X.T.a p.1)
 
 /-- The active phase exponents of a piece. -/
 noncomputable def kA (p : X.PIdx) (j : Fin (X.da p)) : ℕ := X.T.k p.1 (X.eqv p j).1
@@ -335,13 +336,13 @@ theorem kA_pos (p : X.PIdx) (j : Fin (X.da p)) : 0 < X.kA p j := (X.mem_act).1 (
 /-- ★★ **The smooth core presentation of a piece**: constant phase unit `c_i`, transport density
 `ρf`, amplitude `G`. -/
 noncomputable def piecePresentation (p : X.PIdx) :
-    SmoothCorePresentation X.D (X.coreMeasure p) (Base (X.act p.1) X.T.a) (X.da p) where
-  ν := baseMeasure (X.act p.1) X.T.a (X.T.h p.1)
+    SmoothCorePresentation X.D (X.coreMeasure p) (Base (X.act p.1) (X.T.a p.1)) (X.da p) where
+  ν := baseMeasure (X.act p.1) (X.T.a p.1) (X.T.h p.1)
   h := X.hA p
   k := X.kA p
   k_pos := X.kA_pos p
-  b := X.T.a
-  b_pos := X.T.a_pos
+  b := (X.T.a p.1)
+  b_pos := X.T.a_pos p.1
   βf _ := X.T.phaseConst p.1
   β_cont := continuous_const
   β_pos _ := X.T.phaseConst_pos p.1
@@ -352,30 +353,30 @@ noncomputable def piecePresentation (p : X.PIdx) :
   nonneg_ρ := Eventually.of_forall fun z => X.ρf_nonneg p.1 _
   amp := X.amp p
   amplitude_eq := by
-    refine (ae_snd_mem_box' (X.act p.1) X.T.a (baseMeasure (X.act p.1) X.T.a (X.T.h p.1))).mono
-      fun z hz => ?_
-    have hv : ∀ j, z.2 j ∈ Icc 0 X.T.a := fun j => Ioc_subset_Icc_self (hz j (Set.mem_univ j))
+    refine (ae_snd_mem_box' (X.act p.1) (X.T.a p.1)
+      (baseMeasure (X.act p.1) (X.T.a p.1) (X.T.h p.1))).mono fun z hz => ?_
+    have hv : ∀ j, z.2 j ∈ Icc 0 (X.T.a p.1) := fun j => Ioc_subset_Icc_self (hz j (Set.mem_univ j))
     change X.G p.1 (X.Tm p z.1 z.2) = X.ρf p.1 (X.Tm p z.1 z.2) * X.obs (X.T.ψ p.1 (X.Tm p z.1 z.2))
     rw [X.G_eq p.1 (X.Tm_mem_box p z.1 hv), X.ρf_eq p.1 (X.Tm_mem_box p z.1 hv)]
     rfl
   phase_normal := by
-    refine (ae_snd_mem_box' (X.act p.1) X.T.a (baseMeasure (X.act p.1) X.T.a (X.T.h p.1))).mono
-      fun z hz => ?_
-    have hv : ∀ j, z.2 j ∈ Icc 0 X.T.a := fun j => Ioc_subset_Icc_self (hz j (Set.mem_univ j))
+    refine (ae_snd_mem_box' (X.act p.1) (X.T.a p.1)
+      (baseMeasure (X.act p.1) (X.T.a p.1) (X.T.h p.1))).mono fun z hz => ?_
+    have hv : ∀ j, z.2 j ∈ Icc 0 (X.T.a p.1) := fun j => Ioc_subset_Icc_self (hz j (Set.mem_univ j))
     change X.K (X.T.ψ p.1 (X.Tm p z.1 z.2)) = _
     rw [X.T.phase_eq p.1 _ (X.Tm_mem_V p z.1 hv), X.prod_Tm_pow]
     rfl
   transport := by
-    have hΦ : (fun z : Base (X.act p.1) X.T.a × (Fin (X.da p) → ℝ) =>
+    have hΦ : (fun z : Base (X.act p.1) (X.T.a p.1) × (Fin (X.da p) → ℝ) =>
         X.T.ψ p.1 (X.Tm p z.1 z.2)) =
-        (X.T.ψ p.1 ∘ WaterFilling.refl p.2) ∘ glueE' (X.act p.1) X.T.a (X.eqv p) := by
+        (X.T.ψ p.1 ∘ WaterFilling.refl p.2) ∘ glueE' (X.act p.1) (X.T.a p.1) (X.eqv p) := by
       funext z
       simp only [Function.comp_apply, glueE']
       rw [X.Tm_eq_refl_glueE]
-    have hρ : (fun z : Base (X.act p.1) X.T.a × (Fin (X.da p) → ℝ) =>
+    have hρ : (fun z : Base (X.act p.1) (X.T.a p.1) × (Fin (X.da p) → ℝ) =>
         ((mono (X.hA p) z.2 * X.ρf p.1 (X.Tm p z.1 z.2)).toNNReal : ℝ≥0∞)) =
         fun z => ENNReal.ofReal (mono (fun j => X.T.h p.1 (X.eqv p j).1) z.2 *
-          X.ρf p.1 (WaterFilling.refl p.2 (glueE' (X.act p.1) X.T.a (X.eqv p) z))) := by
+          X.ρf p.1 (WaterFilling.refl p.2 (glueE' (X.act p.1) (X.T.a p.1) (X.eqv p) z))) := by
       funext z
       rw [X.Tm_eq_refl_glueE]
       rfl
@@ -394,7 +395,7 @@ noncomputable def en : Fin (Fintype.card X.PIdx) ≃ X.PIdx := (Fintype.equivFin
 /-- ★★★ **The smooth core decomposition of the population integral**: one smooth core presentation
 per chart and orthant, the transport's tail as the tail. -/
 noncomputable def decomp : SmoothCoreDecomposition X.D (Fintype.card X.PIdx)
-    (fun I => Base (X.act (X.en I).1) X.T.a) (fun I => X.da (X.en I)) where
+    (fun I => Base (X.act (X.en I).1) (X.T.a (X.en I).1)) (fun I => X.da (X.en I)) where
   core I := X.coreMeasure (X.en I)
   tail := X.T.tail
   measure_eq := by
