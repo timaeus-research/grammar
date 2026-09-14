@@ -399,3 +399,38 @@ Addendum: CCCLXXXII `SheetCentredCubeRegression` (main `6c3be29`, 683 modules) �
 boxes) through `CentredInputs` with polynomial packets by substitution (`chartPoly`, `bind₁`): the end-to-end test of H3.
 Mirror `grammar_lean.tex` local commit 634e45e (not pushed): domain paragraph rewritten to the landed state, pins bumped,
 `\leanrefH` macro for the hironaka fork.
+
+## 11. Consult #113 (2026-09-13): weights instead of disjointness — verdict and the Q1-α programme
+
+User: a.e.-disjointness is not needed; is the obstruction that partitions of unity are not analytic? Astra #113
+(`gpt6_bigpicture_v113.md`): yes. The engine needs, on each core, an amplitude that is a convergent normal
+power series (ℓ¹ family, `amplitude_eq`), continuous in the base; a weight that is a continuous function of the
+BASE point only is admissible today (`Fϕ.smul`), a weight varying in the normal directions is not, and a
+multiplicity weight is discontinuous. Stratum-adapted partitions (normally constant near the divisor):
+(a) own-chart admissibility IS the right certificate requirement (pieces need not share a normal foliation);
+(b) but normalisation `a_i/∑a_j` destroys own-chart constancy in general, and a normally constant partition
+subordinate to an ARBITRARY prescribed SNC analytic atlas is FALSE (collar counterexample `f(s)+g(s+t)=1` ⇒
+both constant; circular divisor covered by two arcs); (c) Watanabe's clause gives no normal-coordinate
+compatibility (`s' = s+u`, `s+u²` transitions); (d) single dominant-coordinate blow-up: concrete construction
+`a_β = ∏_{γ≠β} η(z_γ²/z_β²)` (all numerators factor through the SAME direction map, so normalisation is safe);
+composites along coordinate centres: a restricted programme needing an induction invariant. Smooth route (Q2):
+finite deepest-corner jets do NOT determine even the leading coefficient (`∫∫ f(x)e^{−nx²y²}`, `f` supported
+away from 0: leading term `(√π/2)n^{−1/2}∫f(x)/x`), so a smooth engine needs facewise transverse jets with
+tangential dependence and controlled remainders (D1); moving the weight into the measure (D2) keeps analytic
+data and §4 infrastructure but requires new weighted-moment asymptotics; stratum-adapted weights (D3) lose
+nothing downstream, only geometric scope. Canonicity in the smooth setting: total coefficients `c_{α,j}` are
+canonical, stratumwise allocations are not automatically. Log degree "codim − 1" is a bound/resonance
+statement, not an unconditional equality.
+
+Programme (Astra's top choice, user "happy either way"): Q1-α weighted-atlas producer with an explicit
+`StratumAdaptedPartition` hypothesis (per-core base factorisation `χ_i(Φ_{i,c}(s,v)) = w_{i,c}(s)` a.e. on the
+WHOLE core box, partition identity, gap on the excluded region, weighted transport), units: (1) core base-weight
+adapter (scale `c`, `x`, certificate data by a continuous base weight); (2) weighted transport algebra (no
+disjointness); (3) adapted-partition structure; (4) weighted domain-atlas producer; (5) tail bookkeeping;
+(6) compatibility: disjoint atlases embed as the old case. First regression: enlarged overlapping
+dominant-coordinate cover of a single blow-up with the direction weights. Stopping rule: one two-stage
+coordinate-centre composite; stop unless an induction invariant preserving the base-factorisation equations is
+provable. Non-claim wording: "certificates from weighted domain-sector atlases equipped with an explicit
+per-core stratum-adapted partition; verified for the stated blow-up models; no claim that arbitrary SNC
+resolutions or Watanabe modifications supply such partitions, nor that normally varying smooth weights enter the
+analytic engine."
