@@ -299,6 +299,48 @@ theorem faceRem_nonneg (h k p : Fin d → ℕ) (b : ℝ) (L : ℕ) {M : ℝ} (hM
   exact mul_nonneg (mul_nonneg (Finset.prod_nonneg fun i _ => by positivity) hM)
     (faceRemWeight_nonneg _ _ _ _ _ _)
 
+/-- ★★★ **The smooth expansion in general dimension at depth `p`, UNIFORMLY in the amplitude**:
+the constant depends only on `(h, k, p, β, b, L)` and the rectangular mixed-derivative bound `M`;
+for every smooth `G` with `|∂^m G| ≤ M` on `[0,b]^d` (`m ≤ p`),
+`|∫_{(0,b]^d} G v^h e^{−Nβ v^{2k}} − ∑_{μ ∈ Λ^Q_L} N^{−μ} ∑_{q ≤ d−1} C_{μ,q}(G) (log N)^q|`
+`  ≤ K N^{−L} (1 + log N)^{d−1}` for all `N ≥ 1`, `Q = 2∏kᵢ`, `C(G) = smoothCoeffAtDepth p G`. -/
+theorem smooth_expansion_at_depth_uniform (hk : ∀ i, 0 < k i) (hβ : 0 < β) (hb : 0 < b)
+    (hL : 0 < L) (hp : ∀ i, p i + h i = 2 * k i * L) (hp0 : ∀ i, 0 < p i) (M : ℝ) :
+    ∃ K : ℝ, ∀ G : (Fin d → ℝ) → ℝ, ContDiff ℝ ∞ G →
+      (∀ m : Fin d → ℕ, (∀ i, m i ≤ p i) → ∀ v : Fin d → ℝ, (∀ i, v i ∈ Icc 0 b) →
+        |pdMulti m (List.finRange d) G v| ≤ M) →
+      ∀ N : ℝ, 1 ≤ N →
+      |(∫ v in box (Fin d) b, G v * mono h v * exp (-(N * β) * mono (fun i => 2 * k i) v)) -
+        absSpectralSum (Qamb k) (d - 1) (smoothCoeffAtDepth G h k p β b) L N| ≤
+        K * (N ^ (-(L : ℝ)) * (1 + log N) ^ (d - 1)) := by
+  choose C hC using fun (J : Finset (Fin d)) (e : Fin d → ℕ) =>
+    face_two_regime k β b L J hk hβ hb hL e
+  refine ⟨∑ x ∈ faceIndex p, faceW x.1 x.2 * (C x.1 (fun i => x.2 i + h i) *
+    faceRem h k p b L M x.1), fun G hG hM N hN => ?_⟩
+  have hM0 : 0 ≤ M := by
+    have := hM 0 (fun i => Nat.zero_le _) 0 (fun i => by simp [hb.le])
+    exact (abs_nonneg _).trans this
+  have hlog : 0 ≤ log N := log_nonneg hN
+  rw [integral_eq_sum_faceIntegral hG b N, ← sum_faceExpansion_eq hk hβ hb N,
+    ← Finset.sum_sub_distrib, Finset.sum_mul]
+  refine (Finset.abs_sum_le_sum_abs _ _).trans (Finset.sum_le_sum fun x hx => ?_)
+  have hm : x.2 ∈ idxL p (lJ x.1) := (Finset.mem_sigma.1 hx).2
+  have hb' := face_bound hG hk hb hp hp0 hM hm (hC x.1 (fun i => x.2 i + h i)) hN
+  have hC0 : 0 ≤ C x.1 (fun i => x.2 i + h i) :=
+    nonneg_of_two_regime (hC x.1 (fun i => x.2 i + h i))
+  have hR0 := faceRem_nonneg h k p b L hM0 x.1
+  have hpow : (1 + log N) ^ DJ x.1 ≤ (1 + log N) ^ (d - 1) :=
+    pow_le_pow_right₀ (by linarith) (DJ_le x.1)
+  have hW := faceW_nonneg x.1 x.2
+  rw [← mul_sub, abs_mul, abs_of_nonneg hW]
+  calc faceW x.1 x.2 * |faceIntegral G h k p β b x.1 x.2 N - faceExpansion G h k p β b L x.1 x.2 N|
+      ≤ faceW x.1 x.2 * (C x.1 (fun i => x.2 i + h i) * faceRem h k p b L M x.1 *
+          (1 + log N) ^ DJ x.1 * N ^ (-(L : ℝ))) := mul_le_mul_of_nonneg_left hb' hW
+    _ ≤ faceW x.1 x.2 * (C x.1 (fun i => x.2 i + h i) * faceRem h k p b L M x.1 *
+          (1 + log N) ^ (d - 1) * N ^ (-(L : ℝ))) := by
+        gcongr
+    _ = _ := by ring
+
 /-- ★★★ **The smooth expansion in general dimension at depth `p`**: for smooth `F` with
 `|∂^m F| ≤ M` on `[0,b]^d` (`m ≤ p`), Jacobian exponents `h`, phase `Nβ v^{2k}`, cutoff `L ≥ 1`
 and depths `pᵢ + hᵢ = 2kᵢL`,
@@ -314,33 +356,8 @@ theorem smooth_expansion_at_depth (hF : ContDiff ℝ ∞ F) (hk : ∀ i, 0 < k i
       |(∫ v in box (Fin d) b, F v * mono h v * exp (-(N * β) * mono (fun i => 2 * k i) v)) -
         absSpectralSum (Qamb k) (d - 1) (smoothCoeffAtDepth F h k p β b) L N| ≤
         K * (N ^ (-(L : ℝ)) * (1 + log N) ^ (d - 1)) := by
-  have hM0 : 0 ≤ M := by
-    have := hM 0 (fun i => Nat.zero_le _) 0 (fun i => by simp [hb.le])
-    exact (abs_nonneg _).trans this
-  choose C hC using fun (J : Finset (Fin d)) (e : Fin d → ℕ) =>
-    face_two_regime k β b L J hk hβ hb hL e
-  refine ⟨∑ x ∈ faceIndex p, faceW x.1 x.2 * (C x.1 (fun i => x.2 i + h i) *
-    faceRem h k p b L M x.1), fun N hN => ?_⟩
-  have hlog : 0 ≤ log N := log_nonneg hN
-  rw [integral_eq_sum_faceIntegral hF b N, ← sum_faceExpansion_eq hk hβ hb N,
-    ← Finset.sum_sub_distrib, Finset.sum_mul]
-  refine (Finset.abs_sum_le_sum_abs _ _).trans (Finset.sum_le_sum fun x hx => ?_)
-  have hm : x.2 ∈ idxL p (lJ x.1) := (Finset.mem_sigma.1 hx).2
-  have hb' := face_bound hF hk hb hp hp0 hM hm (hC x.1 (fun i => x.2 i + h i)) hN
-  have hC0 : 0 ≤ C x.1 (fun i => x.2 i + h i) :=
-    nonneg_of_two_regime (hC x.1 (fun i => x.2 i + h i))
-  have hR0 := faceRem_nonneg h k p b L hM0 x.1
-  have hpow : (1 + log N) ^ DJ x.1 ≤ (1 + log N) ^ (d - 1) :=
-    pow_le_pow_right₀ (by linarith) (DJ_le x.1)
-  have hW := faceW_nonneg x.1 x.2
-  rw [← mul_sub, abs_mul, abs_of_nonneg hW]
-  calc faceW x.1 x.2 * |faceIntegral F h k p β b x.1 x.2 N - faceExpansion F h k p β b L x.1 x.2 N|
-      ≤ faceW x.1 x.2 * (C x.1 (fun i => x.2 i + h i) * faceRem h k p b L M x.1 *
-          (1 + log N) ^ DJ x.1 * N ^ (-(L : ℝ))) := mul_le_mul_of_nonneg_left hb' hW
-    _ ≤ faceW x.1 x.2 * (C x.1 (fun i => x.2 i + h i) * faceRem h k p b L M x.1 *
-          (1 + log N) ^ (d - 1) * N ^ (-(L : ℝ))) := by
-        gcongr
-    _ = _ := by ring
+  obtain ⟨K, hK⟩ := smooth_expansion_at_depth_uniform (h := h) hk hβ hb hL hp hp0 M
+  exact ⟨K, hK F hF hM⟩
 
 end SmoothEngine
 
