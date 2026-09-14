@@ -582,3 +582,21 @@ support). Coefficient functional: scalar linear functional is the final form; op
 from resolution data", starting with the resolution-space-to-weighted-transport bridge.
 Final state 2026-09-14: main `62af5df` (714 modules). CDII `SmoothCubeRegression` (radial smooth non-analytic prior on
 the cube blow-up, `commonD = 0`) + `SmoothZeroDim` (`smoothIntegral_zeroDim`, `smoothCoeff_zeroDim`). SMOOTH PROGRAMME CLOSED.
+
+## 14. PROJECT: a smooth weighted normalised atlas from resolution data (opened 2026-09-14; user: "proceed with 1"; consult #119 = design)
+Astra #119 (`gpt6_bigpicture_v119.md`): **Target A** = `K` analytic on open `U₀`, `K ≥ 0` on connected open `W ∋ 0`, `K(0) = 0`,
+`K ≢ 0` near `0`, prior `C_c^∞`, `tsupport prior ⊆ W`, obs smooth ⇒ `∃ c Q D, HasSmoothCoordFreeExpansion (∫ prior·obs·e^{−NK}) c Q D`.
+Output interface is NOT the strict `WeightedDomainAtlas` (a support-local partition cannot sum to one on full outer-box images):
+`SmoothWeightedNormalisedCoreTransport K prior` = finitely many ZERO charts `ψᵢ` (Watanabe even chart form, `phaseConst·∏v^{2k}`,
+`det = bᵢ·v^h`, bᵢ ≠ 0 analytic on open `Vᵢ ⊇ box`), smooth weights `ωᵢ` on `Vᵢ`, a TAIL MEASURE with phase gap `δ`, and
+`∑ (sourceMeasure prior i).map ψᵢ + tail = vol.withDensity (ofReal prior)`. Bridge = Euclidean chart-by-chart change of variables
+(`lintegral_image_eq_lintegral_abs_det_fderiv_mul` on box ∖ walls; NOT `PartialResolution`); cutoffs = chartwise bumps `βᵢ∘φᵢ`
+extended by zero, normalised by a smooth `q(s)` with `t·q(t) = 1` for `t ≥ 1/2` (NOT `1/s`; NOT Mathlib manifold PoU); target
+weights `χᵢ = ρᵢ∘g⁻¹` on the regular locus (measurable via BijOn + local homeo inverse), a.e.-identified with the smooth
+`ρᵢ∘φᵢ.symm` (phase walls null); residual `α = ∑χᵢ`, tail density `prior·(1−α)`, gap from compactness of `C ∖ {s > 1/2}`;
+`vol(S ∩ {K=0}) = 0` by finite chart images of walls (no analytic-zero-set theorem). Global-smoothness: extend the ONE scalar
+amplitude `Gᵢ = ωᵢ|bᵢ|·prior∘ψᵢ·obs∘ψᵢ` (CCCXCVIII), not the atlas fields. Units 0–9 (§7 of the consult); land Unit 1 first
+(supported one-chart transport kernel, hironaka, arbitrary measurable target density); regressions: `d=1`, `K=x²`, identity
+modification, no-tail AND genuine-tail AND empty-core cases. Target B (semianalytic W) after A: needs a simultaneous exact chart
+packet for `K` and the boundary functions (hironaka export). Acceptance: (1) `WatanabeModificationOn K W` + prior ⇒ the
+core-transport-with-tail, no atlas hypothesis; (2) compose with `exists_watanabeModificationOn` ⇒ Target A; (3) regressions.
