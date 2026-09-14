@@ -816,3 +816,12 @@ audit satisfied: one depth (`remDepth`), one jet order (`remOrder`), one compact
 threshold `N ≥ 1`; little-o via truncation at `cutoffExponent A` plus the finite band (all log powers at each `μ ≤ A`). The theorem is
 proved for the bridge's own observable (`uniform_remainder_cutoff_aux`) and instantiated at `X.withObs f` — this avoids mixed-type rewrites.
 Open (not planned): the statement in Mathlib's compact-convergence topology on `𝓓'`. 738 modules.
+
+## 17. PROJECT: Theorem D — the coefficient distributions on the RESOLVED manifold and their stratification (opened 2026-09-14; user: "let's proceed with this"; consult #126 = design)
+Motivation (user): Theorem C on `W` is sensible but the interesting content is the expression in terms of resolution data and the
+stratification. Finding: the carrier exists upstream — hironaka's `WatanabeModificationOn K W` carries the resolved manifold `R.U`
+(Mathlib `AnalyticManifold`), the proper analytic blow-down `g`, iso off the zero set, Watanabe charts of the maximal atlas
+(`EvenChartBox`), and the bridge proof builds cutoffs and cores ON `R.U` before pushing to `W`. Plan: a resolved transport keeping
+`U`; the U-integral `Z_n[F] = ∫_U F e^{−nK∘g} dμ_U` with `Z_n[φ∘g] = Z_n[φ]`; `𝒯_{μ,q}` on smooth functions on `U`, canonical by
+uniqueness, supported on the divisor; local-depth stratification; support filtration, ordinary kernels on open strata, top-log
+measures. Design consult #126 (`tide-log/prompt_bigpicture_v126.md`).
