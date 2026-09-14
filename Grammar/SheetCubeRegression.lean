@@ -87,7 +87,7 @@ noncomputable def cubeInputs : SheetInputs d where
   K := K
   K_m := continuous_K.measurable
   Ω := centeredBox d 1
-  A := cubeDomainAtlas
+  A := cubeDomainAtlas.toWeighted
   a := 1
   ha := one_pos
   lo_eq := fun (β : Fin d) (j : Fin d) => by
@@ -112,11 +112,19 @@ noncomputable def cubeInputs : SheetInputs d where
   obs_m := hFm
   obs_int := cube_obs_int A hFm
   P := fun (β : Fin d) =>
-    cast (by rw [cubePriorFactor_eq, cubeDomainAtlas_φ]) (A.pullbackChart β)
+    cast (by
+      change HolomorphicSignedBoxExtension 1 (p ∘ φ β) (F ∘ φ β) =
+        HolomorphicSignedBoxExtension 1 (fun v => |(cubeDomainAtlas (d := d)).jacUnit β v| *
+          p ((cubeDomainAtlas (d := d)).φ β v)) (F ∘ (cubeDomainAtlas (d := d)).φ β)
+      rw [cubePriorFactor_eq, cubeDomainAtlas_φ]) (A.pullbackChart β)
   signs_nonempty := fun _ => Finset.univ_nonempty
   ι_nonempty := ⟨(0 : Fin d)⟩
+  t₀ := 1
+  t₀_pos := one_pos
+  ω_indep := fun _ _ _ _ _ => rfl
+  ω_contOn := fun _ => continuousOn_const
 
-theorem cubeInputs_SA : (cubeInputs A hp hp0 hFm).SA = cubeAtlas := rfl
+theorem cubeInputs_SA : (cubeInputs A hp hp0 hFm).SA = cubeAtlas.toProductChartAtlas := rfl
 
 theorem cubeInputs_W : (cubeInputs A hp hp0 hFm).A.W = centeredBox d 1 := rfl
 
@@ -140,7 +148,7 @@ theorem cubeInputs_act_card (β : Fin d) : ((cubeInputs A hp hp0 hFm).act β).ca
 /-- ★★ **Regression**: the general producer reproduces the coordinate-free expansion of the cube
 integral `∫_{[−1,1]^d} F · p · e^{−n|x|²}` on the sheet geometry of the cube blow-up atlas. -/
 theorem cube_hasCoordFreeExpansion_generic :
-    (Sheet.normalData (cubeAtlas (d := d))).HasCoordFreeExpansion
+    (Sheet.normalData (cubeAtlas (d := d)).toProductChartAtlas).HasCoordFreeExpansion
       (cubeInputs A hp hp0 hFm).cert.stratumMeasure (cubeInputs A hp hp0 hFm).coeffCert.field
       (spectrumLe (commonQ (cubeInputs A hp hp0 hFm).cert.cores.k)
         (commonD (cubeInputs A hp hp0 hFm).cert.n))

@@ -195,7 +195,7 @@ noncomputable def toSheetInputs : SheetInputs d where
   K := Y.K
   K_m := Y.K_m
   Ω := Y.Ω
-  A := Y.R
+  A := Y.R.toWeighted
   a := Y.a
   ha := Y.ha
   lo_eq _ _ := rfl
@@ -204,6 +204,7 @@ noncomputable def toSheetInputs : SheetInputs d where
   jacUnit_m i := by
     have : Y.R.jacUnit i = fun v => Y.A.jacUnit i (diagL (Y.sc i) v) * Y.jacC i :=
       funext fun v => Y.R_jacUnit i v
+    change Measurable (Y.R.jacUnit i)
     rw [this]
     exact ((Y.jacUnit_m i).comp (diagL (Y.sc i)).continuous.measurable).mul measurable_const
   hu_cont i := by
@@ -234,6 +235,10 @@ noncomputable def toSheetInputs : SheetInputs d where
     (Y.priorFactor_eq i) rfl
   signs_nonempty := Y.signs_nonempty
   ι_nonempty := Y.ι_nonempty
+  t₀ := 1
+  t₀_pos := one_pos
+  ω_indep := fun _ _ _ _ _ => rfl
+  ω_contOn := fun _ => continuousOn_const
 
 theorem toSheetInputs_W : Y.toSheetInputs.A.W = Y.A.W := rfl
 

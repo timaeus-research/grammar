@@ -7,6 +7,7 @@ import Grammar.ChartPieces
 import Grammar.CoreSigma
 import Monomialize.Transport.DomainSectorAtlas
 import Monomialize.Transport.DomainSectorAtlasBoundary
+import Monomialize.Transport.WeightedSectorAtlas
 
 /-!
 # The pieces of a domain-sector atlas on the sheet geometry (unit H, part 2)
@@ -46,8 +47,8 @@ structure SheetInputs (d : ℕ) where
   K_m : Measurable K
   /-- the resolved set of the atlas -/
   Ω : Set (Fin d → ℝ)
-  /-- the domain-sector atlas -/
-  A : DomainSectorAtlas d K Ω
+  /-- the weighted domain atlas (chart weights `ω_i`, exact weighted transport) -/
+  A : WeightedDomainAtlas d K Ω
   /-- the half side of the chart boxes -/
   a : ℝ
   ha : 0 < a
@@ -75,6 +76,14 @@ structure SheetInputs (d : ℕ) where
     (obs ∘ A.φ i)
   signs_nonempty : ∀ i, (A.signs i).Nonempty
   ι_nonempty : Nonempty A.ι
+  /-- the radius within which the weights are constant along every active coordinate -/
+  t₀ : ℝ
+  t₀_pos : 0 < t₀
+  /-- the weights do not depend on an active coordinate of absolute value `≤ t₀` -/
+  ω_indep : ∀ i j, 0 < A.k i j → ∀ y : Fin d → ℝ, |y j| ≤ t₀ →
+    A.ω i (Function.update y j 0) = A.ω i y
+  /-- the weights are continuous near the divisor -/
+  ω_contOn : ∀ i, ContinuousOn (A.ω i) {y | ∃ j, 0 < A.k i j ∧ |y j| ≤ t₀}
 
 variable {d : ℕ} (X : SheetInputs d)
 
@@ -107,8 +116,44 @@ theorem dom_eq (i : X.A.ι) : X.A.dom i = piBox d (Icc (-X.a) X.a) := by
   simp only [X.lo_eq, X.hi_eq]
   rfl
 
-/-- The product-sector atlas underlying the domain atlas. -/
-abbrev SA : ProductSectorAtlas d X.K X.Ω := X.A.toProductSectorAtlas
+/-- The product-chart atlas underlying the weighted domain atlas. -/
+abbrev SA : ProductChartAtlas d X.K X.Ω := X.A.toProductChartAtlas
+
+/-- The weighted analytic prior factor of chart `i`: `ω_i · |jacUnit_i| · prior ∘ φ_i`. -/
+def ϕw (i : X.A.ι) : (Fin d → ℝ) → ℝ := fun v => X.A.ω i v * X.ϕ i v
+
+theorem ϕw_m (i : X.A.ι) : Measurable (X.ϕw i) := (X.A.ω_measurable i).mul (X.ϕ_m i)
+
+theorem ϕw_nonneg (i : X.A.ι) : ∀ w, 0 ≤ X.ϕw i w := fun w =>
+  mul_nonneg (X.A.ω_nonneg i w) (X.ϕ_nonneg i w)
+
+/-- The weights are constant along the active coordinates of absolute value `≤ t₀`: two points
+agreeing off a set `J` of such coordinates, the second vanishing on `J`, have the same weight. -/
+theorem ω_eq_of_agree (i : X.A.ι) (J : Finset (Fin d)) (y' : Fin d → ℝ) :
+    ∀ y : Fin d → ℝ, (∀ j ∈ J, 0 < X.A.k i j ∧ |y j| ≤ X.t₀ ∧ y' j = 0) →
+      (∀ j, j ∉ J → y j = y' j) → X.A.ω i y = X.A.ω i y' := by
+  classical
+  induction J using Finset.induction_on with
+  | empty =>
+    intro y _ hoff
+    congr 1
+    funext j
+    exact hoff j (Finset.notMem_empty j)
+  | insert j J hj ih =>
+    intro y hJ hoff
+    have hjJ := hJ j (Finset.mem_insert_self j J)
+    rw [← X.ω_indep i j hjJ.1 y hjJ.2.1]
+    refine ih (Function.update y j 0) (fun l hl => ?_) fun l hl => ?_
+    · have hl' := hJ l (Finset.mem_insert_of_mem hl)
+      have hne : l ≠ j := fun h => hj (h ▸ hl)
+      rw [Function.update_of_ne hne]
+      exact hl'
+    · by_cases hlj : l = j
+      · subst hlj
+        rw [Function.update_self]
+        exact hjJ.2.2.symm
+      · rw [Function.update_of_ne hlj]
+        exact hoff l fun h => hl ((Finset.mem_insert.1 h).resolve_left hlj)
 
 /-- The pieces: a chart and a selected orthant. -/
 abbrev PIdx : Type := Σ i : X.A.ι, ↥(X.A.signs i)
@@ -184,7 +229,7 @@ boxes. -/
 theorem restrict_sector_eq (i : X.A.ι) :
     volume.restrict (X.A.sector i) =
       ∑ σ ∈ X.A.signs i, volume.restrict (orthantBox σ X.a : Set (Fin d → ℝ)) := by
-  unfold DomainSectorAtlas.sector selectedOrthants
+  unfold WeightedDomainAtlas.sector selectedOrthants
   rw [inter_iUnion₂]
   rw [Measure.restrict_biUnion_finset (fun σ _ τ _ hστ => (openOrthant_disjoint hστ).mono
     inter_subset_right inter_subset_right)
@@ -193,19 +238,22 @@ theorem restrict_sector_eq (i : X.A.ι) :
     Finset.sum_coe_sort (X.A.signs i) fun σ => volume.restrict (X.A.dom i ∩ openOrthant σ)]
   exact Finset.sum_congr rfl fun σ _ => (Measure.restrict_congr_set (X.orthantBox_ae_eq i σ)).symm
 
-/-- The weighted analytic prior factor on the sector is the atlas sector measure of the prior. -/
+/-- The weighted analytic prior factor on the sector is the weighted atlas sector measure of the
+prior. -/
 theorem withDensity_sector_eq (i : X.A.ι) :
     ((volume.restrict (X.A.sector i)).withDensity fun w =>
-      ENNReal.ofReal (wgt (X.A.h i) w * X.ϕ i w)) =
+      ENNReal.ofReal (wgt (X.A.h i) w * X.ϕw i w)) =
       X.A.sectorMeasure (fun w => ENNReal.ofReal (X.prior w)) i := by
-  unfold DomainSectorAtlas.sectorMeasure
+  unfold WeightedDomainAtlas.sectorMeasure
   refine withDensity_congr_ae ?_
   rw [Filter.EventuallyEq, ae_restrict_iff' (X.A.measurableSet_sector i)]
   refine Eventually.of_forall fun w hw => ?_
   have hV : w ∈ X.A.V i := X.A.dom_subset_V i hw.1
-  rw [X.A.toProductSectorAtlas.jacDensity_eq i hV, ← ENNReal.ofReal_mul (X.prior_nonneg _)]
+  rw [X.SA.jacDensity_eq i hV, ← ENNReal.ofReal_mul (X.prior_nonneg _),
+    ← ENNReal.ofReal_mul (mul_nonneg (X.prior_nonneg _) (mul_nonneg (abs_nonneg _)
+      (Finset.prod_nonneg fun j _ => pow_nonneg (abs_nonneg _) _)))]
   congr 1
-  unfold ϕ wgt
+  unfold ϕw ϕ wgt
   ring
 
 theorem withDensity_mono_left {α : Type*} [MeasurableSpace α] {μ ν : Measure α} [SFinite μ]
@@ -216,7 +264,7 @@ theorem withDensity_mono_left {α : Type*} [MeasurableSpace α] {μ ν : Measure
 
 /-- The reflected piece measure is dominated by the sector measure of the prior. -/
 theorem map_refl_le (p : X.PIdx) :
-    (pieceMeasure (X.A.h p.1) X.a (X.ϕ p.1) p.2.1).map (refl p.2.1) ≤
+    (pieceMeasure (X.A.h p.1) X.a (X.ϕw p.1) p.2.1).map (refl p.2.1) ≤
       X.A.sectorMeasure (fun w => ENNReal.ofReal (X.prior w)) p.1 := by
   rw [map_refl_pieceMeasure, ← X.withDensity_sector_eq p.1]
   refine withDensity_mono_left ?_ _
@@ -232,7 +280,7 @@ theorem integrable_sector (i : X.A.ι) :
     ENNReal.measurable_ofReal.comp X.prior_m
   have hle : (X.A.sectorMeasure (fun w => ENNReal.ofReal (X.prior w)) i).map (X.A.φ i) ≤
       (volume.restrict X.A.W).withDensity fun w => ENNReal.ofReal (X.prior w) := by
-    rw [← X.A.domainTransport hm]
+    rw [← X.A.weightedDomainTransport hm]
     intro s
     rw [Measure.finsetSum_apply]
     exact Finset.single_le_sum
@@ -252,7 +300,7 @@ theorem map_finset_sum {α γ : Type*} [MeasurableSpace α] [MeasurableSpace γ]
 
 /-- ★ **The observable is integrable on every piece**, from its integrability on the domain. -/
 theorem hφint (p : X.PIdx) :
-    Integrable ((X.obs ∘ X.A.φ p.1) ∘ refl p.2.1) (pieceMeasure (X.A.h p.1) X.a (X.ϕ p.1) p.2.1) :=
+    Integrable ((X.obs ∘ X.A.φ p.1) ∘ refl p.2.1) (pieceMeasure (X.A.h p.1) X.a (X.ϕw p.1) p.2.1) :=
   (integrable_map_measure (X.obs_m.comp (X.φ_m p.1)).aestronglyMeasurable
     (measurable_refl _).aemeasurable).1 ((X.integrable_sector p.1).mono_measure (X.map_refl_le p))
 
@@ -265,6 +313,8 @@ theorem exists_delta_chart' (i : X.A.ι) :
         X.a ^ (2 * X.A.k i j)) ∧
       (∀ j ∈ X.act i, 2 * (δ / X.c i) ^ (((X.act i).card : ℝ)⁻¹ *
         ((2 * X.A.k i j : ℕ) : ℝ)⁻¹) < X.a) ∧
+      (∀ j ∈ X.act i, 2 * (δ / X.c i) ^ (((X.act i).card : ℝ)⁻¹ *
+        ((2 * X.A.k i j : ℕ) : ℝ)⁻¹) < X.t₀) ∧
       ∀ σ ∈ X.A.signs i, ∀ (I : Idx (X.act i)) (l : Fin (nI (X.act i) I + 1)),
         2 * (δ / X.c i) ^ (((X.act i).card : ℝ)⁻¹ *
           ((2 * X.A.k i (σI (X.act i) I l).1 : ℕ) : ℝ)⁻¹) <
@@ -272,13 +322,16 @@ theorem exists_delta_chart' (i : X.A.ι) :
   by_cases hA : (X.act i).Nonempty
   · have hS := X.signs_nonempty i
     set ρmin := (X.A.signs i).inf' hS fun σ => ((X.P i).pullback σ).radius X.a with hρ
-    have hmin : 0 < min ρmin X.a := by
-      refine lt_min ?_ X.ha
+    have hmin : 0 < min ρmin (min X.a X.t₀) := by
+      refine lt_min ?_ (lt_min X.ha X.t₀_pos)
       rw [hρ, Finset.lt_inf'_iff]
       exact fun σ _ => ((X.P i).pullback σ).radius_pos X.a
     obtain ⟨δ, hδ, hδa, hsm⟩ := exists_delta_chart (X.act i) (X.A.k i) (X.hkA i) X.a (X.c i)
       (X.hc i) X.ha hA hmin
-    refine ⟨δ, hδ, hδa, fun j hj => (hsm j hj).trans_le (min_le_right _ _), fun σ hσ I l => ?_⟩
+    refine ⟨δ, hδ, hδa,
+      fun j hj => (hsm j hj).trans_le ((min_le_right _ _).trans (min_le_left _ _)),
+      fun j hj => (hsm j hj).trans_le ((min_le_right _ _).trans (min_le_right _ _)),
+      fun σ hσ I l => ?_⟩
     change 2 * (δ / X.c i) ^ (((X.act i).card : ℝ)⁻¹ *
       ((2 * X.A.k i (σI (X.act i) I l).1 : ℕ) : ℝ)⁻¹) < ((X.P i).pullback σ).radius X.a
     refine ((hsm (σI (X.act i) I l).1 (amb_subset (X.act i) I (σI (X.act i) I l).2)).trans_le
@@ -286,6 +339,7 @@ theorem exists_delta_chart' (i : X.A.ι) :
     rw [hρ]
     exact Finset.inf'_le _ hσ
   · refine ⟨1, one_pos, fun j hj => absurd ⟨j, hj⟩ hA, fun j hj => absurd ⟨j, hj⟩ hA,
+      fun j hj => absurd ⟨j, hj⟩ hA,
       fun _ _ I _ => absurd ((amb_nonempty (X.act i) I).mono (amb_subset (X.act i) I)) hA⟩
 
 /-- The collar level of chart `i`. -/
@@ -301,6 +355,15 @@ theorem δ_ball (i : X.A.ι) : ∀ j ∈ X.act i, 2 * (X.δ i / X.c i) ^ (((X.ac
     ((2 * X.A.k i j : ℕ) : ℝ)⁻¹) < X.a :=
   (X.exists_delta_chart' i).choose_spec.2.2.1
 
+theorem δ_t₀ (i : X.A.ι) : ∀ j ∈ X.act i, 2 * (X.δ i / X.c i) ^ (((X.act i).card : ℝ)⁻¹ *
+    ((2 * X.A.k i j : ℕ) : ℝ)⁻¹) < X.t₀ :=
+  (X.exists_delta_chart' i).choose_spec.2.2.2.1
+
+theorem δ_t₀' (i : X.A.ι) (I : Idx (X.act i)) : ∀ l : Fin (nI (X.act i) I + 1),
+    2 * (X.δ i / X.c i) ^ (((X.act i).card : ℝ)⁻¹ *
+      ((2 * X.A.k i (σI (X.act i) I l).1 : ℕ) : ℝ)⁻¹) < X.t₀ :=
+  fun l => X.δ_t₀ i _ (amb_subset (X.act i) I (σI (X.act i) I l).2)
+
 theorem δ_ball' (i : X.A.ι) (I : Idx (X.act i)) : ∀ l : Fin (nI (X.act i) I + 1),
     2 * (X.δ i / X.c i) ^ (((X.act i).card : ℝ)⁻¹ *
       ((2 * X.A.k i (σI (X.act i) I l).1 : ℕ) : ℝ)⁻¹) < X.a :=
@@ -310,10 +373,10 @@ theorem δ_small (p : X.PIdx) : ∀ (I : Idx (X.act p.1)) (l : Fin (nI (X.act p.
     2 * (X.δ p.1 / X.c p.1) ^ (((X.act p.1).card : ℝ)⁻¹ *
       ((2 * X.A.k p.1 (σI (X.act p.1) I l).1 : ℕ) : ℝ)⁻¹) <
       (((X.P p.1).pullback p.2.1).faceSeries X.a (toNonemptyIdx (X.act p.1) I)).ρ :=
-  (X.exists_delta_chart' p.1).choose_spec.2.2.2 p.2.1 p.2.2
+  (X.exists_delta_chart' p.1).choose_spec.2.2.2.2 p.2.1 p.2.2
 
 theorem ae_mem_box' (p : X.PIdx) :
-    ∀ᵐ z ∂pieceMeasure (X.A.h p.1) X.a (X.ϕ p.1) p.2.1, z ∈ piBox d (Icc 0 X.a) := by
+    ∀ᵐ z ∂pieceMeasure (X.A.h p.1) X.a (X.ϕw p.1) p.2.1, z ∈ piBox d (Icc 0 X.a) := by
   unfold pieceMeasure
   exact mem_ae_iff.2 ((withDensity_absolutelyContinuous _ _)
     (mem_ae_iff.1 (ae_restrict_mem (measurableSet_W X.a))))
@@ -323,8 +386,8 @@ theorem ae_mem_box' (p : X.PIdx) :
 /-- The reflected unit of a piece. -/
 noncomputable abbrev uP (p : X.PIdx) : (Fin d → ℝ) → ℝ := unitR (X.A.phaseUnit p.1) p.2.1
 
-/-- The face series of a piece, from the pulled-back packet. -/
-noncomputable def F (p : X.PIdx) (I : Idx (X.act p.1)) :
+/-- The face series of a piece for the UNWEIGHTED prior factor, from the pulled-back packet. -/
+noncomputable def F₀ (p : X.PIdx) (I : Idx (X.act p.1)) :
     FaceSeries (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.uP p) X.a (X.δ p.1)
       (X.ϕ p.1 ∘ refl p.2.1) ((X.obs ∘ X.A.φ p.1) ∘ refl p.2.1) I :=
   toChartFaceSeries (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.hk0 p.1) (X.uP p) X.a
@@ -332,23 +395,97 @@ noncomputable def F (p : X.PIdx) (I : Idx (X.act p.1)) :
     (unitR_lb (X.hu_lb p.1) p.2.1) X.ha
     (((X.P p.1).pullback p.2.1).faceSeries X.a (toNonemptyIdx (X.act p.1) I)) (X.δ_small p I)
 
-/-- ★★ **The chart-box certificate of a piece** (CCCLXXIV), at the chart's collar level. -/
-noncomputable def pieceCertP (p : X.PIdx) (hA : (X.act p.1).Nonempty) :=
-  pieceCert (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.hk0 p.1) (X.A.phaseUnit p.1) X.a
-    (X.δ p.1) (X.δ_pos p.1) (X.hu_cont p.1) (X.ϕ p.1) (X.obs ∘ X.A.φ p.1) (X.hu_tan' p.1) (X.c p.1)
-    (X.hc p.1) (X.hu_lb p.1) X.ha (X.δ_lt p.1) (X.ϕ_m p.1) (X.ϕ_nonneg p.1) (X.P p.1) p.2.1
-    (X.hφint p) (X.δ_small p) hA
+/-- The base weight of a piece core: the chart weight at the (reflected) base point. -/
+noncomputable def gw (p : X.PIdx) (I : Idx (X.act p.1))
+    (s : KI (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.uP p) X.a (X.δ p.1) I) : ℝ :=
+  X.A.ω p.1 (refl p.2.1 s.1.1)
 
-/-- The coefficient certificate of a piece. -/
+theorem continuous_gw (p : X.PIdx) (I : Idx (X.act p.1)) : Continuous (X.gw p I) := by
+  refine (X.ω_contOn p.1).comp_continuous ((continuous_refl _).comp
+    (continuous_subtype_val.comp continuous_subtype_val)) fun s => ?_
+  obtain ⟨j, hj⟩ := amb_nonempty (X.act p.1) I
+  refine ⟨j, X.hkA p.1 j (amb_subset (X.act p.1) I hj), ?_⟩
+  rw [refl_apply, stratum_coord_zero (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) s.1 hj,
+    mul_zero, abs_zero]
+  exact X.t₀_pos.le
+
+theorem abs_gw_le (p : X.PIdx) (I : Idx (X.act p.1))
+    (s : KI (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.uP p) X.a (X.δ p.1) I) :
+    |X.gw p I s| ≤ 1 := by
+  change |X.A.ω p.1 (refl p.2.1 s.1.1)| ≤ 1
+  rw [abs_of_nonneg (X.A.ω_nonneg _ _)]
+  exact X.A.ω_le_one _ _
+
+/-- **The weight is constant on the core**: at the core parametrisation the chart weight is the
+base weight (the normal coordinates stay within `t₀`). -/
+theorem ω_Φ_eq (p : X.PIdx) (I : Idx (X.act p.1))
+    (s : KI (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.uP p) X.a (X.δ p.1) I)
+    (v : Fin (nI (X.act p.1) I + 1) → ℝ)
+    (hv : v ∈ NormalisedBox.box (ι := Fin (nI (X.act p.1) I + 1))
+      (side (X.A.k p.1) (amb (X.act p.1) I) (X.δ p.1))) :
+    X.A.ω p.1 (refl p.2.1 (Φ (amb (X.act p.1) I) (σI (X.act p.1) I)
+      (eI (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.uP p) X.a (X.δ p.1) I)
+      (lamT (X.A.k p.1) (X.uP p) (amb (X.act p.1) I) (X.δ p.1)) (s, v))) = X.gw p I s := by
+  have hside := side_pos (X.A.k p.1) (amb (X.act p.1) I) (X.δ p.1) (X.δ_pos p.1)
+  have hvn : ‖v‖ < 2 * side (X.A.k p.1) (amb (X.act p.1) I) (X.δ p.1) := by
+    refine lt_of_le_of_lt (pi_norm_le_iff_of_nonneg hside.le |>.2 fun l => ?_) (by linarith)
+    have := hv l (mem_univ _)
+    rw [mem_Ioc] at this
+    rw [Real.norm_eq_abs, abs_of_pos this.1]
+    exact this.2
+  have hz := norm_widthsC_mul_lt (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.hk0 p.1)
+    (X.uP p) X.a (X.δ p.1) (X.δ_pos p.1) (X.c p.1) (X.hc p.1) (unitR_lb (X.hu_lb p.1) p.2.1) X.ha
+    I X.t₀_pos (X.δ_t₀' p.1 I) s hvn
+  rw [Φ_eq_originalNormalMapC (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.uP p) X.a
+    (X.δ p.1) I s v]
+  refine X.ω_eq_of_agree p.1 (amb (X.act p.1) I) _ _ (fun j hj => ⟨?_, ?_, ?_⟩) fun j hj => ?_
+  · exact X.hkA p.1 j (amb_subset (X.act p.1) I hj)
+  · have hj' : j ∈ (toNonemptyIdx (X.act p.1) I).1 := hj
+    simp only [refl_apply, originalNormalMap, abs_mul, abs_sgn, one_mul]
+    rw [dif_pos hj', stratum_coord_zero (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) s.1 hj,
+      zero_add]
+    have := (pi_norm_lt_iff X.t₀_pos).1 hz ((σI (X.act p.1) I).symm ⟨j, hj⟩)
+    rw [Real.norm_eq_abs] at this
+    exact this.le
+  · rw [refl_apply, stratum_coord_zero (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) s.1 hj,
+      mul_zero]
+  · have hj' : j ∉ (toNonemptyIdx (X.act p.1) I).1 := hj
+    simp only [refl_apply, originalNormalMap]
+    rw [dif_neg hj']
+
+/-- The face series of a piece for the WEIGHTED prior factor: the unweighted series multiplied
+by the base weight. -/
+noncomputable def F (p : X.PIdx) (I : Idx (X.act p.1)) :
+    FaceSeries (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.uP p) X.a (X.δ p.1)
+      (X.ϕw p.1 ∘ refl p.2.1) ((X.obs ∘ X.A.φ p.1) ∘ refl p.2.1) I where
+  Fϕ := (X.F₀ p I).Fϕ.smul (X.gw p I) (X.continuous_gw p I) 1 (X.abs_gw_le p I)
+  Fφ := (X.F₀ p I).Fφ
+  hϕ_eq := fun s v hv => by
+    change X.A.ω p.1 (refl p.2.1 _) * (X.ϕ p.1 ∘ refl p.2.1) _ = _
+    rw [X.ω_Φ_eq p I s v hv, (X.F₀ p I).hϕ_eq s v hv]
+    exact (CoeffFamily.evalF_const_mul _ _ _).symm
+  hφ_eq := (X.F₀ p I).hφ_eq
+
+/-- ★★ **The chart-box certificate of a weighted piece** (CCCLXXII), at the chart's collar
+level, with the weighted prior factor. -/
+noncomputable def pieceCertP (p : X.PIdx) (hA : (X.act p.1).Nonempty) :=
+  certificate (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.hk0 p.1) (X.uP p) X.a (X.δ p.1)
+    (X.δ_pos p.1) (continuous_unitR (X.hu_cont p.1) p.2.1) (X.ϕw p.1 ∘ refl p.2.1)
+    ((X.obs ∘ X.A.φ p.1) ∘ refl p.2.1) (unitR_tan (X.hu_tan' p.1) p.2.1) (X.hc p.1)
+    (unitR_lb (X.hu_lb p.1) p.2.1) X.ha (X.δ_lt p.1) ((X.ϕw_m p.1).comp (measurable_refl _))
+    (fun _ => X.ϕw_nonneg p.1 _) (X.hφint p) (X.F p) hA
+
+/-- The coefficient certificate of a weighted piece. -/
 noncomputable def pieceCoeffP (p : X.PIdx) (hA : (X.act p.1).Nonempty) :
     (X.pieceCertP p hA).CoefficientCertificate :=
-  pieceCoeff (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.hk0 p.1) (X.A.phaseUnit p.1) X.a
-    (X.δ p.1) (X.δ_pos p.1) (X.hu_cont p.1) (X.ϕ p.1) (X.obs ∘ X.A.φ p.1) (X.hu_tan' p.1) (X.c p.1)
-    (X.hc p.1) (X.hu_lb p.1) X.ha (X.δ_lt p.1) (X.ϕ_m p.1) (X.ϕ_nonneg p.1) (X.P p.1) p.2.1
-    (X.hφint p) (X.δ_small p) hA
+  coeffCertificate (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.hk0 p.1) (X.uP p) X.a
+    (X.δ p.1) (X.δ_pos p.1) (continuous_unitR (X.hu_cont p.1) p.2.1) (X.ϕw p.1 ∘ refl p.2.1)
+    ((X.obs ∘ X.A.φ p.1) ∘ refl p.2.1) (unitR_tan (X.hu_tan' p.1) p.2.1) (X.hc p.1)
+    (unitR_lb (X.hu_lb p.1) p.2.1) X.ha (X.δ_lt p.1) ((X.ϕw_m p.1).comp (measurable_refl _))
+    (fun _ => X.ϕw_nonneg p.1 _) (X.hφint p) (X.F p) hA
 
 theorem pieceCertP_L_μ (p : X.PIdx) (hA : (X.act p.1).Nonempty) :
-    (X.pieceCertP p hA).L.μ = pieceMeasure (X.A.h p.1) X.a (X.ϕ p.1) p.2.1 := rfl
+    (X.pieceCertP p hA).L.μ = pieceMeasure (X.A.h p.1) X.a (X.ϕw p.1) p.2.1 := rfl
 
 theorem pieceCertP_L_phase (p : X.PIdx) (hA : (X.act p.1).Nonempty) :
     (X.pieceCertP p hA).L.phase = ChartModel.phase d (X.act p.1) (X.A.k p.1) (X.uP p) := rfl
@@ -375,9 +512,9 @@ theorem chart_Φ_mem (p : X.PIdx) (hA : (X.act p.1).Nonempty) (I : Fin (numCores
       ((X.pieceCertP p hA).cores.chart I).b,
       ((X.pieceCertP p hA).cores.chart I).Φ q ∈ piBox d (Icc 0 X.a) :=
   stratumCore_Φ_mem_box (X.act p.1) (X.A.k p.1) (X.A.h p.1) (X.hkA p.1) (X.hk0 p.1) (X.uP p) X.a
-    (X.δ p.1) (X.δ_pos p.1) (continuous_unitR (X.hu_cont p.1) p.2.1) (X.ϕ p.1 ∘ refl p.2.1)
+    (X.δ p.1) (X.δ_pos p.1) (continuous_unitR (X.hu_cont p.1) p.2.1) (X.ϕw p.1 ∘ refl p.2.1)
     ((X.obs ∘ X.A.φ p.1) ∘ refl p.2.1) (unitR_tan (X.hu_tan' p.1) p.2.1) (X.c p.1) (X.hc p.1) X.ha
-    ((X.ϕ_m p.1).comp (measurable_refl _)) (fun _ => X.ϕ_nonneg p.1 _)
+    ((X.ϕw_m p.1).comp (measurable_refl _)) (fun _ => X.ϕw_nonneg p.1 _)
     (unitR_lb (X.hu_lb p.1) p.2.1) (X.δ_lt p.1) (X.hφint p) (X.F p) (coreIdx (X.act p.1) I)
 
 /-! ### The piece charts into the sheet space and the compatibilities -/
@@ -415,7 +552,7 @@ theorem obs_compat (p : X.PIdx) {z : Fin d → ℝ} (hz : z ∈ piBox d (Icc (-X
 /-- **The transported piece datum** on the sheet space: measure `μ_p.map Ψ_p`, phase `K ∘ π`,
 observable `obs ∘ π`, level `1` (defined for every piece, active or not). -/
 noncomputable def pieceDatum (p : X.PIdx) : LocalisationData (Sheet.Space X.SA) where
-  μ := (pieceMeasure (X.A.h p.1) X.a (X.ϕ p.1) p.2.1).map (X.Ψ p)
+  μ := (pieceMeasure (X.A.h p.1) X.a (X.ϕw p.1) p.2.1).map (X.Ψ p)
   phase := X.K ∘ Sheet.π X.SA
   obs := X.obs ∘ Sheet.π X.SA
   phase_measurable := X.measurable_Kπ
@@ -434,7 +571,7 @@ noncomputable def pieceDatum (p : X.PIdx) : LocalisationData (Sheet.Space X.SA) 
   δ_pos := one_pos
 
 theorem pieceDatum_μ (p : X.PIdx) :
-    (X.pieceDatum p).μ = (pieceMeasure (X.A.h p.1) X.a (X.ϕ p.1) p.2.1).map (X.Ψ p) := rfl
+    (X.pieceDatum p).μ = (pieceMeasure (X.A.h p.1) X.a (X.ϕw p.1) p.2.1).map (X.Ψ p) := rfl
 
 theorem pieceDatum_phase (p : X.PIdx) : (X.pieceDatum p).phase = X.K ∘ Sheet.π X.SA := rfl
 
