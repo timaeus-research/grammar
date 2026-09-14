@@ -691,3 +691,5 @@ import Grammar.SmoothInnerMonomial
 import Grammar.SmoothTwoDim
 import Grammar.SmoothFaceOperators
 import Grammar.SmoothFaceSplit
+import Grammar.SmoothFiniteUniqueness
+import Grammar.SmoothFaceMonomial
