@@ -617,3 +617,15 @@ smooth prior with compact support in `W`, smooth obs ⇒ `∃ c Q D, HasSmoothCo
 Design deviations from #119: per-chart box radii (no rescaling), a.e. gap hypothesis in `assemble`, `hu_tan` free (Watanabe
 unit = 1), `IsManifold` not needed for cutoffs. In flight: hironaka regressions `ofMonomialWithTail` (d = 1, genuine tail),
 `ofEmptyCores` (agent, branch bridge/regress). NEXT: consult #120 (audit of Target A; design of Target B).
+Consult #120 (`gpt6_bigpicture_v120.md`): Target A AUDIT PASSED (deviations harmless). Cleanups (agent, branch tide/targetA2):
+phase-localisation wrapper removing `Measurable K` (indicator representative + locality of the integral in the phase on the
+prior support), translation wrapper (any zero of K, not the origin), positive-phase case via `ofEmptyCores` (all coefficients
+zero), certificate-facing theorem `∃ C : SmoothExpansionCertificate Z, C.D ≤ d − 1` with `hKnt : ∃ x ∈ W, K x ≠ 0`, consumer
+regressions (`ofMonomialWithTail`, `ofEmptyCores`). TARGET B design: (i) ambient vs domain-only nonnegativity (`K = x` on
+`[0,1]` has odd order at the boundary zero — the even-chart interface needs AMBIENT `K ≥ 0`; else arbitrary exponents on
+selected orthants + `u = s v²` sector adapter); (ii) the export needed = ONE proper surjective modification for the FAMILY
+`(K, π_j)` with INDIVIDUAL factor monomial forms (resolving the product suffices given the factor-divides-monomial lemma in the
+analytic local ring: coordinate germs prime; zero-set containment is NOT enough — `x²+y²`); (iii) interface
+`NormalisedDomainCoreTransport` with `sectors`, source restricted to selected orthants, target `vol|_{Wdom}·prior`; bridge:
+cutoffs unchanged, exceptional set = zero sets of ALL factors; consumer: existing per-(chart, orthant) presentations. hironaka
+sector-atlas d5ae59da5 (regressions merged, ProdId linter fix; the Monomialize root builds). BM89 export audit in flight (agent).
