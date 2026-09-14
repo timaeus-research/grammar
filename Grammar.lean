@@ -699,3 +699,4 @@ import Grammar.SmoothGeneral
 import Grammar.SmoothTimeRescale
 import Grammar.SmoothAmplitudeFamily
 import Grammar.SmoothFamilyIntegral
+import Grammar.SmoothCoreDecomposition
