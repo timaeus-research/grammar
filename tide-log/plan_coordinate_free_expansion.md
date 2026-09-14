@@ -651,3 +651,12 @@ CDV `SmoothTargetAClean` LANDED (Target A final form: `exists_smoothExpansionCer
 zero, positive-phase pure tail, regressions). hironaka sector-atlas bb46913a7: `ChartData.walls` generalised (B5 prerequisite).
 In flight (agents): B1–B2 `FactorSplitting` (wtA), B3 `UnitAbsorption` (wtB), B4 `ChartDomainReading` (wtC), grammar
 `SmoothDomainConsumer` (phase7).
+hironaka sector-atlas 5ef3fc813 (Target B, all glue except the final assembly): `ChartDomainReading` (B4, agent: `chart_domain_ae`,
+`chartAdmissibleSigns`, `DomainChartData.ofBoundaryMonomials`), `UnitAbsorption` (B3, agent: `AbsorbingChange`, `Φ.chart`,
+`watanabeRep_chart_phase` — exact even phase after absorbing the unit on one active coordinate; all other unit×monomial forms
+preserved with the same exponents), `FactorSplitting` (B1–B2, agent: `exists_box_factors_unit_mul_monomial`, `exists_evenBox_factors`),
+`DomainBridge` (mine: `ProductChartBox`, `exists_normalisedDomainCoreTransport_of_cover`, `volume_zeroSet_inter_compact`).
+Grammar CDVI `SmoothDomainConsumer` LANDED (main 24b32f4, 718 modules; half-box/half-line regressions). In flight: B5a
+`ProductChartExtraction` (agent: `exists_productChartBox` from the product resolution via factor splitting + unit absorption,
+`exists_finite_productChartBoxes`). Then B6: hironaka `exists_normalisedDomainCoreTransport_of_analyticOnNhd` (Watanabe on
+`F = K·∏π`) and the grammar Target B theorem `∫_{Wdom} prior·obs·e^{−NK}` (Wdom = boundaryDomain W π compact).
