@@ -680,3 +680,20 @@ hironaka 9ca3ad986; all 1100+ dots verified). Candidate next projects (Astra #12
 end — finite gluing of overlapping basic domains (M+); (2) RLCT identification of the leading nonzero exponent via
 hironaka's E5 readout (separate readout project; S/M only if the leading asymptotic aligns exactly); (3) disconnected
 ambient / identically zero phase components (M).
+
+## 15. Strata-integral form of the smooth coefficients (opened 2026-09-14; user: "go ahead with 1"; consult #122 = design)
+Astra #122: the ORDINARY kernel form `c_{μ,q} = Σ_I ∫_{S_I} Σ_{|α|≤R} ⟨∂^α_⊥(φ∘π), B_{I,α}⟩ dν_I` with integrable fields is FALSE
+in general for smooth data at crossings: on `[0,1]²` with `K = x²y²`, `∫∫ x^M e^{−nx²y²} ~ (√π/2M) n^{−1/2}` for EVERY `M`
+(arbitrarily high corner Taylor terms at the same exponent — the observable is seen along the axis `y = 0`, not through
+a finite corner jet), and `f_ε = χ(x/ε)χ(y/ε)` has `c_{1/2,0}(f_ε) = c(χ⊗χ) + 4A log ε` unbounded while its axis values and
+corner jet are bounded — the missing objects are SUBTRACTED integrals `∫_0^1 (f(x,0) − f(0,0))/x dx` (finite parts), which is
+exactly what the engine's `remList` remainders encode. Correct targets: **Theorem A** finite-jet determination
+(`∃ R, ∀ f g, equal R-jets on the resolved divisor (then: on `D ∩ K⁻¹0` ambiently) → c_{μ,q}(f) = c_{μ,q}(g)`; the
+coefficient factors through the range of the finite-jet restriction map — a linear functional on finite face jets);
+**Theorem B** the renormalised chart-strata formula separating observable jets from density-only functionals
+`𝓑_{J,a,μ,q}(u) = ∫_s Σ_{a≤m<p} 1/(m−a)! Σ_j C_{J,m,μ,j} C(j,q) ∫_{K-box} R_K^p[d_{J,m−a} u] w^{h_K}(w^{2k_K})^{−μ} log^{j−q}`
+(Leibniz on `∂^m_J(D f)`; do NOT commute `remList` past the product); **Theorem C** (later, XL) distributional global
+packaging. Units: 1 face-trace dependency of `remList`/`faceAmp` (M); 2 intrinsic finite-jet theorem (M–L); 3 finite-order
+`C^R` bound (M–L); 4 Leibniz-separated formula (L); 5 choice comparison by uniqueness (S–M); 6 global (XL); 7 ordinary-kernel
+specialisation under extra hypotheses. Regressions: `c_{1/2,1}(P) = √π/4·P(0,0)` (CCCXV), `c_{1/2,0}(x^M) = √π/(2M)`,
+axis-subtraction form of the constant coefficient, weight Leibniz. Non-claims recorded per §8 of the consult.
