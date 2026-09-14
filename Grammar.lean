@@ -713,3 +713,4 @@ import Grammar.SmoothClosure
 import Grammar.SmoothCubeRegression
 import Grammar.SmoothZeroDim
 import Grammar.SmoothBridgeConsumer
+import Grammar.SmoothTargetA
