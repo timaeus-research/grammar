@@ -721,3 +721,4 @@ import Grammar.SmoothTargetBFacade
 import Grammar.SmoothJetDetermination
 import Grammar.ShallowStratumRegression
 import Grammar.SmoothRenormalisedStrata
+import Grammar.SmoothObservableCoeff
