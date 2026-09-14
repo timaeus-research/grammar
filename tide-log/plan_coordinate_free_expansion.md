@@ -608,3 +608,12 @@ Progress 2026-09-14 (hironaka fork `sector-atlas`, remotes renamed: origin = for
 `ZeroChartExtraction` (`EvenChartBox`, `exists_finite_evenChartBoxes`, `isCompact_zeroFibre`, `injOn_offZero`,
 `zeroSet_eq_walls`), Unit 4 `ChartCutoffs` (`exists_chartCutoffs`), Unit 3 grammar `SmoothBridgeConsumer`. INCIDENT:
 Lake wiped the symlinked clone (see memory); package dirs are now Lake-managed clones.
+★★★ TARGET A LANDED 2026-09-14: main `83d9986` (716 modules). hironaka fork `sector-atlas` 26f92335d: `ZeroChartExtraction`
+(Unit 5, agent), `ChartCutoffs` (Unit 4, agent), `CoreTransportAssembly` (`assemble`), `ResolutionBridge`
+(★★★ `exists_normalisedCoreTransport_of_modification` / `_of_analyticOnNhd`). Grammar CDIII `SmoothBridgeConsumer` (Unit 3,
+agent; ★★★ `NormalisedCoreTransport.hasSmoothCoordFreeExpansion`, `coeff_eq_of_transports`), CDIV `SmoothTargetA`
+(★★★ `exists_hasSmoothCoordFreeExpansion_of_analyticOnNhd`: analytic `K ≥ 0` on connected open `W ∋ 0`, `K(0)=0`, `K ≢ 0`,
+smooth prior with compact support in `W`, smooth obs ⇒ `∃ c Q D, HasSmoothCoordFreeExpansion`; extra hypothesis `Measurable K`).
+Design deviations from #119: per-chart box radii (no rescaling), a.e. gap hypothesis in `assemble`, `hu_tan` free (Watanabe
+unit = 1), `IsManifold` not needed for cutoffs. In flight: hironaka regressions `ofMonomialWithTail` (d = 1, genuine tail),
+`ofEmptyCores` (agent, branch bridge/regress). NEXT: consult #120 (audit of Target A; design of Target B).
