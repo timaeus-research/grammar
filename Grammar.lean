@@ -730,3 +730,4 @@ import Grammar.SmoothCoeffDistribution
 import Grammar.SmoothPartitionDistribution
 import Grammar.SmoothFaceDistribution
 import Grammar.ProductJetDistribution
+import Grammar.FaceRestrictionOperators
