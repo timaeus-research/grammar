@@ -802,3 +802,8 @@ Non-claims for the closure record: no seminorm-uniform remainder; no canonical i
 no minimal tangential order / minimal jet representation / uniqueness of the face decomposition; no base-density regularity from the
 absence of base derivatives; `faceJetObs f` not compactly supported; no arbitrary representative independence beyond what is proved;
 support statements are inclusions; no single finite face-jet list for all coefficients. Mirror: Astra's eight-sentence chart-face paragraph.
+### 16.6 CLOSURE 2026-09-14 — THEOREM C PROJECT CLOSED (Astra #125 tidy-up done)
+CDXXV `SmoothFaceDistributionClosure`: neighbourhood congruence, closed-box congruence, extension independence
+(`faceFunctional_faceJetOf_eq`), cutoff pairing (`faceFunctional_eq_faceDistribution_mulCutoff`, `exists_cutoff_faceBox`), and
+`coeffDistribution_eq_sum_faceDistribution` (pairing of compactly supported face distributions with normal jets, cutoff-independent).
+737 modules. Not done (recorded non-claims): C4s uniform remainder; C5f regrouping; minimal orders; canonical stratification.
