@@ -600,3 +600,11 @@ amplitude `Gᵢ = ωᵢ|bᵢ|·prior∘ψᵢ·obs∘ψᵢ` (CCCXCVIII), not the 
 modification, no-tail AND genuine-tail AND empty-core cases. Target B (semianalytic W) after A: needs a simultaneous exact chart
 packet for `K` and the boundary functions (hironaka export). Acceptance: (1) `WatanabeModificationOn K W` + prior ⇒ the
 core-transport-with-tail, no atlas hypothesis; (2) compose with `exists_watanabeModificationOn` ⇒ Target A; (3) regressions.
+Progress 2026-09-14 (hironaka fork `sector-atlas`, remotes renamed: origin = fork, upstream = timaeus-research):
+60f0676c4 Units 1–2 `SupportedTransport` (`lintegral_supported`, `map_supported`, `sum_withDensity_add_residual`);
+2fa91f429 `NormalisedCoreTransport` (interface + `ofMonomialNoTail`); f6d377f42 `ChartWeights` (`targetWeight` via
+`Function.extend` + `measurableEmbedding_of_fderivWithin`, `map_targetWeight`, `sum_targetWeight_le_one/eq_one`);
+769cabf43 `CoreTransportAssembly` (`activeWalls`, `ChartData`, ★★ `assemble`). In flight (agents): Unit 5
+`ZeroChartExtraction` (`EvenChartBox`, `exists_finite_evenChartBoxes`, `isCompact_zeroFibre`, `injOn_offZero`,
+`zeroSet_eq_walls`), Unit 4 `ChartCutoffs` (`exists_chartCutoffs`), Unit 3 grammar `SmoothBridgeConsumer`. INCIDENT:
+Lake wiped the symlinked clone (see memory); package dirs are now Lake-managed clones.
