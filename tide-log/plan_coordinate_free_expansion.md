@@ -780,3 +780,12 @@ Landed: CDXIX `ProductJetDistribution` (agent; general-`E` `Distribution.ofJetBo
 bound) and C5g `ParametricCoordinateDerivative` (agent, `tide/c5g`; `pdMulti_slice_eq_iteratedFDeriv`, joint continuity,
 `SmoothAmplitudeFamily.ofSlice`) — needed for the analytic part: integrability of `s ↦ renormFunctional … (cyl u s)` ⇒ linearity of
 `faceFunctional`; tangential finite-order bound ⇒ `faceDistribution : 𝓓'(PieceFaceSpace)` with support in the closed face box.
+### 16.4 Status 2026-09-14 — C5 COMPLETE (chart-face form of Theorem C)
+Landed: CDXVIII `FaceRestrictionOperators` (agent; ι-operators, `faceAmp_eq_remListι`, `norm_iteratedFDeriv_faceRes_le`) · CDXXI
+`ParametricCoordinateDerivative` (agent; `pdMulti_slice_eq_iteratedFDeriv`, `continuous_pdMulti_slice`, `SmoothAmplitudeFamily.ofSlice`) ·
+CDXXIII `SmoothFaceFunctionalBound` (`abs_renormFunctional_le`, `renormConst`) · CDXXIV `SmoothFaceDistributionAnalytic` (linearity via
+`cylFam`/`continuous_renormFunctional_cyl`; tangential bound `abs_faceFunctional_le` with `faceOrder = Σ pieceDepth`, `rectBound_cyl`;
+locality; ★★★ `faceDistribution : 𝓓'(PieceFaceSpace)`, bound, `dsupport ⊆ faceBox`, compact). Together with CDXXII's reconstruction:
+`T_{μ,q}(f) = Σ_{P,J,a} faceW J a · 𝓑_{P,J,a}(faceJet f)`. Name clashes between concurrent agent modules (`projK`, `faceRes`,
+`contDiff_slice`) resolved by renaming (`tangProj`, `faceResFam`, `contDiff_sliceFin`). Remaining from #124: C5f regrouping (optional),
+C4s uniform remainder (L–XL), paper-facing wording; consult #125 audit of C5.

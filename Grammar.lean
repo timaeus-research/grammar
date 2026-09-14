@@ -731,5 +731,6 @@ import Grammar.SmoothCoeffDistribution
 import Grammar.SmoothPartitionDistribution
 import Grammar.SmoothFaceDistribution
 import Grammar.SmoothFaceFunctionalBound
+import Grammar.SmoothFaceDistributionAnalytic
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
