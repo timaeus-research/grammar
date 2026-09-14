@@ -934,3 +934,20 @@ since the hypothesis is stated in the resolution charts). Built first try. Consu
 functionals may now be called "distributions of finite order on U (chart-wise)". Mirror: sentence + pin 9f5f74b (local commit, unpushed).
 Remaining optional: (3) scalar independence across modifications for pull-backs, (4) Riesz, (5) RLCT nonvanishing via positive box lower
 bound, (6) x²y² regression; D7 kernels / common refinement DEFERRED.
+
+### 17.7 Follow-ups (3) and (5) LANDED (2026-09-14). Main a40ab1f, 755 modules.
+CDXXXVIII `SmoothResolvedModificationIndependence`: `coeff_comp_gv_eq_of_modifications` (same K, prior; any two modifications; pull-back
+observables agree), `coeff_eq_of_Z_eventuallyEq` (uniqueness across resolved data), `coeff_one_eq_of_modifications`,
+`isLeadingIndexOne_iff_of_modifications`. CDXXXIX `SmoothResolvedRLCTIndex`: `IsExtremalData lam m` (2kλ* ≤ h+1 on all walls of Z₀;
+resonanceCount λ* ≤ m*), `resonantZeroFibre_eq_empty_of_precedes`, `coeff_eq_zero_of_precedes` (ALL observables), `isLeadingIndex_of_extremalData`
+(unconditional leading index), `tendsto_normalised_Z_of_extremalData`, `coeff_nonneg_of_extremalData`. CDXL `MonomialBoxLowerBound`:
+`exists_tendsto_monoBoxIntegral` (inactive coordinates split off by Fubini along piEquivPiSubtypeProd; relabel; `boxIntegralGen_isEquivalent_general`).
+CDXLI `SmoothResolvedRLCTPositive`: `coeff_one_pos_of_realised` (realised extremal pair, prior > 0 at π P₀ ⇒ 0 < 𝒯^U_{λ*,m*−1}[1]) via
+`integral_image_orthant` (Mathlib `integral_image_eq_integral_abs_det_fderiv_smul` on the orthant box of the even chart at P₀, injectivity from
+`injOn_offZero`), `exists_orthant_bound`, `Z_one_ge_mul_monoBoxIntegral`, `resonanceCount_eq_card_of_centered`; `isLeadingIndexOne_of_realised`.
+⇒ the RLCT identification on U: Z_N[1] ~ c N^{−λ*}(log N)^{m*−1}, c > 0, (λ*, m*) = extremal pair of the intrinsic wall data.
+Lessons: HO-unification failures — pass `g`/`f g` explicitly to `integral_image_orthant`/`integral_prod_mul`; `Tendsto`-typed `have`s
+need `(G := …)` for `contMDiff_const`; anonymous constructor into `{u | p u ∧ q u}` needs the subset statement typed first;
+`ae_restrict_of_forall_mem` goals need `beta_reduce`; `Finset.mem_val` is an Eq (rw, not .2). Mirror pin a40ab1f (local, unpushed; 6 ahead).
+Remaining optional: (4) Riesz; (6) x²y² regression; realisation of the extremal pair on a compact zero fibre (semicontinuity of pairs);
+D7 kernels / common refinement DEFERRED.
