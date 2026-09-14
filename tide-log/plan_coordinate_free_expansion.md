@@ -951,3 +951,16 @@ need `(G := …)` for `contMDiff_const`; anonymous constructor into `{u | p u �
 `ae_restrict_of_forall_mem` goals need `beta_reduce`; `Finset.mem_val` is an Eq (rw, not .2). Mirror pin a40ab1f (local, unpushed; 6 ahead).
 Remaining optional: (4) Riesz; (6) x²y² regression; realisation of the extremal pair on a compact zero fibre (semicontinuity of pairs);
 D7 kernels / common refinement DEFERRED.
+
+### 17.8 CONSULT #129 (2026-09-14): THEOREM D CLOSED. Main 3d7d6ff, 757 modules.
+Landed after #128: CDXXXVII D3b chart-wise jet bound; CDXXXVIII modification independence on pull-backs; CDXXXIX extremal pair ⇒ leading
+index (all observables); CDXL monomial orthant-box asymptotics; CDXLI positivity at a realised pair; CDXLII realisation on a compact zero
+fibre; CDXLIII packaging: `rlct_asymptotic_of_realised` / `exists_rlct_asymptotic` (∫ prior e^{−NK} ∼ c N^{−λ*}(log N)^{m*−1}, c > 0).
+Astra #129 audit: route sufficient (one orthant suffices; no upper comparison needed); wording: "finite-order chart-seminorm estimates"
+(not "distributions chart-wise"); extremal ≠ attained (isExtremalData_zero is the warning label; "candidate leading index" for general
+extremal data); the REALISER version is primary (uniform positivity on the zero set excludes ordinary cutoffs, e.g. K = x² with a bump);
+"RLCT in the Laplace-asymptotic sense; zeta-pole identification not formalised" (pole at −λ* of order m* for ζ = ∫ K^z prior);
+c is identified as the positive unit coefficient (no explicit local formula); common leading SCALE for all observables, not a nonzero
+leading term for each. Modification independence + positive leading asymptotic on both ⇒ (λ*, m*) is an invariant of (K, prior).
+Optional after closure (ranked): x²y² local regression (S), Riesz on the compact resonant fibre (M), zeta-pole identification (M–L),
+D7 common refinement (L). Paper paragraph in gpt6_bigpicture_v129.md §B (adopted in the mirror).
