@@ -702,3 +702,8 @@ walls), `SmoothCoreDecomposition.coeff_congr`, ★★★ `BridgeInputs.coeff_con
 walls). In flight: Theorem B `SmoothRenormalisedStrata` (agent, tide/jets2): `renormFunctional`, `smoothCoeffAtDepth_mul_eq`,
 family/decomposition level, `BridgeInputs.coeff_eq_renormSum`.
 CDX `ShallowStratumRegression` LANDED (main 18c0fca, 722 modules): `xM_isEquivalent`, `no_finite_cornerJet_formula`.
+★★★ THEOREM B LANDED: CDXI `SmoothRenormalisedStrata` (agent): `renormFunctional`, `smoothCoeff_mul_eq`, `renormFunctional_add_smul/_congr`,
+`familyCoeff_mul_eq`, `BridgeInputs.coeff_eq_renormSum` (723 modules). §15 Theorems A, B and the counterexample regression DONE.
+Remaining (Astra #122): Unit 3 finite-order `C^R` bound (continuity of the coefficient functional), Unit 6 global distributional
+packaging (XL), Unit 7 ordinary-kernel specialisation under extra hypotheses; paper-facing remark on the finite-part reading of
+eq:thm_coordfree; mirror paragraph.
