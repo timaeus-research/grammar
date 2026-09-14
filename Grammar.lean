@@ -752,5 +752,6 @@ import Grammar.SmoothResolvedRLCTIndex
 import Grammar.MonomialBoxLowerBound
 import Grammar.SmoothResolvedRLCTPositive
 import Grammar.SmoothResolvedExtremalRealised
+import Grammar.SmoothResolvedRLCTAsymptotic
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
