@@ -693,3 +693,6 @@ import Grammar.SmoothFaceOperators
 import Grammar.SmoothFaceSplit
 import Grammar.SmoothFiniteUniqueness
 import Grammar.SmoothFaceMonomial
+import Grammar.SmoothAssemblyAlgebra
+import Grammar.SmoothGeneralDepth
+import Grammar.SmoothGeneral
