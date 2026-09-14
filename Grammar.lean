@@ -716,3 +716,4 @@ import Grammar.SmoothBridgeConsumer
 import Grammar.SmoothTargetA
 import Grammar.SmoothTargetAClean
 import Grammar.SmoothDomainConsumer
+import Grammar.SmoothTargetB
