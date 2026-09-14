@@ -851,3 +851,34 @@ sufficient conditions. Regression: quadrant `x²y²`: off the corner `T_{1/2,0}(
 `T_{1/2,1} = (√π/4)δ_0`. Non-claims: no canonical per-stratum summands; `B_a` coordinate-dependent; no order 0 at higher exponents;
 no global integrability up to deeper strata; no nonvanishing; no resolution-independence without comparison maps; no Whitney/global
 components. Execution: D0 (me, hironaka clone, branch sector-atlas, fork only); D4 (agent, grammar worktree `tide/d4`).
+### 17.2 Status after consult #127 (2026-09-14)
+LANDED (all axiom-clean): D0 hironaka `ResolvedMeasure` (Borel `R.U`; `liftMeasure` = off-divisor lift of any measure, divisor-null,
+`π_*` = restriction to the regular locus, UNCONDITIONAL uniqueness `eq_liftMeasure_of_map_gv`; `resolvedMeasure := liftMeasure (prior·vol)`,
+`π_* μ_U = prior·vol`, finite, carried by the compact `π⁻¹(supp prior)`, observable identity `∫_U f∘π e^{−tK∘π} dμ_U = ∫ f e^{−tK} prior`);
+D1 hironaka `ResolvedCoreTransport` (transport + resolution charts `φ i` of the maximal atlas, `V i = target`, `ψ i = π ∘ φ_i⁻¹`;
+`coreU i = core_i.map φ_i⁻¹`, `tailU = liftMeasure tail`; `∑ coreU + tailU = μ_U` EXACTLY by uniqueness; `integral_resolvedMeasure_eq`;
+`chartInv` measurable totalisation; `contDiffOn_comp_symm` (F∘φ⁻¹ smooth on the target for F ∈ C^∞(U)); `contMDiff_gv`;
+existence from the bridge data `exists_evenChartData_of_modification` (bridge proof split)); fork rev `34cbdee3e`, grammar pin bumped.
+D2 grammar `SmoothResolvedConsumer` (CDXXVIII): `ResolvedData` (F smooth on U), `μU`, `Z`, `D Y`, `decomp Y`, `hasSmoothCoordFreeExpansion`,
+`coeff Ξ Y μ q = 𝒯^U_{μ,q}[F]`, `coeff_eq_of_transports` (intrinsic in Y for fixed R), `coeff_comp_gv` (= Theorem C on pull-backs).
+D3 grammar `SmoothResolvedCoefficient` (CDXXIX): `coeff_add/smul/zero`, `zeroFibre = D ∩ π⁻¹(supp prior)` compact, `exists_phase_gap`,
+`abs_Z_le_of_eventually_zero` (exponentially small), `coeff_eq_zero_of_eventually_zero`, `coeff_congr_of_eventuallyEq` (germ locality).
+D4 grammar `NormalCrossingWallInvariance` (CDXXVII, agent): `MonomialForm`, `exists_wall_equiv`, `exponent_eq_of_unit_monomial_eq`,
+`exists_wall_equiv_jac(_det)`, `card_eq_of_phase_eq`, `multiset_pairs_eq_of_phase_eq`.
+Consult #127 (`gpt6_bigpicture_v127.md`): AUDIT — level (1) delivered as designed (domain C^∞(U) right; germ locality is the correct
+support statement; do NOT say "depends only on F|_{Z₀}"); missing: continuity (chart-wise jet bound, unit D3b, M–L, independent, not
+blocking D5), resolution-independence, stratum kernels. DESIGN level (2): D5a atlas-transition adapter (transition `H = φ'∘φ⁻¹` analytic
+near 0 with inverse, phase equality, Jacobian chain rule) + `EvenChartBox.h_eq_zero_of_k_eq_zero` (inactive Jacobian exponents vanish:
+at a point with u_j = 0, others ≠ 0, the phase is nonzero so the blow-down is a local iso there and det ≠ 0; via isoOff) + centred
+comparison `pairData` equality (M–L); D5b `pairs P : Multiset (ℕ×ℕ)` on ALL of U (empty off D), `depth = card`, `Resonates μ (k,h) :=
+∃ m, 2kμ = h+1+m`, `resonanceCount`, basic lemmas (S–M); D5c local formula `pairs Q = {(k_j,h_j) : j active, (φ Q)_j = 0}` for Q in the
+source of ANY even chart (translate by u₀, D4 with general unit), closed `depthGE c`, `resonanceGE μ c`, open `shallowOpen c`, coordinate
+description of the stratum in a centred chart; no bundled submanifold, no Whitney (M). D6 `resonantZeroFibre μ q := zeroFibre ∩
+resonanceGE μ (q+1)`, target `coeff_eq_zero_of_eventually_zero_on_resonantZeroFibre`; GATE: inspect the engine for a LOCAL wall-supported
+coefficient lemma (coefficient of (μ,q) vanishes when the amplitude vanishes near the set of points with ≥ q+1 resonant vanishing active
+coordinates); chart-wide multiplicity bound alone is insufficient; partition of unity is NOT free (no subordinate-transport theorem).
+D7 minimal: restrictions to `U_c` (q ≥ c ⇒ 0; q = c−1 supported on `Z₀ ∩ S_c ∩ {r_μ = c}`), kernels deferred (normal jets). D8a: define
+leading at the FUNCTIONAL level (`IsLeadingFunctionalIndex μ₀ q₀`: some G with C ≠ 0, all preceding indices vanish for all G); normalised
+limit `N^{μ₀}(log N)^{−q₀} Z_N[G] → C_{μ₀,q₀}(G)`; positivity `G ≥ 0 on L ⇒ C ≥ 0`; `|C(G)| ≤ M C(1)`; alternative hypothesis "leading
+for Z_N[1]" implies it by domination; Riesz separate (M–L). Regression x²y² at D5 (depth/resonance counts), constants later.
+Paper paragraph for level (1) in §C of the consult (nine sentences).
