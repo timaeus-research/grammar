@@ -745,5 +745,6 @@ import Grammar.SmoothResolvedResonant
 import Grammar.SmoothResolvedLeadingOne
 import Grammar.SmoothResonantSupport
 import Grammar.SmoothResolvedResonantSupport
+import Grammar.SmoothResolvedLeadingSup
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
