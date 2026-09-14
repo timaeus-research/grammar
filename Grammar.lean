@@ -701,3 +701,4 @@ import Grammar.SmoothAmplitudeFamily
 import Grammar.SmoothFamilyIntegral
 import Grammar.SmoothCoreDecomposition
 import Grammar.SmoothExpansionCertificate
+import Grammar.SmoothCoreCertificate
