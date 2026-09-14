@@ -924,3 +924,13 @@ across modifications for PULL-BACK observables (uniqueness of expansions; cheap 
 density/extension interface is the cost); (5) RLCT bridge: nonvanishing of the leading coefficient of Z_N[1] via a POSITIVE BOX LOWER
 BOUND `Z_N[1] ≥ c N^{−λ*}(log N)^{m*−1}` at a point with positive prior realising the extremal pair (new lemma); (6) x²y² local-data
 regressions without a global modification; D7 kernels and common-refinement comparison DEFERRED. Paper paragraph (ten sentences) in §C.
+
+### 17.6 D3b LANDED (2026-09-14). Main 9f5f74b, 751 modules.
+CDXXXVII `SmoothResolvedJetBound`: `abs_coeff_le_of_chartJetBound : ChartJetBound Y (engineOrder μ) M → |𝒯^U_{μ,q}[F]| ≤ jetConstU μ q * M`,
+`ChartJetBound R M := ∀ i, JetBound R (centeredBox d (a i)) (F ∘ chartInv i) M`. Proof = Theorem C's CDXVI with `F ∘ chartInv i` in place of
+`obs ∘ ψ i` (`obsExtU` smooth extension off the box, `obsfamU` affine family, `amp_eq_mul`, `rectBound_obsfamU` via
+`abs_pdMulti_comp_affineMap_finRange` + `pdMulti_eqOn_centeredBox` + `abs_pdMulti_finRange_le_norm_iteratedFDeriv_of_mem`; no chartConst
+since the hypothesis is stated in the resolution charts). Built first try. Consult #128 follow-ups (1)+(2) DONE; the coefficient
+functionals may now be called "distributions of finite order on U (chart-wise)". Mirror: sentence + pin 9f5f74b (local commit, unpushed).
+Remaining optional: (3) scalar independence across modifications for pull-backs, (4) Riesz, (5) RLCT nonvanishing via positive box lower
+bound, (6) x²y² regression; D7 kernels / common refinement DEFERRED.
