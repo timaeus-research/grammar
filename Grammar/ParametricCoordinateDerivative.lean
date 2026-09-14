@@ -75,7 +75,7 @@ theorem slice_eq_comp (s : B) :
   funext v
   simp only [Function.comp, ContinuousLinearMap.inr_apply, Prod.mk_add_mk, add_zero, zero_add]
 
-theorem contDiff_slice {n : WithTop ℕ∞} (hG : ContDiff ℝ n G) (s : B) :
+theorem contDiff_sliceFin {n : WithTop ℕ∞} (hG : ContDiff ℝ n G) (s : B) :
     ContDiff ℝ n fun v => G (s, v) :=
   hG.comp (contDiff_const.prodMk contDiff_id)
 
@@ -122,14 +122,14 @@ theorem pdMulti_slice_eq_iteratedFDeriv (hG : ContDiff ℝ ∞ G) (m : Fin d →
     (s : B) (v : Fin d → ℝ) :
     pdMulti m l (fun v => G (s, v)) v =
       iteratedFDeriv ℝ (wordLen m l) G (s, v) fun j => ((0 : B), coordWord m l j) := by
-  rw [pdMulti_eq_iteratedFDeriv (contDiff_slice hG s) m l]
+  rw [pdMulti_eq_iteratedFDeriv (contDiff_sliceFin hG s) m l]
   exact iteratedFDeriv_slice_apply (hG.of_le (mod_cast le_top)) s v (coordWord m l)
 
 theorem pdPow_slice_eq_iteratedFDeriv (hG : ContDiff ℝ ∞ G) (i : Fin d) (k : ℕ) (s : B)
     (v : Fin d → ℝ) :
     pdPow i k (fun v => G (s, v)) v =
       iteratedFDeriv ℝ k G (s, v) fun _ => ((0 : B), Pi.single i 1) := by
-  rw [pdPow_eq_iteratedFDeriv (contDiff_slice hG s) i k]
+  rw [pdPow_eq_iteratedFDeriv (contDiff_sliceFin hG s) i k]
   exact iteratedFDeriv_slice_apply (hG.of_le (mod_cast le_top)) s v _
 
 /-! ### Joint continuity in the parameter and the variable -/
@@ -197,7 +197,7 @@ variable {S : Type*} [TopologicalSpace S]
 def ofSlice {σ : S → B} (hσ : Continuous σ) (hG : ContDiff ℝ ∞ G) (b : ℝ) :
     SmoothAmplitudeFamily S d b where
   amp s v := G (σ s, v)
-  smooth s := contDiff_slice hG (σ s)
+  smooth s := contDiff_sliceFin hG (σ s)
   deriv_cont m :=
     ((continuous_pdMulti_slice hG m (List.finRange d)).comp
       ((hσ.comp continuous_fst).prodMk continuous_snd)).continuousOn
