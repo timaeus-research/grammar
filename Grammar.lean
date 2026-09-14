@@ -685,3 +685,5 @@ import Grammar.SheetOverlapRegression
 import Grammar.SmoothFaceRegression
 import Grammar.SmoothCoordTaylor
 import Grammar.SmoothOneDim
+import Grammar.SmoothLogIntegrable
+import Grammar.SmoothFaceTheorem
