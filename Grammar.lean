@@ -710,3 +710,5 @@ import Grammar.SmoothExtension
 import Grammar.SmoothCoefficientLinearity
 import Grammar.SmoothOverlapRegression
 import Grammar.SmoothClosure
+import Grammar.SmoothCubeRegression
+import Grammar.SmoothZeroDim
