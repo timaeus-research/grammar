@@ -898,3 +898,19 @@ the lattice support (`faceMonoCoeff_eq_zero_of_not_lattice`) and the coarse degr
 prior∘ψ vanishes near them; jets of the smooth EXTENSION at box-boundary face points vanish since it agrees with the vanishing function on a
 full-dimensional wedge (Lean-painful); `Filter.eventually_nhdsSet_iff_forall` for pointwise-to-set. D7 minimal and D8 Riesz/Z₀-sup bound
 not started. Regression x²y² (depth/resonance counts) not started.
+### 17.4 D6 + D8 second theorem LANDED (2026-09-14). Main d820762, 749 modules.
+D6a (agent, `SmoothResonantSupport`, CDXXXIII): the engine DID have the pole-multiplicity bound at the state-density level
+(`stateDensityRep_coeffAt_eq_zero_of_le`: coeffAt vanishes at log degree ≥ `expMult`); the agent threaded it through
+`coeffTerm → spectralCoeff → familySpectralCoeff → boxCoeff → faceMonoCoeff → faceCoef` with the honest multi-index tracking of the
+monomial reps (`mul_support_ge`, `truncList_support_ge`, `scale_support_ge`, `monoFam_support_ge`), `resonantCount`, and the face
+amplitude vanishing `faceAmp_eq_zero_of_jets_zero` (`JetsZeroOn`, `remList_eq_zero_of_jetsZeroOn`), giving
+`smoothCoeff_eq_zero_of_resonant`. D6b geometric half (`SmoothResolvedResonant`): `pdMulti_eq_zero_of_eqOn_inter_closedBox` (jets at
+box-boundary points are limits of interior jets — needed because the engine sees the smooth EXTENSION of the chart amplitude),
+`faceResonant_le_resonanceCount` (via the local formula in the piece's even chart box `Y.evenChartBox` — hironaka D1 addendum
+`phaseConst_eq_one`, fork `5a310bdba`), `Gloc_eventually_zero` (F vanishes near the divisor point, OR the point is off `supp prior` so
+`prior ∘ ψ` vanishes near the chart point), `pdMulti_amp_eq_zero_on_face`. Assembly (`SmoothResolvedResonantSupport`, CDXXXV):
+`coeff_eq_zero_of_eventually_zero_resonant`, `coeff_congr_of_eventuallyEq_resonant`, `coeff_eq_zero_of_eventually_zero_depth`,
+`coeff_eq_zero_of_tsupport_subset_shallowOpen` (minimal D7). D8a second theorem (`SmoothResolvedLeadingOne`, CDXXXIV):
+`isLeadingIndex_of_one` by domination + first-nonzero-index extraction from the finite certified spectrum.
+Remaining from #127: D3b chart-wise jet bound on U (continuity of 𝒯^U), D7 kernels (deferred: normal jets), D8b Riesz / sup over Z₀ bound,
+regression x²y² (needs a `WatanabeModificationOn` for x²y² — construct charts at all zero points; M). Next: consult #128 audit of level (2).
