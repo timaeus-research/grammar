@@ -914,3 +914,13 @@ box-boundary points are limits of interior jets — needed because the engine se
 `isLeadingIndex_of_one` by domination + first-nonzero-index extraction from the finite certified spectrum.
 Remaining from #127: D3b chart-wise jet bound on U (continuity of 𝒯^U), D7 kernels (deferred: normal jets), D8b Riesz / sup over Z₀ bound,
 regression x²y² (needs a `WatanabeModificationOn` for x²y² — construct charts at all zero points; M). Next: consult #128 audit of level (2).
+### 17.5 Consult #128 (2026-09-14): CLOSE level (2) as the resolved geometric + germ-locality layer. Wording corrections for the paper:
+"closed SUPERLEVEL sets" (exact strata only locally closed), "chart-independent on a FIXED modification" (not resolution-independent),
+"germ-local coefficient FUNCTIONALS" (not distributions until D3b), "CONDITIONAL leading-index results" (no RLCT identification). Resonance
+convention confirmed (Mellin denominator h+m+1−2kμ). Add the contrapositive corollary `𝒯 ≠ 0 → S_{μ,q} ∩ tsupport F ≠ ∅`. Ranked follow-ups:
+(1) leading sup bound over S_{μ₀,q₀} via SMOOTH SATURATION θ∘G (θ = id near G(S), |θ| ≤ M) + germ congruence + existing bound, M ↓ sup
+(S–M, try first); (2) D3b chart-wise seminorm bound ⇒ continuity (if the paper says "distribution"); (3) scalar coefficient independence
+across modifications for PULL-BACK observables (uniqueness of expansions; cheap corollary to check); (4) Riesz (after the sup bound;
+density/extension interface is the cost); (5) RLCT bridge: nonvanishing of the leading coefficient of Z_N[1] via a POSITIVE BOX LOWER
+BOUND `Z_N[1] ≥ c N^{−λ*}(log N)^{m*−1}` at a point with positive prior realising the extremal pair (new lemma); (6) x²y² local-data
+regressions without a global modification; D7 kernels and common-refinement comparison DEFERRED. Paper paragraph (ten sentences) in §C.
