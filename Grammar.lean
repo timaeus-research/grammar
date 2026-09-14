@@ -697,3 +697,5 @@ import Grammar.SmoothAssemblyAlgebra
 import Grammar.SmoothGeneralDepth
 import Grammar.SmoothGeneral
 import Grammar.SmoothTimeRescale
+import Grammar.SmoothAmplitudeFamily
+import Grammar.SmoothFamilyIntegral
