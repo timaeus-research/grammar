@@ -19,10 +19,10 @@
       "type": "git",
       "subDir": null,
       "scope": "",
-      "rev": "9ca3ad9867ee1dddb063451d3689f76babd5c83b",
+      "rev": "88e896b886d1281e2b74382f1cad9d9c26236113",
       "name": "hironaka",
       "manifestFile": "lake-manifest.json",
-      "inputRev": "9ca3ad9867ee1dddb063451d3689f76babd5c83b",
+      "inputRev": "88e896b886d1281e2b74382f1cad9d9c26236113",
       "inherited": false,
       "configFile": "lakefile.toml"
     },
