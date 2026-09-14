@@ -703,3 +703,4 @@ import Grammar.SmoothCoreDecomposition
 import Grammar.SmoothExpansionCertificate
 import Grammar.SmoothCoreCertificate
 import Grammar.SmoothAffineFamily
+import Grammar.SmoothSheetTransport
