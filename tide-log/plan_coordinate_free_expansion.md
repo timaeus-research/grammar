@@ -634,3 +634,16 @@ hironaka sector-atlas 1c1bf695b: `DomainCoreTransport` (Target B interface `Norm
 ★★ `assembleDomain`). In flight (agents): BM89 export audit (what hironaka provides towards ONE modification with individual
 factor forms); grammar Target A cleanups (tide/targetA2); grammar domain consumer `SmoothDomainConsumer` (tide/domainconsumer,
 worktree grammar-tide-phase7).
+BM89 AUDIT (agent) for Target B: hironaka has NO family monomialisation, BUT (i) `watanabe_thm_2_3_of_isConnected_of_bo`
+runs on an arbitrary single analytic `F` — apply it to the PRODUCT `F := K · ∏ π_j` (iso off the WHOLE family zero divisor);
+(ii) the factor-splitting lemma exists and is certified: `Monomialize/Analytic/Germ/MonomialFun.lean:46
+exists_nhd_eq_unit_mul_monomial` (F·G = unit·monomial on an open nbhd of 0 ⇒ F = unit·monomial on a polydisc; germ version
+`eq_unit_mul_monomial_of_mul_eq`, `prime_convX`, `Conv` is a UFD); (iii) `ofBoundaryMonomials`/`domain_ae_of_boundaryMonomials`
+consume exactly the per-factor forms (as hypotheses). TARGET B PLAN (hironaka): B1 factor splitting at a centred chart
+(iterate the lemma over the family; Σ exponents = θ); B2 parity/sign on a connected polydisc (K ≥ 0 ambient ⇒ even exps,
+positive unit; boundary units constant sign ε_ℓ); B3 ALIGNED UNIT ABSORPTION `e(u) = (v^{1/2k₁}u₁, u₂, …)` (or general
+diagonal unit rescaling) preserving all unit×monomial forms with the SAME exponents and the maximal-atlas membership
+(`restrOpen_trans_mem_maximalAtlas`) — makes `K∘rep' = ∏u^{2k}` exactly; B4 per-chart `domain_ae` from constant-sign monomial
+boundary forms (adapt `domain_ae_of_boundaryMonomials`); B5 generalise `ChartData.injOn` to an arbitrary closed null wall set
+⊇ active walls (the product blow-down is injective only off ALL factor walls) + the domain bridge (C₀ = g⁻¹(Wdom ∩ supp ∩
+{K=0}); nullity of `E ∩ S` via a SEPARATE finite chart family at F-zeros); B6 Target B final theorem (grammar).
