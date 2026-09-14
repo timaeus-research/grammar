@@ -825,3 +825,29 @@ stratification. Finding: the carrier exists upstream — hironaka's `WatanabeMod
 `U`; the U-integral `Z_n[F] = ∫_U F e^{−nK∘g} dμ_U` with `Z_n[φ∘g] = Z_n[φ]`; `𝒯_{μ,q}` on smooth functions on `U`, canonical by
 uniqueness, supported on the divisor; local-depth stratification; support filtration, ordinary kernels on open strata, top-log
 measures. Design consult #126 (`tide-log/prompt_bigpicture_v126.md`).
+### 17.1 Consult #126 design (2026-09-14)
+Three levels: (1) intrinsic coefficient functional on the FIXED measured resolution `(U, π = R.gv, μ_U)`; (2) intrinsic
+normal-crossing depth/resonance filtration from a chart-invariance lemma; (3) smooth stratum-kernel presentations of RESTRICTIONS —
+NOT a canonical splitting into per-stratum summands (finite-part extension across deeper strata is ambiguous by terms supported
+there). Corrections: the highest log coefficient at an arbitrary exponent is NOT a measure (1-D: `n^{-3/2}` coefficient is `δ''`);
+only the globally first nonzero term (smallest exponent, highest log) is a positive order-0 measure (positivity argument); candidate
+exponents are UNIONS of the branch lattices `L_j = {(h_j+1+m)/(2k_j)}`, multiple poles from COINCIDENCES `2k_j μ = h_j+1+m_j`, not sums.
+D0 (hironaka): off-divisor subtype homeomorphism `e : {P // K(gv P) ≠ 0} ≃ₜ {x : W // K x ≠ 0}`; canonical `μ_U := incl_* (e⁻¹_* ν^×)`
+(ν = prior·vol restricted off the zero set); `μ_U D = 0`, `μ_U.map gv = priorMeasure`, concentration on `gv⁻¹(supp prior)` (compact);
+uniqueness of null-divisor lifts `η D = 0 → ξ D = 0 → η.map gv = ξ.map gv → η = ξ`; integral identity `Z^U_t[f∘π] = ∫ f e^{−tK} prior`.
+D1: lift cores (`(coreSource_i).map φ_i.symm` via SUBTYPE maps on the core box) and tail (`tail_W.map e⁻¹`, off the zero set by the
+gap), `∑ coreU + tailU = μ_U` by the uniqueness of lifts; structure `ResolvedCoreTransport` (minimal interface for grammar).
+D2–D3 (grammar): `𝒯^R_{μ,q}` a linear functional on smooth functions on `U` with a compact finite-chart jet estimate (NOT an
+overlap-compatible chart family first); certificate for `t ↦ Z^U_t[F]`, intrinsic by `coeff_eq`; `𝒯(f∘π) = coeffDistribution f`;
+support in `D ∩ π⁻¹(supp prior)`; uniform remainder. D4 (L, standalone): local wall correspondence — two monomial-unit descriptions
+of the same phase and Jacobian determinant at `P` under a local diffeo `H` give `σ : J ≃ J'` with `k = k'∘σ`, `h = h'∘σ`, matching
+tangent hyperplanes (leading homogeneous terms / restriction to lines; no irreducible decomposition). D5: `d_D(P) = |J(P)|`,
+`D_{≥c}` closed, `S_c` locally closed smooth submanifold of codim `c`, `U_c := U ∖ D_{≥c+1}` open; resonant count
+`r_μ(P) = #{j ∈ J(P) : μ ∈ L_j}`. D6: `supp 𝒯_{μ,q} ⊆ C ∩ {r_μ ≥ q+1} ⊆ D_{≥q+1}` (necessary conditions; localise + uniqueness).
+D7: on `U_c`, a functional supported on `D_{≥c}` is a finite transverse differential operator applied to smooth densities on `S_c`
+(adapted coordinates; `B_a` coordinate-dependent, the transverse-order filtration intrinsic); automatic case `𝒯_{μ,q}|_{U_{q+1}}`.
+D8: the globally leading coefficient is a positive Radon measure (`|𝒯(F)| ≤ C sup|F|` by positivity); explicit leading density under
+sufficient conditions. Regression: quadrant `x²y²`: off the corner `T_{1/2,0}(u) = (√π/2)∫_0^1 u(x,0)/x dx` (+ vertical),
+`T_{1/2,1} = (√π/4)δ_0`. Non-claims: no canonical per-stratum summands; `B_a` coordinate-dependent; no order 0 at higher exponents;
+no global integrability up to deeper strata; no nonvanishing; no resolution-independence without comparison maps; no Whitney/global
+components. Execution: D0 (me, hironaka clone, branch sector-atlas, fork only); D4 (agent, grammar worktree `tide/d4`).
