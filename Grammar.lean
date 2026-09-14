@@ -682,3 +682,4 @@ import Grammar.SheetBoundaryRegression
 import Grammar.SheetRescale
 import Grammar.SheetCentredCubeRegression
 import Grammar.SmoothFaceRegression
+import Grammar.SmoothCoordTaylor

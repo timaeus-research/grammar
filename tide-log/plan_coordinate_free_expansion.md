@@ -460,3 +460,17 @@ coordinate-free D2 certificate (Option A; total canonicity, J-min independence);
 presentation (later); U8 stochastic adapter. Stopping rule: engine usable at U6. Non-claims: smooth weights
 can cancel poles (flatness ⇒ faster-than-algebraic decay); RLCT readout needs nonvanishing; `C^M` certificates
 license only finitely many orders.
+Consult #116 (2026-09-14, `gpt6_bigpicture_v116.md`): the real-variable route for U2–U3 is sound; corrections/simplifications:
+normalise face remainders by `1/∏_{i∈J} m_i!`; nonempty inner faces only call the monomial engine (the fully flat term
+`J = ∅` is bounded elementarily by `e^{−x} ≤ C_L x^{−L}`: `≤ M C_L β^{−L} N^{−L} ∫ v^{p+h−aL}` — no logs); the two-regime
+inner bound is global (no shrinking region), with `1+|log(N w^{a})| ≤ (1+log N)(1+|S(w)|)` and the reusable
+integrability of `∏ w_i^{c_i}(1+|Σ a_i log w_i|)^D` on `(0,b]^K` for `c_i > −1`; log degree preserved (`≤ |J|−1`);
+use the box API `boxCoeff` at side `b` with `t = N w^{a_K}`; pad inner lattices `Q_J | Q_all`; define
+`smoothCoeffAtDepth p F μ q` FIRST, prove the expansion for every valid `L`, prove UNIQUENESS of finite power-log
+expansions, then the depth-free `smoothCoeff`. Lean: index by an arbitrary `[Fintype ι]` (cores instantiate
+`ι := Nrm I`), inline hypotheses `ContDiff ℝ ∞ F` + rectangular mixed-derivative bound `M`, a split wrapper
+(reuse `Tan/Nrm/split` or `piEquivPiSubtypeProd`), faces `J ∈ univ.powerset` with `FaceMultiIndex p J := (i : ↥J) → Fin (p i)`,
+subset sum externally + list induction internally; parameters via a wrapper (joint continuity of `∂_v^α F(s,v)`,
+finite `ν`); U4 by the radius margin (`sup|∂^α A_c| ≤ C‖c‖_{ℓ¹_{b'}}`), new `WeightedCorePresentation` exposing the
+same expansion interface. Milestones: (1) the 1D smooth theorem (coefficients `Σ_{m<p} F^{(m)}(0)/m! c^{(m)}_{μ,0}`,
+NOT Gamma identification), (2) the generic one-flat-complement face theorem, (3) `d = 2` tensor expansion (U0 check).
