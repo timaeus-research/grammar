@@ -660,3 +660,9 @@ Grammar CDVI `SmoothDomainConsumer` LANDED (main 24b32f4, 718 modules; half-box/
 `ProductChartExtraction` (agent: `exists_productChartBox` from the product resolution via factor splitting + unit absorption,
 `exists_finite_productChartBoxes`). Then B6: hironaka `exists_normalisedDomainCoreTransport_of_analyticOnNhd` (Watanabe on
 `F = K·∏π`) and the grammar Target B theorem `∫_{Wdom} prior·obs·e^{−NK}` (Wdom = boundaryDomain W π compact).
+★★★ TARGET B LANDED 2026-09-14: main `5e14080` (719 modules); hironaka sector-atlas 9ca3ad986 (`ProductChartExtraction` B5a
+agent, `DomainBridgeFinal`: `exists_normalisedDomainCoreTransport_of_analyticOnNhd`). Grammar CDVII `SmoothTargetB`:
+`exists_hasSmoothCoordFreeExpansion_domain_of_analyticOnNhd` (K, π_ℓ analytic on U₀; K ≥ 0 on connected open W ∋ 0;
+`K·∏π` vanishes at 0, ≢ 0 near 0; `Wdom = W ∩ {π ≥ 0}` compact; smooth prior with compact support in W; smooth obs;
+Measurable K) and the certificate form with `C.D ≤ d − 1`. NEXT: consult #121 (audit of Target B; cleanups — remove
+`Measurable K`, translation/positive-phase wrappers as for Target A; ball-inequality regression; mirror paragraph; closure).
