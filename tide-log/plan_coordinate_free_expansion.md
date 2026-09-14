@@ -555,3 +555,14 @@ coefficients are scalars, not a jet field; existence of a smooth weighted atlas 
 IN FLIGHT: U6c regression (overlapping shifted boxes with an ACTIVE-dependent smooth ramp; hironaka
 `shiftedAtlasOf` for an arbitrary partition function); optional: smooth-extension helper, d=0 regression,
 coefficient linearity; audit consult #118.
+
+### 13.3 Status 2026-09-14 (U6c + refinements): the smooth route is COMPLETE
+CCCXCVIII `SmoothExtension` (smooth Urysohn `exists_contDiff_zero_one_nhds`, `exists_contDiff_eqOn_of_contDiffOn`;
+`SmoothSheetNhdsInputs`: prior/observable smooth only on an open neighbourhood of the closed domain — the
+producer's global-smoothness non-claim for the DATA is removed; chart data remain globally smooth, they live in the
+atlas). CCCXCIX `SmoothCoefficientLinearity` (certificate `add/smul/zero/congr`; ★★ `coeff_add`, `coeff_smul`: the
+intrinsic coefficient at each `(μ,q)` is a linear functional of the observable). CD `SmoothOverlapRegression` (U6c,
+delegated): hironaka `shiftedAtlasOf τ` for an arbitrary partition function (fork `sector-atlas` 001c545b6, pin bumped);
+`activeRamp` depends on the active coordinate, ★ `activeRamp_not_ω_indep` (analytic producer's hypothesis FAILS),
+★★ `smoothOverlap_hasSmoothCoordFreeExpansion`, ★★ `coeff_eq_of_ramp` / `coeff_active_eq_coeff_tangential`.
+Remaining optional items: d = 0 regression; cube blow-up with radial weight `χ(‖x‖²)`; audit consult #118.
