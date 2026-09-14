@@ -708,6 +708,7 @@ import Grammar.SmoothSheetTransport
 import Grammar.SmoothSheetPieces
 import Grammar.SmoothSheetProducer
 import Grammar.SmoothExtension
+import Grammar.CoordinateFrechetBridge
 import Grammar.SmoothCoefficientLinearity
 import Grammar.SmoothOverlapRegression
 import Grammar.SmoothClosure
