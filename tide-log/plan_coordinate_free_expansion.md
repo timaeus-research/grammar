@@ -789,3 +789,16 @@ locality; ★★★ `faceDistribution : 𝓓'(PieceFaceSpace)`, bound, `dsupport
 `T_{μ,q}(f) = Σ_{P,J,a} faceW J a · 𝓑_{P,J,a}(faceJet f)`. Name clashes between concurrent agent modules (`projK`, `faceRes`,
 `contDiff_slice`) resolved by renaming (`tangProj`, `faceResFam`, `contDiff_sliceFin`). Remaining from #124: C5f regrouping (optional),
 C4s uniform remainder (L–XL), paper-facing wording; consult #125 audit of C5.
+### 16.5 Consult #125 (2026-09-14): AUDIT of C5 — PASSED; CLOSE after a small interface tidy-up
+Astra #125 (`tide-log/gpt6_bigpicture_v125.md`): C5 realises the chart-face design (termwise reconstruction from fixed functionals
+independent of the observable; ambient base space fine; `faceOrder` an upper bound; smooth pairing vs test-function pairing correct
+but the bridge should be exposed; `obsExt` dependence = presentation choice until an invariance theorem is stated). Tidy-up (all S):
+(A) smooth neighbourhood-congruence of `faceFunctional` (from linearity + locality); (B) cutoff pairing identity `faceFunctional u =
+faceDistribution (χ·u)` for a smooth `χ = 1` near `faceBox`, cutoff independence; (C) extension independence via the closed-box jet
+lemma (`pdMulti_eqOn_centeredBox`; face-value agreement alone is NOT enough — normal jets); (D) a documentation block. C4s: cheaper
+now but not automatically M — the missing audit is the REMAINDER proof's uniformity (one depth, one jet order, one compact set, `f`-free
+constants and threshold); recommendation: STOP, reopen only if the paper needs a distribution-topology expansion; C5f not required.
+Non-claims for the closure record: no seminorm-uniform remainder; no canonical intrinsic stratification or chart-independent summands;
+no minimal tangential order / minimal jet representation / uniqueness of the face decomposition; no base-density regularity from the
+absence of base derivatives; `faceJetObs f` not compactly supported; no arbitrary representative independence beyond what is proved;
+support statements are inclusions; no single finite face-jet list for all coefficients. Mirror: Astra's eight-sentence chart-face paragraph.
