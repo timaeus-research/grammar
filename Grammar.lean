@@ -749,5 +749,7 @@ import Grammar.SmoothResolvedLeadingSup
 import Grammar.SmoothResolvedJetBound
 import Grammar.SmoothResolvedModificationIndependence
 import Grammar.SmoothResolvedRLCTIndex
+import Grammar.MonomialBoxLowerBound
+import Grammar.SmoothResolvedRLCTPositive
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
