@@ -134,7 +134,8 @@ theorem contDiff_cyl {B : Type*} [NormedAddCommGroup B] [NormedSpace ℝ B] (J :
 def faceResFam {B : Type*} (J : Finset (Fin d)) (U : B → (Fin d → ℝ) → ℝ) : FaceSpace B J → ℝ :=
   fun z => U z.1 (glue J 0 z.2)
 
-theorem cyl_faceResFam_eqOn_face {B : Type*} (J : Finset (Fin d)) (U : B → (Fin d → ℝ) → ℝ) (s : B) :
+theorem cyl_faceResFam_eqOn_face {B : Type*} (J : Finset (Fin d)) (U : B → (Fin d → ℝ) → ℝ) (s
+    : B) :
     EqOn (cyl J (faceResFam J U) s) (U s) (face J) := fun v hv => by
   rw [cyl_apply, faceResFam, glue_zero_tangProj hv]
 
