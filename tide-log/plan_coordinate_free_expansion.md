@@ -882,3 +882,19 @@ leading at the FUNCTIONAL level (`IsLeadingFunctionalIndex μ₀ q₀`: some G w
 limit `N^{μ₀}(log N)^{−q₀} Z_N[G] → C_{μ₀,q₀}(G)`; positivity `G ≥ 0 on L ⇒ C ≥ 0`; `|C(G)| ≤ M C(1)`; alternative hypothesis "leading
 for Z_N[1]" implies it by domination; Riesz separate (M–L). Regression x²y² at D5 (depth/resonance counts), constants later.
 Paper paragraph for level (1) in §C of the consult (nine sentences).
+### 17.3 Level (2) progress (2026-09-14, after consult #127)
+LANDED: D5a hironaka `ResolvedJacobian` (fork `a67aad4a7`: `isLocalDiffeomorphAt_gv` off the zero set via `isoOff` ∘ inclusion-of-`W`
+partial diffeomorphism; `det_fderiv_rep_ne_zero`; `h_eq_zero_of_k_eq_zero`; `prod_pow_h_eq_active`) + grammar `ResolvedDepth` (CDXXX:
+`pairData`, `monomialForm` (unit 1), transition analyticity, Jacobian chain rule, `pairData_eq_of_centered`; `divisor`, `pairs R hK0 P`,
+`depth`, `Resonates`, `resonanceCount`, `pairs_eq_pairData`, `depth_pos_iff`, …); D5c grammar `ResolvedDepthLocal` (CDXXXI:
+`pairs_eq_of_mem_source` local formula via `translatedForm` (D4 with unit), sub-multiset monotonicity, `isClosed_depthGE`,
+`isClosed_resonanceGE`, `isOpen_shallowOpen`, `depthGE_one`, `depthGE_succ_dim`, `mem_depthGE_iff_of_centered`); D8a grammar
+`SmoothLeadingTerm` + `SmoothResolvedLeading` (CDXXXII: `tendsto_normalised_of_leading`, `IsLeadingIndex` (functional level),
+`tendsto_normalised_Z`, `coeff_nonneg_of_leading`, `abs_coeff_le_of_leading`). Main `a2c47f8`, 745 modules.
+D6 GATE RESULT: the engine's face coefficients `faceCoef = faceMonoCoeff = boxCoeff (spectral coefficients of the old engine)` have only
+the lattice support (`faceMonoCoeff_eq_zero_of_not_lattice`) and the coarse degree bound (`_of_lt`/`DJ`); the MULTIPLICITY bound
+(log degree at (μ,q) ≤ #{i ∈ J : (e_i+1)/(2k_i) = μ} − 1) is NOT present → D6a is an engine dig into `boxCoeff`/`familySpectralCoeff`
+(L). Deferred. Also needed for D6b: the chart amplitude `ρf · F∘φ⁻¹` vanishes near a face iff F vanishes near the face points in U OR
+prior∘ψ vanishes near them; jets of the smooth EXTENSION at box-boundary face points vanish since it agrees with the vanishing function on a
+full-dimensional wedge (Lean-painful); `Filter.eventually_nhdsSet_iff_forall` for pointwise-to-set. D7 minimal and D8 Riesz/Z₀-sup bound
+not started. Regression x²y² (depth/resonance counts) not started.
