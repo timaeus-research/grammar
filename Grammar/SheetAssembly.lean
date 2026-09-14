@@ -165,7 +165,7 @@ noncomputable def datum : LocalisationData (Sheet.Space X.SA) :=
     (X.obs ∘ Sheet.π X.SA) X.measurable_Kπ (fun _ => rfl) (fun _ => rfl) 1 one_pos
 
 theorem datum_μ :
-    X.datum.μ = ∑ p : X.PIdx, (pieceMeasure (X.A.h p.1) X.a (X.ϕ p.1) p.2.1).map (X.Ψ p) := rfl
+    X.datum.μ = ∑ p : X.PIdx, (pieceMeasure (X.A.h p.1) X.a (X.ϕw p.1) p.2.1).map (X.Ψ p) := rfl
 
 /-- The active pieces: those whose chart has a nonempty active set. -/
 abbrev APIdx : Type := {p : X.PIdx // (X.act p.1).Nonempty}
@@ -272,9 +272,9 @@ noncomputable def T (k : Fin X.N) : CoreNormalMomentPresentation (X.cores.chart 
 /-- The transported piece measure pushed to the domain is the weighted analytic prior on the
 orthant box, pushed by the chart. -/
 theorem map_Ψ_eq (p : X.PIdx) :
-    ((pieceMeasure (X.A.h p.1) X.a (X.ϕ p.1) p.2.1).map (X.Ψ p)).map (Sheet.π X.SA) =
+    ((pieceMeasure (X.A.h p.1) X.a (X.ϕw p.1) p.2.1).map (X.Ψ p)).map (Sheet.π X.SA) =
       ((volume.restrict (orthantBox p.2.1 X.a : Set (Fin d → ℝ))).withDensity fun w =>
-        ENNReal.ofReal (wgt (X.A.h p.1) w * X.ϕ p.1 w)).map (X.A.φ p.1) := by
+        ENNReal.ofReal (wgt (X.A.h p.1) w * X.ϕw p.1 w)).map (X.A.φ p.1) := by
   rw [Measure.map_map (Sheet.continuous_π X.SA).measurable (X.measurable_Ψ p),
     ← map_refl_pieceMeasure, Measure.map_map (X.φ_m p.1) (measurable_refl _)]
   refine Measure.map_congr ?_
@@ -283,7 +283,7 @@ theorem map_Ψ_eq (p : X.PIdx) :
 /-- The orthant pieces of a chart sum to the sector measure of the prior. -/
 theorem sum_withDensity_orthant (i : X.A.ι) :
     ∑ σ : ↥(X.A.signs i), (volume.restrict (orthantBox σ.1 X.a : Set (Fin d → ℝ))).withDensity
-      (fun w => ENNReal.ofReal (wgt (X.A.h i) w * X.ϕ i w)) =
+      (fun w => ENNReal.ofReal (wgt (X.A.h i) w * X.ϕw i w)) =
       X.A.sectorMeasure (fun w => ENNReal.ofReal (X.prior w)) i := by
   rw [← X.withDensity_sector_eq i, X.restrict_sector_eq i,
     ← Finset.sum_coe_sort (X.A.signs i) fun σ =>
@@ -299,7 +299,7 @@ theorem datum_map_π :
       (volume.restrict X.A.W).withDensity fun w => ENNReal.ofReal (X.prior w) := by
   rw [datum_μ, map_finset_sum _ _ (Sheet.continuous_π X.SA).measurable]
   simp_rw [X.map_Ψ_eq]
-  rw [Fintype.sum_sigma, ← X.A.domainTransport (a := fun w => ENNReal.ofReal (X.prior w))
+  rw [Fintype.sum_sigma, ← X.A.weightedDomainTransport (a := fun w => ENNReal.ofReal (X.prior w))
     (ENNReal.measurable_ofReal.comp X.prior_m)]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [← X.sum_withDensity_orthant i, map_finset_sum _ _ (X.φ_m i)]
@@ -378,10 +378,11 @@ theorem hasCoordFreeExpansion :
 
 end SheetInputs
 
-/-- ★★★ **Existence form**: a domain-sector atlas with the sheet-assembly inputs produces a resolved
-certificate and a coefficient certificate on its sheet geometry for which the coordinate-free
-expansion holds. -/
-theorem hasCoordFreeExpansion_of_domainSectorAtlas (X : SheetInputs d) :
+/-- ★★★ **Existence form**: a WEIGHTED domain atlas (chart weights constant along the active
+coordinates near the divisor, exact weighted transport — no disjointness of the chart images) with
+the sheet-assembly inputs produces a resolved certificate and a coefficient certificate on its
+sheet geometry for which the coordinate-free expansion holds. -/
+theorem hasCoordFreeExpansion_of_weightedDomainAtlas (X : SheetInputs d) :
     ∃ (C : ResolvedCertificate (Sheet.geometry X.SA) (Sheet.normalData X.SA) X.A.W X.K X.prior
         X.obs) (Cc : C.CoefficientCertificate),
       (Sheet.normalData X.SA).HasCoordFreeExpansion C.stratumMeasure Cc.field

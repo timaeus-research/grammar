@@ -58,7 +58,7 @@ noncomputable def boundaryInputs [NeZero n] : SheetInputs n where
   K := monoPhase k
   K_m := (continuous_monoPhase k).measurable
   Ω := centeredBox n a
-  A := monomialHalfBoxAtlas k ha c
+  A := (monomialHalfBoxAtlas k ha c).toWeighted
   a := a
   ha := ha
   lo_eq _ _ := rfl
@@ -81,6 +81,10 @@ noncomputable def boundaryInputs [NeZero n] : SheetInputs n where
   P i := (HolomorphicSignedBoxExtension.ofPolynomials a P Q).congr (priorFactor_eq k ha c P i) rfl
   signs_nonempty i := signs_monomialHalfBoxAtlas_nonempty k ha c i
   ι_nonempty := ⟨()⟩
+  t₀ := 1
+  t₀_pos := one_pos
+  ω_indep := fun _ _ _ _ _ => rfl
+  ω_contOn := fun _ => continuousOn_const
 
 theorem boundaryInputs_W [NeZero n] :
     (boundaryInputs k ha c P Q hP).A.W =
@@ -93,7 +97,7 @@ theorem boundaryInputs_signs [NeZero n] (i : Unit) (σ : WaterFilling.CoordSign 
 /-- ★★ **Boundary regression**: the coordinate-free expansion of
 `∫_{[−a,a]^n ∩ {y_{c j} ≥ 0}} Q · P · e^{−n ∏ y^{2k}}` through the domain-sector producer. -/
 theorem boundary_hasCoordFreeExpansion [NeZero n] :
-    (Sheet.normalData (monomialBoxAtlas k ha)).HasCoordFreeExpansion
+    (Sheet.normalData (monomialBoxAtlas k ha).toProductChartAtlas).HasCoordFreeExpansion
       (boundaryInputs k ha c P Q hP).cert.stratumMeasure
       (boundaryInputs k ha c P Q hP).coeffCert.field
       (spectrumLe (commonQ (boundaryInputs k ha c P Q hP).cert.cores.k)

@@ -35,7 +35,7 @@ open Monomialize.VolumeScaling
 
 namespace Sheet
 
-variable {d : ℕ} {F : (Fin d → ℝ) → ℝ} {Ω : Set (Fin d → ℝ)} (A : ProductSectorAtlas d F Ω)
+variable {d : ℕ} {F : (Fin d → ℝ) → ℝ} {Ω : Set (Fin d → ℝ)} (A : ProductChartAtlas d F Ω)
 
 /-! ### The space -/
 
