@@ -647,3 +647,7 @@ diagonal unit rescaling) preserving all unit×monomial forms with the SAME expon
 boundary forms (adapt `domain_ae_of_boundaryMonomials`); B5 generalise `ChartData.injOn` to an arbitrary closed null wall set
 ⊇ active walls (the product blow-down is injective only off ALL factor walls) + the domain bridge (C₀ = g⁻¹(Wdom ∩ supp ∩
 {K=0}); nullity of `E ∩ S` via a SEPARATE finite chart family at F-zeros); B6 Target B final theorem (grammar).
+CDV `SmoothTargetAClean` LANDED (Target A final form: `exists_smoothExpansionCertificate_of_analyticOnNhd`, no Measurable K, any
+zero, positive-phase pure tail, regressions). hironaka sector-atlas bb46913a7: `ChartData.walls` generalised (B5 prerequisite).
+In flight (agents): B1–B2 `FactorSplitting` (wtA), B3 `UnitAbsorption` (wtB), B4 `ChartDomainReading` (wtC), grammar
+`SmoothDomainConsumer` (phase7).
