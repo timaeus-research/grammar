@@ -580,3 +580,5 @@ support). Coefficient functional: scalar linear functional is the final form; op
 `coeff_eq_of_equal_finiteJets` (∃ R independent of f, g). Mirror paragraph: Astra's §4 wording adapted into
 `grammar_lean.tex` (local commit only). NEXT PROJECT (separate name/acceptance): "a smooth weighted normalised atlas
 from resolution data", starting with the resolution-space-to-weighted-transport bridge.
+Final state 2026-09-14: main `62af5df` (714 modules). CDII `SmoothCubeRegression` (radial smooth non-analytic prior on
+the cube blow-up, `commonD = 0`) + `SmoothZeroDim` (`smoothIntegral_zeroDim`, `smoothCoeff_zeroDim`). SMOOTH PROGRAMME CLOSED.
