@@ -434,3 +434,29 @@ provable. Non-claim wording: "certificates from weighted domain-sector atlases e
 per-core stratum-adapted partition; verified for the stated blow-up models; no claim that arbitrary SNC
 resolutions or Watanabe modifications supply such partitions, nor that normally varying smooth weights enter the
 analytic engine."
+
+## 13. Consult #114 (2026-09-14): DESIGN of the smooth-amplitude engine (run in parallel with Q1-α, §12 = Q1-α agent's status)
+
+Astra #114 (`gpt6_bigpicture_v114.md`): build D1 as a FACEWISE Mellin expansion theorem with D2 (analytic
+datum for prior/observable, smooth weight `χ` as a parameter of the coefficient map) as the integration path.
+Corrections: a full-box core is NOT face-free because cores are a.e.-disjoint (boundary layers near the faces
+`v_J = 0` have positive volume and contribute algebraic terms); corner Taylor remainders `O(‖v‖^M)` are
+insufficient; finite transverse order along faces ≠ finite normal order at the deepest base (Option A keeps the
+infinite `r`-sum of observable jets with new smooth-weight moments; Option B = face-supported coefficient
+distributions, later). Coefficients: `H_F(s,z) = Γ(z)β^{−z} Z_F(s,z)`, `Z_F(s,z) = ∫_{(0,b]^d} F ∏ v_i^{h_i − a_i z}`,
+Laurent principal parts at poles `μ ∈ ⋃_i {(h_i+1+m)/a_i}`, `C_{μ,j}(F) = (1/j!)∫_K d_{μ,j+1}(s) dν`; explicit
+face-subtraction continuation `Z_F = Σ_{J⊆[d]} Σ_{m_J<p_J} [∏_{i∈J} b^{h_i+m_i+1−a_i z}/(h_i+m_i+1−a_i z)]
+∫_{(0,b]^{J^c}} (∏_{J^c} R_i) F_{J,m} ∏ v_i^{h_i−a_i z}` with `F_{J,m} = ∂_J^m F/m!|_{v_J=0}`; remainder
+`≤ C_L ‖F‖_{mixed,p} N^{−L}(1+log N)^{d−1}`. D2: `M_{γ,χ}(N,s) = ∫ χ v^{γ+h} e^{−Nβ∏v^{2k}}` with
+index-dependent subtraction depths `p_i(γ)` giving uniform-in-γ bounds `≤ C_L ‖χ‖_{mixed,P} b^{|γ|} N^{−L}…`
+(fallback: Cauchy margin `b' > b` absorbs `(1+|γ|)^M`); coefficient map `smoothTanCoeff_χ(x; μ, j) =
+∫ Σ_γ c_γ(s) m_{γ,μ,j}(χ; s) dν` linear and bounded in the ℓ¹ datum. Units: U0 regression
+`∫_0^b∫_0^b f(x)e^{−Nx²y²} = (√π/2)N^{−1/2}∫f/x + O(e^{−cN})` for `f` supported away from 0 (all corner jets
+vanish); U1 one-coordinate subtraction operator (parameterised meromorphic continuation); U2 tensor
+subtraction + Laurent bookkeeping (`FaceMellinDatum`); U3 smooth core expansion (`O(N^{−T})` contour theorem,
+then the cutoff bound — smooth replacement of `cutoffExpansion_gInt`); U4 D2 adapter (shifted moments,
+uniform-in-γ, equality with old coefficients for `χ = 1`); U5 weighted core/decomposition assembly; U6
+coordinate-free D2 certificate (Option A; total canonicity, J-min independence); U7 facewise finite-order
+presentation (later); U8 stochastic adapter. Stopping rule: engine usable at U6. Non-claims: smooth weights
+can cancel poles (flatness ⇒ faster-than-algebraic decay); RLCT readout needs nonvanishing; `C^M` certificates
+license only finitely many orders.
