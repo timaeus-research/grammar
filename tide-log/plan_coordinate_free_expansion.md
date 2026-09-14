@@ -517,3 +517,19 @@ need only be measurable/bounded globally, base-only near the divisor) but was no
 milestone 2 = the generic one-flat-complement face theorem (inner monomial integral with the two-regime estimate
 integrated against a product-flat outer amplitude), milestone 3 = `d = 2` tensor expansion (U0 compatibility), then
 U3 general `d`, U4 D2 adapter (radius margin), U5/U6.
+
+### 13.1 Status 2026-09-14 (after U3): smooth engine milestones 1–3 and U3 CLOSED
+Main `3a10735` (698 modules). Landed: CCCLXXXVIII `SmoothLogIntegrable` + `SmoothFaceTheorem`
+(★★ `face_expansion`, the generic one-flat-complement face theorem with the GLOBAL two-regime input and
+preserved log degree); CCCLXXXIX `SmoothInnerMonomial` + `SmoothTwoDim` (★★ `twoDim_smooth`: corner jets ×
+monomial box integrals + two edge face integrals + `O(N^{−L})`, explicit constant; U0 compatibility confirmed);
+CCCXC `SmoothFaceOperators` + `SmoothFaceSplit` (★ `sum_faceOp` subset formula, ★ `tayList_eq_sum`,
+★★ `faceTerm_integral`, ★ `faceAmp_bound`); CCCXCI (delegated agent) `SmoothFaceMonomial` (★★
+`faceMono_two_regime` through the box engine, `faceMonoCoeff`) + `SmoothFiniteUniqueness` (★★
+`finite_coeff_unique`); CCCXCII `SmoothAssemblyAlgebra` + `SmoothGeneralDepth` + `SmoothGeneral`:
+★★★ `smooth_expansion_at_depth` and ★★★ `smooth_cutoffExpansion : CutoffExpansion (2∏k) (d−1)
+(smoothIntegral F h k β b) (smoothCoeff F h k β b)` from `ContDiff ℝ ∞ F` alone, ★★ `smoothCoeff_unique`.
+Design notes: depth `pᵢ = 2kᵢL − hᵢ` for `L ≥ L₀ = Σhᵢ + 1`; canonical coefficient at `μ` uses the cutoff
+`max(⌊μ⌋₊+1, L₀)`; the empty face is `e^{−βt}`; `inJ` predicate keeps `Subtype.fintype` on face subtypes.
+NEXT: consult #117 (U4 base parameters / units β(s), U5 smooth core presentation, U6 coordinate-free
+smooth statement and the weighted-atlas closure without `ω_indep`/`ω_contOn`).
