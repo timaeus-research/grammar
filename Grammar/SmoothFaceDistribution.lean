@@ -16,7 +16,7 @@ renormalised functional depends on its argument `U` only through the restriction
 `{v_J = 0}` (the complementary Taylor remainder and the face integral live there). This file
 introduces the **face space** `FaceSpace P J = BaseSpace × TangSpace` (base coordinates and the
 tangential active coordinates, an ambient Euclidean space), the **cylinder extension**
-`cyl u s v = u (s, projK v)` of a function `u` on the face space, and the **face functional**
+`cyl u s v = u (s, tangProj v)` of a function `u` on the face space, and the **face functional**
 
   `faceFunctional X P J a μ q u = ∫_s renormFunctional (ρfam P s) … J a μ q (cyl u s.1) dν(s)`,
 
@@ -93,19 +93,19 @@ theorem pdMulti_lK_eqOn_face {J : Finset (Fin d)} {F G : (Fin d → ℝ) → ℝ
 /-! ### The tangential projection and the cylinder extension -/
 
 /-- The tangential projection `v ↦ (v_k)_{k ∉ J}`. -/
-def projK (J : Finset (Fin d)) : (Fin d → ℝ) →L[ℝ] ({i // ¬ inJ J i} → ℝ) :=
+def tangProj (J : Finset (Fin d)) : (Fin d → ℝ) →L[ℝ] ({i // ¬ inJ J i} → ℝ) :=
   ContinuousLinearMap.pi fun k => ContinuousLinearMap.proj k.1
 
-theorem projK_apply (J : Finset (Fin d)) (v : Fin d → ℝ) (k : {i // ¬ inJ J i}) :
-    projK J v k = v k.1 := rfl
+theorem tangProj_apply (J : Finset (Fin d)) (v : Fin d → ℝ) (k : {i // ¬ inJ J i}) :
+    tangProj J v k = v k.1 := rfl
 
-theorem projK_glue_zero (J : Finset (Fin d)) (w : {i // ¬ inJ J i} → ℝ) :
-    projK J (glue J 0 w) = w := by
+theorem tangProj_glue_zero (J : Finset (Fin d)) (w : {i // ¬ inJ J i} → ℝ) :
+    tangProj J (glue J 0 w) = w := by
   funext k
-  rw [projK_apply, glue_apply_of_not_mem J _ _ k.2]
+  rw [tangProj_apply, glue_apply_of_not_mem J _ _ k.2]
 
-theorem glue_zero_projK {J : Finset (Fin d)} {v : Fin d → ℝ} (hv : v ∈ face J) :
-    glue J 0 (projK J v) = v := by
+theorem glue_zero_tangProj {J : Finset (Fin d)} {v : Fin d → ℝ} (hv : v ∈ face J) :
+    glue J 0 (tangProj J v) = v := by
   funext i
   by_cases hi : i ∈ J
   · rw [glue_apply_of_mem J _ _ hi]; exact (hv i hi).symm
@@ -117,26 +117,26 @@ abbrev FaceSpace (B : Type*) (J : Finset (Fin d)) : Type _ := B × ({i // ¬ inJ
 
 /-- The cylinder extension of a function on the face space to the engine's coordinates. -/
 def cyl {B : Type*} (J : Finset (Fin d)) (u : FaceSpace B J → ℝ) (s : B) : (Fin d → ℝ) → ℝ :=
-  fun v => u (s, projK J v)
+  fun v => u (s, tangProj J v)
 
 theorem cyl_apply {B : Type*} (J : Finset (Fin d)) (u : FaceSpace B J → ℝ) (s : B)
-    (v : Fin d → ℝ) : cyl J u s v = u (s, projK J v) := rfl
+    (v : Fin d → ℝ) : cyl J u s v = u (s, tangProj J v) := rfl
 
 theorem cyl_glue_zero {B : Type*} (J : Finset (Fin d)) (u : FaceSpace B J → ℝ) (s : B)
     (w : {i // ¬ inJ J i} → ℝ) : cyl J u s (glue J 0 w) = u (s, w) := by
-  rw [cyl_apply, projK_glue_zero]
+  rw [cyl_apply, tangProj_glue_zero]
 
 theorem contDiff_cyl {B : Type*} [NormedAddCommGroup B] [NormedSpace ℝ B] (J : Finset (Fin d))
     {u : FaceSpace B J → ℝ} (hu : ContDiff ℝ ∞ u) (s : B) : ContDiff ℝ ∞ (cyl J u s) :=
-  hu.comp (contDiff_const.prodMk (projK J).contDiff)
+  hu.comp (contDiff_const.prodMk (tangProj J).contDiff)
 
 /-- The face restriction of a function on the engine's coordinates, over a base parameter. -/
-def faceRes {B : Type*} (J : Finset (Fin d)) (U : B → (Fin d → ℝ) → ℝ) : FaceSpace B J → ℝ :=
+def faceResFam {B : Type*} (J : Finset (Fin d)) (U : B → (Fin d → ℝ) → ℝ) : FaceSpace B J → ℝ :=
   fun z => U z.1 (glue J 0 z.2)
 
-theorem cyl_faceRes_eqOn_face {B : Type*} (J : Finset (Fin d)) (U : B → (Fin d → ℝ) → ℝ) (s : B) :
-    EqOn (cyl J (faceRes J U) s) (U s) (face J) := fun v hv => by
-  rw [cyl_apply, faceRes, glue_zero_projK hv]
+theorem cyl_faceResFam_eqOn_face {B : Type*} (J : Finset (Fin d)) (U : B → (Fin d → ℝ) → ℝ) (s : B) :
+    EqOn (cyl J (faceResFam J U) s) (U s) (face J) := fun v hv => by
+  rw [cyl_apply, faceResFam, glue_zero_tangProj hv]
 
 /-! ### Face factorisation of the renormalised functional -/
 
@@ -153,12 +153,12 @@ theorem renormFunctional_eqOn_face {D U U' : (Fin d → ℝ) → ℝ} (hD : Cont
 
 theorem renormFunctional_eq_cyl {B : Type*} [NormedAddCommGroup B] [NormedSpace ℝ B]
     {D : (Fin d → ℝ) → ℝ} (hD : ContDiff ℝ ∞ D) (J : Finset (Fin d)) {U : B → (Fin d → ℝ) → ℝ}
-    (s : B) (hU : ContDiff ℝ ∞ (U s)) (hres : ContDiff ℝ ∞ (faceRes J U)) (hb : 0 < b)
+    (s : B) (hU : ContDiff ℝ ∞ (U s)) (hres : ContDiff ℝ ∞ (faceResFam J U)) (hb : 0 < b)
     (a : Fin d → ℕ) (q : ℕ) :
     renormFunctional D h k p β b J a μ q (U s) =
-      renormFunctional D h k p β b J a μ q (cyl J (faceRes J U) s) :=
+      renormFunctional D h k p β b J a μ q (cyl J (faceResFam J U) s) :=
   renormFunctional_eqOn_face hD hU (contDiff_cyl J hres s) hb J a q
-    (cyl_faceRes_eqOn_face J U s).symm
+    (cyl_faceResFam_eqOn_face J U s).symm
 
 /-! ### Smoothness of the affine chart glue in both arguments -/
 
@@ -222,7 +222,7 @@ theorem cyl_faceJet_eqOn_face (P : X.PIdx) (J : Finset (Fin (X.da P))) (a : Fin 
     (s : Base (X.act P.1) (X.T.a P.1)) :
     EqOn (cyl J (X.faceJet P J a) s.1) (pdMulti a (lJ J) (X.obsfam P s)) (face J) := by
   intro v hv
-  rw [cyl_apply, faceJet, glue_zero_projK hv]
+  rw [cyl_apply, faceJet, glue_zero_tangProj hv]
   rfl
 
 /-- The face jet is smooth on the face space. -/
