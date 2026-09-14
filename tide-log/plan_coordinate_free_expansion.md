@@ -533,3 +533,25 @@ Design notes: depth `pᵢ = 2kᵢL − hᵢ` for `L ≥ L₀ = Σhᵢ + 1`; cano
 `max(⌊μ⌋₊+1, L₀)`; the empty face is `e^{−βt}`; `inJ` predicate keeps `Subtype.fintype` on face subtypes.
 NEXT: consult #117 (U4 base parameters / units β(s), U5 smooth core presentation, U6 coordinate-free
 smooth statement and the weighted-atlas closure without `ω_indep`/`ω_contOn`).
+
+### 13.2 Status 2026-09-14 (after U4–U6b): the smooth route is CLOSED through the producer
+Main `a97005c` (708 modules). Consult #117 (`gpt6_bigpicture_v117.md`) designed U4–U6; all landed.
+CCCXCIII `SmoothTimeRescale` (`smoothIntegral F h k β b N = smoothIntegral F h k 1 b (βN)`, `scaleCoeff`
+log-degree mixing, zero-support of canonical coefficients), `SmoothAmplitudeFamily` (jointly continuous
+derivatives over a compact base; uniform rect bound; `continuous_smoothCoeff`; `uniform_cutoff`),
+`SmoothFamilyIntegral` (`cutoffExpansion_integral(_beta)`: integrate the family expansion against a finite
+base measure with a continuous positive unit β(s)). CCCXCIV `SmoothCoreDecomposition` (`SmoothCorePresentation`
+with nonnegative transport density ρ, observable kept out of the density; ★★★ `cutoffExpansion` of the
+global Laplace integral from finitely many cores + an exponentially small tail). CCCXCV
+`SmoothExpansionCertificate` (scalar coefficient functional, `HasSmoothCoordFreeExpansion`, analytic
+compatibility `coeff_eq_gCoeff` by uniqueness) + `SmoothCoreCertificate` (★★★ `hasSmoothCoordFreeExpansion`,
+★★ presentation independence `coeff_eq_of_decompositions`). CCCXCVI `SmoothAffineFamily` (orthant
+reflections/glue, chain rule for `pdMulti`, `SmoothAmplitudeFamily.ofAffine`) + `SmoothSheetTransport`
+(`baseMeasure`, ★★ `map_glueE'_pieceMeasure`). CCCXCVII `SmoothSheetPieces` (`SmoothSheetInputs d`: smooth
+weighted domain atlas, NO `ω_indep`/`ω_contOn`; per-orthant `piecePresentation`) + `SmoothSheetProducer`
+(★★★ `SmoothSheetInputs.hasSmoothCoordFreeExpansion`, ★★ `coeff_eq_of_inputs`).
+Non-claims: chart data assumed globally smooth (neighbourhood/smooth-extension version not done);
+coefficients are scalars, not a jet field; existence of a smooth weighted atlas is an input.
+IN FLIGHT: U6c regression (overlapping shifted boxes with an ACTIVE-dependent smooth ramp; hironaka
+`shiftedAtlasOf` for an arbitrary partition function); optional: smooth-extension helper, d=0 regression,
+coefficient linearity; audit consult #118.
