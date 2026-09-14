@@ -733,3 +733,15 @@ linear, `|F u| ≤ sup|u'|`, support `[0,1]`, NO order-0 bound (`F(u_ε) ≥ log
 C2 + C3 + intrinsicness with Theorem B as the presentation. Non-claims: minimal order, `C^R` extension, resolved manifold,
 intrinsic per-stratum tensors, measure coefficients, chart-transition compatibility, strong-topology expansion.
 Execution 2026-09-14: agents on C0c (`tide/c0c`), C1a (`tide/c1a`), C6 (`tide/c6`); C0a/C0b/C1b/C1c/C2/C3 in `tide/smooth`.
+### 16.1 Status 2026-09-14 — FIRST RELEASE BOUNDARY REACHED (C2 + C3 + intrinsicness)
+Landed (all axiom-clean, gated): CDXII `CoordinateFrechetBridge` (C0c: `pdMulti_eq_iteratedFDeriv`, `abs_pdMulti_le_norm_iteratedFDeriv`,
+`rectBound_of_jetBound`, local chain rule `exists_chart_jet_bound`; agent) · CDXIII `SmoothCoeffBound` (C1a: `coeffBoundConstant`,
+`abs_smoothCoeff_le`, `abs_familyCoeff_le_const_beta`; agent) · CDXIV `FinitePartRegression` (C6: `finitePart`, `abs_finitePart_le`,
+`no_order_zero_bound`, `finitePart_pow`; agent) · CDXV `SmoothObservableCoeff` (C0a/C0b/C3: `observableCoeff`, `_add/_smul/_zero`,
+`observableCoeff_eq_of_eq`, `coreImage`/`wallImage` compact, `wallImage_subset_zeroSet`, `observableCoeff_eq_zero_of_tsupport_subset`,
+`_of_disjoint_prior`) · CDXVI `SmoothCoeffJetBound` (C1b/C1c: `RectBound.mul`, `engineOrder`, `engineOrder_le_chartJetTotal`,
+`rectBound_obsfam`, `abs_coeff_le`, `abs_observableCoeff_le`) · CDXVII `SmoothCoeffDistribution` (C2/C3/C4w: `Distribution.ofJetBound`,
+`coeffDistribution : 𝓓'(ℝ^d,ℝ)`, `coeffDistribution_bound`, `coeffDistribution_eq_of_eq`, `dsupport_coeffDistribution_subset(_zeroSet)`,
+`isCompact_dsupport_coeffDistribution`, `hasSmoothCoordFreeExpansion_partitionObs`). 729 modules. Mirror paragraph appended.
+Remaining: C5a/C5b chart-face distributions and the pairing presentation (L–XL); C4s seminorm-uniform remainder / `Z_n` as a
+distribution (L–XL); paper-facing wording. Next: consult #124 audit of the release boundary + C5 design.

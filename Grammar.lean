@@ -726,3 +726,4 @@ import Grammar.FinitePartRegression
 import Grammar.SmoothRenormalisedStrata
 import Grammar.SmoothObservableCoeff
 import Grammar.SmoothCoeffJetBound
+import Grammar.SmoothCoeffDistribution
