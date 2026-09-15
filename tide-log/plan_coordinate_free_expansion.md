@@ -1515,3 +1515,11 @@ finite-order (compact-uniform C^r on closed boxes) convergence of branch represe
 continuity with a uniform coefficient bound for the base integrals (pitfalls: faceCoeffInt needs more derivatives than the displayed normal
 order; do not impose wall agreement; work on closed boxes; smooth approximants only); (2) consolidation; (3) lower-log Mellin weights as an
 `iteratedDeriv` identity in the Mellin order; (4) random-field subleading limits deferred.
+
+### 20.21 CONSULT #144 UNIT A LANDED (2026-09-15): CDXCV `SmoothCoeffContinuity`; 819 modules.
+`smoothCoeff` linear in the amplitude (uniqueness), `abs_smoothCoeff_sub_le`, `tendsto_smoothCoeff(_of_iteratedFDeriv)` at the canonical depth
+`p = depthOf h k (cutoffOf h μ)`, order |p| explicit. NEXT (unit B): continuity of the cube replacement rule in the field ζ — needs the
+finite-order continuity of composition `g ∘ ζ` on a compact box: plan via Mathlib's Faà di Bruno (`HasFTaylorSeriesUpToOn.comp`,
+`HasFTaylorSeriesUpTo.eq_iteratedFDeriv`, `taylorComp` = sum over `OrderedFinpartition n` of `compAlongOrderedFinpartition`, with the
+difference bound `norm_compAlongOrderedFinpartition_sub_compAlongOrderedFinpartition_le`) + Leibniz `norm_iteratedFDeriv_mul_le` for the
+product with η; then `tendsto_empCoeffRect_top` in ζ; unit C: resolved continuity (uniform over the compact base, finite base measure).

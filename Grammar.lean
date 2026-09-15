@@ -814,5 +814,6 @@ import Grammar.EmpiricalResolvedExpansion
 import Grammar.EmpiricalLeadingConsistency
 import Grammar.EmpiricalRectReplacement
 import Grammar.EmpiricalResolvedStratumFormula
+import Grammar.SmoothCoeffContinuity
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
