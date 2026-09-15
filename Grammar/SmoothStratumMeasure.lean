@@ -168,31 +168,55 @@ theorem stratumMeasure_compl_exactStratum {μ : ℝ} {c : ℕ} (hc : 1 ≤ c)
 
 /-! ### Localisation: observables vanishing near the deep zero fibre -/
 
+/-- A smooth observable vanishing near the deep zero fibre agrees on the exact stratum with a
+smooth test function `G·χ`, `χ` a cutoff equal to `1` on `Z₀` minus the vanishing neighbourhood. -/
+theorem exists_cutoff_eqOn_exactStratum (μ : ℝ) {c : ℕ} {G : Ξ.R.U → ℝ}
+    (hG0 : ∀ᶠ P in 𝓝ˢ (Ξ.deepZeroFibre c), G P = 0) :
+    ∃ χ : Ξ.R.U → ℝ, ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ χ ∧ Ξ.IsTest c (fun P => G P * χ P) ∧
+      EqOn G (fun P => G P * χ P) (Ξ.exactStratum μ c) := by
+  obtain ⟨O, hO, hDO, hGO⟩ := eventually_nhdsSet_iff_exists.1 hG0
+  have hK0c : IsCompact (Ξ.zeroFibre \ O) := Ξ.isCompact_zeroFibre.diff hO
+  have hK0X : Ξ.zeroFibre \ O ⊆ Ξ.stratumOpen c := fun P hP hD => hP.2 (hDO hD)
+  obtain ⟨χ, hχ, hχt, hχ1, -⟩ := Ξ.exists_cutoff c hK0c hK0X
+  refine ⟨χ, hχ, ⟨hχt.1.mul_left, tsupport_mul_subset_right.trans hχt.2⟩, fun P hP => ?_⟩
+  by_cases hPO : P ∈ O
+  · simp [hGO P hPO]
+  · simp [hχ1 P ⟨hP.1, hPO⟩]
+
+/-- Such an observable agrees `ν`-a.e. on `X` with the test function `G·χ`. -/
+theorem ae_eq_mul_cutoff {μ : ℝ} {c : ℕ} (hc : 1 ≤ c) (hzero : Ξ.ZeroOrder μ c)
+    {G χ : Ξ.R.U → ℝ} (heq : EqOn G (fun P => G P * χ P) (Ξ.exactStratum μ c)) :
+    (fun x : Ξ.stratumOpen c => G x.1) =ᵐ[Ξ.stratumMeasure Y hc hzero]
+      fun x => G x.1 * χ x.1 := by
+  rw [Filter.EventuallyEq, ae_iff]
+  refine measure_mono_null ?_ (Ξ.stratumMeasure_compl_exactStratum Y hc hzero)
+  intro x hx hxE
+  exact hx (heq hxE)
+
+/-- ★★ **Integrability**: the restriction to `X` of a smooth observable vanishing near the deep
+zero fibre is integrable against the stratum measure. -/
+theorem integrable_stratumMeasure {μ : ℝ} {c : ℕ} (hc : 1 ≤ c) (hzero : Ξ.ZeroOrder μ c)
+    {G : Ξ.R.U → ℝ} (hG : ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ G)
+    (hG0 : ∀ᶠ P in 𝓝ˢ (Ξ.deepZeroFibre c), G P = 0) :
+    Integrable (fun x : Ξ.stratumOpen c => G x.1) (Ξ.stratumMeasure Y hc hzero) := by
+  obtain ⟨χ, hχ, hGχt, heq⟩ := Ξ.exists_cutoff_eqOn_exactStratum μ hG0
+  have hGχ : ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ (fun P => G P * χ P) := hG.mul hχ
+  refine Integrable.congr ?_ (Ξ.ae_eq_mul_cutoff Y hc hzero heq).symm
+  exact Continuous.integrable_of_hasCompactSupport (Ξ.toCc c hGχ hGχt).continuous
+    (Ξ.toCc c hGχ hGχt).hasCompactSupport
+
 /-- ★★★ **Representation for observables vanishing near the deep zero fibre**, compactly supported
 in `X` or not: the `(μ, c−1)` coefficient is the integral against the stratum measure. -/
 theorem coeff_withF_eq_integral_stratumMeasure {μ : ℝ} {c : ℕ} (hc : 1 ≤ c)
     (hzero : Ξ.ZeroOrder μ c) {G : Ξ.R.U → ℝ} (hG : ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ G)
     (hG0 : ∀ᶠ P in 𝓝ˢ (Ξ.deepZeroFibre c), G P = 0) :
     (Ξ.withF G hG).coeff Y μ (c - 1) = ∫ x, G x.1 ∂(Ξ.stratumMeasure Y hc hzero) := by
-  obtain ⟨O, hO, hDO, hGO⟩ := eventually_nhdsSet_iff_exists.1 hG0
-  have hK0c : IsCompact (Ξ.zeroFibre \ O) := Ξ.isCompact_zeroFibre.diff hO
-  have hK0X : Ξ.zeroFibre \ O ⊆ Ξ.stratumOpen c := fun P hP hD => hP.2 (hDO hD)
-  obtain ⟨χ, hχ, hχt, hχ1, hχ01⟩ := Ξ.exists_cutoff c hK0c hK0X
+  obtain ⟨χ, hχ, hGχt, heq⟩ := Ξ.exists_cutoff_eqOn_exactStratum μ hG0
   have hGχ : ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ (fun P => G P * χ P) := hG.mul hχ
-  have hGχt : Ξ.IsTest c (fun P => G P * χ P) :=
-    ⟨hχt.1.mul_left, tsupport_mul_subset_right.trans hχt.2⟩
-  have heq : EqOn G (fun P => G P * χ P) (Ξ.exactStratum μ c) := fun P hP => by
-    by_cases hPO : P ∈ O
-    · simp [hGO P hPO]
-    · simp [hχ1 P ⟨hP.1, hPO⟩]
   rw [Ξ.coeff_eq_of_eqOn_exactStratum Y hc hzero hG hGχ hG0 hGχt.eventually_zero heq]
   change Ξ.T Y μ c _ hGχ = _
   rw [← Ξ.integral_stratumMeasure_test Y hc hzero hGχ hGχt]
-  refine integral_congr_ae ?_
-  rw [Filter.EventuallyEq, ae_iff]
-  refine measure_mono_null ?_ (Ξ.stratumMeasure_compl_exactStratum Y hc hzero)
-  intro x hx hxE
-  exact hx (heq hxE).symm
+  exact (integral_congr_ae (Ξ.ae_eq_mul_cutoff Y hc hzero heq)).symm
 
 /-- The coefficient of `Ξ` itself, when `F` vanishes near the deep zero fibre. -/
 theorem coeff_eq_integral_stratumMeasure {μ : ℝ} {c : ℕ} (hc : 1 ≤ c) (hzero : Ξ.ZeroOrder μ c)
@@ -234,6 +258,12 @@ theorem residueMeasure_compl_exactStratum {μ : ℝ} {c : ℕ} (hc : 1 ≤ c)
     Ξ.residueMeasure Y hc hzero (Subtype.val ⁻¹' Ξ.exactStratum μ c)ᶜ = 0 := by
   unfold residueMeasure
   rw [Measure.smul_apply, Ξ.stratumMeasure_compl_exactStratum Y hc hzero, smul_zero]
+
+theorem integrable_residueMeasure {μ : ℝ} {c : ℕ} (hc : 1 ≤ c) (hzero : Ξ.ZeroOrder μ c)
+    {G : Ξ.R.U → ℝ} (hG : ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ G)
+    (hG0 : ∀ᶠ P in 𝓝ˢ (Ξ.deepZeroFibre c), G P = 0) :
+    Integrable (fun x : Ξ.stratumOpen c => G x.1) (Ξ.residueMeasure Y hc hzero) :=
+  (Ξ.integrable_stratumMeasure Y hc hzero hG hG0).smul_measure ENNReal.ofReal_ne_top
 
 theorem integral_residueMeasure {μ : ℝ} (hμ : 0 < μ) {c : ℕ} (hc : 1 ≤ c)
     (hzero : Ξ.ZeroOrder μ c) (g : Ξ.stratumOpen c → ℝ) :
