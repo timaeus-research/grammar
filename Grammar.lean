@@ -786,5 +786,8 @@ import Grammar.EmpiricalFaceFunctional
 import Grammar.EmpiricalPieceLeading
 import Grammar.EmpiricalPieceIntegral
 import Grammar.EmpiricalResolvedLeading
+import Grammar.EmpiricalFieldLipschitz
+import Grammar.UniformCompactFamilies
+import Grammar.EmpiricalBranchTuples
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
