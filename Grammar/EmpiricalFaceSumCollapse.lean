@@ -246,18 +246,40 @@ theorem jetsZeroOn_of_eventually_zero {G : (Fin d → ℝ) → ℝ} (hG : ContDi
   intro α v hv
   exact pdMulti_eq_zero_of_eqOn_inter_closedBox hG hb hO (fun w hw => hOsub hw.1) ⟨hSO hv, hS hv⟩ α
 
+/-- **Deep vanishing within the box**: `η` vanishes near every point of the deep set
+`{≥ c+1 vanishing coordinates}` of `[0,b]^d`, on the closed box. This is the form in which the
+chart amplitudes vanish (they are arbitrary smooth extensions off the chart box). -/
+def DeepVanishing (η : (Fin d → ℝ) → ℝ) (b : ℝ) (c : ℕ) : Prop :=
+  ∀ v ∈ deepSet d b c, ∀ᶠ w in 𝓝 v, w ∈ closedBox d b → η w = 0
+
+theorem DeepVanishing.of_eventually {η : (Fin d → ℝ) → ℝ} {b : ℝ} {c : ℕ}
+    (h : ∀ᶠ v in 𝓝ˢ (deepSet d b c), η v = 0) : DeepVanishing η b c :=
+  fun v hv => (eventually_nhdsSet_iff_forall.1 h v hv).mono fun _ hw _ => hw
+
+theorem DeepVanishing.mono_fun {η η' : (Fin d → ℝ) → ℝ} {b : ℝ} {c : ℕ} (h : DeepVanishing η b c)
+    (h' : ∀ v, η v = 0 → η' v = 0) : DeepVanishing η' b c :=
+  fun v hv => (h v hv).mono fun w hw hwb => h' w (hw hwb)
+
+/-- A smooth function vanishing near the deep set within the closed box has vanishing jets on
+the deep set. -/
+theorem jetsZeroOn_of_deepVanishing {G : (Fin d → ℝ) → ℝ} (hG : ContDiff ℝ ∞ G) {b : ℝ}
+    (hb : 0 < b) {c : ℕ} (h : DeepVanishing G b c) : JetsZeroOn G (deepSet d b c) := by
+  intro α v hv
+  obtain ⟨O, hOsub, hO, hvO⟩ := mem_nhds_iff.1 (h v hv)
+  exact pdMulti_eq_zero_of_eqOn_inter_closedBox hG hb hO (fun w hw => hOsub hw.1 hw.2)
+    ⟨hvO, hv.1⟩ α
+
 variable {η ζ : (Fin d → ℝ) → ℝ} {h k : Fin d → ℕ}
 
 /-- The field family inherits the deep vanishing of the amplitude, for every coupling. -/
 theorem jetsZeroOn_fieldFam_deep (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ) {c : ℕ}
-    (hdeep : ∀ᶠ v in 𝓝ˢ (deepSet d 1 c), η v = 0) (τ : ℝ) :
-    JetsZeroOn (fieldFam η ζ τ) (deepSet d 1 c) :=
-  jetsZeroOn_of_eventually_zero (contDiff_fieldFam hη hζ τ) one_pos (deepSet_subset_closedBox 1 c)
-    (hdeep.mono fun v hv => by simp [fieldFam, hv])
+    (hdeep : DeepVanishing η 1 c) (τ : ℝ) : JetsZeroOn (fieldFam η ζ τ) (deepSet d 1 c) :=
+  jetsZeroOn_of_deepVanishing (contDiff_fieldFam hη hζ τ) one_pos
+    (hdeep.mono_fun fun v hv => by simp [fieldFam, hv])
 
 /-- On a face of size `c` the face amplitude of the field family is the plain normal derivative. -/
 theorem faceAmp_fieldFam_eq_pdMulti (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ) {c : ℕ}
-    (hdeep : ∀ᶠ v in 𝓝ˢ (deepSet d 1 c), η v = 0) (p : Fin d → ℕ) {J : Finset (Fin d)}
+    (hdeep : DeepVanishing η 1 c) (p : Fin d → ℕ) {J : Finset (Fin d)}
     (hJ : J.card = c) (m : Fin d → ℕ) (τ : ℝ) {w : {i // ¬ inJ J i} → ℝ}
     (hw : w ∈ box {i // ¬ inJ J i} 1) :
     faceAmp p J (fieldFam η ζ τ) m w = pdMulti m (lJ J) (fieldFam η ζ τ) (glue J 0 w) := by
@@ -286,7 +308,7 @@ theorem faceAmp_fieldFam_eq_pdMulti (hη : ContDiff ℝ ∞ η) (hζ : ContDiff 
 
 /-- On a face of size `> c` the face amplitude of the field family vanishes. -/
 theorem faceAmp_fieldFam_eq_zero (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ) {c : ℕ}
-    (hdeep : ∀ᶠ v in 𝓝ˢ (deepSet d 1 c), η v = 0) (p : Fin d → ℕ) {J : Finset (Fin d)}
+    (hdeep : DeepVanishing η 1 c) (p : Fin d → ℕ) {J : Finset (Fin d)}
     (hJ : c < J.card) (m : Fin d → ℕ) (τ : ℝ) {w : {i // ¬ inJ J i} → ℝ}
     (hw : w ∈ box {i // ¬ inJ J i} 1) : faceAmp p J (fieldFam η ζ τ) m w = 0 :=
   faceAmp_eq_zero_of_jets_zero p J (contDiff_fieldFam hη hζ τ) m one_pos
@@ -300,7 +322,7 @@ the deep set `{≥ c+1 vanishing coordinates}` and `μ > 0`, the empirical coeff
 is the sum over the faces of size `c` of
 `faceW · resonantTop · ∫_{face} ∂_J^{α_J}[η · S_μ(ζ)](0_J, w) · (power weight)`. -/
 theorem empCoeff_eq_faceSum_top (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ) (hk : ∀ i, 0 < k i)
-    {μ : ℝ} (hμ : 0 < μ) {c : ℕ} (hc : 1 ≤ c) (hdeep : ∀ᶠ v in 𝓝ˢ (deepSet d 1 c), η v = 0) :
+    {μ : ℝ} (hμ : 0 < μ) {c : ℕ} (hc : 1 ≤ c) (hdeep : DeepVanishing η 1 c) :
     empCoeff η ζ h k μ (c - 1) =
       ∑ J ∈ (univ : Finset (Finset (Fin d))).filter (fun J => J.card = c),
         faceW J (resOrder h k μ J) *
@@ -407,7 +429,7 @@ theorem empCoeff_eq_faceSum_top (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ 
 /-- ★★ **Vanishing above the depth**: for `η` vanishing near the deep set, the empirical
 coefficients of log degree `≥ c` vanish. -/
 theorem empCoeff_eq_zero_of_deep (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ) {μ : ℝ} {c : ℕ}
-    (hdeep : ∀ᶠ v in 𝓝ˢ (deepSet d 1 c), η v = 0) {q : ℕ} (hq : c ≤ q) :
+    (hdeep : DeepVanishing η 1 c) {q : ℕ} (hq : c ≤ q) :
     empCoeff η ζ h k μ q = 0 := by
   unfold empCoeff empCoeffAtDepth
   refine Finset.sum_eq_zero fun x _ => ?_
@@ -428,7 +450,7 @@ theorem empCoeff_eq_zero_of_deep (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ
 of the amplitude `η · S_μ(ζ)/Γ(μ)` — exponent by exponent, the field enters through the
 fluctuation function evaluated on the field. -/
 theorem empCoeff_top_eq_smoothCoeff (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ) (hk : ∀ i, 0 < k i)
-    {μ : ℝ} (hμ : 0 < μ) {c : ℕ} (hc : 1 ≤ c) (hdeep : ∀ᶠ v in 𝓝ˢ (deepSet d 1 c), η v = 0) :
+    {μ : ℝ} (hμ : 0 < μ) {c : ℕ} (hc : 1 ≤ c) (hdeep : DeepVanishing η 1 c) :
     empCoeff η ζ h k μ (c - 1) =
       smoothCoeff (fun v => η v * fluctuation 1 μ (ζ v) / Real.Gamma μ) h k 1 1 μ (c - 1) := by
   have hΓ : 0 < Real.Gamma μ := Real.Gamma_pos_of_pos hμ
@@ -441,8 +463,7 @@ theorem empCoeff_top_eq_smoothCoeff (hη : ContDiff ℝ ∞ η) (hζ : ContDiff 
     ring
   have hAc : ContDiff ℝ ∞ fun v => (Real.Gamma μ)⁻¹ * S v := contDiff_const.mul hSc
   have hAdeep : JetsZeroOn (fun v => (Real.Gamma μ)⁻¹ * S v) (deepSet d 1 c) :=
-    jetsZeroOn_of_eventually_zero hAc one_pos (deepSet_subset_closedBox 1 c)
-      (hdeep.mono fun v hv => by simp [hS, hv])
+    jetsZeroOn_of_deepVanishing hAc one_pos (hdeep.mono_fun fun v hv => by simp [hS, hv])
   rw [hA, smoothCoeff_eq_faceSum_top hAc h k hk one_pos one_pos μ hc hAdeep,
     empCoeff_eq_faceSum_top hη hζ hk hμ hc hdeep]
   refine Finset.sum_congr rfl fun J hJ => ?_

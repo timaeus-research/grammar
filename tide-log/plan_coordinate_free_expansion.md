@@ -1498,3 +1498,10 @@ deep set of the cube. Ingredients exactly as Astra prescribed: deep-set dilation
 rule; the rectangular collapse was not redone. NEXT (priority 2b): the resolved graded formula — `ξ.resolvedCoeff μ (c−1)` as the branchwise
 weighted stratum sum with amplitude `amp_{p,s} · S_μ(Lψ_p ∘ Tm_p)/Γ(μ)`; needs eventually-zero of the chart amplitude near the piece deep set
 (cf. `jetsZeroOn_amp_deep`/`Gloc_eventually_zero_deep`) and the pieceCoeff → smoothCoeff_b transport. Papers: refresh §9 after 2b.
+
+### 20.19 CONSULT #143 PRIORITY 2b LANDED (2026-09-15): CDXCIV `EmpiricalResolvedStratumFormula`; 818 modules.
+`resolvedCoeff_eq_empStratumSum : ξ.resolvedCoeff μ (c−1) = Σ_p ∫ empPieceStratumSum_p dν_p` for F vanishing near D_{c+1}, with the
+branch amplitudes `amp_{p,s} · S_μ(Lψ_p∘Tm_{p,s})/Γ(μ)`; `resolvedCoeff_eq_zero_of_deep`. Deep hypothesis of CDLXXXVII/CDXCIII weakened to
+in-box `DeepVanishing` (the chart amplitudes are arbitrary smooth extensions off the box). Priorities 1, 2a, 2b of consult #143 DONE.
+REMAINING: (3) coefficient continuity under compact-uniform C^r convergence of representatives (optional, stability programme). Papers:
+refresh §9 (`grammar_lean_2.tex`: cube replacement + branchwise stratum sum + non-claim) and the mirror remark; bump the pin.

@@ -813,5 +813,6 @@ import Grammar.EmpiricalPieceExpansion
 import Grammar.EmpiricalResolvedExpansion
 import Grammar.EmpiricalLeadingConsistency
 import Grammar.EmpiricalRectReplacement
+import Grammar.EmpiricalResolvedStratumFormula
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

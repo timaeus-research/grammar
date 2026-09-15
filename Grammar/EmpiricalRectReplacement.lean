@@ -12,7 +12,7 @@ import Grammar.EmpiricalBoxScaling
 The graded empirical formula of `EmpiricalFaceSumCollapse` is stated on the unit box. On the cube
 `(0,b]^d` it follows by the exact dilation `v = b u`, without repeating the face analysis: the deep
 set of the cube is the dilated deep set of the unit box (`mapsTo_diag_deepSet`,
-`eventually_zero_deepSet_diag`), the POPULATION coefficients obey the same scaling law as the
+`DeepVanishing.diag`), the POPULATION coefficients obey the same scaling law as the
 empirical ones (`smoothIntegral_eq_dilation`, ★ `smoothCoeff_eq_scaleCoeff_dilation`, by uniqueness
 of cutoff expansions), the coefficients of log degree `≥ c` of a deep-vanishing amplitude vanish on
 both sides (`smoothCoeff_eq_zero_of_deep`, from the population support theorem), so at the top
@@ -50,11 +50,19 @@ theorem mapsTo_diag_deepSet {b : ℝ} (hb : 0 < b) (c : ℕ) :
     refine ⟨Finset.mem_univ _, ?_⟩
     simp only [diag, hi.2, mul_zero]
 
-theorem eventually_zero_deepSet_diag {η : (Fin d → ℝ) → ℝ} {b : ℝ} (hb : 0 < b) {c : ℕ}
-    (h : ∀ᶠ v in 𝓝ˢ (deepSet d b c), η v = 0) :
-    ∀ᶠ v in 𝓝ˢ (deepSet d 1 c), (η ∘ diag (fun _ : Fin d => b)) v = 0 :=
-  ((contDiff_diag (fun _ : Fin d => b)).continuous.tendsto_nhdsSet
-    (mapsTo_diag_deepSet hb c)).eventually h
+theorem diag_mem_closedBox {b : ℝ} (hb : 0 < b) {u : Fin d → ℝ} (hu : u ∈ closedBox d 1) :
+    diag (fun _ : Fin d => b) u ∈ closedBox d b := by
+  rw [mem_closedBox] at hu ⊢
+  intro i
+  exact ⟨mul_nonneg hb.le (hu i).1, mul_le_of_le_one_right hb.le (hu i).2⟩
+
+/-- Deep vanishing on the cube dilates to deep vanishing on the unit box. -/
+theorem DeepVanishing.diag {η : (Fin d → ℝ) → ℝ} {b : ℝ} (hb : 0 < b) {c : ℕ}
+    (h : DeepVanishing η b c) : DeepVanishing (η ∘ diag (fun _ : Fin d => b)) 1 c := by
+  intro v hv
+  have h1 := ((contDiff_diag (fun _ : Fin d => b)).continuous.tendsto v).eventually
+    (h _ (mapsTo_diag_deepSet hb c hv))
+  exact h1.mono fun u hu hub => hu (diag_mem_closedBox hb hub)
 
 /-! ### The population scaling law -/
 
@@ -129,12 +137,23 @@ theorem smoothCoeff_eq_zero_of_deep (hF : ContDiff ℝ ∞ F) (hk : ∀ i, 0 < k
 
 variable {η ζ : (Fin d → ℝ) → ℝ}
 
+/-- ★ **Vanishing above the depth on the cube**: for `η` vanishing near the deep set of the cube,
+the empirical cube coefficients of log degree `≥ c` vanish. -/
+theorem empCoeffRect_eq_zero_of_deep (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ) {b : ℝ}
+    (hb : 0 < b) {c : ℕ} (hdeep : DeepVanishing η b c) (μ : ℝ) {q : ℕ} (hq : c ≤ q) :
+    empCoeffRect η ζ h k (fun _ => b) μ q = 0 := by
+  unfold empCoeffRect scaleCoeff
+  rw [Finset.sum_eq_zero fun j hj => ?_, mul_zero, mul_zero]
+  have hjc : c ≤ j := hq.trans (Finset.mem_Ico.1 hj).1
+  rw [empCoeff_eq_zero_of_deep (hη.comp (contDiff_diag _)) (hζ.comp (contDiff_diag _))
+    (hdeep.diag hb) hjc, zero_mul, zero_mul]
+
 /-- ★★★ **The replacement rule on a general cube**: for `η` vanishing near the deep set of
 `(0,b]^d`, the empirical top coefficient of the cube integral is the population coefficient, on the
 same cube, of the amplitude `η · S_μ(ζ)/Γ(μ)`. -/
 theorem empCoeffRect_top_eq_smoothCoeff (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ)
     (hk : ∀ i, 0 < k i) {b : ℝ} (hb : 0 < b) {μ : ℝ} (hμ : 0 < μ) {c : ℕ} (hc : 1 ≤ c)
-    (hdeep : ∀ᶠ v in 𝓝ˢ (deepSet d b c), η v = 0) :
+    (hdeep : DeepVanishing η b c) :
     empCoeffRect η ζ h k (fun _ => b) μ (c - 1) =
       smoothCoeff (fun v => η v * fluctuation 1 μ (ζ v) / Real.Gamma μ) h k 1 b μ (c - 1) := by
   have hB : 0 < mono (fun i => 2 * k i) (fun _ : Fin d => b) := mono_pos _ fun _ => hb
@@ -142,16 +161,15 @@ theorem empCoeffRect_top_eq_smoothCoeff (hη : ContDiff ℝ ∞ η) (hζ : ContD
   set B : ℝ := mono (fun i => 2 * k i) (fun _ : Fin d => b) with hBdef
   have hηD : ContDiff ℝ ∞ (η ∘ diag (fun _ : Fin d => b)) := hη.comp (contDiff_diag _)
   have hζD : ContDiff ℝ ∞ (ζ ∘ diag (fun _ : Fin d => b)) := hζ.comp (contDiff_diag _)
-  have hdeep1 := eventually_zero_deepSet_diag hb hdeep
+  have hdeep1 := hdeep.diag hb
   -- the population amplitude and its dilation
   set G : (Fin d → ℝ) → ℝ := fun v => η v * fluctuation 1 μ (ζ v) / Real.Gamma μ with hG
   have hGc : ContDiff ℝ ∞ G := (contDiff_mul_fluctuation hη hζ hμ).div_const _
   have hGD : G ∘ diag (fun _ : Fin d => b) = fun v => (η ∘ diag (fun _ : Fin d => b)) v *
       fluctuation 1 μ ((ζ ∘ diag (fun _ : Fin d => b)) v) / Real.Gamma μ := rfl
   have hGDdeep : JetsZeroOn (G ∘ diag (fun _ : Fin d => b)) (deepSet d 1 c) :=
-    jetsZeroOn_of_eventually_zero (hGc.comp (contDiff_diag _)) one_pos
-      (deepSet_subset_closedBox 1 c) (hdeep1.mono fun v hv => by
-        rw [hGD]; simp only [hv, zero_mul, zero_div])
+    jetsZeroOn_of_deepVanishing (hGc.comp (contDiff_diag _)) one_pos
+      (hdeep1.mono_fun fun v hv => by rw [hGD]; simp only [hv, zero_mul, zero_div])
   by_cases hcd : c - 1 ≤ d - 1
   · -- the empirical side: only `j = c − 1` survives in the scaling law
     have hL : empCoeffRect η ζ h k (fun _ => b) μ (c - 1) =
