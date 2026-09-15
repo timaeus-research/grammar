@@ -18,7 +18,7 @@ rev = "v4.33.1"
 [[require]]
 name = "hironaka"
 git = "https://github.com/dmurfet/hironaka"
-rev = "5a310bdba8e9c6f370f347212e1d51cce6923586"
+rev = "cb11bc8d93eb28607175c927dfe67d272dd15d78"
 
 [[require]]
 name = "strucdual"
