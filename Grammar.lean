@@ -760,5 +760,6 @@ import Grammar.SmoothFaceMonoTop
 import Grammar.SmoothResolvedStratumFormula
 import Grammar.SmoothResolvedStratumPositive
 import Grammar.SmoothResolvedStratumEuclidean
+import Grammar.SmoothStratumIntegrable
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
