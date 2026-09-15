@@ -20,8 +20,8 @@ applied branch by branch (`pieceCoeff_top_eq_smoothCoeff`), where `ζ = Lψ_p �
 smooth branch representative of the field on the piece. The inputs are the cube replacement rule
 (`empCoeffRect_top_eq_smoothCoeff`) and the deep vanishing of the chart amplitudes within the
 piece boxes (`deepVanishing_amp`, from `Gloc_eventually_zero_deep`). Above the depth the
-coefficients vanish (`resolvedCoeff_eq_zero_of_deep`); with `c − 1` in place of `c` the same theorem
-shows that for `c ≥ 2` the coefficient annihilates `𝓘_c`, so it defines a functional on
+coefficients vanish (`resolvedCoeff_eq_zero_of_deep`); with `c − 1` in place of `c` the same
+theorem shows that for `c ≥ 2` the coefficient annihilates `𝓘_c`, so it defines a functional on
 `𝓘_{c+1}/𝓘_c`, presented branchwise. Non-claim: the sum is NOT asserted to be the population coefficient of
 a globally defined amplitude on the resolved manifold — the branch representatives need not
 descend across the walls (consult #143). Zero `sorry`/`axiom`.
