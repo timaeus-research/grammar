@@ -1398,3 +1398,18 @@ of the leading coefficients (`empInnerCoeff` for G = τ^r e^{aτ}: mellinMom = �
 `empCoeff_unique`. The box-form empirical Theorem E is complete in the repo's canonical interface. NEXT: consult #142 (audit of
 the statement, the paper-facing formulation, and the order of: uniform constants over jet-bounded families; explicit S-ladder form of
 `empInnerCoeff` for G = τ^r e^{aτ}; general boxes; chart assembly `SmoothRootField`; graded stratum identification).
+
+### 20.8 CONSULT #142 (2026-09-15): box-form empirical Theorem E ACCEPTED ("the right deterministic empirical expansion theorem on a
+normal-crossing box"; the general-G state-density design "an improvement over the constant-field design"). Corrections recorded:
+(i) sign: mellinMom (τ^r e^{aτ}) μ ℓ = (−1)^ℓ ∂_ν^ℓ S_ν(a)|_{ν=μ+r/2} (the (−log s)^ℓ convention); (ii) the unconditional Mellin identity
+keeps the remainder: mellinMom (τ ↦ faceAmp p J (η e^{τζ}) α w) μ 0 = faceAmp p J (η S_μ(ζ)) α w; R_K disappears only under deep-locus
+vanishing, by VANISHING TAYLOR JETS (T_i^{p_i} f = 0 on the face for i ∈ K), applicable BEFORE Mellin integration: faceAmp = pdMulti for
+|J| = c; (iii) top state-density coefficient a_{μ,r−1} = 1/(r−1)! ∏_{λ_i ≠ μ} 1/(λ_i − μ); all-resonant: 1/(s−1)!, so
+empFaceCoef(μ, s−1) = ∏(2k)^{-1}/(s−1)! · mellinMom G μ 0; (iv) general boxes by exact scaling Z_b(N) = A_b Z_1(B_b N; η∘b, ζ∘b),
+A_b = ∏ b^{h+1}, B_b = ∏ b^{2k}, √N v^k = √(B_b N) u^k (no rescaling of ζ), coefficient law c^b_{μq} = A_b B_b^{−μ} Σ_{j≥q} C(j,q)(log B_b)^{j−q} c^1_{μj};
+(v) chart adapter: smooth on a neighbourhood of the closed box ⇒ globally smooth representative agreeing near the box (cutoff).
+Ordered units: 1 uniform engine (linear in the jet-bound constant C; canonical transfer); 2 Mellin–jet bridge (mellinMom_pow_mul_exp_zero,
+mellinMom_pdMulti_fieldFam_zero, [faceAmp version]); 3 top spectral coefficient + depth-flatness interfaces (empFaceCoef_eq_zero_of_expMult_le,
+_top_eq_zero_of_not_exact, _top_of_exact; deep vanishing ⇒ faceAmp = 0 for |J| > c, = pdMulti for |J| = c); 4 box graded identification
+(empCoeff_eq_zero_of_depthSupport, empCoeff_eq_faceSum_top, H_μ/Γ(μ) corollary, zero-field recovery); 5 general-box scaling adapter.
+Paper paragraph ("Deterministic empirical expansion on a normal-crossing box") supplied — to go into grammar_lean_2 §9 when pins refresh.
