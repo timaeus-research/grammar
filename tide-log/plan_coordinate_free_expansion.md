@@ -1537,3 +1537,13 @@ the uniform bound on a finite measure.
 `chartImage p`, F ∈ 𝓘_{c+1}, μ > 0. Affine transfer `‖D^r(L∘A_s)‖ ≤ ‖D^r L (A_s ·)‖` (‖T‖ ≤ 1). NEXT: papers (§9: continuity theorem +
 finite-order caveat; mirror sentence; pin), memory; then consult #145 (closure of the continuity programme; next direction: lower-log Mellin
 weights as `iteratedDeriv` identity, or random-field subleading limits given the deterministic continuity + a C^R tightness hypothesis).
+
+### 20.24 CONSULT #145 (2026-09-16): units A–C ACCEPTED ("close the fixed-index deterministic continuity item"). Corrections: the order is the
+canonical construction's order, not minimal; chart-image ambient-jet hypothesis is sufficient (possibly stronger than needed); paper wording
+"the required order depends on the coefficient index; the theorem asserts no uniform finite order" and "convergence in distribution PLUS
+continuity gives continuous mapping (tightness alone does not identify the limit)". Ranked next: (1) extract the LOCAL LIPSCHITZ bound
+[DONE: `exists_pieceCoeff_top_bound`, `exists_resolvedCoeff_top_bound`, sequential theorem re-derived] and package the jet topology
+(`BranchJetSpace μ := ∀ p, ∀ r : Fin (pieceOrder p μ + 1), C(chartImage p, CMM r)`, `branchJet`, `RealizableJets := range branchJet`,
+`coeffOnJets` continuous ⇒ measurable; well-defined by the bound with ε = 0; topology depends on μ; realizable image only); then consolidate;
+(2) lower-log Mellin weights — audit the kernel normalisation first (τ^{2ν−1} vs log(τ²)), one-derivative identity with a locally uniform
+dominator before iterating; (3) conditional random-field subleading theorem via the repo's convergence-in-law abstraction.

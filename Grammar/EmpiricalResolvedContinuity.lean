@@ -21,7 +21,10 @@ affine chart map of a piece is `v ↦ T v + s'` with `‖T‖ ≤ 1` (`affineLin
 — uniformly in the base point; the replaced amplitudes are then close with a constant uniform in
 the base point (`exists_jetClose_replaced_uniform`), the cube replacement rule and the coefficient
 bound give a pointwise bound uniform in `s` (`abs_pieceKernel_sub_le`), and the base integrals
-converge on the finite base measure (★★ `tendsto_pieceCoeff_top`). Deterministic and sequential;
+converge on the finite base measure (★★ `tendsto_pieceCoeff_top`); the same estimates give LOCAL
+LIPSCHITZ control on jet-bounded data (★★ `exists_pieceCoeff_top_bound`,
+`exists_resolvedCoeff_top_bound`: `|C(ξ₁) − C(ξ₂)| ≤ K·ε` for `ε ≤ 1`, `K` depending on the
+resolved data, `F`, `μ`, `c` and a jet bound of `ξ₂`). Deterministic and sequential;
 no agreement of the branch representatives across the walls is imposed (Astra #144).
 Zero `sorry`/`axiom`.
 -/
@@ -175,37 +178,30 @@ theorem Tm_mem_chartImage (p : (Ξ.X Y).PIdx) (s : Base ((Ξ.X Y).act p.1) (Y.T.
 noncomputable def pieceOrder (p : (Ξ.X Y).PIdx) (μ : ℝ) : ℕ :=
   ∑ i, depthOf ((Ξ.X Y).hA p) ((Ξ.X Y).kA p) (cutoffOf ((Ξ.X Y).hA p) μ) i
 
-/-! ### Convergence of the piece coefficients -/
+/-! ### The local Lipschitz bound and convergence of the piece coefficients -/
 
-/-- ★★ **Convergence of a piece coefficient at the top power** when the branch representatives
-converge in `C^{R_p}` on the chart image of the piece. -/
-theorem tendsto_pieceCoeff_top {c : ℕ} (hc : 1 ≤ c)
+/-- ★★ **Local Lipschitz control of a piece coefficient on jet-bounded data**: for `B` a bound on
+the jets of the second field's branch representative on the chart image, there is `K` (depending
+on the resolved data, `F`, `μ`, `c`, `p` and `B` only) with
+`|ξ₁.pieceCoeff p μ (c−1) − ξ₂.pieceCoeff p μ (c−1)| ≤ K·ε` whenever the branch representatives
+are `ε`-close in `C^{R_p}` on the chart image, `ε ≤ 1`. -/
+theorem exists_pieceCoeff_top_bound {c : ℕ} (hc : 1 ≤ c)
     (hF : ∀ᶠ P in 𝓝ˢ (Ξ.deepZeroFibre c), Ξ.F P = 0) {μ : ℝ} (hμ : 0 < μ) (p : (Ξ.X Y).PIdx)
-    (ξ : ℕ → Ξ.SmoothRootField Y) (ξ₀ : Ξ.SmoothRootField Y) {M : ℕ → ℝ} (hM0' : ∀ n, 0 ≤ M n)
-    (hM : ∀ n, JetClose (Ξ.pieceOrder Y p μ) (Ξ.chartImage Y p) ((ξ n).Lψ p) (ξ₀.Lψ p) (M n))
-    (hM0 : Tendsto M atTop (𝓝 0)) :
-    Tendsto (fun n => (ξ n).pieceCoeff p μ (c - 1)) atTop (𝓝 (ξ₀.pieceCoeff p μ (c - 1))) := by
+    {B : ℝ} (hB : 0 ≤ B) :
+    ∃ K, 0 ≤ K ∧ ∀ ξ₁ ξ₂ : Ξ.SmoothRootField Y,
+      JetBoundOn (Ξ.pieceOrder Y p μ) (Ξ.chartImage Y p) (ξ₂.Lψ p) B → ∀ ε, 0 ≤ ε → ε ≤ 1 →
+      JetClose (Ξ.pieceOrder Y p μ) (Ξ.chartImage Y p) (ξ₁.Lψ p) (ξ₂.Lψ p) ε →
+      |ξ₁.pieceCoeff p μ (c - 1) - ξ₂.pieceCoeff p μ (c - 1)| ≤ K * ε := by
   have := (Ξ.piecePresentation Y p).isFiniteMeasure_ν
   have ha : 0 < Y.T.a p.1 := Y.T.a_pos p.1
   have hkA := (Ξ.X Y).kA_pos p
-  unfold pieceOrder at hM
-  obtain ⟨BG, hBG0, hBG⟩ := exists_jetBoundOn (Ξ.contDiff_G Y p.1) _ (Ξ.isCompact_chartImage Y p)
-  obtain ⟨BL, hBL0, hBL⟩ := exists_jetBoundOn (ξ₀.Lψ_smooth p) _ (Ξ.isCompact_chartImage Y p)
-  obtain ⟨C, hC0, hrep⟩ := exists_jetClose_replaced_uniform hμ
-    (∑ i, depthOf ((Ξ.X Y).hA p) ((Ξ.X Y).kA p) (cutoffOf ((Ξ.X Y).hA p) μ) i) (Y.T.a p.1) hBG0
-    hBL0
+  obtain ⟨BG, hBG0, hBG⟩ := exists_jetBoundOn (Ξ.contDiff_G Y p.1) (Ξ.pieceOrder Y p μ)
+    (Ξ.isCompact_chartImage Y p)
+  obtain ⟨C, hC0, hrep⟩ := exists_jetClose_replaced_uniform hμ (Ξ.pieceOrder Y p μ) (Y.T.a p.1)
+    hBG0 hB
   have hmaps : ∀ s : Base ((Ξ.X Y).act p.1) (Y.T.a p.1), ∀ v ∈ closedBox _ (Y.T.a p.1),
       affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v ∈ Ξ.chartImage Y p :=
     fun s v hv => Ξ.Tm_mem_chartImage Y p s hv
-  -- the kernels
-  set a : ℕ → Base ((Ξ.X Y).act p.1) (Y.T.a p.1) → ℝ := fun n s =>
-    empCoeffRect (fun v => Ξ.G Y p.1 (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v))
-      (fun v => (ξ n).Lψ p (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v))
-      ((Ξ.X Y).hA p) ((Ξ.X Y).kA p) (fun _ => Y.T.a p.1) μ (c - 1) with ha_def
-  set a₀ : Base ((Ξ.X Y).act p.1) (Y.T.a p.1) → ℝ := fun s =>
-    empCoeffRect (fun v => Ξ.G Y p.1 (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v))
-      (fun v => ξ₀.Lψ p (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v))
-      ((Ξ.X Y).hA p) ((Ξ.X Y).kA p) (fun _ => Y.T.a p.1) μ (c - 1) with ha₀_def
   set Kc : ℝ := coeffBoundConstant ((Ξ.X Y).hA p) ((Ξ.X Y).kA p)
     (depthOf ((Ξ.X Y).hA p) ((Ξ.X Y).kA p) (cutoffOf ((Ξ.X Y).hA p) μ)) 1 (Y.T.a p.1) μ (c - 1)
     with hKc
@@ -217,55 +213,103 @@ theorem tendsto_pieceCoeff_top {c : ℕ} (hc : 1 ≤ c)
         ((Ξ.X Y).hA p) ((Ξ.X Y).kA p) (fun _ => Y.T.a p.1) μ (c - 1))
       (Ξ.piecePresentation Y p).ν := by
     intro L hL
-    obtain ⟨B, hB⟩ := exists_abs_empCoeffRect_le_pieceFam ((Ξ.X Y).eqv p) p.2 (Ξ.G Y p.1) L
+    obtain ⟨B', hB'⟩ := exists_abs_empCoeffRect_le_pieceFam ((Ξ.X Y).eqv p) p.2 (Ξ.G Y p.1) L
       (Ξ.contDiff_G Y p.1) hL ((Ξ.X Y).continuous_sc p) ha ((Ξ.X Y).hA p) ((Ξ.X Y).kA p) hkA μ
       (c - 1)
-    refine Integrable.mono' (integrable_const B) (measurable_empCoeffRect_pieceFam
+    refine Integrable.mono' (integrable_const B') (measurable_empCoeffRect_pieceFam
       ((Ξ.X Y).eqv p) p.2 (Ξ.G Y p.1) L (Ξ.contDiff_G Y p.1) hL ((Ξ.X Y).continuous_sc p)
       ((Ξ.X Y).hA p) ((Ξ.X Y).kA p) μ (c - 1)).aestronglyMeasurable (ae_of_all _ fun s => ?_)
     rw [Real.norm_eq_abs]
-    exact hB s
+    exact hB' s
+  refine ⟨Kc * C * (Ξ.piecePresentation Y p).ν.real univ, by positivity, ?_⟩
+  intro ξ₁ ξ₂ hB₂ ε hε0 hε1 hc'
   -- the pointwise bound, uniform in the base point
-  have hpt : ∀ n, M n ≤ 1 → ∀ s, |a n s - a₀ s| ≤ Kc * (C * M n) := by
-    intro n hn s
+  have hpt : ∀ s,
+      |empCoeffRect (fun v => Ξ.G Y p.1 (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v))
+          (fun v => ξ₁.Lψ p (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v))
+          ((Ξ.X Y).hA p) ((Ξ.X Y).kA p) (fun _ => Y.T.a p.1) μ (c - 1) -
+        empCoeffRect (fun v => Ξ.G Y p.1 (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v))
+          (fun v => ξ₂.Lψ p (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v))
+          ((Ξ.X Y).hA p) ((Ξ.X Y).kA p) (fun _ => Y.T.a p.1) μ (c - 1)| ≤ Kc * (C * ε) := by
+    intro s
     have hηc : ContDiff ℝ ∞ fun v =>
         Ξ.G Y p.1 (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v) :=
       (Ξ.contDiff_G Y p.1).comp (contDiff_affineMap _ _ _)
-    have hζn : ContDiff ℝ ∞ fun v =>
-        (ξ n).Lψ p (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v) :=
-      ((ξ n).Lψ_smooth p).comp (contDiff_affineMap _ _ _)
-    have hζ₀ : ContDiff ℝ ∞ fun v =>
-        ξ₀.Lψ p (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v) :=
-      (ξ₀.Lψ_smooth p).comp (contDiff_affineMap _ _ _)
+    have hζ₁ : ContDiff ℝ ∞ fun v =>
+        ξ₁.Lψ p (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v) :=
+      (ξ₁.Lψ_smooth p).comp (contDiff_affineMap _ _ _)
+    have hζ₂ : ContDiff ℝ ∞ fun v =>
+        ξ₂.Lψ p (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v) :=
+      (ξ₂.Lψ_smooth p).comp (contDiff_affineMap _ _ _)
     have hdeep : DeepVanishing
         (fun v => Ξ.G Y p.1 (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v)) (Y.T.a p.1) c :=
       Ξ.deepVanishing_amp Y hF p s
-    simp only [ha_def, ha₀_def]
-    rw [empCoeffRect_top_eq_smoothCoeff hηc hζn hkA ha hμ hc hdeep,
-      empCoeffRect_top_eq_smoothCoeff hηc hζ₀ hkA ha hμ hc hdeep]
-    refine abs_smoothCoeff_sub_le ((contDiff_mul_fluctuation hηc hζn hμ).div_const _)
-      ((contDiff_mul_fluctuation hηc hζ₀ hμ).div_const _) hkA one_pos ha
-      (rectBound_of_jetClose ((contDiff_mul_fluctuation hηc hζn hμ).div_const _)
-        ((contDiff_mul_fluctuation hηc hζ₀ hμ).div_const _) _ ?_) (c - 1)
-    exact hrep _ _ _ hηc hζn hζ₀
+    rw [empCoeffRect_top_eq_smoothCoeff hηc hζ₁ hkA ha hμ hc hdeep,
+      empCoeffRect_top_eq_smoothCoeff hηc hζ₂ hkA ha hμ hc hdeep]
+    refine abs_smoothCoeff_sub_le ((contDiff_mul_fluctuation hηc hζ₁ hμ).div_const _)
+      ((contDiff_mul_fluctuation hηc hζ₂ hμ).div_const _) hkA one_pos ha
+      (rectBound_of_jetClose ((contDiff_mul_fluctuation hηc hζ₁ hμ).div_const _)
+        ((contDiff_mul_fluctuation hηc hζ₂ hμ).div_const _) _ ?_) (c - 1)
+    exact hrep _ _ _ hηc hζ₁ hζ₂
       (jetBoundOn_comp_affineMap _ _ (Ξ.contDiff_G Y p.1) _ hBG (hmaps s))
-      (jetBoundOn_comp_affineMap _ _ (ξ₀.Lψ_smooth p) _ hBL (hmaps s)) (M n) (hM0' n) hn
-      (jetClose_comp_affineMap _ _ ((ξ n).Lψ_smooth p) (ξ₀.Lψ_smooth p) _ (hM n) (hmaps s))
-  -- convergence of the base integrals
+      (jetBoundOn_comp_affineMap _ _ (ξ₂.Lψ_smooth p) _ hB₂ (hmaps s)) ε hε0 hε1
+      (jetClose_comp_affineMap _ _ (ξ₁.Lψ_smooth p) (ξ₂.Lψ_smooth p) _ hc' (hmaps s))
+  have hZ₁ : ξ₁.pieceCoeff p μ (c - 1) = ∫ s,
+      empCoeffRect (fun v => Ξ.G Y p.1 (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v))
+        (fun v => ξ₁.Lψ p (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v))
+        ((Ξ.X Y).hA p) ((Ξ.X Y).kA p) (fun _ => Y.T.a p.1) μ (c - 1)
+      ∂(Ξ.piecePresentation Y p).ν := rfl
+  have hZ₂ : ξ₂.pieceCoeff p μ (c - 1) = ∫ s,
+      empCoeffRect (fun v => Ξ.G Y p.1 (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v))
+        (fun v => ξ₂.Lψ p (affineMap ((Ξ.X Y).eqv p) p.2 ((Ξ.X Y).sc p s) v))
+        ((Ξ.X Y).hA p) ((Ξ.X Y).kA p) (fun _ => Y.T.a p.1) μ (c - 1)
+      ∂(Ξ.piecePresentation Y p).ν := rfl
+  rw [hZ₁, hZ₂, ← integral_sub (hint _ (ξ₁.Lψ_smooth p)) (hint _ (ξ₂.Lψ_smooth p)),
+    ← Real.norm_eq_abs]
+  refine (norm_integral_le_of_norm_le_const (C := Kc * (C * ε))
+    (ae_of_all _ fun s => ?_)).trans (le_of_eq ?_)
+  · rw [Real.norm_eq_abs]
+    exact hpt s
+  · ring
+
+/-- ★★ **Convergence of a piece coefficient at the top power** when the branch representatives
+converge in `C^{R_p}` on the chart image of the piece. -/
+theorem tendsto_pieceCoeff_top {c : ℕ} (hc : 1 ≤ c)
+    (hF : ∀ᶠ P in 𝓝ˢ (Ξ.deepZeroFibre c), Ξ.F P = 0) {μ : ℝ} (hμ : 0 < μ) (p : (Ξ.X Y).PIdx)
+    (ξ : ℕ → Ξ.SmoothRootField Y) (ξ₀ : Ξ.SmoothRootField Y) {M : ℕ → ℝ} (hM0' : ∀ n, 0 ≤ M n)
+    (hM : ∀ n, JetClose (Ξ.pieceOrder Y p μ) (Ξ.chartImage Y p) ((ξ n).Lψ p) (ξ₀.Lψ p) (M n))
+    (hM0 : Tendsto M atTop (𝓝 0)) :
+    Tendsto (fun n => (ξ n).pieceCoeff p μ (c - 1)) atTop (𝓝 (ξ₀.pieceCoeff p μ (c - 1))) := by
+  obtain ⟨B, hB0, hB⟩ := exists_jetBoundOn (ξ₀.Lψ_smooth p) (Ξ.pieceOrder Y p μ)
+    (Ξ.isCompact_chartImage Y p)
+  obtain ⟨K, hK0, hK⟩ := Ξ.exists_pieceCoeff_top_bound Y hc hF hμ p hB0
   have hev : ∀ᶠ n in atTop, M n ≤ 1 := hM0.eventually (Iic_mem_nhds zero_lt_one)
   rw [tendsto_iff_norm_sub_tendsto_zero]
   refine squeeze_zero' (Eventually.of_forall fun n => norm_nonneg _) (hev.mono fun n hn => ?_)
-    (g := fun n => Kc * (C * M n) * (Ξ.piecePresentation Y p).ν.real univ) ?_
-  · have hZn : (ξ n).pieceCoeff p μ (c - 1) = ∫ s, a n s ∂(Ξ.piecePresentation Y p).ν := rfl
-    have hZ₀ : ξ₀.pieceCoeff p μ (c - 1) = ∫ s, a₀ s ∂(Ξ.piecePresentation Y p).ν := rfl
-    rw [hZn, hZ₀, ← integral_sub (hint _ ((ξ n).Lψ_smooth p)) (hint _ (ξ₀.Lψ_smooth p))]
-    refine norm_integral_le_of_norm_le_const (ae_of_all _ fun s => ?_)
-    rw [Real.norm_eq_abs]
-    exact hpt n hn s
-  · have h1 : Tendsto (fun n => Kc * (C * M n) * (Ξ.piecePresentation Y p).ν.real univ) atTop
-        (𝓝 (Kc * (C * 0) * (Ξ.piecePresentation Y p).ν.real univ)) :=
-      ((hM0.const_mul C).const_mul Kc).mul_const _
-    simpa using h1
+    (g := fun n => K * M n) (by simpa using hM0.const_mul K)
+  rw [Real.norm_eq_abs]
+  exact hK (ξ n) ξ₀ hB (M n) (hM0' n) hn (hM n)
+
+/-- ★★ **Local Lipschitz control of the resolved coefficient on jet-bounded data**. -/
+theorem exists_resolvedCoeff_top_bound {c : ℕ} (hc : 1 ≤ c)
+    (hF : ∀ᶠ P in 𝓝ˢ (Ξ.deepZeroFibre c), Ξ.F P = 0) {μ : ℝ} (hμ : 0 < μ) {B : ℝ} (hB : 0 ≤ B) :
+    ∃ K, 0 ≤ K ∧ ∀ ξ₁ ξ₂ : Ξ.SmoothRootField Y,
+      (∀ p, JetBoundOn (Ξ.pieceOrder Y p μ) (Ξ.chartImage Y p) (ξ₂.Lψ p) B) →
+      ∀ ε, 0 ≤ ε → ε ≤ 1 →
+      (∀ p, JetClose (Ξ.pieceOrder Y p μ) (Ξ.chartImage Y p) (ξ₁.Lψ p) (ξ₂.Lψ p) ε) →
+      |ξ₁.resolvedCoeff μ (c - 1) - ξ₂.resolvedCoeff μ (c - 1)| ≤ K * ε := by
+  have h : ∀ p : (Ξ.X Y).PIdx, ∃ K, 0 ≤ K ∧ ∀ ξ₁ ξ₂ : Ξ.SmoothRootField Y,
+      JetBoundOn (Ξ.pieceOrder Y p μ) (Ξ.chartImage Y p) (ξ₂.Lψ p) B → ∀ ε, 0 ≤ ε → ε ≤ 1 →
+      JetClose (Ξ.pieceOrder Y p μ) (Ξ.chartImage Y p) (ξ₁.Lψ p) (ξ₂.Lψ p) ε →
+      |ξ₁.pieceCoeff p μ (c - 1) - ξ₂.pieceCoeff p μ (c - 1)| ≤ K * ε :=
+    fun p => Ξ.exists_pieceCoeff_top_bound Y hc hF hμ p hB
+  choose Kp hKp0 hKp using h
+  refine ⟨∑ p, Kp p, Finset.sum_nonneg fun p _ => hKp0 p, ?_⟩
+  intro ξ₁ ξ₂ hB₂ ε hε0 hε1 hc'
+  unfold SmoothRootField.resolvedCoeff
+  rw [← Finset.sum_sub_distrib, Finset.sum_mul]
+  exact (Finset.abs_sum_le_sum_abs _ _).trans
+    (Finset.sum_le_sum fun p _ => hKp p ξ₁ ξ₂ (hB₂ p) ε hε0 hε1 (hc' p))
 
 /-- ★★★ **Continuity of the resolved empirical coefficients in the branch representatives**: if
 the smooth root fields `ξₙ → ξ` in the sense that on every piece the branch representatives
