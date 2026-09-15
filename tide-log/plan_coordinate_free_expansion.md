@@ -1523,3 +1523,11 @@ finite-order continuity of composition `g ∘ ζ` on a compact box: plan via Mat
 `HasFTaylorSeriesUpTo.eq_iteratedFDeriv`, `taylorComp` = sum over `OrderedFinpartition n` of `compAlongOrderedFinpartition`, with the
 difference bound `norm_compAlongOrderedFinpartition_sub_compAlongOrderedFinpartition_le`) + Leibniz `norm_iteratedFDeriv_mul_le` for the
 product with η; then `tendsto_empCoeffRect_top` in ζ; unit C: resolved continuity (uniform over the compact base, finite base measure).
+
+### 20.22 CONSULT #144 UNIT B LANDED (2026-09-15): CDXCVI `JetCloseness`, CDXCVII `EmpiricalRectContinuity`; 821 modules.
+`exists_jetClose_comp` (composition finite-order stable, Faà di Bruno), `JetClose.mul_left`, `tendsto_empCoeffRect_top` (cube replacement rule
+continuous in ζ for C^{|p|} closeness on the closed box). NEXT (unit C): resolved continuity — `ξₙ.resolvedCoeff μ (c−1) → ξ.resolvedCoeff μ (c−1)`
+for branch representatives `Lψₙ p → Lψ p` in C^R on the compact chart image `K_p` of the piece; needs the affine transfer
+`iteratedFDeriv r (L ∘ affineMap e σ c) v = (D^r L (affineMap …)).compContinuousLinearMap (fun _ => T)`, ‖T‖ ≤ 1 (uniform jet bound of the limit
+representatives and JetClose transfer, uniform in the base point), uniform η-jet bound of the piece amplitudes, then the base integrals converge by
+the uniform bound on a finite measure.
