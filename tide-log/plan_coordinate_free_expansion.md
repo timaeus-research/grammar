@@ -1140,3 +1140,15 @@ Axiom probe clean. Mirror paragraph updated with Astra #135's paper sentence and
 pin 3b39911 (21 ahead of Overleaf). Artifact Section 8 status updated. Lean gotchas: `set`-bound measures hide Regular instances; `classical`
 breaks `Function.update` rewrites (instance mismatch) — use explicit ite or avoid; `MeasurableEmbedding.integrable_map_iff` with named args fails —
 build the restricted-integrability fact and use `.1`; `Subtype.val` needs type ascription in `Measure.map/comap`.
+
+### 18.12 CONSULT #136 (2026-09-15): CHART-PUSHFORWARD IDENTITY CLOSED; SECTION-4 PROGRAMME DECLARED COMPLETE FOR THE PAPER.
+Verdict CLOSE (all six P1 units accounted for; no missing unit). Wording applied: hypotheses visible (μ > 0, c ≥ 1, zero-order); "pushforwards,
+restricted to X"; "finite sum of measures finite on compact subsets of X" (not a finite measure); residue terminology scoped to the simple-pole faces;
+HEADLINES row "Definition B realised: explicit chart-density formula proved equal to the intrinsic residue measure" (not "made a theorem").
+comap along the embedding X ↪ U is acceptable (= restrict-and-retype; nothing lost). Transport dependence of the DEFINITION is explicit and
+eliminated by `chartResidueMeasure_eq_of_transports` (independence among transports of the FIXED resolved core, not under change of resolution).
+Collar dichotomy complete (depth + zero fibre + supported prior ⇒ D_{c+1}; else open complement of tsupport prior). Programme status: for the
+paper's purposes the Section-4 programme is COMPLETE at the level of the intrinsic residue measure, its explicit resolved-chart representation and
+transport independence; NOT claimed: meromorphic continuation, manifold-level residue calculus, Radon extension across D_{c+1}. Remaining (extensions
+/examples/future work, ranked): depth-one x²y² direct route; scaling to drop box support in CDLXII–CDLXIII; k_i = 0 exponents; subtype-S packaging;
+zeta continuation (separate programme). Mirror pin 3b39911 (21 ahead of Overleaf).
