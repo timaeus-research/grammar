@@ -1122,3 +1122,21 @@ U7 optional monomial specialisation 2^{m*}/∏_J 2k_j. No extremality hypothesis
 measure is exactly the finite sum of the pushforwards of the multiplicity-normalised simple-face densities in any resolved chart transport;
 equivalently the sum over normal sides of the iterated logarithmic density residue of (K∘π)^{−μ}μ_U, each normal side contributing (2k_j)⁻¹ per
 wall." Artifact A/B wording corrected accordingly.
+
+### 18.11 CHART-PUSHFORWARD IDENTITY LANDED (2026-09-15). Main 3b39911, 780 modules. (P1 of consult #135, units 1–6.)
+CDLXIV `SmoothChartResidueCollar`: `ampObs` (amplitude family of an observable typed over Ξ.X Y — needed because `(Ξ.withF G hG).amp` carries
+`(withF).X Y` types that block `rw`), `amp_withF_eq` (amp = ρloc(Tm)·G(divPt) on the closed box; ρloc = ω|b|prior∘ψ F-free), joint continuity/
+bounds, `gv_divPt_eq`, `eventually_amp_zero_of_deep` (divPt deep ⇒ in D_{c+1} (G vanishes nearby) or off supp prior (ρloc vanishes nearby)),
+`exists_collar` (tube lemma over compact Base × deepSet; `isCompact_deepSet`), `integrable_faceIntegrand` (joint, base ⊗ vol|box; bound M·C off the
+collar via `exists_bound_residueWeight`). CDLXV `SmoothChartResidueMeasure`: `faceRef`, `faceNorm'`, `faceDensity` (uses ρf, the smooth global
+extension of ρloc, for measurability), `faceMap` (through chartInv), `faceMeasureU := map faceMap (faceRef.withDensity ofReal D)`,
+`faceMeasure := comap val faceMeasureU` on X, `chartResidueMeasure := Σ_I Σ_{J simple} faceMeasure`, `integral_faceMeasure_test` (embedding →
+integral_map → withDensity smul → Fubini → dlogResidueInt). CDLXVI `SmoothChartResidueIdentity`: `integrable_faceMeasure_test`,
+`faceMeasure_lt_top_of_isCompact` (cutoff domination + ofReal_integral_eq_lintegral_ofReal), IsFiniteMeasureOnCompacts + Regular instances
+(`Regular.of_sigmaCompactSpace_of_isLocallyFiniteMeasure`; X is σ-compact and pseudometrisable automatically), `integral_chartResidueMeasure_test`
+(= Σ_I ∫ pieceResidueSum), `residueConst_mul_integral_chartResidueMeasure` (= T[G]), `stratumMeasure_eq_smul_chartResidueMeasure` (via
+eq_stratumMeasure_of_tests with Regular.smul), `chartResidueMeasure_eq_residueMeasure` (μ > 0), inherited support + transport independence.
+Axiom probe clean. Mirror paragraph updated with Astra #135's paper sentence and the corrected Definition B wording (|f|ω, log-collar, 2^c/∏2k_j);
+pin 3b39911 (21 ahead of Overleaf). Artifact Section 8 status updated. Lean gotchas: `set`-bound measures hide Regular instances; `classical`
+breaks `Function.update` rewrites (instance mismatch) — use explicit ite or avoid; `MeasurableEmbedding.integrable_map_iff` with named args fails —
+build the restricted-integrability fact and use `.1`; `Subtype.val` needs type ascription in `Measure.map/comap`.
