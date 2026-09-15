@@ -1462,3 +1462,11 @@ refine/pad to the common lattice/degree: ★★★ `empZ_cutoffExpansion`; zero-
 (`empBoxIntegral` = `empIntegralRect` on the cube; `(Ξ.amp Y p).amp s = G ∘ affineMap (eqv p) p.2 (sc p s)` rfl; `Tm p s = affineMap …` rfl);
 sum over pieces (`CutoffExpansion.sum`, `.refine` to `(Ξ.decomp Y).commonQ`, `.pad` to `commonD`) + tail (`abs_integral_tail_le`,
 `cutoffExpansion_of_exp_small`): ★★★ `empZ_cutoffExpansion`; canonical `Ξ.empCoeff Y ξ`; zero-field compatibility with the population `Ξ.coeff`.
+
+### 20.15 STAGE 7 PART 3 LANDED (2026-09-15): CDXCI `EmpiricalResolvedExpansion`; 815 modules. STAGE 7 COMPLETE.
+★★★ `SmoothRootField.empZ_cutoffExpansion : CutoffExpansion commonQ commonD (Ξ.empZ Y ξ) ξ.resolvedCoeff` for a bounded smooth root field;
+`resolvedCoeff_unique`; `resolvedCoeff_zero` (= population `Ξ.coeff Y`). REMAINING (empirical Theorem E programme): (a) the resolved graded
+identification (top-power coefficient = stratum sum with amp ↦ amp·S_μ(ψ̂)/Γ(μ); needs deep-vanishing of the chart amplitude on the pieces —
+`jetsZeroOn_amp_deep` exists — combined with CDLXXXVII per piece and the rectangle scaling of the top coefficient); (b) recovery of the leading
+theorem `hasLeadingTerm_empZ` from the expansion at `(λ, m−1)` (chart-leading ⇒ all lower coefficients vanish); (c) the random-field
+consequences. Papers: add the resolved theorem to grammar_lean_2 §9 and the mirror remark; refresh pins.
