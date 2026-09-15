@@ -799,5 +799,7 @@ import Grammar.EmpiricalInnerKernel
 import Grammar.EmpiricalInnerTwoRegime
 import Grammar.SmoothFaceParam
 import Grammar.EmpiricalFaceKernel
+import Grammar.ParametricFaceAmplitude
+import Grammar.EmpiricalFieldFamilyJets
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

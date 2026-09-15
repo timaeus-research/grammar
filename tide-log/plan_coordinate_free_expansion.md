@@ -1367,3 +1367,17 @@ are polynomials of degree |m| in τ times e^{τζ}: multi-coordinate `jetPoly`; 
 τ-polynomial derivative bounds), (iii) the substitution τ := √N u^k = √(N w^{2k_K}) u_J^{k_J} identifying the J-face integral with
 ∫_w w^{h_K} empUnitInner k_J (m+h_J) (c_m(w;·)) (N w^{2k_K}) dw. Then Stage 5: sum over faces J (subset formula) = the full box integral of
 η e^{−N u^{2k} + √N u^k ζ}; canonical coefficients via `CutoffExpansion.coeff_unique`.
+
+### 20.5 STAGE 4 LANDED (2026-09-15): CDLXXXII `ParametricFaceAmplitude`, `EmpiricalFieldFamilyJets`; 805 modules.
+`IsJet`: ∂^m (η e^{τζ}) = (Σ_{r≤|m|} P_r τ^r) e^{τζ} with smooth P_r; uniform bound C(1+τ)^{|p|}e^{M'τ} over m ≤ p on the closed box;
+`growthLE_faceAmp_fieldFam`: the face amplitudes τ ↦ faceAmp p J (fieldFam η ζ τ) m w are GrowthLE with constant
+(∏_K 1/(p−1)!)·C·w^{p_K} — the hypothesis of `empirical_face_expansion`; joint measurability from joint smoothness
+(`contDiff_faceAmp_slice`). NEXT (Stage 5, mirror of `SmoothGeneralDepth`): (i) `empFaceInner k e G t := ∫_{(0,1]^ι} u^e G(√t u^k) e^{−t u^{2k}}`
+on a general finite index type ι (empty ι: = G(√t)e^{−t}), reindexing to `empUnitInner` via `faceEquiv` (pattern `faceMono_reindex`),
+two-regime for general ι incl. the empty face (spectrum ∅, remainder from `jet_kernel_le` + e^{−t/2} ≤ E t^{−L}); (ii) the empirical
+face-term integral: ∫_v faceOp p J finRange (fieldFam η ζ (√N v^k)) v · v^h e^{−N v^{2k}} = Σ_m faceW J m ∫_w w^{h_K} empFaceInner k_J (m+h_J)
+(τ ↦ faceAmp p J (fieldFam η ζ τ) m w) (N w^{2k_K}) (mirror of `faceTerm_integral`; τ(glue u w) = √(N w^{2k_K}) u^{k_J} for w > 0);
+(iii) pointwise subset formula at τ = √N v^k, `integral_box_split`; (iv) per-face bound via `face_expansion_param` with
+`growthLE_faceAmp_fieldFam` and measurability; (v) `reorganise` into `absSpectralSum (Qamb k) (d−1) (empCoeffAtDepth) L N`
+(spectrum {(e_i+1)/(2k_i)} ⊆ latticeBelow Qamb L; coefficients vanish off the spectrum by `coeffAt_eq_zero_of_not_mem`):
+★★★ `empirical_expansion_at_depth`.
