@@ -51,6 +51,7 @@ empirical stratum measure. -/
 structure RootField where
   /-- the field on `U` -/
   ψ : Ξ.R.U → ℝ
+  ψ_meas : Measurable ψ
   /-- the branch representative of the piece -/
   loc : ∀ p : (Ξ.X Y).PIdx,
     Base ((Ξ.X Y).act p.1) (Y.T.a p.1) × (Fin ((Ξ.X Y).da p) → ℝ) → ℝ
@@ -64,6 +65,7 @@ namespace RootField
 /-- The zero field. -/
 def zero : Ξ.RootField Y where
   ψ _ := 0
+  ψ_meas := measurable_const
   loc _ _ := 0
   loc_cont _ := continuous_const
   loc_eq _ _ _ := rfl
@@ -225,6 +227,23 @@ theorem integral_faceMeasure_eq {c : ℕ} (μ : ℝ) {G : Ξ.R.U → ℝ} (hGc :
       ∫ z, Ξ.faceDensity Y p J μ z * G (Ξ.faceMap Y p J z) ∂(Ξ.faceRef Y p J) :=
   Ξ.integral_comap_map_withDensity Y p J (Ξ.measurable_faceDensity Y p J μ)
     ((Ξ.ae_faceRef_mem_box Y p J).mono fun _ hz => Ξ.faceDensity_nonneg Y p J μ hz) hGc hGt
+
+/-- The empirical face-density integrand of a test is integrable against the reference measure. -/
+theorem integrable_empFaceDensity_mul {μ : ℝ} (hμ : 0 < μ) {c : ℕ} (hJc : J.card = c)
+    {G : Ξ.R.U → ℝ} (hG : ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ G) (hGt : Ξ.IsTest c G) :
+    Integrable (fun z => Ξ.empFaceDensity Y p J ξ μ z * G (Ξ.faceMap Y p J z))
+      (Ξ.faceRef Y p J) := by
+  obtain ⟨M, -, hM⟩ := ξ.exists_bound
+  have hint := Ξ.integrable_faceDensity_mul Y p J hG hGt hJc μ
+  have h := hint.bdd_mul (c := fluctDensity μ M)
+    ((continuous_fluctDensity hμ).comp (Ξ.continuous_faceTrace Y p J ξ)).aestronglyMeasurable
+    (by
+      filter_upwards [Ξ.ae_faceRef_mem_box Y p J] with z hz
+      rw [Function.comp_apply, Real.norm_eq_abs, abs_of_pos (fluctDensity_pos hμ _)]
+      exact fluctDensity_le_of_abs_le hμ (Ξ.faceTrace_abs_le Y p J ξ (hM p) hz))
+  refine h.congr (Eventually.of_forall fun z => ?_)
+  simp only [Function.comp_apply, empFaceDensity]
+  ring
 
 /-- **Lipschitz dependence of a face integral on the trace**: with traces bounded by `M` and
 `δ`-close on the face, the test integrals differ by at most `fluctLip μ M · δ · ∫ |G| dface`. -/

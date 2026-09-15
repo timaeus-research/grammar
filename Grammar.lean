@@ -781,5 +781,10 @@ import Grammar.SmoothStratumJetDescent
 import Grammar.FluctuationLipschitz
 import Grammar.EmpiricalRegressionOneDim
 import Grammar.EmpiricalStratumMeasure
+import Grammar.EmpiricalBoxLeading
+import Grammar.EmpiricalFaceFunctional
+import Grammar.EmpiricalPieceLeading
+import Grammar.EmpiricalPieceIntegral
+import Grammar.EmpiricalResolvedLeading
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

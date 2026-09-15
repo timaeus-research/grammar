@@ -1223,3 +1223,18 @@ compacts, regular; Lipschitz in sup norm of the representatives with constant fl
 a_N (P, N·K∘π(P))_*(e^{−NK∘π} μ_U) ⇒ ν ⊗ t^{μ−1}e^{−t}dt/Γ(μ) on X for the leading pair (start: extremal pair (λ*, m*) via `tendsto_normalised_partitionObs_extremal`
 at rescaled N — a_N ∫F e^{−sNK} → s^{−μ}∫F dν is the Laplace transform of the radial marginal), then the continuous-field leading theorem by testing against
 F e^{(1−β)t + βξ√t} (tail bound e^{−βt+βM√t} ≤ e^{βM²/2}e^{−βt/2}); fallback: fixed-δ face sandwich. Lean gotchas recorded in HEADLINES CDLXX.
+
+### 19.2 RANK 2 LANDED (2026-09-15): the empirical leading theorem — CDLXXI–CDLXXIII, 790 modules.
+Route taken: NOT the marked radial limit — the analytic engine already had Headline XIX `spatialPhase_tendsto` (leading term of the standard integral
+with a CONTINUOUS spatially varying phase on the unit box). Assembly: dilation to `(0,b]^{n+1}`; identification of the dilated `spatialFace` with the
+empirical face functional (unit-box split along the resonant set J, scaling of the Jᶜ integral, `phaseMoment = S/2`, `Σ_J (h−2kl+1) = 0`); general `Fin d`
+box integral with `BoxLeading`/`boxFaceLimit` (d = 0 exponentially small; lower pairs → 0 via `Precedes`); per piece: transport of the empirical core
+integral through the presentation (`phaseConst = 1` so the root field ψ = √n(K−K_n)/√K enters as `e^{√N v^k loc}` with S at temperature 1 — no β
+bookkeeping), domination by the half-temperature zero-phase integral (AM–GM), `hasLeadingTerm_integral_of_dominated_kernel`; global: core sum + tail
+(`e^{−δN/2}`), `HasLeadingTerm.sum`; identification with `empiricalStratumMeasure` for tests via `simpleFaces = {resSet}` / `∅`.
+Main: `hasLeadingTerm_empZ` (all smooth F; limit Σ_p ∫ boxFaceLimit_p dν_p) and `hasLeadingTerm_empZ_eq_integral` (tests: limit = ∫_X F dν^λ_m(ξ)).
+Interface: `ChartLeading λ m` (every piece: ratios ≥ λ, at most m equal to λ) — Astra #138 rank-0 "leading pair on the localisation"; not derived from
+`IsExtremalData` (which is stated at zero-fibre points and does not constrain walls of chart faces lying outside `tsupport prior`). Open: (a) admissible
+non-compactly-supported F (needs integrability of F against face measures); (b) `ν(0) = ν` under ChartLeading (zero-order from ChartLeading needs every
+exact-stratum point to lie in some piece); (c) rank 4 (field CLT transfer, C(B) convergence), rank 5 (annealed), rank 3 branchwise pushforward is
+now implicit in the identification. Consult #139 = audit of the rank-2 unit (pending).
