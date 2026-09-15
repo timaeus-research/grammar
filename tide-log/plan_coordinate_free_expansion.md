@@ -993,3 +993,15 @@ CutoffExpansion ⇒ `tendsto_normalised_of_leading` + `monomialBoxRealCutoff_equ
 goals arrive as beta-redexes → `beta_reduce`; `Finset.mem_val` is an Eq (rw); `pow_le_pow_left` → `pow_le_pow_left₀`;
 `isOpen_setOf_eventually_nhds` → `isOpen_setOfPred_eventually_nhds`; images `(fun w => f w) '' B` leave beta-redexes — use `f '' B`.
 Next: consult #131 (audit + closure of Theorem E).
+
+### 18.2 CONSULT #131 (2026-09-15): THEOREM E CLOSED. Main f923221, 766 modules.
+Audit: constant Γ(μ)β^{−μ}/((c−1)!∏_{j∈J}(2k_j)α_j!) = faceW · faceCoef_top ✓; exact-support cutoff indexing ✓. Wording: "finite localized
+chart-face representation on the exact stratum" (summed coefficient is the invariant; no intrinsic normal-derivative density), derivatives of
+the WHOLE localized amplitude, "absolutely convergent complementary-face integrals" (joint base/face integrability = the engine family
+integral, not restated), "nonnegative" not strictly positive, ZeroOrder on the whole exact stratum, neighbourhood vanishing not flatness,
+Radon-measure interpretation on U ∖ deepZeroFibre is the standard consequence (not a landed construction), no finite extension across
+deeper strata. Corollary (1) landed: CDLII `zeroOrder_of_extremalData` (extremality ⇒ n = 0 for resonant walls), `coeff_nonneg_of_deep_extremal`,
+`coeff_eq_of_eqOn_exactStratum_extremal`; m* bounds the resonance count not the depth, so the restriction to observables vanishing near
+the depth-≥ c+1 fibre is NOT vacuous. Optional after closure (ranked): x²y² regression through the graded formula (needs an identity
+modification constructor in hironaka), explicit lower-log Taylor-subtracted formulas (API packaging), flatness extension (M).
+Mirror: Theorem E paragraph revised per §C, pinned f923221 (local master 11 ahead of Overleaf; push user-side).
