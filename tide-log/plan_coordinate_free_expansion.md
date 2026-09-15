@@ -1103,3 +1103,22 @@ to {x_i = 0 : k_i = kmax}); `monomialInsertion_equal` (2^d Γ(1/2κ) η(0)/((d�
 Mirror sentence + pin 7077a28 (19 ahead of Overleaf). Remaining (Astra ranking): chart-pushforward = ν (general structural, M–L); depth-one
 x²y² by the direct route (√N ∫φ f e^{−Nx²y²} → √π(∫φf(x,0)dx/|x| + ∫φf(0,y)dy/|y|) for f vanishing near 0); scaling to drop the symBox
 support hypothesis; k_i = 0 exponents; subtype S packaging (low); zeta (separate programme).
+
+### 18.10 CONSULT #135 (2026-09-15): DESIGN of the structural unit P1 (chart-pushforward = ℛ). Corrections to my Definition B: use |f|ω
+(positive densities, signed f); the naive collar (2ε)⁻¹∫_{|f|<ε} g ω DIVERGES — correct: (2ε)⁻¹∫_{|f|<ε} g|f|ω or (2 log 1/ε)⁻¹∫_{ε<|f|<r} g ω;
+ℛ sums NORMAL SIDES: full two-sided c-fold crossing = 2^c/∏_J 2k_j × ordinary iterated residue (sanity: x^{2k}, μ=1/2k: ℛ = (1/k)δ₀). A′
+(truncated negative moment, constant c!) CONFIRMED but label "expected classical characterisation, not formalised". PLAN P1 (M–L; unit 4 gating):
+U1 F-free context Ξ₁ := Ξ.withF 1; withF-invariance of geometry/base measures; amplitude factorisation ((withF G).amp p).amp s v =
+(Ξ₁.amp p).amp s v * G (divPt p s v) on the chart domain. U2 face parameter space Q_{p,J} = Base_p × W_{p,J} (W = complementary coords),
+reference q = β_p ⊗ volume|box, maps z(s,w) = glue J 0 w, e(s,w) = divPt p s z, restricted to valid chart points with e ∈ X (face points must
+be shown in (Y.φ i).target; OpenPartialHomeomorph not globally continuous). U3 density D_{p,J} = ∏_J(2k)⁻¹ · A⁰_p(s,z) · residueWeight(h|Jᶜ,k|Jᶜ,μ,w);
+faceResidueMeasure = map e (q.withDensity ofReal D) on X; chartResidueMeasure μ c = Σ_I Σ_{J simple} faceResidueMeasure. U4 (gating): local
+finiteness — for compact C ⊆ X, ∫_{e⁻¹C} D dq < ∞ (extra vanishing active coord ⇒ image in D_{c+1}; need chart-box closure/target containment/
+weight support control) or cutoff domination via integrability behind integrableOn_pieceStratum_integrand; then Regular via sigma-compact
+locally-finite (check exact Mathlib name). U5 ENNReal pushforward formula, then real test bridge ∫_X G dm_{p,J} = ∫_s dlogResidueInt(...) dβ_p
+(integral_map, withDensity, Fubini on prod, amplitude factorisation). U6 headline: chartResidueMeasure μ c = residueMeasure Y hc hzero and
+stratumMeasure = ofReal(residueConst) • chartResidueMeasure (via eq_stratumMeasure_of_tests on ν' := ofReal residueConst • chartResidueMeasure).
+U7 optional monomial specialisation 2^{m*}/∏_J 2k_j. No extremality hypothesis. Paper sentence: "On X the intrinsically defined normalised residue
+measure is exactly the finite sum of the pushforwards of the multiplicity-normalised simple-face densities in any resolved chart transport;
+equivalently the sum over normal sides of the iterated logarithmic density residue of (K∘π)^{−μ}μ_U, each normal side contributing (2k_j)⁻¹ per
+wall." Artifact A/B wording corrected accordingly.
