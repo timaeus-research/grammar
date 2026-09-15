@@ -817,5 +817,6 @@ import Grammar.EmpiricalResolvedStratumFormula
 import Grammar.SmoothCoeffContinuity
 import Grammar.JetCloseness
 import Grammar.EmpiricalRectContinuity
+import Grammar.EmpiricalResolvedContinuity
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

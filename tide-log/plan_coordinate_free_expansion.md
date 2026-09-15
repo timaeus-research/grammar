@@ -1531,3 +1531,9 @@ for branch representatives `Lψₙ p → Lψ p` in C^R on the compact chart imag
 `iteratedFDeriv r (L ∘ affineMap e σ c) v = (D^r L (affineMap …)).compContinuousLinearMap (fun _ => T)`, ‖T‖ ≤ 1 (uniform jet bound of the limit
 representatives and JetClose transfer, uniform in the base point), uniform η-jet bound of the piece amplitudes, then the base integrals converge by
 the uniform bound on a finite measure.
+
+### 20.23 CONSULT #144 UNIT C LANDED (2026-09-15): CDXCVIII `EmpiricalResolvedContinuity`; 822 modules. Units A–C COMPLETE.
+`tendsto_resolvedCoeff_top`: `ξₙ.resolvedCoeff μ (c−1) → ξ₀.resolvedCoeff μ (c−1)` for `Lψₙ p → Lψ₀ p` in C^{pieceOrder p μ} on the compact
+`chartImage p`, F ∈ 𝓘_{c+1}, μ > 0. Affine transfer `‖D^r(L∘A_s)‖ ≤ ‖D^r L (A_s ·)‖` (‖T‖ ≤ 1). NEXT: papers (§9: continuity theorem +
+finite-order caveat; mirror sentence; pin), memory; then consult #145 (closure of the continuity programme; next direction: lower-log Mellin
+weights as `iteratedDeriv` identity, or random-field subleading limits given the deterministic continuity + a C^R tightness hypothesis).
