@@ -756,5 +756,7 @@ import Grammar.SmoothResolvedRLCTAsymptotic
 import Grammar.SmoothExactResonance
 import Grammar.SmoothRemainderIdentity
 import Grammar.SmoothFaceSumCollapse
+import Grammar.SmoothFaceMonoTop
+import Grammar.SmoothResolvedStratumFormula
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
