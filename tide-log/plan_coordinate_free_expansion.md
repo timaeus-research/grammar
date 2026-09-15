@@ -1093,3 +1093,13 @@ x = tz, φ_t(z) = t²φ(tz), Z_φ(N) = Z_{φ_t}(t⁴N). NEXT (ranked): (1) mixed
 `phaseCoeff_zero_phase`/`amplitudeCoeff`; candidate (v) corrected: prior restricted to the subspace, 2^m not 2^d); (2) chart-pushforward = ν
 (general structural); (3) depth-one x²y² by a DIRECT route (√N ∫φ f e^{−Nx²y²} → √π(∫φf(x,0)dx/|x| + …) for f vanishing near 0, then uniqueness);
 subtype S packaging low; zeta separate. Mirror wording applied (pin 72f89d5; 18 ahead of Overleaf).
+
+### 18.9 MIXED-MONOMIAL EXPLICIT INSERTION FUNCTIONAL LANDED (2026-09-15). Main 7077a28, 777 modules.
+CDLXIII `MonomialInsertionConstant` (Astra #134 (c)(1)): `monomialInsertion k η := Σ_σ amplitudeCoeff 0 k λ* 1 (η∘reflect σ)`;
+`monomial_tendsto_insertion` (headline XIX zero phase + `phaseCoeff_zero_phase` + N ↦ √N: normalised → monomialInsertion k (φf), all k_i > 0,
+φ supported in symBox); `monomial_coeff_comp_gv_eq` (𝒯[f∘π] = explicit, by uniqueness); `monomial_integral_extremalStratumMeasure_eq`
+(∫ f∘π dν^{λ*}_{m*} = explicit for f∘π vanishing near D_{m*+1}: the positive-dimensional leading measure = weighted restriction of the prior
+to {x_i = 0 : k_i = kmax}); `monomialInsertion_equal` (2^d Γ(1/2κ) η(0)/((d−1)!(2κ)^d)); `monomialInsertion_x2y2 = √π η(0)` ✓ CDLXII.
+Mirror sentence + pin 7077a28 (19 ahead of Overleaf). Remaining (Astra ranking): chart-pushforward = ν (general structural, M–L); depth-one
+x²y² by the direct route (√N ∫φ f e^{−Nx²y²} → √π(∫φf(x,0)dx/|x| + ∫φf(0,y)dy/|y|) for f vanishing near 0); scaling to drop the symBox
+support hypothesis; k_i = 0 exponents; subtype S packaging (low); zeta (separate programme).
