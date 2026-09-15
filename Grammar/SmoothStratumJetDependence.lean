@@ -13,10 +13,10 @@ The `(μ, c−1)` coefficient of an observable `F` vanishing near the deep zero 
 only through a finite transverse jet along the exact stratum `S^μ_c`, and the order of that jet
 is intrinsic. Both halves of the statement are chart-free:
 
-* `VanishesToOrderAt n H P`: near `P`, `H` is a finite sum of products of `n` smooth functions
-  each vanishing at `P` (equivalently, the `(n−1)`-jet of `H` at `P` is zero);
+* `VanishesToOrderAt n H P`: near `P`, `H` is a finite sum of smooth multiples of products of `n`
+  smooth functions each vanishing at `P` (equivalently, the `(n−1)`-jet of `H` at `P` is zero);
   `MemIdealPowNear S n H P` is the ideal-theoretic form `H ∈ 𝓘_S^n` near `P` (the factors vanish
-  on `S`).
+  on `S`). Exponent `0` imposes nothing.
 * `stratumJetOrder μ P = Σ_{(k,h)} (⌊2kμ⌋₊ − h − 1)` over the intrinsic wall pairs through `P`;
   at a point of the exact stratum it is the total resonant Taylor order `|α|` of the face formula
   (`stratumJetOrder_divPt_eq`), and it vanishes under the zero-order condition.
@@ -114,37 +114,54 @@ variable (Ξ : ResolvedData d) (Y : ResolvedCoreTransport Ξ.R Ξ.hKc Ξ.prior)
 
 /-! ### Chart-free vanishing orders -/
 
-/-- **Vanishing to order `n` at `P`**: near `P`, `H` is a finite sum of products of `n` smooth
-functions each vanishing at `P` (the `(n−1)`-jet of `H` at `P` is zero). -/
+/-- **Vanishing to order `n` at `P`**: near `P`, `H` is a finite sum of smooth multiples of
+products of `n` smooth functions each vanishing at `P` (`H ∈ 𝔪_P^n` near `P`; the `(n−1)`-jet of `H`
+at `P` is zero). For `n = 0` every smooth `H` qualifies. -/
 def VanishesToOrderAt (n : ℕ) (H : Ξ.R.U → ℝ) (P : Ξ.R.U) : Prop :=
-  ∃ N ∈ 𝓝 P, ∃ (m : ℕ) (g : Fin m → Fin n → Ξ.R.U → ℝ),
+  ∃ N ∈ 𝓝 P, ∃ (ι : Type) (_ : Fintype ι) (a : ι → Ξ.R.U → ℝ) (g : ι → Fin n → Ξ.R.U → ℝ),
+    (∀ i, ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ (a i)) ∧
     (∀ i l, ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ (g i l)) ∧ (∀ i l, g i l P = 0) ∧
-    ∀ Q ∈ N, H Q = ∑ i, ∏ l, g i l Q
+    ∀ Q ∈ N, H Q = ∑ i, a i Q * ∏ l, g i l Q
 
-/-- **`H ∈ 𝓘_S^n` near `P`**: near `P`, `H` is a finite sum of products of `n` smooth functions
-each vanishing on `S`. -/
+/-- **`H ∈ 𝓘_S^n` near `P`**: near `P`, `H` is a finite sum of smooth multiples of products of `n`
+smooth functions each vanishing on `S`. For `n = 0` every smooth `H` qualifies. -/
 def MemIdealPowNear (S : Set Ξ.R.U) (n : ℕ) (H : Ξ.R.U → ℝ) (P : Ξ.R.U) : Prop :=
-  ∃ N ∈ 𝓝 P, ∃ (m : ℕ) (g : Fin m → Fin n → Ξ.R.U → ℝ),
+  ∃ N ∈ 𝓝 P, ∃ (ι : Type) (_ : Fintype ι) (a : ι → Ξ.R.U → ℝ) (g : ι → Fin n → Ξ.R.U → ℝ),
+    (∀ i, ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ (a i)) ∧
     (∀ i l, ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ (g i l)) ∧ (∀ i l, ∀ Q ∈ S, g i l Q = 0) ∧
-    ∀ Q ∈ N, H Q = ∑ i, ∏ l, g i l Q
+    ∀ Q ∈ N, H Q = ∑ i, a i Q * ∏ l, g i l Q
 
 variable {Ξ} in
 theorem MemIdealPowNear.vanishesToOrderAt {S : Set Ξ.R.U} {n : ℕ} {H : Ξ.R.U → ℝ} {P : Ξ.R.U}
     (h : Ξ.MemIdealPowNear S n H P) (hP : P ∈ S) : Ξ.VanishesToOrderAt n H P := by
-  obtain ⟨N, hN, m, g, hg, hg0, hH⟩ := h
-  exact ⟨N, hN, m, g, hg, fun i l => hg0 i l P hP, hH⟩
+  obtain ⟨N, hN, ι, _, a, g, ha, hg, hg0, hH⟩ := h
+  exact ⟨N, hN, ι, inferInstance, a, g, ha, hg, fun i l => hg0 i l P hP, hH⟩
 
 variable {Ξ} in
 theorem VanishesToOrderAt.congr {n : ℕ} {H H' : Ξ.R.U → ℝ} {P : Ξ.R.U}
     (h : Ξ.VanishesToOrderAt n H P) (hHH' : ∀ Q, H Q = H' Q) : Ξ.VanishesToOrderAt n H' P := by
-  obtain ⟨N, hN, m, g, hg, hg0, hH⟩ := h
-  exact ⟨N, hN, m, g, hg, hg0, fun Q hQ => (hHH' Q).symm.trans (hH Q hQ)⟩
+  obtain ⟨N, hN, ι, _, a, g, ha, hg, hg0, hH⟩ := h
+  exact ⟨N, hN, ι, inferInstance, a, g, ha, hg, hg0, fun Q hQ => (hHH' Q).symm.trans (hH Q hQ)⟩
+
+/-- Exponent zero imposes nothing on a smooth function. -/
+theorem memIdealPowNear_zero (S : Set Ξ.R.U) {H : Ξ.R.U → ℝ}
+    (hH : ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ H) (P : Ξ.R.U) : Ξ.MemIdealPowNear S 0 H P :=
+  ⟨univ, univ_mem, Unit, inferInstance, fun _ => H, fun _ => Fin.elim0, fun _ => hH,
+    fun _ l => Fin.elim0 l, fun _ l => Fin.elim0 l, fun Q _ => by simp⟩
 
 /-- Order one is plain vanishing at the point. -/
 theorem vanishesToOrderAt_one_of_eq_zero {H : Ξ.R.U → ℝ}
     (hH : ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ H) {P : Ξ.R.U} (h0 : H P = 0) :
     Ξ.VanishesToOrderAt 1 H P :=
-  ⟨univ, univ_mem, 1, fun _ _ => H, fun _ _ => hH, fun _ _ => h0, fun Q _ => by simp⟩
+  ⟨univ, univ_mem, Unit, inferInstance, fun _ _ => 1, fun _ _ => H, fun _ => contMDiff_const,
+    fun _ _ => hH, fun _ _ => h0, fun Q _ => by simp⟩
+
+/-- Order one on `S` is plain vanishing on `S`. -/
+theorem memIdealPowNear_one_of_eqOn_zero (S : Set Ξ.R.U) {H : Ξ.R.U → ℝ}
+    (hH : ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ H) (h0 : ∀ Q ∈ S, H Q = 0) (P : Ξ.R.U) :
+    Ξ.MemIdealPowNear S 1 H P :=
+  ⟨univ, univ_mem, Unit, inferInstance, fun _ _ => 1, fun _ _ => H, fun _ => contMDiff_const,
+    fun _ _ => hH, fun _ _ => h0, fun Q _ => by simp⟩
 
 /-! ### The intrinsic transverse jet order -/
 
@@ -203,19 +220,22 @@ theorem pdMulti_amp_eq_zero_of_vanishesToOrder (p : (Ξ.X Y).PIdx)
     (hv : v₀ ∈ closedBox _ (Y.T.a p.1)) {α : Fin ((Ξ.X Y).da p) → ℕ}
     (hF : Ξ.VanishesToOrderAt (∑ i, α i + 1) Ξ.F (Ξ.divPt Y p s v₀)) :
     pdMulti α (List.finRange _) ((Ξ.amp Y p).amp s) v₀ = 0 := by
-  obtain ⟨N, hN, m, g, hg, hg0, hFg⟩ := hF
+  obtain ⟨N, hN, ι, _, a, g, ha, hg, hg0, hFg⟩ := hF
   obtain ⟨N', hN'N, hN'o, hPN'⟩ := mem_nhds_iff.1 hN
   have hbox : IsClosed (centeredBox d (Y.T.a p.1)) := (isCompact_centeredBox d _).isClosed
-  choose gt hgt hgteq using fun (i : Fin m) (l : Fin (∑ i, α i + 1)) =>
+  choose gt hgt hgteq using fun (i : ι) (l : Fin (∑ i, α i + 1)) =>
     Ξ.exists_contDiff_eqOn_comp_chartInv Y (hg i l) p.1
+  choose aT hat hateq using fun (i : ι) => Ξ.exists_contDiff_eqOn_comp_chartInv Y (ha i) p.1
   obtain ⟨ρt, hρt, hρteq, -⟩ := exists_contDiff_eqOn_of_contDiffOn (Y.T.V_open p.1) hbox
     (Y.T.box_subset_V p.1) ((Ξ.X Y).contDiffOn_ρloc p.1)
   have hfp := Ξ.contDiff_facePt Y p s
-  have hAi : ∀ i : Fin m, ContDiff ℝ ∞ fun v =>
-      ρt (Ξ.facePt Y p s v) * ∏ l, gt i l (Ξ.facePt Y p s v) := fun i =>
-    (hρt.comp hfp).mul (contDiff_prod fun l _ => (hgt i l).comp hfp)
-  have hAs : ContDiff ℝ ∞ fun v =>
-      ∑ i, (1 : ℝ) * (ρt (Ξ.facePt Y p s v) * ∏ l, gt i l (Ξ.facePt Y p s v)) :=
+  have hDi : ∀ i : ι, ContDiff ℝ ∞ fun v => ρt (Ξ.facePt Y p s v) * aT i (Ξ.facePt Y p s v) :=
+    fun i => (hρt.comp hfp).mul ((hat i).comp hfp)
+  have hAi : ∀ i : ι, ContDiff ℝ ∞ fun v =>
+      ρt (Ξ.facePt Y p s v) * aT i (Ξ.facePt Y p s v) * ∏ l, gt i l (Ξ.facePt Y p s v) :=
+    fun i => (hDi i).mul (contDiff_prod fun l _ => (hgt i l).comp hfp)
+  have hAs : ContDiff ℝ ∞ fun v => ∑ i, (1 : ℝ) *
+      (ρt (Ξ.facePt Y p s v) * aT i (Ξ.facePt Y p s v) * ∏ l, gt i l (Ξ.facePt Y p s v)) :=
     ContDiff.sum fun i _ => contDiff_const.mul (hAi i)
   have hO : IsOpen (Ξ.facePt Y p s ⁻¹' ((Y.φ p.1).target ∩ (Y.φ p.1).symm ⁻¹' N')) :=
     ((Y.φ p.1).continuousOn_symm.isOpen_inter_preimage (Y.φ p.1).open_target hN'o).preimage
@@ -223,8 +243,8 @@ theorem pdMulti_amp_eq_zero_of_vanishesToOrder (p : (Ξ.X Y).PIdx)
   have hv₀O : v₀ ∈ Ξ.facePt Y p s ⁻¹' ((Y.φ p.1).target ∩ (Y.φ p.1).symm ⁻¹' N') :=
     ⟨Ξ.facePt_mem_target Y p s hv, hPN'⟩
   have heq : ∀ v ∈ Ξ.facePt Y p s ⁻¹' ((Y.φ p.1).target ∩ (Y.φ p.1).symm ⁻¹' N') ∩
-      closedBox _ (Y.T.a p.1), (Ξ.amp Y p).amp s v =
-        ∑ i, (1 : ℝ) * (ρt (Ξ.facePt Y p s v) * ∏ l, gt i l (Ξ.facePt Y p s v)) := by
+      closedBox _ (Y.T.a p.1), (Ξ.amp Y p).amp s v = ∑ i, (1 : ℝ) *
+        (ρt (Ξ.facePt Y p s v) * aT i (Ξ.facePt Y p s v) * ∏ l, gt i l (Ξ.facePt Y p s v)) := by
     intro v hv'
     have hub := Ξ.facePt_mem_box Y p s hv'.2
     have hut := Ξ.facePt_mem_target Y p s hv'.2
@@ -234,8 +254,12 @@ theorem pdMulti_amp_eq_zero_of_vanishesToOrder (p : (Ξ.X Y).PIdx)
     change (Ξ.X Y).ρloc p.1 _ * Ξ.F (Ξ.divPt Y p s v) = _
     rw [hFg (Ξ.divPt Y p s v) (hN'N hv'.1.2), ← hρteq hub, Finset.mul_sum]
     refine Finset.sum_congr rfl fun i _ => ?_
-    rw [one_mul]
+    rw [one_mul, ← mul_assoc]
     congr 1
+    · rw [hateq i hub]
+      change ρt _ * a i (Ξ.divPt Y p s v) = ρt _ * a i (Y.chartInv p.1 (Ξ.facePt Y p s v))
+      rw [Y.chartInv_eq p.1 hut]
+      rfl
     refine Finset.prod_congr rfl fun l _ => ?_
     rw [hgteq i l hub]
     change g i l (Ξ.divPt Y p s v) = g i l (Y.chartInv p.1 (Ξ.facePt Y p s v))
@@ -244,8 +268,8 @@ theorem pdMulti_amp_eq_zero_of_vanishesToOrder (p : (Ξ.X Y).PIdx)
   rw [pdMulti_eq_of_eqOn_inter_closedBox ((Ξ.amp Y p).smooth s) hAs (Y.T.a_pos p.1) hO heq
     ⟨hv₀O, hv⟩ α, pdMulti_finset_sum (fun _ => (1 : ℝ)) (fun i _ => hAi i)]
   refine Finset.sum_eq_zero fun i _ => ?_
-  rw [one_mul, pdMulti_mul (D := fun v => ρt (Ξ.facePt Y p s v))
-    (f := fun v => ∏ l, gt i l (Ξ.facePt Y p s v)) (hρt.comp hfp)
+  rw [one_mul, pdMulti_mul (D := fun v => ρt (Ξ.facePt Y p s v) * aT i (Ξ.facePt Y p s v))
+    (f := fun v => ∏ l, gt i l (Ξ.facePt Y p s v)) (hDi i)
     (contDiff_prod fun l _ => (hgt i l).comp hfp) α (List.nodup_finRange _)]
   beta_reduce
   refine Finset.sum_eq_zero fun β _ => ?_

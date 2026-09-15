@@ -1168,3 +1168,19 @@ packaging). Lean gotchas: `pdMulti_finset_sum` lives in `SmoothRenormalisedStrat
 binder name — hoist to a named `have`; dot-notation lemmas need `variable {Ξ} in`; after `rw [hEqOn hx]` a beta-redex `(fun u => …) x` blocks the next
 `rw` — `change` first; style linter forbids `show` (use `change`). Follow-ups: mirror sentence + leanref dots (pin bump); artifact §11 status;
 optionally the fine multi-order version (per-wall orders α_j via Σ_j 𝓘_{E_j}^{α_j+1}) and Astra audit #137.
+
+### 18.14 CONSULT #137 (2026-09-15) AUDIT OF THE JET UNIT; DESCENT LANDED (CDLXVIII, 782 modules).
+Verdict: CDLXVII establishes intrinsic finite-jet dependence (kernel/invariance), not a separately constructed residue–jet pairing. Corrections
+applied: (1) exponent zero — the original definitions made `MemIdealPowNear S 0 H P` mean "H locally = m" (empty products); fixed by allowing
+smooth coefficients `Σ_i a_i ∏_l g_il` (now 𝓘_S^0 = C^∞, `memIdealPowNear_zero`), index type `ι` with `[Fintype ι]` (so `.add` uses `ι ⊕ ι'`);
+(2) paper wording must include the prior φ among the determining data, must not suggest an explicit pairing object was constructed, and "finite
+jet" is a per-point bound. Astra's replacement wording adopted in the mirror; Lean annotation "Formalised: invariance under the ideal-power
+equivalence and the descent; an explicit residue–jet pairing as separately defined objects is not constructed". Order formula confirmed: at
+exact-stratum points ⌊2kμ⌋₊ − h − 1 = α_j exactly (natural floor + truncated subtraction), n(P) = |α| is an order BOUND (cancellations may lower the
+true order). "Depends only on the transverse jet" is justified in the ideal-theoretic sense (class mod 𝓘_S^{n+1}); equivalence with normal Taylor
+coefficients (Hadamard in submanifold coordinates) is standard but NOT formalised — paper should define the jet ideal-theoretically. Do not say
+tangential derivatives are "absorbed in density integration". Ranked: (1) fix + align wording [done]; (2) package the descent A/(A ∩ J) [done:
+CDLXVIII `admissible`, `jetKernel`, `coeffLin`, `descendedCoeff`, `descendedCoeff_mk`]; (3) per-wall version Σ_j 𝓘_{E_j}^{α_j+1} optional
+(annihilates a LARGER ideal — sharper; needed only for anisotropic j^α notation); (4) do NOT assert "conormal distribution of order n" (needs
+continuity/order estimates). Lean gotchas: `at` is a keyword (variable name `aT`); `lake env lean` on a dependent uses STALE oleans after editing the
+dependency — `lake build` the dependency first; `Sum.elim` cases reduce by rfl.
