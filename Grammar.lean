@@ -771,5 +771,6 @@ import Grammar.SmoothStratumMeasurePositive
 import Grammar.SmoothStratumMeasureFinite
 import Grammar.MonomialResolvedData
 import Grammar.MonomialStratumMeasure
+import Grammar.MonomialExplicitConstant
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
