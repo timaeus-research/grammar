@@ -1238,3 +1238,21 @@ Interface: `ChartLeading λ m` (every piece: ratios ≥ λ, at most m equal to �
 non-compactly-supported F (needs integrability of F against face measures); (b) `ν(0) = ν` under ChartLeading (zero-order from ChartLeading needs every
 exact-stratum point to lie in some piece); (c) rank 4 (field CLT transfer, C(B) convergence), rank 5 (annealed), rank 3 branchwise pushforward is
 now implicit in the identification. Consult #139 = audit of the rank-2 unit (pending).
+
+### 19.3 CONSULT #139 (2026-09-15) = audit of rank 2; verdict: "Rank 2 supplies the substantive deterministic E1 theorem"; route via `spatialPhase_tendsto` preferred over a marked radial limit.
+Corrections adopted: (i) `ChartLeading` is sound but potentially stronger than necessary; it does NOT assert the coefficient is nonzero nor that (λ,m) is
+the effective pair — word it as "no coordinate wall in the chosen localised transport has ratio below λ, and no transport chart contains more than m
+coordinate walls of ratio λ; it constrains the presented charts even where the prior amplitude vanishes". (ii) My "closed boxes include mass on the deeper
+fibre" reading is WRONG: integrable face densities give zero mass to {w_i = 0}; D_{m+1} may lie in the topological support without carrying mass. Do not
+carry a strictness reading of "ν(X) ≤ c, equality iff D_{m+1} = ∅" into the mirror before auditing the exact Lean statement/hypotheses. (iii) Keep
+separate: analytic theorem (limit = branchwise face-density measure) vs population comparison (ν(0) = ν^pop under the zero-order condition; needs a
+coverage bridge: every exact-stratum point in some piece, walls represented by chart coordinates, ratios/multiplicities agree). (iv) Rank 5a (Gaussian
+expectation E S_λ(G) = Γ(λ)(1 − v/2)^{−λ}, v < 2, uniform gap v ≤ 2 − ε for integrability) is NOT an annealed theorem; 5b needs UI (e.g. uniform
+exponential moment of M_n²) — keep visibly separate. Theorem A wording + non-claims list in (f) adopted for the mirror.
+Rank 3 design (adopted): finite-N Lipschitz bound |g_t(a) − g_t(b)| ≤ √(2/e) e^{M²} |a − b| e^{−t/2} (mean value + M√t ≤ t/4 + M² + √t e^{−t/4} ≤ √(2/e)),
+hence |I_N(ξ,η) − I_N(ζ,η)| ≤ C_M ‖ξ − ζ‖_∞ I_{N/2}(0,|η|); normalised by s_N the half-temperature boundedness gives an eventual N-independent Lipschitz
+constant; abstract lemma "uniform asymptotics on compact field families" (pointwise convergence + eventual uniform Lipschitz on balls + locally Lipschitz
+limit ⇒ sup over compact → 0, via finite ε-net); define T_N, T on ALL continuous branch tuples E = ∏_p C(Base_p × [0,b]^{d_p}), not only RootField
+witnesses. Rank 4: joint convergence L_n ⇒ G in E (piecewise marginals insufficient), tightness + compact-uniform ⇒ T_n(L_n) − T(L_n) → 0 in P,
+continuity ⇒ T(L_n) ⇒ T(G); tail: M_n = O_p(1) gives |tail|/s_n → 0 in P; no independence needed. Sizes: rank 3 300–800 lines, rank 4 400–1200, 5a 150–400.
+Priority 3 → 4, 5a parallel.
