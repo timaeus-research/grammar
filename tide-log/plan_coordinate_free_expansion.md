@@ -1413,3 +1413,11 @@ mellinMom_pdMulti_fieldFam_zero, [faceAmp version]); 3 top spectral coefficient 
 _top_eq_zero_of_not_exact, _top_of_exact; deep vanishing ⇒ faceAmp = 0 for |J| > c, = pdMulti for |J| = c); 4 box graded identification
 (empCoeff_eq_zero_of_depthSupport, empCoeff_eq_faceSum_top, H_μ/Γ(μ) corollary, zero-field recovery); 5 general-box scaling adapter.
 Paper paragraph ("Deterministic empirical expansion on a normal-crossing box") supplied — to go into grammar_lean_2 §9 when pins refresh.
+
+### 20.9 UNIT 1 LANDED (2026-09-15): CDLXXXV `EmpiricalUniform`; 809 modules.
+`FieldJetBound η ζ p b C M'`; `empFace_bound_uniform`, `empirical_expansion_at_depth_uniform` (K₀(h,k,p,L,M'), remainder C·K₀·N^{−L}(1+log N)^{d−1}),
+`exists_abs_empCoeffAtDepth_le` (coefficients O(C)), ★★★ `emp_cutoffExpansion_uniform` (canonical coefficients, all N ≥ 1, all fields with the
+jet bound). NEXT: unit 2 (Mellin–jet bridge): `mellinMom_pow_mul_exp_zero` (mellinMom (τ^r e^{aτ}) μ 0 = S_{μ+r/2}(a)), differentiation under
+the Mellin integral for jet families (`pd_mellinMom_isJet`, by `hasDerivAt_integral_of_dominated_loc_of_deriv_le` with the jet bound on a compact
+neighbourhood), `mellinMom_pdMulti_fieldFam_zero : mellinMom (τ ↦ ∂^m(η e^{τζ})(v)) μ 0 = ∂^m[η · S_μ(ζ)](v)`; then unit 3 (top spectral
+coefficient, depth-flatness), unit 4 (box graded identification), unit 5 (general-box scaling).

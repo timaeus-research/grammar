@@ -219,9 +219,43 @@ theorem exists_pdMulti_fieldFam_bound (hη : ContDiff ℝ ∞ η) (hζ : ContDif
 
 /-! ### The face amplitudes of the field family -/
 
-/-- ★ **Flat growth of the empirical face amplitudes**: for `w` in the complementary box,
-`τ ↦ G_{J,m}(τ; w) = (R_K^p ∂^m B_τ)(0_J, w)` has growth
+/-- The rectangular jet bound of the field family: `|∂^m B_τ(v)| ≤ C (1+τ)^{|p|} e^{M'τ}` for all
+`m ≤ p`, `τ ≥ 0` and `v` in the closed box. This is the only way `(η, ζ)` enter the constants of
+the empirical expansion. -/
+def FieldJetBound (η ζ : (Fin d → ℝ) → ℝ) (p : Fin d → ℕ) (b C M' : ℝ) : Prop :=
+  ∀ m : Fin d → ℕ, (∀ i, m i ≤ p i) → ∀ τ : ℝ, 0 ≤ τ → ∀ v ∈ closedBox d b,
+    |pdMulti m (List.finRange d) (fieldFam η ζ τ) v| ≤ C * (1 + τ) ^ (∑ i, p i) * exp (M' * τ)
+
+theorem exists_fieldJetBound (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ) {b M' : ℝ}
+    (hζM : ∀ v ∈ closedBox d b, |ζ v| ≤ M') (p : Fin d → ℕ) :
+    ∃ C : ℝ, 0 ≤ C ∧ FieldJetBound η ζ p b C M' :=
+  exists_pdMulti_fieldFam_bound hη hζ hζM p
+
+theorem FieldJetBound.nonneg {p : Fin d → ℕ} {b C M' : ℝ} (hb : 0 ≤ b)
+    (h : FieldJetBound η ζ p b C M') :
+    0 ≤ C := by
+  have h0 := h 0 (fun i => Nat.zero_le _) 0 le_rfl 0 (mem_closedBox.2 fun i => by simp [hb])
+  simp only [add_zero, one_pow, mul_one, mul_zero, exp_zero] at h0
+  exact (abs_nonneg _).trans h0
+
+/-- ★ **Flat growth of the empirical face amplitudes under a jet bound**: for `w` in the
+complementary box, `τ ↦ G_{J,m}(τ; w) = (R_K^p ∂^m B_τ)(0_J, w)` has growth
 `(∏_K 1/(pᵢ−1)!) C w^{p_K} (1+τ)^{|p|} e^{M'τ}`. -/
+theorem growthLE_faceAmp_fieldFam_of_bound (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ)
+    {b C M' : ℝ} (hb : 0 < b) {p : Fin d → ℕ} (hC : FieldJetBound η ζ p b C M') (hp0 : ∀ i, 0 < p i)
+    (J : Finset (Fin d)) (m : Fin d → ℕ) (hm : m ∈ idxL p (lJ J)) {w : {i // ¬ inJ J i} → ℝ}
+    (hw : w ∈ box {i // ¬ inJ J i} b) :
+    GrowthLE (fun τ => faceAmp p J (fieldFam η ζ τ) m w)
+      ((∏ i : {i // ¬ inJ J i}, ((p i - 1).factorial : ℝ)⁻¹) * C *
+        mono (fun i : {i // ¬ inJ J i} => p i) w) (∑ i, p i) M' := by
+  intro τ hτ
+  have h := faceAmp_bound p J (contDiff_fieldFam hη hζ τ) hb hp0
+    (M := C * (1 + τ) ^ (∑ i, p i) * exp (M' * τ))
+    (fun m' hm' v hv => hC m' hm' τ hτ v (mem_closedBox.2 hv)) hm hw
+  refine h.trans (le_of_eq ?_)
+  ring
+
+/-- ★ **Flat growth of the empirical face amplitudes** (existential form). -/
 theorem growthLE_faceAmp_fieldFam (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ) {b M' : ℝ}
     (hb : 0 < b) (hζM : ∀ v ∈ closedBox d b, |ζ v| ≤ M') (p : Fin d → ℕ) (hp0 : ∀ i, 0 < p i) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ (J : Finset (Fin d)) (m : Fin d → ℕ), m ∈ idxL p (lJ J) →
@@ -229,13 +263,8 @@ theorem growthLE_faceAmp_fieldFam (hη : ContDiff ℝ ∞ η) (hζ : ContDiff �
         GrowthLE (fun τ => faceAmp p J (fieldFam η ζ τ) m w)
           ((∏ i : {i // ¬ inJ J i}, ((p i - 1).factorial : ℝ)⁻¹) * C *
             mono (fun i : {i // ¬ inJ J i} => p i) w) (∑ i, p i) M' := by
-  obtain ⟨C, hC0, hC⟩ := exists_pdMulti_fieldFam_bound hη hζ hζM p
-  refine ⟨C, hC0, fun J m hm w hw τ hτ => ?_⟩
-  have h := faceAmp_bound p J (contDiff_fieldFam hη hζ τ) hb hp0
-    (M := C * (1 + τ) ^ (∑ i, p i) * exp (M' * τ))
-    (fun m' hm' v hv => hC m' hm' τ hτ v (mem_closedBox.2 hv)) hm hw
-  refine h.trans (le_of_eq ?_)
-  ring
+  obtain ⟨C, hC0, hC⟩ := exists_fieldJetBound hη hζ hζM p
+  exact ⟨C, hC0, fun J m hm w hw => growthLE_faceAmp_fieldFam_of_bound hη hζ hb hC hp0 J m hm hw⟩
 
 /-- The face amplitudes of the field family are jointly continuous in `(τ, w)`. -/
 theorem continuous_faceAmp_fieldFam_joint (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ)

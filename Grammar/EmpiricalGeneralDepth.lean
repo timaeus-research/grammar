@@ -298,18 +298,17 @@ noncomputable def empFaceExpansion (η ζ : (Fin d → ℝ) → ℝ) (h k p : Fi
           (fun τ => faceAmp p J (fieldFam η ζ τ) m w) μ j)
         (fun i : {i // ¬ inJ J i} => h i) (fun i : {i // ¬ inJ J i} => 2 * k i) 1 μ (j - q)
 
-/-- ★ **The per-face bound**: the parametrised face theorem applied to the `(J, m)` empirical
-face integral, with the two-regime constant of the face and the flat-growth constant of the
-field family. -/
-theorem empFace_bound (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ) {M' : ℝ}
-    (hζM : ∀ v ∈ closedBox d 1, |ζ v| ≤ M') (hk : ∀ i, 0 < k i) {L : ℕ} (hL : 0 < L)
-    (hp : ∀ i, p i + h i = 2 * k i * L) (hp0 : ∀ i, 0 < p i) (J : Finset (Fin d))
+/-- ★ **The per-face bound, UNIFORM in the field data**: the constant depends only on
+`(h, k, p, L, M', J, m)`; for every smooth `(η, ζ)` with the jet bound of constant `C` the `(J, m)`
+face integral is within `C · K (1 + log N)^{DJ} N^{−L}` of its face expansion. -/
+theorem empFace_bound_uniform (hk : ∀ i, 0 < k i) {L : ℕ} (hL : 0 < L)
+    (hp : ∀ i, p i + h i = 2 * k i * L) (hp0 : ∀ i, 0 < p i) (M' : ℝ) (J : Finset (Fin d))
     (m : Fin d → ℕ) :
-    ∃ K : ℝ, 0 ≤ K ∧ (m ∈ idxL p (lJ J) → ∀ N : ℝ, 1 ≤ N →
-      |empFaceIntegral η ζ h k p J m N - empFaceExpansion η ζ h k p L J m N| ≤
-        K * (1 + log N) ^ DJ J * N ^ (-(L : ℝ))) := by
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ (η ζ : (Fin d → ℝ) → ℝ), ContDiff ℝ ∞ η → ContDiff ℝ ∞ ζ →
+      ∀ C : ℝ, FieldJetBound η ζ p 1 C M' → m ∈ idxL p (lJ J) → ∀ N : ℝ, 1 ≤ N →
+        |empFaceIntegral η ζ h k p J m N - empFaceExpansion η ζ h k p L J m N| ≤
+          C * K * (1 + log N) ^ DJ J * N ^ (-(L : ℝ)) := by
   have hL' : (0 : ℝ) < L := by exact_mod_cast hL
-  obtain ⟨Cg, hCg0, hCg⟩ := growthLE_faceAmp_fieldFam hη hζ one_pos hζM p hp0
   obtain ⟨C₂, hC₂0, hC₂⟩ := empFace_two_regime k (L : ℝ) J hk (∑ i, p i) M' hL' (fun i => m i + h i)
   obtain ⟨Cc, hCc0, hCc⟩ :=
     exists_abs_empFaceCoef_le k (L : ℝ) J hk (∑ i, p i) M' (fun i => m i + h i)
@@ -318,7 +317,12 @@ theorem empFace_bound (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ) {M
   set R : ℝ := faceRemWeight (fun i : {i // ¬ inJ J i} => p i) (fun i : {i // ¬ inJ J i} => h i)
     (fun i : {i // ¬ inJ J i} => 2 * k i) 1 L (DJ J) with hR
   have hR0 : 0 ≤ R := faceRemWeight_nonneg _ _ _ _ _ _
-  refine ⟨C₂ * (P * Cg) * R, by positivity, fun hm N hN => ?_⟩
+  refine ⟨C₂ * P * R, by positivity, fun η ζ hη hζ C hC hm N hN => ?_⟩
+  have hC0 : 0 ≤ C := hC.nonneg zero_le_one
+  have hCg : ∀ w ∈ box {i // ¬ inJ J i} 1, GrowthLE (fun τ => faceAmp p J (fieldFam η ζ τ) m w)
+      ((∏ i : {i // ¬ inJ J i}, ((p i - 1).factorial : ℝ)⁻¹) * C *
+        mono (fun i : {i // ¬ inJ J i} => p i) w) (∑ i, p i) M' :=
+    fun w hw => growthLE_faceAmp_fieldFam_of_bound hη hζ one_pos hC hp0 J m hm hw
   have hGm := measurable_uncurry_faceAmp_fieldFam hη hζ p J m
   have hT : Measurable fun w : {i // ¬ inJ J i} → ℝ =>
       N * mono (fun i : {i // ¬ inJ J i} => 2 * k i) w :=
@@ -328,7 +332,7 @@ theorem empFace_bound (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ) {M
       (fun i : {i // inJ J i} => m i + h i) (fun τ => faceAmp p J (fieldFam η ζ τ) m w) t)
     (c := fun w => empFaceCoef k J (fun i => m i + h i) (fun τ => faceAmp p J (fieldFam η ζ τ) m w))
     (p := fun i => p i) (h := fun i => h i) (a := fun i => 2 * k i) (b := 1)
-    (M := P * Cg * Cc) (C := C₂ * (P * Cg)) (L := (L : ℝ))
+    (M := P * C * Cc) (C := C₂ * (P * C)) (L := (L : ℝ))
     (Λ := empΛJ k (L : ℝ) J (fun i => m i + h i)) (D := DJ J) one_pos (by positivity)
     (measurable_empFaceInner_comp _ _ hGm hT).aestronglyMeasurable
     (fun μ _ j _ => (measurable_empFaceCoef_comp k J _ hGm μ j).aestronglyMeasurable)
@@ -338,15 +342,27 @@ theorem empFace_bound (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ) {M
     refine key.trans (le_of_eq ?_)
     rw [hR]
     ring
-  · have hgrow := hCg J m hm w hw
+  · have hgrow := hCg w hw
     calc |empFaceCoef k J (fun i => m i + h i) (fun τ => faceAmp p J (fieldFam η ζ τ) m w) μ j|
-        ≤ (P * Cg * mono (fun i : {i // ¬ inJ J i} => p i) w) * Cc :=
+        ≤ (P * C * mono (fun i : {i // ¬ inJ J i} => p i) w) * Cc :=
           hCc _ _ hgrow μ hμ j hj
       _ = _ := by ring
-  · have hgrow := hCg J m hm w hw
+  · have hgrow := hCg w hw
     have h2 := hC₂ _ (hGm.comp measurable_prodMk_left) _ hgrow t ht
     refine h2.trans (le_of_eq ?_)
     ring
+
+/-- ★ **The per-face bound** (existential form, fixed field data). -/
+theorem empFace_bound (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ) {M' : ℝ}
+    (hζM : ∀ v ∈ closedBox d 1, |ζ v| ≤ M') (hk : ∀ i, 0 < k i) {L : ℕ} (hL : 0 < L)
+    (hp : ∀ i, p i + h i = 2 * k i * L) (hp0 : ∀ i, 0 < p i) (J : Finset (Fin d))
+    (m : Fin d → ℕ) :
+    ∃ K : ℝ, 0 ≤ K ∧ (m ∈ idxL p (lJ J) → ∀ N : ℝ, 1 ≤ N →
+      |empFaceIntegral η ζ h k p J m N - empFaceExpansion η ζ h k p L J m N| ≤
+        K * (1 + log N) ^ DJ J * N ^ (-(L : ℝ))) := by
+  obtain ⟨C, hC0, hC⟩ := exists_fieldJetBound hη hζ hζM p
+  obtain ⟨K, hK0, hK⟩ := empFace_bound_uniform h k p hk hL hp hp0 M' J m
+  refine ⟨C * K, by positivity, fun hm N hN => hK η ζ hη hζ C hC hm N hN⟩
 
 /-! ### The assembly -/
 
@@ -441,6 +457,46 @@ theorem sum_empFaceExpansion_eq (hk : ∀ i, 0 < k i) (L : ℕ) (N : ℝ) :
       (fun w => empFaceCoef_eq_zero k (L : ℝ) x.1 hk _ _ hμ hμJ j) _ _ _ _ _)
     (fun x _ => DJ_le x.1)
 
+/-- ★★★ **The empirical expansion at depth `p`, UNIFORMLY in the field data**: the constant
+depends only on `(h, k, p, L, M')`; for every smooth `(η, ζ)` with the jet bound
+`|∂^m(η e^{τζ})| ≤ C (1+τ)^{|p|} e^{M'τ}` (`m ≤ p`),
+`|∫_{(0,1]^d} η(v) e^{√N v^k ζ(v)} v^h e^{−N v^{2k}} dv`
+`  − absSpectralSum Q (d−1) (empCoeffAtDepth η ζ h k p) L N|`
+`  ≤ C K₀ N^{−L} (1 + log N)^{d−1}` for all `N ≥ 1`. -/
+theorem empirical_expansion_at_depth_uniform (hk : ∀ i, 0 < k i) {L : ℕ} (hL : 0 < L)
+    (hp : ∀ i, p i + h i = 2 * k i * L) (hp0 : ∀ i, 0 < p i) (M' : ℝ) :
+    ∃ K₀ : ℝ, 0 ≤ K₀ ∧ ∀ (η ζ : (Fin d → ℝ) → ℝ), ContDiff ℝ ∞ η → ContDiff ℝ ∞ ζ →
+      ∀ C : ℝ, FieldJetBound η ζ p 1 C M' → ∀ N : ℝ, 1 ≤ N →
+        |(∫ v in box (Fin d) 1, fieldFam η ζ (coupling k N v) v * mono h v *
+            exp (-N * mono (fun i => 2 * k i) v)) -
+          absSpectralSum (Qamb k) (d - 1) (empCoeffAtDepth η ζ h k p) L N| ≤
+          C * K₀ * (N ^ (-(L : ℝ)) * (1 + log N) ^ (d - 1)) := by
+  choose K hK0 hK using fun (J : Finset (Fin d)) (m : Fin d → ℕ) =>
+    empFace_bound_uniform h k p hk hL hp hp0 M' J m
+  refine ⟨∑ x ∈ faceIndex p, faceW x.1 x.2 * K x.1 x.2,
+    Finset.sum_nonneg fun x _ => mul_nonneg (faceW_nonneg _ _) (hK0 _ _),
+    fun η ζ hη hζ C hC N hN => ?_⟩
+  have hC0 : 0 ≤ C := hC.nonneg zero_le_one
+  have hlog : 0 ≤ log N := log_nonneg hN
+  rw [integral_eq_sum_empFaceIntegral h k p hη hζ (by linarith),
+    ← sum_empFaceExpansion_eq h k p hk L N, ← Finset.sum_sub_distrib, Finset.mul_sum,
+    Finset.sum_mul]
+  refine (Finset.abs_sum_le_sum_abs _ _).trans (Finset.sum_le_sum fun x hx => ?_)
+  have hm : x.2 ∈ idxL p (lJ x.1) := (Finset.mem_sigma.1 hx).2
+  have hb' := hK x.1 x.2 η ζ hη hζ C hC hm N hN
+  have hpow : (1 + log N) ^ DJ x.1 ≤ (1 + log N) ^ (d - 1) :=
+    pow_le_pow_right₀ (by linarith) (DJ_le x.1)
+  have hW := faceW_nonneg x.1 x.2
+  have hK0' := hK0 x.1 x.2
+  rw [← mul_sub, abs_mul, abs_of_nonneg hW]
+  calc faceW x.1 x.2 *
+        |empFaceIntegral η ζ h k p x.1 x.2 N - empFaceExpansion η ζ h k p L x.1 x.2 N|
+      ≤ faceW x.1 x.2 * (C * K x.1 x.2 * (1 + log N) ^ DJ x.1 * N ^ (-(L : ℝ))) :=
+        mul_le_mul_of_nonneg_left hb' hW
+    _ ≤ faceW x.1 x.2 * (C * K x.1 x.2 * (1 + log N) ^ (d - 1) * N ^ (-(L : ℝ))) := by
+        gcongr
+    _ = _ := by ring
+
 /-- ★★★ **The empirical expansion in general dimension at depth `p`**: for smooth `η, ζ` on the
 closed unit box with `|ζ| ≤ M'`, `kᵢ > 0`, Jacobian exponents `h`, cutoff `L ≥ 1` and depths
 `pᵢ + hᵢ = 2kᵢL`,
@@ -457,27 +513,9 @@ theorem empirical_expansion_at_depth (hη : ContDiff ℝ ∞ η) (hζ : ContDiff
           exp (-N * mono (fun i => 2 * k i) v)) -
         absSpectralSum (Qamb k) (d - 1) (empCoeffAtDepth η ζ h k p) L N| ≤
         K * (N ^ (-(L : ℝ)) * (1 + log N) ^ (d - 1)) := by
-  choose K hK0 hK using fun (J : Finset (Fin d)) (m : Fin d → ℕ) =>
-    empFace_bound h k p hη hζ hζM hk hL hp hp0 J m
-  refine ⟨∑ x ∈ faceIndex p, faceW x.1 x.2 * K x.1 x.2, fun N hN => ?_⟩
-  have hlog : 0 ≤ log N := log_nonneg hN
-  rw [integral_eq_sum_empFaceIntegral h k p hη hζ (by linarith),
-    ← sum_empFaceExpansion_eq h k p hk L N, ← Finset.sum_sub_distrib, Finset.sum_mul]
-  refine (Finset.abs_sum_le_sum_abs _ _).trans (Finset.sum_le_sum fun x hx => ?_)
-  have hm : x.2 ∈ idxL p (lJ x.1) := (Finset.mem_sigma.1 hx).2
-  have hb' := hK x.1 x.2 hm N hN
-  have hpow : (1 + log N) ^ DJ x.1 ≤ (1 + log N) ^ (d - 1) :=
-    pow_le_pow_right₀ (by linarith) (DJ_le x.1)
-  have hW := faceW_nonneg x.1 x.2
-  have hK0' := hK0 x.1 x.2
-  rw [← mul_sub, abs_mul, abs_of_nonneg hW]
-  calc faceW x.1 x.2 *
-        |empFaceIntegral η ζ h k p x.1 x.2 N - empFaceExpansion η ζ h k p L x.1 x.2 N|
-      ≤ faceW x.1 x.2 * (K x.1 x.2 * (1 + log N) ^ DJ x.1 * N ^ (-(L : ℝ))) :=
-        mul_le_mul_of_nonneg_left hb' hW
-    _ ≤ faceW x.1 x.2 * (K x.1 x.2 * (1 + log N) ^ (d - 1) * N ^ (-(L : ℝ))) := by
-        gcongr
-    _ = _ := by ring
+  obtain ⟨C, _, hC⟩ := exists_fieldJetBound hη hζ hζM p
+  obtain ⟨K₀, _, hK₀⟩ := empirical_expansion_at_depth_uniform h k p hk hL hp hp0 M'
+  exact ⟨C * K₀, fun N hN => hK₀ η ζ hη hζ C hC N hN⟩
 
 end SmoothEngine
 
