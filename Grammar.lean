@@ -796,5 +796,6 @@ import Grammar.EmpiricalGaussianExpectation
 import Grammar.EmpiricalFieldJets
 import Grammar.EmpiricalOneDim
 import Grammar.EmpiricalInnerKernel
+import Grammar.EmpiricalInnerTwoRegime
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

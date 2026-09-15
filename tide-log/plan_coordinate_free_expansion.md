@@ -1345,3 +1345,13 @@ c μ q := ∏1/(2k) Σ_j coeffAt rep μ j · C(j,q) · mellinMom G μ (j−q) an
 (ii) general box (0,b] by rescaling; (iii) Stage 2 parametrised flat face theorem (coefficient functions c_{μj}(w) flat, remainder with
 ∏ w^p factor); (iv) Stage 4 multi-coordinate jets of B(u,τ) = η e^{τξ} (pdMulti in u_J, polynomial in τ) with the growth bound in τ;
 (v) Stage 5 assembly via the subset formula applied to B_τ then τ := √N u^k.
+
+### 20.3 NEXT (i) LANDED (2026-09-15): CDLXXX `EmpiricalInnerTwoRegime`; 801 modules.
+The Stage-3 series is now `powLog (innerSpectrum k e) n (empInnerCoeff k e G) t` with `empInnerCoeff μ q = ∏1/(2k) Σ_j coeffAt μ j C(j,q) mellinMom G μ (j−q)`,
+every coefficient `≤ A · innerCoeffBound`, and the GLOBAL two-regime estimate `empUnitInner_two_regime` holds for all t > 0 with remainder
+`A · C(k,e,m,M,L) · t^{−L}(1+|log t|)^n` — the face theorem's `hZ2` input, linear in A. Spectrum = `{(eᵢ+1)/(2kᵢ)}` (a subset of the lattice
+`latticeBelow (latticeQ k) L` after intersecting with μ < L; the face theorem takes any finite Λ so no lattice conversion is needed).
+NEXT: (ii) general box (0,b]: `empBoxInner k e G b t := ∫_{(0,b]^J} …` by the diagonal rescaling u = b·u' (t ↦ t b^{2|k|}, G ↦ G(b^{|k|}·)
+absorbed in the growth constant), or via `SmoothTimeRescale.CutoffExpansion.comp_mul_pos`; (iii) Stage 2: the parametrised flat face
+theorem — outer integral over w of `η(w,u) · empUnitInner(G(w;·))`-type kernels with `|G(w;τ)| ≤ A ∏ w^p (1+τ)^m e^{Mτ}`; (iv) Stage 4
+multi-coordinate jets; (v) Stage 5 assembly with τ := √N u^k.
