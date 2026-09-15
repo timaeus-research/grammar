@@ -1428,3 +1428,9 @@ coefficient, depth-flatness), unit 4 (box graded identification), unit 5 (genera
 of the state density in the all-resonant case (`empFaceCoef(μ, |J|−1) = ∏(2k)^{-1}/(|J|−1)! · mellinMom G μ 0`), vanishing off the exact
 resonance, and depth-flatness (deep vanishing ⇒ faceAmp = 0 for |J| > c, faceAmp = pdMulti for |J| = c; reuse the population
 `jetsZeroOn`/`smoothCoeff_eq_faceSum_top` mechanism); then unit 4 (box graded identification).
+
+### 20.11 UNITS 3–4 LANDED (2026-09-15): CDLXXXVII `EmpiricalFaceSumCollapse`; 811 modules.
+★★★ `empCoeff_eq_faceSum_top` and ★★★ `empCoeff_top_eq_smoothCoeff : empCoeff η ζ h k μ (c−1) = smoothCoeff (η S_μ(ζ)/Γ(μ)) h k 1 1 μ (c−1)`
+for η vanishing near the deep set — the graded empirical Theorem E in the box, i.e. Astra's #141 conjecture proved at box level;
+`empCoeff_eq_zero_of_deep`. NEXT: unit 5 (general-box scaling adapter: Z_b(N) = A_b Z_1(B_b N; η∘b, ζ∘b), coefficient law), then the
+chart/resolved assembly (Stage 7 `SmoothRootField`: recover `hasLeadingTerm_empZ` at α = 0), and the paper statements (grammar_lean_2 §9).
