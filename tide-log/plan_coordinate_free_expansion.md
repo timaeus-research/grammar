@@ -978,3 +978,18 @@ E2 resolved chart-piece definition + equality + exact-stratum interpretation (fa
 stratum formulas", density = "local top Mellin-residue weight along the stratum" (residual phase factor after removing the normal monomial,
 raised to −μ; NOT (K∘π|_S)^{−μ}); lower log powers = "convergent Taylor-subtracted chart-face formulas" (not divergent, not canonical per
 stratum). Vanishing-near is the hypothesis; flatness a non-claim. Paper statement in gpt6_bigpicture_v130.md §10.
+
+### 18.1 THEOREM E UNITS E0–E4 LANDED (2026-09-15). Main b370f6d, 765 modules.
+CDXLIV `SmoothExactResonance` (E0: `exactCount`, exact-support vanishing chain, `faceCoef_top_eq_zero_of_not_exact`, `taylorOrder_unique`);
+CDXLV `SmoothRemainderIdentity` (E1a: `remList_eq_self_of_jetsZeroOn`); CDXLVI `SmoothFaceSumCollapse` (E1d: `deepSet`, `resOrder`,
+`smoothCoeff_eq_faceSum_top`); CDXLVII `SmoothFaceMonoTop` (E1b: `faceMonoCoeff_top = Γ(μ)β^{−μ}/((|ι|−1)!∏2k)`, via two-regime ⇒
+CutoffExpansion ⇒ `tendsto_normalised_of_leading` + `monomialBoxRealCutoff_equal_isEquivalent`); CDXLVIII `SmoothResolvedStratumFormula`
+(E2: `deepZeroFibre`, `jetsZeroOn_amp_deep`, `pieceStratumSum`, `stratumSum`, `coeff_eq_stratumSum`, `wallsAt_facePt_eq`, `depth_divPt_eq`,
+`resonanceCount_divPt_eq`); CDXLIX `SmoothResolvedStratumPositive` (E3: `exactStratum`, `ZeroOrder`, `stratum_or_jets_zero`,
+`coeff_nonneg_of_deep`, `coeff_eq_of_eqOn_exactStratum`); CDL `SmoothResolvedStratumEuclidean` (E4: `observableCoeff_eq_zero_of_eventually_zero_image`,
+`observableCoeff_eq_stratumSum`, `_nonneg_of_deep`, `_eq_of_eqOn_image`); CDLI `SmoothStratumIntegrable` (E1c: collar + `integrable_faceCoeff`,
+`integrableOn_pieceStratum_integrand`). Mirror: Theorem E paragraph appended (pin to bump to b370f6d). Lessons: existing
+`pdMulti_lJ_eq_finRange` name clash (different signature) → suffix `_of_zero_off`; `ae_restrict_of_forall_mem` / `setIntegral_nonneg`
+goals arrive as beta-redexes → `beta_reduce`; `Finset.mem_val` is an Eq (rw); `pow_le_pow_left` → `pow_le_pow_left₀`;
+`isOpen_setOf_eventually_nhds` → `isOpen_setOfPred_eventually_nhds`; images `(fun w => f w) '' B` leave beta-redexes — use `f '' B`.
+Next: consult #131 (audit + closure of Theorem E).
