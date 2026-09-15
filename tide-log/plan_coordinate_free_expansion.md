@@ -1381,3 +1381,14 @@ face-term integral: ∫_v faceOp p J finRange (fieldFam η ζ (√N v^k)) v · v
 `growthLE_faceAmp_fieldFam` and measurability; (v) `reorganise` into `absSpectralSum (Qamb k) (d−1) (empCoeffAtDepth) L N`
 (spectrum {(e_i+1)/(2k_i)} ⊆ latticeBelow Qamb L; coefficients vanish off the spectrum by `coeffAt_eq_zero_of_not_mem`):
 ★★★ `empirical_expansion_at_depth`.
+
+### 20.6 STAGE 5 LANDED (2026-09-15): CDLXXXIII `EmpiricalFaceInner`, `EmpiricalGeneralDepth`; 807 modules.
+★★★ `empirical_expansion_at_depth`: |∫_{(0,1]^d} η e^{√N v^k ζ} v^h e^{−N v^{2k}} − absSpectralSum (2∏k) (d−1) (empCoeffAtDepth η ζ h k p) L N|
+≤ K N^{−L}(1+log N)^{d−1}, N ≥ 1, under p_i + h_i = 2k_iL, |ζ| ≤ M' on the closed box. Coefficients = face coefficient integrals of the
+Mellin-moment coefficients of the face amplitudes (R_K ∂^m (η e^{τζ}))(0_J, w) — the S_{μ+r/2}(ζ(0_J,w)) ladder. Axiom-clean.
+NEXT (Stage 6/7, mirror of `SmoothGeneral`/`SmoothRootField`): (i) depth independence + canonical coefficients via
+`CutoffExpansion.coeff_unique` (the expansion holds for every L with p := 2kL − h, so the coefficients below any cutoff agree);
+(ii) uniformity over (η, ζ) with common bounds (the constants K depend on η, ζ only through the rectangular jet bounds — make this
+explicit, as `smooth_expansion_at_depth_uniform` does), enabling the random-field application ζ = ζ_n(ω); (iii) the explicit ladder form
+of the leading coefficients (`empInnerCoeff` for G = τ^r e^{aτ}: mellinMom = ∂_μ^ℓ S_{μ+r/2}(a), via `hasDerivAt_fluctuation`);
+(iv) general boxes (0,b] and the chart/resolved assembly; (v) the paper statement for grammar_lean_2 (Section 9 extension).

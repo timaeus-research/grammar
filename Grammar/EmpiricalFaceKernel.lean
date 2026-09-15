@@ -33,38 +33,39 @@ variable {ι : Type*} {n : ℕ}
 
 /-- The inner kernel of a jointly measurable family, at a measurable parameter, is measurable in
 the outer point. -/
-theorem measurable_empUnitInner_comp (k e : Fin (n + 1) → ℕ) {G : (ι → ℝ) → ℝ → ℝ}
-    (hG : Measurable (Function.uncurry G)) {T : (ι → ℝ) → ℝ} (hT : Measurable T) :
+theorem measurable_empUnitInner_comp {α : Type*} [MeasurableSpace α] (k e : Fin (n + 1) → ℕ)
+    {G : α → ℝ → ℝ} (hG : Measurable (Function.uncurry G)) {T : α → ℝ} (hT : Measurable T) :
     Measurable fun w => empUnitInner k e (G w) (T w) := by
-  have h1 : Measurable fun p : (ι → ℝ) × (Fin (n + 1) → ℝ) =>
+  have h1 : Measurable fun p : α × (Fin (n + 1) → ℝ) =>
       G p.1 (Real.sqrt (T p.1) * ∏ i, p.2 i ^ k i) := by
-    have : (fun p : (ι → ℝ) × (Fin (n + 1) → ℝ) =>
+    have : (fun p : α × (Fin (n + 1) → ℝ) =>
         G p.1 (Real.sqrt (T p.1) * ∏ i, p.2 i ^ k i)) =
         Function.uncurry G ∘ fun p => (p.1, Real.sqrt (T p.1) * ∏ i, p.2 i ^ k i) := rfl
     rw [this]
     exact hG.comp (measurable_fst.prodMk ((hT.comp measurable_fst).sqrt.mul (by fun_prop)))
-  have hm : Measurable (Function.uncurry fun (w : ι → ℝ) (u : Fin (n + 1) → ℝ) =>
+  have hm : Measurable (Function.uncurry fun (w : α) (u : Fin (n + 1) → ℝ) =>
       (∏ i, u i ^ e i) *
         (G w (Real.sqrt (T w) * ∏ i, u i ^ k i) * exp (-T w * ∏ i, u i ^ (2 * k i)))) := by
-    change Measurable fun p : (ι → ℝ) × (Fin (n + 1) → ℝ) =>
+    change Measurable fun p : α × (Fin (n + 1) → ℝ) =>
       (∏ i, p.2 i ^ e i) *
         (G p.1 (Real.sqrt (T p.1) * ∏ i, p.2 i ^ k i) * exp (-T p.1 * ∏ i, p.2 i ^ (2 * k i)))
-    refine (by fun_prop : Measurable fun p : (ι → ℝ) × (Fin (n + 1) → ℝ) =>
+    refine (by fun_prop : Measurable fun p : α × (Fin (n + 1) → ℝ) =>
       ∏ i, p.2 i ^ e i).mul (h1.mul ?_)
     exact ((hT.comp measurable_fst).neg.mul (by fun_prop)).exp
   exact (hm.stronglyMeasurable.integral_prod_right'
     (ν := volume.restrict (unitBox (n + 1)))).measurable
 
 /-- The Mellin moments of a jointly measurable family are measurable in the outer point. -/
-theorem measurable_mellinMom_comp {G : (ι → ℝ) → ℝ → ℝ} (hG : Measurable (Function.uncurry G))
-    (μ : ℝ) (ℓ : ℕ) : Measurable fun w => mellinMom (G w) μ ℓ := by
-  have h1 : Measurable fun p : (ι → ℝ) × ℝ => G p.1 (Real.sqrt p.2) := by
-    have : (fun p : (ι → ℝ) × ℝ => G p.1 (Real.sqrt p.2)) =
+theorem measurable_mellinMom_comp {α : Type*} [MeasurableSpace α] {G : α → ℝ → ℝ}
+    (hG : Measurable (Function.uncurry G)) (μ : ℝ) (ℓ : ℕ) :
+    Measurable fun w => mellinMom (G w) μ ℓ := by
+  have h1 : Measurable fun p : α × ℝ => G p.1 (Real.sqrt p.2) := by
+    have : (fun p : α × ℝ => G p.1 (Real.sqrt p.2)) =
         Function.uncurry G ∘ fun p => (p.1, Real.sqrt p.2) := rfl
     rw [this]
     exact hG.comp (measurable_fst.prodMk measurable_snd.sqrt)
-  have hm : Measurable (Function.uncurry fun (w : ι → ℝ) (s : ℝ) => momKernel (G w) μ ℓ s) := by
-    change Measurable fun p : (ι → ℝ) × ℝ =>
+  have hm : Measurable (Function.uncurry fun (w : α) (s : ℝ) => momKernel (G w) μ ℓ s) := by
+    change Measurable fun p : α × ℝ =>
       p.2 ^ (μ - 1) * (-log p.2) ^ ℓ * (G p.1 (Real.sqrt p.2) * exp (-p.2))
     exact ((measurable_snd.pow_const _).mul (measurable_snd.log.neg.pow_const _)).mul
       (h1.mul measurable_snd.neg.exp)
@@ -72,8 +73,8 @@ theorem measurable_mellinMom_comp {G : (ι → ℝ) → ℝ → ℝ} (hG : Measu
     (ν := volume.restrict (Ioi (0 : ℝ)))).measurable
 
 /-- The coefficient functions of a jointly measurable family are measurable. -/
-theorem measurable_empInnerCoeff_comp (k e : Fin (n + 1) → ℕ) {G : (ι → ℝ) → ℝ → ℝ}
-    (hG : Measurable (Function.uncurry G)) (μ : ℝ) (q : ℕ) :
+theorem measurable_empInnerCoeff_comp {α : Type*} [MeasurableSpace α] (k e : Fin (n + 1) → ℕ)
+    {G : α → ℝ → ℝ} (hG : Measurable (Function.uncurry G)) (μ : ℝ) (q : ℕ) :
     Measurable fun w => empInnerCoeff k e (G w) μ q := by
   unfold empInnerCoeff
   refine measurable_const.mul (Finset.measurable_sum _ fun j _ => ?_)

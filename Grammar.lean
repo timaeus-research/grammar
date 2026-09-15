@@ -801,5 +801,7 @@ import Grammar.SmoothFaceParam
 import Grammar.EmpiricalFaceKernel
 import Grammar.ParametricFaceAmplitude
 import Grammar.EmpiricalFieldFamilyJets
+import Grammar.EmpiricalFaceInner
+import Grammar.EmpiricalGeneralDepth
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
