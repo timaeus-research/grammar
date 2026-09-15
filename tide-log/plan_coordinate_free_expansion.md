@@ -1184,3 +1184,30 @@ CDLXVIII `admissible`, `jetKernel`, `coeffLin`, `descendedCoeff`, `descendedCoef
 (annihilates a LARGER ideal — sharper; needed only for anisotropic j^α notation); (4) do NOT assert "conormal distribution of order n" (needs
 continuity/order estimates). Lean gotchas: `at` is a keyword (variable name `aT`); `lake env lean` on a dependent uses STALE oleans after editing the
 dependency — `lake build` the dependency first; `Sum.elim` cases reduce by rfl.
+
+## 19. PROJECT: the EMPIRICAL version (K_n) in light of the population results (opened 2026-09-15; user: "focus on the empirical version"; consult #138 = audit of my proposal E1–E6)
+Setting: Z^0_n[φ] = ∫ φ e^{−βnK_n} φ_prior, K_n∘π = u^{2k} − n^{−1/2} u^k ξ_n(u) (Watanabe standard form; u^k SIGNED), ξ_n ⇒ G. Paper Thm (strataempiricalexpansion) needs
+C^ω-convergence of ξ_n (Hypothesis I); Lean has the chart-level Taylor-data version (weighted ℓ¹, all d; headline_*), far-phase bound, Gibbs concentration,
+ratio transfer, sample-datum ℓ¹ CLT, Gaussian moments of S_λ, bilocal second moments, uniform moments, annealed assembly. Nothing coordinate-free/global.
+Astra #138 corrections to my proposal: (1) a graded stratum coefficient is NOT a leading limit unless (μ,c) is the leading pair on the localisation (lower
+exponents from shallower strata) — state the leading theorem for the leading pair (extremal pair first), the coefficient theorem separately; (2) convergence
+of ξ_n only on Z_0 is insufficient (counterexample ξ_n(u) = h(√n u), trace 0, limit A(0)∫e^{−βv²+βvh(v)}dv) — need ξ_n ⇒ G in C(B) on a compact
+neighbourhood B of the zero fibre (or trace convergence + transverse stochastic equicontinuity); (3) SIGNED monomial: u^kξ = |u^k|(sgn(u^k)ξ); the effective
+field ξ̂ = sgn(u^k)ξ is branchwise (normal sides): K=x² two-sided with constant field a gives √N∫φe^{−Nx²+√Nxa} → √π φ(0)e^{a²/4} = φ(0)(S_{1/2}(a)+S_{1/2}(−a))/2,
+NOT φ(0)S_{1/2}(a). Global object: on the normal-side cover Û →p U, ν_β(ξ̂) = p_*((S_{μ,β}(ξ̂)/Γ(μ)) ν̂), p_*ν̂ = ν; absolutely continuous w.r.t. ν with a
+branch-averaged density. Our chartResidueMeasure is already a sum over orthant pieces σ (normal sides), so the branchwise density is natural there.
+Normalisations: S_{μ,β}(a) = ∫t^{μ−1}e^{−βt+βa√t}dt, S(0) = Γ(μ)β^{−μ}, ∂_a^p S_{μ,β} = β^p S_{μ+p/2,β}; ν^μ_{c,β}(ξ) = (S_{μ,β}(ξ)/Γ(μ))ν^μ_c = (S_{μ,β}(ξ)/(c−1)!)ℛ^μ_c.
+Proof route for the leading theorem: MARKED RADIAL LIMIT a_N (P, NK(P))_*(e^{−NK}μ_U) ⇒ ν ⊗ t^{μ−1}e^{−t}dt/Γ(μ) (reuse the population leading theorem at
+rescaled N: a_N∫Fe^{−sNK} → s^{−μ}∫Fdν gives the Laplace transform of the radial marginal), then test against F e^{(1−β)t+βξ√t} with the tail bound
+e^{−βt+βM√t} ≤ e^{βM²/2}e^{−βt/2}; fallback: fixed-δ face sandwich (freeze ξ on {u_j ≤ δ ∀ resonant j}, the rest loses one log; N→∞ then δ→0; the
+N^{−ε} region is an O(ε) fraction of the log-simplex, not an O(1) layer). Annealed: E S_{μ,β}(G(P)) = Γ(μ)[β(1−βv(P)/2)]^{−μ} for βv<2 (first moment uses only
+the variance function); E L² < ∞ iff ∬H(P,Q)ρ(dP)ρ(dQ) < ∞ with the bilocal kernel (d<2√(ab) finite; = iff μ<1/4); sup βv < 1 sufficient. Paper statements
+(A) continuous-field leading residue theorem (no analyticity), (B) empirical leading law + posterior law (C(B) convergence, O_p(1) far envelope, ratio with
+shared leading pair and a.s. positive finite denominator), (C) annealed residue + second moments, (D) keep the analytic full expansion; add finite-jet
+locality of fixed graded coefficients (initially under analytic hypotheses). Ranked programme (new LOC est.): 0 leading-pair + signed/root interfaces +
+regressions (300–800); 1 F1+E2 fluctuation bounds, weighted measure, locality, Lipschitz (300–900); 2 marked radial limit + continuous-field leading theorem
+(1500–4000); 3 chart/piece assembly + branchwise pushforward (800–2500); 4 varying-field distributional transfer, joint observables, ratios, far phase
+(500–1500); 5 Gaussian mean measure + UI transfer (400–1200); 6 bilocal variance criterion (500–1500); 7 fixed-index joint finite-jet coefficient theorem
+(1500–4000); 8 uniform C^k asymptotics (3000–8000+). Parallel: compatibility lemma "analytic Taylor-tree coefficient = S-weighted face integral in a
+zero-order leading chart" (500–1500). Regression suite: x² one/two-sided constant field; x²y² constant field with normal-side conventions; boundary-layer
+field h(√n u); a localisation with a lower exponent; constant Gaussian face variance (effective temperature).
