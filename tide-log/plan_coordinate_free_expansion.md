@@ -964,3 +964,17 @@ c is identified as the positive unit coefficient (no explicit local formula); co
 leading term for each. Modification independence + positive leading asymptotic on both ⇒ (λ*, m*) is an invariant of (K, prior).
 Optional after closure (ranked): x²y² local regression (S), Riesz on the compact resonant fibre (M), zeta-pole identification (M–L),
 D7 common refinement (L). Paper paragraph in gpt6_bigpicture_v129.md §B (adopted in the mirror).
+
+## 18. PROJECT: Theorem E — graded stratum formulas for the resolved coefficient functionals (opened 2026-09-15; user: "proceed with this kernel project"; consult #130 = design)
+Design (Astra #130, adopted): NOT chosen-kernel calculus, NOT zeta regularisation. Graded formulation: 𝓘_c := {F = 0 near D_c := Z₀ ∩ depthGE c};
+𝒯^U_{μ,c−1}|_{𝓘_{c+1}} is canonical and descends to 𝓘_{c+1}/𝓘_c. On 𝓘_{c+1}, 𝒯^U_{μ,c−1}[F] = Σ over size-c faces J with ALL walls
+resonant (2k_jμ = h_j+1+α_j, α_j ∈ ℕ unique) of Γ(μ)β^{−μ}/((c−1)! ∏_j 2k_j α_j!) · ∫_{(0,b]^{Jᶜ}} (∂_J^α A)(0_J,w) ∏_{i∉J} w_i^{h_i−2k_iμ} dw,
+A = ω|b|·prior∘π·F the WHOLE amplitude (Leibniz: normal derivatives of F up to α). Correction: faceCoef ≠ 0 at the TOP log j = |J|−1
+forces full resonance (not for lower j: x²y² with amplitude y² has both exponents 1/2 and 3/2). Units: E0 resonance semantics (S);
+E1a remList = self when K-jets vanish on complementary hyperplanes (M); E1b faceMonoCoeff_top = Γ(μ)β^{−μ}∏(2k_j)^{−1}/(c−1)!,
+box-length independent (M); E1c integrability/collar of the unremaindered weighted face integrand (M); E1d engine collapse at (μ,c−1) (M);
+E2 resolved chart-piece definition + equality + exact-stratum interpretation (face point with u_J = 0, complementary active ≠ 0 lies in
+{depth = c, r_μ = c}) (L); E3 zero-order positivity + values-only (M); E4 Euclidean pullback + paper paragraph (S). Names: "graded
+stratum formulas", density = "local top Mellin-residue weight along the stratum" (residual phase factor after removing the normal monomial,
+raised to −μ; NOT (K∘π|_S)^{−μ}); lower log powers = "convergent Taylor-subtracted chart-face formulas" (not divergent, not canonical per
+stratum). Vanishing-near is the hypothesis; flatness a non-claim. Paper statement in gpt6_bigpicture_v130.md §10.
