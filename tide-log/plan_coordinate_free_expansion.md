@@ -1470,3 +1470,17 @@ identification (top-power coefficient = stratum sum with amp ↦ amp·S_μ(ψ̂)
 `jetsZeroOn_amp_deep` exists — combined with CDLXXXVII per piece and the rectangle scaling of the top coefficient); (b) recovery of the leading
 theorem `hasLeadingTerm_empZ` from the expansion at `(λ, m−1)` (chart-leading ⇒ all lower coefficients vanish); (c) the random-field
 consequences. Papers: add the resolved theorem to grammar_lean_2 §9 and the mirror remark; refresh pins.
+
+### 20.16 CONSULT #143 (2026-09-15): Stage 7 ACCEPTED — "closes the deterministic resolved expansion". Readings recorded: `SmoothRootField`
+= branchwise ambient smooth extendibility (not a globally smooth field across the divisor; different `Lψ` per orthant allowed; `loc_eq`
+is a compatibility requirement); the global |ψ| ≤ M is fine (tail only); state the normalisation `Z_ψ(N) = ∫ F e^{−NK + √N √K ψ}`, √K ≥ 0,
+signs in the representatives; the resolved theorem is for a FIXED field (ψ = ψ_n, N = n needs uniform control). Priorities: (1) leading
+consistency: generic lemma "CutoffExpansion + independent leading limit ⇒ dominant coefficients vanish and the coefficient at (λ, m−1) is
+the limit", then `resolvedCoeff λ (m−1) = Σ_p ∫ pieceFaceLimit` under ChartLeading (α = 0 replacement rule without deep vanishing);
+(2a) rectangle replacement: deep-jet dilation `D_b(deepSet 1) = deepSet b`, upper-degree vanishing, then `empCoeffRect μ (c−1) =
+smoothCoeff_b (η S_μ(ζ)/Γ(μ)) μ (c−1)` via `c^b_{μ,c−1} = A_b B_b^{−μ} c^1_{μ,c−1}` and a population scaling lemma (by uniqueness);
+(2b) resolved graded formula = "branchwise weighted stratum sum" with amplitude amp·S_μ(Lψ∘Tm)/Γ(μ) (NOT literally Ξ.coeff of a global
+amplitude — that needs descent); (3) coefficient continuity under compact-uniform C^r convergence of representatives (deterministic,
+sequential; dominated convergence through the Mellin moments) — separate stability/probability programme. Paper paragraph + non-claims
+supplied (bounded deterministic root field, same lattice/degree, zero-field compatibility; no construction of representatives, no descent
+across walls, no random-field statements, no nonvanishing).
