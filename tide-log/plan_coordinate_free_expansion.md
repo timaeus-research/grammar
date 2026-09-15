@@ -1152,3 +1152,19 @@ paper's purposes the Section-4 programme is COMPLETE at the level of the intrins
 transport independence; NOT claimed: meromorphic continuation, manifold-level residue calculus, Radon extension across D_{c+1}. Remaining (extensions
 /examples/future work, ranked): depth-one x²y² direct route; scaling to drop box support in CDLXII–CDLXIII; k_i = 0 exponents; subtype-S packaging;
 zeta continuation (separate programme). Mirror pin 3b39911 (21 ahead of Overleaf).
+
+### 18.13 JET DEPENDENCE UNIT LANDED (2026-09-15). CDLXVII `SmoothStratumJetDependence`, 781 modules.
+User question: is the transverse jet in the pairing `C_{μ,c−1}(f) = ⟨Res, j^α_S(f∘π)⟩` a coordinate-free object, and is the pairing formalised?
+Answer now: yes, chart-free. `VanishesToOrderAt n H P` (locally a finite sum of products of n smooth functions vanishing at P) and
+`MemIdealPowNear S n H P` (H ∈ 𝓘_S^n near P). Intrinsic order `stratumJetOrder μ P = Σ_{(k,h)∈pairs P} (⌊2kμ⌋₊ − h − 1)`; at face points equals
+Σ_J resOrder (`stratumJetOrder_divPt_eq`, unconditional — pairs at a face point are exactly the J-walls); zero under ZeroOrder. Main:
+`coeff_eq_zero_of_vanishesToOrder` / `coeff_eq_of_vanishesToOrder` / `coeff_eq_of_memIdealPow` / `T_eq_of_memIdealPow` — NO zero-order
+hypothesis (first coefficient theorem on the exact stratum beyond order zero). Proof: coeff_eq_stratumSum; non-exact faces vanish
+(`faceCoef_top_eq_zero_of_not_exact`); exact faces: face point in exact stratum (prior support) ⇒ amp = ρloc(Tm)·F(divPt) on the box, F locally
+Σ_i ∏_l g_il, extend g_il∘chartInv and ρloc smoothly off the closed box (`exists_contDiff_eqOn_of_contDiffOn`), derivatives agree on O ∩ closedBox
+(`pdMulti_eq_of_eqOn_inter_closedBox`), Leibniz `pdMulti_mul` + `pdMulti_prod_eq_zero_of_forall_eq_zero` (order < n ⇒ some factor undifferentiated);
+face point off prior support ⇒ `pdMulti_amp_eq_zero_of_not_mem_tsupport`. Only vanishing AT the point is used (the S-version is the ideal-theoretic
+packaging). Lean gotchas: `pdMulti_finset_sum` lives in `SmoothRenormalisedStrata` (import it); a `?_` inside `fun l => ?_` in `rw [...]` loses the
+binder name — hoist to a named `have`; dot-notation lemmas need `variable {Ξ} in`; after `rw [hEqOn hx]` a beta-redex `(fun u => …) x` blocks the next
+`rw` — `change` first; style linter forbids `show` (use `change`). Follow-ups: mirror sentence + leanref dots (pin bump); artifact §11 status;
+optionally the fine multi-order version (per-wall orders α_j via Σ_j 𝓘_{E_j}^{α_j+1}) and Astra audit #137.

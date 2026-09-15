@@ -776,5 +776,6 @@ import Grammar.MonomialInsertionConstant
 import Grammar.SmoothChartResidueCollar
 import Grammar.SmoothChartResidueMeasure
 import Grammar.SmoothChartResidueIdentity
+import Grammar.SmoothStratumJetDependence
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
