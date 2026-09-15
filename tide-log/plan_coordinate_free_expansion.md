@@ -1443,3 +1443,14 @@ replacement rule empCoeff μ (c−1) = smoothCoeff (η S_μ(ζ)/Γ(μ)) μ (c−
 `SmoothRootField` with branch representatives smooth up to the walls; empirical versions of base-integrated remainder domination, tails,
 coefficient integration; recovery of `hasLeadingTerm_empZ` at α = 0) and the random-field consequences (coefficient convergence under C^{|p|}
 convergence of representatives). Paper: add the box theorem, the uniform bound and the replacement rule to grammar_lean_2 §9 (pins to refresh).
+
+### 20.13 STAGE 7 PART 1 LANDED (2026-09-15): CDLXXXIX `EmpiricalAffineJets`; 813 modules.
+Design (no consult; follows #142 Stage 7): `SmoothRootField` = `RootField` + per piece a smooth ambient `Lψ p` with `loc p z = Lψ p (Tm p z.1 z.2)`
+(sector sign absorbed per piece). Piece field family after dilation to the unit box: `fieldFam (pieceAmp e σ G b (sc s)) (pieceAmp e σ Lψ b (sc s)) τ`
+= `(fieldFam G Lψ τ) ∘ A_s ∘ b`. Landed: jets under dilation, `pdMulti_pieceMap`, UNIFORM `FieldJetBound` over the compact base, joint
+continuity/measurability of the face amplitudes in (s, τ, w). NEXT (part 2, `EmpiricalPieceExpansion`): `SmoothRootField`; identify
+`empBoxIntegral h k N b (loc s) (amp s) = empIntegralRect (amp s) (loc s) h k (fun _ => b) N`; measurability in s of the kernel and of
+`empCoeffRect (amp s) (loc s) …` (general `measurable_empCoeffAtDepth_comp`); uniform rectangle bound from the unit-box uniform theorem
+by the scaling identity; `cutoffExpansion_integral_of_uniform` ⇒ `CutoffExpansion (Qamb kA) (da−1) (empPieceInt Y p ξ) (empPieceCoeff)`.
+Then part 3 (`EmpiricalResolvedExpansion`): sum over pieces + exponentially small tail (`abs_integral_tail_le`, `cutoffExpansion_of_exp_small`),
+refine/pad to the common lattice/degree: ★★★ `empZ_cutoffExpansion`; zero-field compatibility with the population `coeff`.
