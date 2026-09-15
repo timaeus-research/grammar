@@ -803,5 +803,6 @@ import Grammar.ParametricFaceAmplitude
 import Grammar.EmpiricalFieldFamilyJets
 import Grammar.EmpiricalFaceInner
 import Grammar.EmpiricalGeneralDepth
+import Grammar.EmpiricalGeneral
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

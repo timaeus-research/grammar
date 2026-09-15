@@ -1392,3 +1392,9 @@ NEXT (Stage 6/7, mirror of `SmoothGeneral`/`SmoothRootField`): (i) depth indepen
 explicit, as `smooth_expansion_at_depth_uniform` does), enabling the random-field application ζ = ζ_n(ω); (iii) the explicit ladder form
 of the leading coefficients (`empInnerCoeff` for G = τ^r e^{aτ}: mellinMom = ∂_μ^ℓ S_{μ+r/2}(a), via `hasDerivAt_fluctuation`);
 (iv) general boxes (0,b] and the chart/resolved assembly; (v) the paper statement for grammar_lean_2 (Section 9 extension).
+
+### 20.7 STAGE 6 LANDED (2026-09-15): CDLXXXIV `EmpiricalGeneral`; 808 modules.
+`emp_cutoffExpansion : CutoffExpansion (Qamb k) (d−1) (empIntegral η ζ h k) (empCoeff η ζ h k)` from smoothness of η, ζ alone;
+`empCoeff_unique`. The box-form empirical Theorem E is complete in the repo's canonical interface. NEXT: consult #142 (audit of
+the statement, the paper-facing formulation, and the order of: uniform constants over jet-bounded families; explicit S-ladder form of
+`empInnerCoeff` for G = τ^r e^{aτ}; general boxes; chart assembly `SmoothRootField`; graded stratum identification).
