@@ -1238,3 +1238,13 @@ Interface: `ChartLeading λ m` (every piece: ratios ≥ λ, at most m equal to �
 non-compactly-supported F (needs integrability of F against face measures); (b) `ν(0) = ν` under ChartLeading (zero-order from ChartLeading needs every
 exact-stratum point to lie in some piece); (c) rank 4 (field CLT transfer, C(B) convergence), rank 5 (annealed), rank 3 branchwise pushforward is
 now implicit in the identification. Consult #139 = audit of the rank-2 unit (pending).
+
+### 19.4 RANK 3 LANDED (2026-09-15): CDLXXIV `EmpiricalFieldLipschitz`, `UniformCompactFamilies`, `EmpiricalBranchTuples`; 793 modules.
+Astra #139 design followed exactly: scalar bound |e^{−σ²+σa} − e^{−σ²+σb}| ≤ e^{M²}|a−b|e^{−σ²/2} (constant e^{M²} rather than √(2/e)e^{M²}, using
+σe^{−σ²/4} ≤ 1 from 1 + x + x²/2 ≤ e^x); box Lipschitz bound with the half-temperature zero-field integral; abstract ε-net lemma; T_N, T on ALL continuous
+branch tuples E = ∏_p C(Base_p × [0,b_p]^{d_p}, ℝ) (clamp extension instead of Tietze); `tendstoUniformlyOn_tupleZ` on compact C ⊆ E; bridge
+Z^emp = T_N(ξ̂) + tail, T(ξ̂) = Σ_p ∫ pieceFaceLimit (uniqueness of limits). NEXT: rank 4 — joint convergence in distribution L_n ⇒ G in E (E is a
+Polish space: Base_p × closedBox compact metric ⇒ C(K,ℝ) separable complete; finite product), tightness, T_n(L_n) − T(L_n) → 0 in P (via
+`tendstoUniformlyOn_tupleZ` + tightness), T continuous (`abs_limit_sub_le_of_eventually_lipschitz` gives local Lipschitz on balls), T(L_n) ⇒ T(G)
+(continuous mapping), random tail M_n = O_p(1). Check what Mathlib/Grammar already has for convergence in distribution (`Gibbs.tendstoInDistribution_*`
+in GibbsJointRatio.lean) before designing. Rank 5a in parallel: E S_λ(G) = Γ(λ)(1 − v/2)^{−λ} via `integral_fluctuation_gaussianReal`.
