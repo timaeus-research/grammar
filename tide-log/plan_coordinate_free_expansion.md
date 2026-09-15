@@ -1505,3 +1505,13 @@ branch amplitudes `amp_{p,s} · S_μ(Lψ_p∘Tm_{p,s})/Γ(μ)`; `resolvedCoeff_e
 in-box `DeepVanishing` (the chart amplitudes are arbitrary smooth extensions off the box). Priorities 1, 2a, 2b of consult #143 DONE.
 REMAINING: (3) coefficient continuity under compact-uniform C^r convergence of representatives (optional, stability programme). Papers:
 refresh §9 (`grammar_lean_2.tex`: cube replacement + branchwise stratum sum + non-claim) and the mirror remark; bump the pin.
+
+### 20.20 CONSULT #144 (2026-09-15): priorities 2a/2b ACCEPTED, `DeepVanishing` weakening ACCEPTED ("use the weaker hypothesis in the paper:
+vanishes on a neighbourhood of the deep set relative to the closed box"). §20 formalisation DECLARED CLOSED as a milestone. Paper edits applied
+(relative-neighbourhood hypothesis; "piece by piece in the resolved presentation" instead of "on the resolved manifold"; resonance weights of
+Theorem E; 𝓘_{c+1}/𝓘_c descent stated for c ≥ 2 via the vanishing theorem with c−1). Ranked next: (1) fixed-coefficient continuity under
+finite-order (compact-uniform C^r on closed boxes) convergence of branch representatives — A: `smoothCoeff_finiteOrderBound`
+(∃ r C, |smoothCoeff A h k β b μ q| ≤ C · boxJetNorm r b A) + linearity by uniqueness; B: cube replacement continuity in ζ; C: resolved
+continuity with a uniform coefficient bound for the base integrals (pitfalls: faceCoeffInt needs more derivatives than the displayed normal
+order; do not impose wall agreement; work on closed boxes; smooth approximants only); (2) consolidation; (3) lower-log Mellin weights as an
+`iteratedDeriv` identity in the Mellin order; (4) random-field subleading limits deferred.
