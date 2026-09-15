@@ -812,5 +812,6 @@ import Grammar.EmpiricalAffineJets
 import Grammar.EmpiricalPieceExpansion
 import Grammar.EmpiricalResolvedExpansion
 import Grammar.EmpiricalLeadingConsistency
+import Grammar.EmpiricalRectReplacement
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

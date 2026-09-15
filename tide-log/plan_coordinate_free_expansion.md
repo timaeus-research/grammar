@@ -1490,3 +1490,11 @@ across walls, no random-field statements, no nonvanishing).
 `hasLeadingTerm_empZ`); support of the expansion under chart-leading. NEXT (priority 2a/2b): rectangle replacement (deep-jet dilation,
 upper-degree vanishing, `empCoeffRect μ (c−1) = smoothCoeff_b (η S_μ(ζ)/Γ(μ)) μ (c−1)` via the population scaling law) and the resolved
 graded formula as the branchwise weighted stratum sum; then (3) coefficient continuity. Papers: add the leading-consistency sentence to §9.
+
+### 20.18 CONSULT #143 PRIORITY 2a LANDED (2026-09-15): CDXCIII `EmpiricalRectReplacement`; 817 modules.
+`empCoeffRect_top_eq_smoothCoeff : empCoeffRect η ζ h k b μ (c−1) = smoothCoeff (η S_μ(ζ)/Γ(μ)) h k 1 b μ (c−1)` for η vanishing near the
+deep set of the cube. Ingredients exactly as Astra prescribed: deep-set dilation, the population b-scaling law by expansion uniqueness
+(`smoothCoeff_eq_scaleCoeff_dilation`, reusable), population upper-degree vanishing from the resonant support theorem, unit-box replacement
+rule; the rectangular collapse was not redone. NEXT (priority 2b): the resolved graded formula — `ξ.resolvedCoeff μ (c−1)` as the branchwise
+weighted stratum sum with amplitude `amp_{p,s} · S_μ(Lψ_p ∘ Tm_p)/Γ(μ)`; needs eventually-zero of the chart amplitude near the piece deep set
+(cf. `jetsZeroOn_amp_deep`/`Gloc_eventually_zero_deep`) and the pieceCoeff → smoothCoeff_b transport. Papers: refresh §9 after 2b.
