@@ -1454,3 +1454,11 @@ continuity/measurability of the face amplitudes in (s, τ, w). NEXT (part 2, `Em
 by the scaling identity; `cutoffExpansion_integral_of_uniform` ⇒ `CutoffExpansion (Qamb kA) (da−1) (empPieceInt Y p ξ) (empPieceCoeff)`.
 Then part 3 (`EmpiricalResolvedExpansion`): sum over pieces + exponentially small tail (`abs_integral_tail_le`, `cutoffExpansion_of_exp_small`),
 refine/pad to the common lattice/degree: ★★★ `empZ_cutoffExpansion`; zero-field compatibility with the population `coeff`.
+
+### 20.14 STAGE 7 PART 2 LANDED (2026-09-15): CDXC `EmpiricalPieceExpansion`; 814 modules.
+`empRect_cutoffExpansion_integral`: the base integral of the piece rectangle kernels is a cutoff expansion on the chart lattice, coefficients
+= base integrals of `empCoeffRect`. NEXT (part 3, `EmpiricalResolvedExpansion`): `SmoothRootField` (RootField + smooth `Lψ p` with
+`loc p z = Lψ p (Tm p z.1 z.2)`); identify `empPieceInt Y p ξ N` with the base integral of `empIntegralRect ((Ξ.amp Y p).amp s) (loc p (s,·)) …`
+(`empBoxIntegral` = `empIntegralRect` on the cube; `(Ξ.amp Y p).amp s = G ∘ affineMap (eqv p) p.2 (sc p s)` rfl; `Tm p s = affineMap …` rfl);
+sum over pieces (`CutoffExpansion.sum`, `.refine` to `(Ξ.decomp Y).commonQ`, `.pad` to `commonD`) + tail (`abs_integral_tail_le`,
+`cutoffExpansion_of_exp_small`): ★★★ `empZ_cutoffExpansion`; canonical `Ξ.empCoeff Y ξ`; zero-field compatibility with the population `Ξ.coeff`.

@@ -809,5 +809,6 @@ import Grammar.EmpiricalMellinJet
 import Grammar.EmpiricalFaceSumCollapse
 import Grammar.EmpiricalBoxScaling
 import Grammar.EmpiricalAffineJets
+import Grammar.EmpiricalPieceExpansion
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
