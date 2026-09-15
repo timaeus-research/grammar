@@ -1005,3 +1005,24 @@ deeper strata. Corollary (1) landed: CDLII `zeroOrder_of_extremalData` (extremal
 the depth-≥ c+1 fibre is NOT vacuous. Optional after closure (ranked): x²y² regression through the graded formula (needs an identity
 modification constructor in hironaka), explicit lower-log Taylor-subtracted formulas (API packaging), flatness extension (M).
 Mirror: Theorem E paragraph revised per §C, pinned f923221 (local master 11 ahead of Overleaf; push user-side).
+
+### 18.3 RESIDUE PROGRAMME (2026-09-15; user: "the phrasing in terms of Poincaré residues is beautiful and should be centered going forward … Proceed with 1-3"; consult #132 = design). Main 86bbdb5, 770 modules.
+Item 1 (pole orders, residue weight, residue-sum restatement) landed as CDLIII `SmoothResolvedResidue`: `poleOrder k h μ = 2kμ−h`,
+`resonates_iff_poleOrder`, `exactCount_eq_card_simplePole`, `residueWeight`, `dlogResidueInt` (∏(2k_j)⁻¹ · ∫ A·∏w^h(∏w^{2k})^{−μ} over the
+face), `residueConst μ c = Γ(μ)/(c−1)!`, `faceTerm_eq_residue_of_simple`, `simpleFaces`, `residueSum`, `coeff_eq_residueSum`,
+`observableCoeff_eq_residueSum`. Items 2–3 per Astra #132 (adopt (3B): the residue is a MEASURE defined from the coefficient functional;
+defer log-form calculus and zeta continuation): units 1–3 = CDLIV `SmoothStratumTest` (X := U ∖ D_{c+1} = `stratumOpen`, `IsTest`, `T`,
+linearity/positivity/locality/monotonicity, local bound `abs_T_le`, cutoffs) + CDLV `SmoothStratumApprox` (extension by zero `ext`, fixed-
+support uniform approximation `exists_approx` via `exists_contMDiffMap_forall_mem_convex_of_local_const`, Cauchy limit `Λ₀`,
+`Λ : C_c(X,ℝ) →ₚ[ℝ] ℝ`, `Λ_toCc`); units 4–10 = CDLVI `SmoothStratumMeasure`: `stratumMeasure := RealRMK.rieszMeasure Λ` (Regular),
+`integral_stratumMeasure_test`, `stratumMeasure_compl_exactStratum` (inner regularity + cutoffs supported in the open set
+X ∖ S^μ_c, which is open because within X the exact stratum is cut out by the closed depth/resonance filtrations,
+`stratumOpen_inter_exactStratum`), `coeff_withF_eq_integral_stratumMeasure` (F ∈ 𝓘_{c+1} not nec. compactly supported in X: cutoff = 1 on
+Z₀ ∖ O, values-only dependence, a.e. equality), `observableCoeff_eq_integral_stratumMeasure`, `integral_stratumMeasure_eq_residueSum`,
+`residueMeasure := ofReal((c−1)!/Γ(μ)) • ν`, `integral_residueMeasure_eq` (bare residue sum), `stratumMeasure_eq_of_transports`,
+`eq_stratumMeasure_of_tests` (uniqueness among regular measures by smooth tests; fixed-support approximation +
+`ext_of_integral_eq_on_compactlySupported`). Deferred (Astra ranking): measure on the subtype S, explicit chart-pushforward measure and
+equality with Riesz (M–L), restricted log-density residue calculus (L), general log-form calculus / zeta continuation (L+).
+Wording (Astra): "intrinsic positive Radon measure on U ∖ D_{c+1}, carried by the exact stratum; in normal-crossings coordinates
+Γ(μ)/(c−1)! times the multiplicity-weighted logarithmic residue of the twisted prior density, normalised against d log(u_j^{2k_j})";
+distinguish from the classical alternating-form Poincaré residue; avoid the unqualified equation ν = Γ/(c−1)!·Res unless Res is defined.
