@@ -1305,3 +1305,21 @@ gpt6_bigpicture_v140.md "Suggested paper theorem".
 Astra #140 priorities 1–2 done. Remaining optional: Polish tightness corollary (convergent ⇒ tight in E) + measurability convenience theorem for
 Z^emp_n from a jointly measurable ψ; conditional annealed theorem from the explicit UI criterion sup_n E exp(p M_n²/(4(1−a))) < ∞; exponent bridge
 with attainment conditions; functional CLT (separate programme). The empirical programme is CLOSED for the paper (Astra #140).
+
+## 20. PROJECT: EMPIRICAL THEOREM E — the graded stratum formula with the field's normal jets (opened 2026-09-15; user: "let's proceed with this empirical Theorem E next"; consult #141 = design)
+Conjecture (audited CORRECT by Astra #141, with qualifications): for a root field with representatives SMOOTH up to the walls and F vanishing near
+D_{c+1}, the empirical coefficient at (μ, c−1) is the population graded stratum formula with the amplitude replaced, exponent by exponent, by
+amp · S_μ(ψ̂)/Γ(μ) (β = 1): ∂^α_J[amp · S_μ(ξ)] = ∫ s^{μ−1} e^{−s} ∂^α_J[amp e^{√s ξ}] ds, and ∂_a^r S_μ = S_{μ+r/2} (NO factor 1/2 for the repo's
+definition; at general β: ∂_a S_{μ,β} = β S_{μ+1/2,β}, S_{μ,β}(0) = β^{−μ}Γ(μ), replacement amp ↦ amp·S_{μ,β}(ξ)/S_{μ,β}(0)). Qualifications: (i) fixed
+field only; (ii) the replacement identifies the TOP surviving log coefficient under the depth-vanishing hypothesis — lower log powers involve
+∂_μ^ℓ S_μ (log s insertions) and are NOT a substitution rule; (iii) the τ^r = (√t u^k)^r factor shifts the S-index by r/2, not the exponent;
+(iv) outer-coordinate dependence of ξ_face(w) adds no term but forces a PARAMETRISED face theorem (coefficients c_{μj}(w)). Mellin diagnostic:
+M_N Z^emp(z) = ∫ A u^{h−2kz} S_z(ξ(u)) du (population: Γ(z)).
+Architecture (option 1, 1D first): Stage 0 S-API (S_μ(0)=Γ(μ), ∂^r_a S_μ = S_{μ+r/2}, compact-uniform bounds, differentiation under ∫; 200–450);
+Stage 1 ★ 1D empirical smooth engine: Z(N) = ∫_0^b η u^h e^{−Nu^{2k}+√N u^k ξ(u)} du, C_j = (1/(2k j!)) d^j/du^j[η S_{μ_j}(ξ)](0), μ_j = (h+j+1)/(2k),
+|Z − Σ_{μ_j<L} C_j N^{−μ_j}| ≤ K N^{−L}; proof: u = N^{−1/(2k)} x, Taylor v ↦ η(v)e^{x^k ξ(v)} at v=0 with x fixed, polynomial in x^k dominated by
+e^{−x^{2k}}, extend coefficient integrals to ∞ (900–1600); Stage 2 parametrised face_expansion (350–750); Stage 3 constant-field face kernels
+Z_e(t;a) with compact-a-uniform expansions, top log = S_μ(a)/((|J|−1)!∏2k) (1000–2000); Stage 4 spatial-field jets B(u,τ) = A e^{τξ}, remainder
+≤ C ∏u^p (1+τ)^M e^{M₀τ} (1000–2000); Stage 5 emp_cutoffExpansion + canonical empCoeff via generic uniqueness (1200–2400); Stage 6 local graded
+formula + deep-face vanishing (700–1400); Stage 7 SmoothRootField + resolved assembly, headline (600–1200). Total 6–12k lines. Weber/closed forms
+are evaluation tools downstream, not prerequisites. Paper statement in gpt6_bigpicture_v141.md.
