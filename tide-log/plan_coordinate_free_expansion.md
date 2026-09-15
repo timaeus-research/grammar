@@ -1067,8 +1067,18 @@ Grammar CDLX `MonomialResolvedData`: `monomialData`, `pairs_ofMonomial` (walls =
 `resonanceCount_monomial_zero` (origin realises m*), `monomial_rlct_asymptotic` (classical (min 1/(2k_i), #argmin) recovered; needs
 `exists_resolvedCoreTransport_of_modification` for Y). CDLXI `MonomialStratumMeasure`: equal exponents κ: `deepZeroFibre_equal_eq_empty`
 (depth ≤ d), `exactStratum_equal_subset` (= origin), `equalMeasure_compl_origin`, `equalMeasure_eq_smul_dirac` (ν^{λ*}_d = c·δ₀, c = 𝒯[1]),
-`tendsto_normalised_partitionObs_equal` (every insertion: c·f(0)). Axiom probe clean. Not derived: explicit c = (√π/4)φ(0) for x²y²
+`tendsto_normalised_partitionObs_equal` (every insertion: c·f(0)). Axiom probe clean. Not derived: explicit c = √π φ(0) for x²y² (CORRECTION: the earlier (√π/4)φ(0) counted ONE orthant sector; there are four)
 (would need matching the abstract 𝒯[1] against the box-model asymptotic); depth-one measures ν^{1/2}_1 for x²y². Mirror pins bffaf9e/cb11bc8d9
 (15 ahead of Overleaf). Lean gotchas: section `variable` hypotheses not mentioned in a statement need `include … in`; `{j | p j}` Finset notation
 resists `simp only [Finset.mem_filter]` under binders — prove filter identities by `ext; rw [mem_filter]; by_cases`; `Finset.sup` attained via
 `Finset.exists_mem_eq_sup`; `Multiset.map_congr rfl`; `measure_inter_add_sdiff` + `Set.sdiff_eq` for the singleton decomposition.
+
+### 18.7 x²y² EXPLICIT CONSTANT LANDED (2026-09-15). Main 72f89d5 (merge of 7ba9aa9), 776 modules.
+CDLXII `MonomialExplicitConstant`: `headline_symmetric_abs_phase_leading` (Headline XIX, zero phase, h=0, k=1, l=1/2, β=1) + `phaseCoeff_equal`
++ `phaseMoment_zero` + `Real.Gamma_one_half_eq`: four sectors × φ(0)√π/2, transport N ↦ √N (compose with `tendsto_rpow_atTop (1/2)`, `Real.sq_sqrt`,
+`Real.log_sqrt`) halves the log ⇒ `x2y2_tendsto_headline : normalised (1/2) 1 (partitionObs (x²y²) φ 1) → √π φ(0)` (prior supported in symBox 2);
+uniqueness against `tendsto_normalised_Z_of_extremalData` + `Z_one` ⇒ `x2y2_coeff_one_eq : 𝒯[1] = √π φ(0)`; `x2y2_measure_eq : ν^{1/2}_2 = √π φ(0) δ₀`;
+`x2y2_tendsto_normalised : → √π φ(0) f(0)` for every smooth f. CORRECTION propagated everywhere: the constant is √π φ(0), NOT (√π/4)φ(0) (the
+chart-face constant Γ(1/2)/(1!·2·2) is PER ORTHANT SECTOR; four sectors). Sanity: ∫ e^{−Mx²y²}dy = √π/(√M|x|), ∫_{1/√M<|x|<1} dx/|x| = log M.
+Mirror pin 72f89d5 (17 ahead of Overleaf). Remaining: priors not supported in the symmetric box (scaling), depth-one measure ν^{1/2}_1 explicitly,
+chart-pushforward = ν, subtype measure, zeta continuation. Consult #134 (audit + direction) launched.
