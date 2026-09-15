@@ -1323,3 +1323,12 @@ Z_e(t;a) with compact-a-uniform expansions, top log = S_μ(a)/((|J|−1)!∏2k) 
 ≤ C ∏u^p (1+τ)^M e^{M₀τ} (1000–2000); Stage 5 emp_cutoffExpansion + canonical empCoeff via generic uniqueness (1200–2400); Stage 6 local graded
 formula + deep-face vanishing (700–1400); Stage 7 SmoothRootField + resolved assembly, headline (600–1200). Total 6–12k lines. Weber/closed forms
 are evaluation tools downstream, not prerequisites. Paper statement in gpt6_bigpicture_v141.md.
+
+### 20.1 STAGE 1 LANDED (2026-09-15): CDLXXVIII `EmpiricalFieldJets`, `EmpiricalOneDim`; 799 modules.
+`empOneDim_expansion`: Z(N) = Σ_{j≤q} C_j N^{−(h+j+1)/2k} + O(N^{−L}), C_j = ∂^j[η S_{μ_j}∘ξ](0)/(j!·2k); `iteratedDeriv_mul_fluctuation` is the
+differentiation-under-the-integral identity; `empOneDimCoeff_one` shows S_{μ+1/2}. Stage 0 (S-API) was absorbed: the existing
+`hasDerivAt_fluctuation` (∂_a S_{μ,β} = β S_{μ+1/2,β}) suffices. NEXT (Astra #141 order): Stage 2 parametrised `face_expansion` (coefficients
+c_{μj}(w)); Stage 3 constant-field face kernels Z_e(t;a) with compact-a-uniform expansions (source: the analytic Taylor tree at constant field, or
+redo the 1D scaling argument per resonant coordinate + the multi-coordinate face monomial); Stage 4 spatial-field jets in several normal variables
+(B(u,τ) = A e^{τξ}, remainder ≤ C ∏u^p (1+τ)^M e^{M₀τ}); Stage 5 `emp_cutoffExpansion` + canonical `empCoeff` (include the 1D
+CutoffExpansion wrapper on (2k)⁻¹ℕ); Stage 6 local graded formula; Stage 7 `SmoothRootField` + resolved assembly.

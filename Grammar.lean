@@ -793,5 +793,7 @@ import Grammar.UniformCompactTransfer
 import Grammar.EmpiricalFieldLimit
 import Grammar.GaussianFluctuationScalar
 import Grammar.EmpiricalGaussianExpectation
+import Grammar.EmpiricalFieldJets
+import Grammar.EmpiricalOneDim
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
