@@ -1484,3 +1484,9 @@ amplitude — that needs descent); (3) coefficient continuity under compact-unif
 sequential; dominated convergence through the Mellin moments) — separate stability/probability programme. Paper paragraph + non-claims
 supplied (bounded deterministic root field, same lattice/degree, zero-field compatibility; no construction of representatives, no descent
 across walls, no random-field statements, no nonvanishing).
+
+### 20.17 CONSULT #143 PRIORITY 1 LANDED (2026-09-15): CDXCII `EmpiricalLeadingConsistency`; 816 modules.
+`resolvedCoeff_leading : ξ.resolvedCoeff λ (m−1) = Σ_p ∫ pieceFaceLimit dν_p` under ChartLeading (generic extraction + uniqueness against
+`hasLeadingTerm_empZ`); support of the expansion under chart-leading. NEXT (priority 2a/2b): rectangle replacement (deep-jet dilation,
+upper-degree vanishing, `empCoeffRect μ (c−1) = smoothCoeff_b (η S_μ(ζ)/Γ(μ)) μ (c−1)` via the population scaling law) and the resolved
+graded formula as the branchwise weighted stratum sum; then (3) coefficient continuity. Papers: add the leading-consistency sentence to §9.
