@@ -1044,3 +1044,14 @@ escaping to D_{m*+1}" — NOT claimed; never use ν.real univ as total mass with
 (needs a local lower bound in charts; orthant lower bound plausible); (3) explicit chart-pushforward measure = ν (M–L); (4) measure on the
 subtype S (repackaging); (5) zeta continuation (new programme). Mirror paragraph replaced by Astra's §(d) wording with dots, pin 7c909a0
 (local master 13 ahead of Overleaf; push user-side).
+
+### 18.5 Follow-ups (2) and mass finiteness LANDED (2026-09-15). Main fc4edd0, 773 modules.
+CDLVIII `SmoothStratumMeasurePositive`: orthant lower bound with a nonnegative base observable (`Z_ge_mul_monoBoxIntegral`,
+`exists_orthant_bound_obs`); `coeff_comp_gv_pos_of_realised`, `observableCoeff_pos_of_realised` (0 < C_{λ*,m*−1}(f) for f ≥ 0 positive at
+π(P₀), P₀ a realiser with positive prior); `integral_extremalStratumMeasure_pos`; `partitionObs_isEquivalent_of_pos` (genuine ∼ with positive
+constant). CDLIX `SmoothStratumMeasureFinite`: `coeff_le_coeff_one_of_extremalData` (monotone leading functional), `extremalStratumMeasure_univ_le`
+(ν^{λ*}_{m*}(X) ≤ 𝒯[1]; IsFiniteMeasure + Regular instances), `extremalStratumMeasure_univ_eq_of_deep_empty` (mass = RLCT constant when
+D_{m*+1} = ∅). Mirror sentences + pin fc4edd0 (local master 14 ahead). Artifact a142c13e rewritten with 5 diagrams (resolution, exponent ladders,
+depth filtration, construction pipeline, x²y² density) — fixed a CSS rule that blew up MathJax SVG in captions. Remaining ranked: x²y² regression
+(needs identity WatanabeModificationOn in hironaka: charts (x₀x₁, x₁−a) at axis points, maximal-atlas membership, plus a ResolvedCoreTransport
+instance — L); explicit chart-pushforward measure = ν (M–L); subtype measure (S); zeta (L+).
