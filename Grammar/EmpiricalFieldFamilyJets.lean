@@ -154,16 +154,14 @@ theorem IsJet.pdMulti (hζ : ContDiff ℝ ∞ ζ) {R : ℕ} {H : ℝ → (Fin d 
     simp only [wordLen, pdMulti_cons]
     rwa [← Nat.add_assoc]
 
-/-- ★ A jet of degree `R` on the closed box grows at most like `C (1+τ)^R e^{M'τ}` when
-`|ζ| ≤ M'`. -/
-theorem IsJet.bound {b M' : ℝ} (hζM : ∀ v ∈ closedBox d b, |ζ v| ≤ M') {R : ℕ}
-    {H : ℝ → (Fin d → ℝ) → ℝ} (h : IsJet ζ R H) :
-    ∃ C : ℝ, 0 ≤ C ∧ ∀ τ : ℝ, 0 ≤ τ → ∀ v ∈ closedBox d b,
-      |H τ v| ≤ C * (1 + τ) ^ R * exp (M' * τ) := by
+/-- ★ A jet of degree `R` on a compact set grows at most like `C (1+τ)^R e^{M'τ}` when
+`|ζ| ≤ M'` there. -/
+theorem IsJet.bound_of_isCompact {K : Set (Fin d → ℝ)} (hK : IsCompact K) {M' : ℝ}
+    (hζM : ∀ v ∈ K, |ζ v| ≤ M') {R : ℕ} {H : ℝ → (Fin d → ℝ) → ℝ} (h : IsJet ζ R H) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ τ : ℝ, 0 ≤ τ → ∀ v ∈ K, |H τ v| ≤ C * (1 + τ) ^ R * exp (M' * τ) := by
   obtain ⟨P, hP, hH⟩ := h
-  have hb : ∀ r, ∃ C : ℝ, ∀ v ∈ closedBox d b, |P r v| ≤ C := fun r => by
-    obtain ⟨C, hC⟩ := (isCompact_closedBox b).exists_bound_of_continuousOn
-      (hP r).continuous.continuousOn
+  have hb : ∀ r, ∃ C : ℝ, ∀ v ∈ K, |P r v| ≤ C := fun r => by
+    obtain ⟨C, hC⟩ := hK.exists_bound_of_continuousOn (hP r).continuous.continuousOn
     exact ⟨C, fun v hv => by simpa [Real.norm_eq_abs] using hC v hv⟩
   choose C hC using hb
   refine ⟨∑ r ∈ range (R + 1), |C r|, Finset.sum_nonneg fun _ _ => abs_nonneg _,
@@ -188,6 +186,23 @@ theorem IsJet.bound {b M' : ℝ} (hζM : ∀ v ∈ closedBox d b, |ζ v| ≤ M')
       ≤ ((∑ r ∈ range (R + 1), |C r|) * (1 + τ) ^ R) * exp (M' * τ) :=
         mul_le_mul h1 h2 (exp_pos _).le (by positivity)
     _ = _ := by ring
+
+/-- ★ A jet of degree `R` on the closed box grows at most like `C (1+τ)^R e^{M'τ}` when
+`|ζ| ≤ M'`. -/
+theorem IsJet.bound {b M' : ℝ} (hζM : ∀ v ∈ closedBox d b, |ζ v| ≤ M') {R : ℕ}
+    {H : ℝ → (Fin d → ℝ) → ℝ} (h : IsJet ζ R H) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ τ : ℝ, 0 ≤ τ → ∀ v ∈ closedBox d b,
+      |H τ v| ≤ C * (1 + τ) ^ R * exp (M' * τ) :=
+  h.bound_of_isCompact (isCompact_closedBox b) hζM
+
+/-- A jet is continuous in the coupling at every point. -/
+theorem IsJet.continuous_left {R : ℕ} {H : ℝ → (Fin d → ℝ) → ℝ} (h : IsJet ζ R H)
+    (v : Fin d → ℝ) : Continuous fun τ => H τ v := by
+  obtain ⟨P, hP, hH⟩ := h
+  have : (fun τ => H τ v) = fun τ => (∑ r ∈ range (R + 1), P r v * τ ^ r) * exp (τ * ζ v) :=
+    funext fun τ => hH τ v
+  rw [this]
+  fun_prop
 
 /-- ★ **Uniform jet bound**: the coordinate derivatives `∂^m B_τ`, `m ≤ p`, are bounded on the
 closed box by `C (1+τ)^{|p|} e^{M'τ}` with ONE constant `C`. -/

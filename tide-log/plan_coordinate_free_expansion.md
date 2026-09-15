@@ -1421,3 +1421,10 @@ jet bound). NEXT: unit 2 (Mellin–jet bridge): `mellinMom_pow_mul_exp_zero` (me
 the Mellin integral for jet families (`pd_mellinMom_isJet`, by `hasDerivAt_integral_of_dominated_loc_of_deriv_le` with the jet bound on a compact
 neighbourhood), `mellinMom_pdMulti_fieldFam_zero : mellinMom (τ ↦ ∂^m(η e^{τζ})(v)) μ 0 = ∂^m[η · S_μ(ζ)](v)`; then unit 3 (top spectral
 coefficient, depth-flatness), unit 4 (box graded identification), unit 5 (general-box scaling).
+
+### 20.10 UNIT 2 LANDED (2026-09-15): CDLXXXVI `EmpiricalMellinJet`; 810 modules.
+`mellinMom (τ^r e^{aτ}) μ 0 = S_{μ+r/2}(a)`; `pdMulti_mellinField_isJet` (derivatives commute with the Mellin integral on jet families);
+★★ `mellinMom_pdMulti_fieldFam_zero : ∫ s^{μ−1}e^{−s} ∂^m(η e^{√s ζ})(v) ds = ∂^m[η S_μ(ζ)](v)`. NEXT: unit 3 — top spectral coefficient
+of the state density in the all-resonant case (`empFaceCoef(μ, |J|−1) = ∏(2k)^{-1}/(|J|−1)! · mellinMom G μ 0`), vanishing off the exact
+resonance, and depth-flatness (deep vanishing ⇒ faceAmp = 0 for |J| > c, faceAmp = pdMulti for |J| = c; reuse the population
+`jetsZeroOn`/`smoothCoeff_eq_faceSum_top` mechanism); then unit 4 (box graded identification).
