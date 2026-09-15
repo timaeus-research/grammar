@@ -791,5 +791,7 @@ import Grammar.UniformCompactFamilies
 import Grammar.EmpiricalBranchTuples
 import Grammar.UniformCompactTransfer
 import Grammar.EmpiricalFieldLimit
+import Grammar.GaussianFluctuationScalar
+import Grammar.EmpiricalGaussianExpectation
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

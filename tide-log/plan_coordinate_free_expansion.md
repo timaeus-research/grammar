@@ -1275,3 +1275,12 @@ NEXT: rank 5a — E S_λ(G) = Γ(λ)(1 − v/2)^{−λ} for G ~ N(0,v), v < 2 (r
 v ≤ 2 − ε (Tonelli). Keep 5b (annealed; UI) visibly separate. Also: (a) the statistical-model input — is there a repo theorem giving ξ̂_n ⇒ G in
 C(K) (L1SeqCLT is ℓ¹-sequence-valued; a C(K) tightness/CLT would need Kolmogorov–Chentsov or the paper's analytic-certificate route) — record as an
 input, not on the critical path; (b) mirror + grammar_lean_2 paragraphs for ranks 3–4.
+
+### 19.6 RANK 5a LANDED (2026-09-15): CDLXXVI `GaussianFluctuationScalar`, `EmpiricalGaussianExpectation`; 797 modules.
+`integral_tupleLimit_gaussian`: E T(G) = (1 − v/2)^{−λ} T(0) for a measurable random tuple with all one-point laws N(0,v), v < 2 (Tonelli face by
+face; no independence). The empirical programme ranks 0–5a are now closed: deterministic leading theorem (rank 2), uniform asymptotics on compact
+field families (rank 3), convergence in distribution for random root fields (rank 4), Gaussian expectation of the limit (rank 5a). OPEN/NOT ON THE
+CRITICAL PATH: rank 5b (annealed limit; UI); the statistical-model input (ξ̂_n ⇒ G in ∏ C(K_p) with tight laws) — the repo has the ℓ¹-sequence CLT
+(L1SeqCLT) and chart-level CLTs, not a C(K)-valued functional CLT; ChartLeading ↔ IsExtremalData bridge; the all-smooth-F stratum-integral
+identification; facewise-varying variance with uniform gap. NEXT: mirror + grammar_lean_2 paragraphs for ranks 3–5a; consult #140 (audit of ranks
+3–5a and direction); update memory/artifact.
