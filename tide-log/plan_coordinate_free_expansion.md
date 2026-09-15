@@ -1026,3 +1026,21 @@ equality with Riesz (M–L), restricted log-density residue calculus (L), genera
 Wording (Astra): "intrinsic positive Radon measure on U ∖ D_{c+1}, carried by the exact stratum; in normal-crossings coordinates
 Γ(μ)/(c−1)! times the multiplicity-weighted logarithmic residue of the twisted prior density, normalised against d log(u_j^{2k_j})";
 distinguish from the classical alternating-form Poincaré residue; avoid the unqualified equation ν = Γ/(c−1)!·Res unless Res is defined.
+
+### 18.4 CONSULT #133 (2026-09-15): RESIDUE PROGRAMME CLOSED. Main 7c909a0, 771 modules.
+Verdict CLOSE in the adopted measure-theoretic sense (3B). Four paper-level corrections applied to the mirror paragraph: state c ≥ 1 and μ > 0
+(for ℛ); "intrinsic" = independent of the auxiliary transport data for the fixed resolved geometry and prior (NOT modification/resolution
+independence); the logarithmic residue is the DENSITY-RESIDUE CONVENTION defined by the proved face-integral formula (each simple density pole
+contributes (2k_j)⁻¹ = normalisation against d log(u_j^{2k_j}); chart and face multiplicities retained), not an independent residue calculus;
+distinguish the normalised-limit coefficient (valid even if zero) from a nonzero leading asymptotic, and ν from ℛ (keep the Γ(λ*)/(m*−1)! factor).
+"Carried by the exact stratum" ✓ (S^μ_c relatively closed in X, so supp_X ν ⊆ S^μ_c; no ambient-U support statement, no extension across
+D_{c+1}). Representation on 𝓘_{c+1} = vanishing on a NEIGHBOURHOOD of D_{c+1} (not flat/finite order). API completion landed: explicit
+`integrable_stratumMeasure`/`integrable_residueMeasure` (cutoff + a.e. equality). Extra unit CDLVII `SmoothStratumMeasureExtremal`:
+`extremalStratumMeasure`, `tendsto_normalised_Z_extremal`, `tendsto_normalised_partitionObs_extremal`, `partitionObs_isEquivalent_extremal`
+(nonzero coefficient required). Total mass: general ν can be infinite (x²y², μ=1/2, c=1: dy/|y| near the crossing); at extremal data
+finiteness is plausible via a limsup bound on Z_1 + cutoffs + inner regularity, but equality with the unit coefficient needs "no leading mass
+escaping to D_{m*+1}" — NOT claimed; never use ν.real univ as total mass without finiteness. Ranked follow-ups: (1) x²y² regression
+(crossing multiplicities, Γ normalisation, infinite lower-stratum mass, finite leading atomic measure); (2) local positivity ∫f∘π dν > 0
+(needs a local lower bound in charts; orthant lower bound plausible); (3) explicit chart-pushforward measure = ν (M–L); (4) measure on the
+subtype S (repackaging); (5) zeta continuation (new programme). Mirror paragraph replaced by Astra's §(d) wording with dots, pin 7c909a0
+(local master 13 ahead of Overleaf; push user-side).
