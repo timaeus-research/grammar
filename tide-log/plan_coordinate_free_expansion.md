@@ -1355,3 +1355,15 @@ NEXT: (ii) general box (0,b]: `empBoxInner k e G b t := ∫_{(0,b]^J} …` by th
 absorbed in the growth constant), or via `SmoothTimeRescale.CutoffExpansion.comp_mul_pos`; (iii) Stage 2: the parametrised flat face
 theorem — outer integral over w of `η(w,u) · empUnitInner(G(w;·))`-type kernels with `|G(w;τ)| ≤ A ∏ w^p (1+τ)^m e^{Mτ}`; (iv) Stage 4
 multi-coordinate jets; (v) Stage 5 assembly with τ := √N u^k.
+
+### 20.4 STAGE 2 LANDED (2026-09-15): CDLXXXI `SmoothFaceParam`, `EmpiricalFaceKernel`; 803 modules.
+`face_expansion_param`: the face theorem with w-dependent inner function Z(w,t) and coefficient functions c(w) μ j (flatness carried by
+the inner estimate). `empirical_face_expansion`: ∫ w^h empUnitInner k e G(w;·) (N w^a) dw expands in N^{−μ}(log N)^q, μ ∈ spectrum ∩ {μ<L},
+with coefficients faceCoeffInt (w ↦ empInnerCoeff k e G(w;·) μ j) and remainder C(k,e,m,M',L)·M·(1+log N)^n N^{−L} faceRemWeight — uniform
+over all flat-growth families |G(w;τ)| ≤ M ∏w^p (1+τ)^m e^{M'τ}. NEXT: Stage 4 — the multi-coordinate jets. For B_τ(u) = η(u) e^{τ ζ(u)}
+(η, ζ smooth on the closed box, |ζ| ≤ M'), the face operator T_J R_K B_τ = Σ_{m ≤ p_J} u_J^m · c_m(w;τ) with c_m(w;τ) = (1/m!) ∂_J^m (R_K B_τ)(0_J,w):
+prove (i) joint measurability/continuity in (w,τ), (ii) the growth bound |c_m(w;τ)| ≤ M ∏_{i∈K} w_i^{p_i} (1+τ)^{|m|} e^{M'τ} (jets of e^{τζ}
+are polynomials of degree |m| in τ times e^{τζ}: multi-coordinate `jetPoly`; R_K flatness via the coordinate Taylor remainder with the
+τ-polynomial derivative bounds), (iii) the substitution τ := √N u^k = √(N w^{2k_K}) u_J^{k_J} identifying the J-face integral with
+∫_w w^{h_K} empUnitInner k_J (m+h_J) (c_m(w;·)) (N w^{2k_K}) dw. Then Stage 5: sum over faces J (subset formula) = the full box integral of
+η e^{−N u^{2k} + √N u^k ζ}; canonical coefficients via `CutoffExpansion.coeff_unique`.
