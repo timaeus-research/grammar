@@ -57,7 +57,8 @@ theorem integrableOn_envelope (m : ℕ) (M : ℝ) {μ : ℝ} (hμ : 0 < μ) (ℓ
     (integrableOn_momKernel hGm hG hμ ℓ).abs
   refine hI.congr_fun (fun s hs => ?_) measurableSet_Ioi
   have hs0 : 0 < s := hs
-  show |s ^ (μ - 1) * (-log s) ^ ℓ * ((1 + Real.sqrt s) ^ m * exp (M * Real.sqrt s) * exp (-s))| = _
+  change |s ^ (μ - 1) * (-log s) ^ ℓ *
+    ((1 + Real.sqrt s) ^ m * exp (M * Real.sqrt s) * exp (-s))| = _
   rw [abs_mul, abs_mul, abs_of_nonneg (Real.rpow_nonneg hs0.le _), abs_pow, abs_neg,
     abs_of_nonneg (by positivity :
       (0 : ℝ) ≤ (1 + Real.sqrt s) ^ m * exp (M * Real.sqrt s) * exp (-s))]
