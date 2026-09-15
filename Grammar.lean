@@ -753,5 +753,8 @@ import Grammar.MonomialBoxLowerBound
 import Grammar.SmoothResolvedRLCTPositive
 import Grammar.SmoothResolvedExtremalRealised
 import Grammar.SmoothResolvedRLCTAsymptotic
+import Grammar.SmoothExactResonance
+import Grammar.SmoothRemainderIdentity
+import Grammar.SmoothFaceSumCollapse
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
