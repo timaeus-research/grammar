@@ -1055,3 +1055,20 @@ D_{m*+1} = ∅). Mirror sentences + pin fc4edd0 (local master 14 ahead). Artifac
 depth filtration, construction pipeline, x²y² density) — fixed a CSS rule that blew up MathJax SVG in captions. Remaining ranked: x²y² regression
 (needs identity WatanabeModificationOn in hironaka: charts (x₀x₁, x₁−a) at axis points, maximal-atlas membership, plus a ResolvedCoreTransport
 instance — L); explicit chart-pushforward measure = ν (M–L); subtype measure (S); zeta (L+).
+
+### 18.6 MONOMIAL REGRESSION LANDED (2026-09-15). Main bffaf9e, 775 modules; hironaka fork cb11bc8d9 (pin bumped from 5a310bdba).
+hironaka `Monomialize/Transport/MonomialModification.lean` (branch sector-atlas, fork only): `modelOn W`, `idMap W` (identity AnalyticMap),
+`isAnalyticIsoOver_idMap`, `translation c` (OpenPartialHomeomorph), `stdChart`/`transChart P` (translated standard chart, in the maximal atlas via
+`restrOpen_trans_mem_maximalAtlas`), `watanabeRep_idMap_transChart` (rep u = u + P), `monoPhase k = ∏ x_i^{2k_i}`, `activeExp k P`,
+`exists_monomialChart` (AbsorbingChange on the translated chart: phase exactly ∏u^{2k'}, Jacobian unit·∏u^0, box in target),
+`watanabeChartAt_monoPhase`, `WatanabeModificationOn.ofMonomial k W`, `exists_evenChartBox_ofMonomial` (E.k = activeExp, E.h = 0), `ofMonomial_gv`.
+Grammar CDLX `MonomialResolvedData`: `monomialData`, `pairs_ofMonomial` (walls = active zero coords, pairs (k_i,0)), `depth_ofMonomial`,
+`resonanceCount_ofMonomial`, `kmax`, `mstar`, `lamStar = 1/(2 kmax)`, `resonates_lamStar_iff` (⇔ k_i = kmax), `isExtremalData_monomial`,
+`resonanceCount_monomial_zero` (origin realises m*), `monomial_rlct_asymptotic` (classical (min 1/(2k_i), #argmin) recovered; needs
+`exists_resolvedCoreTransport_of_modification` for Y). CDLXI `MonomialStratumMeasure`: equal exponents κ: `deepZeroFibre_equal_eq_empty`
+(depth ≤ d), `exactStratum_equal_subset` (= origin), `equalMeasure_compl_origin`, `equalMeasure_eq_smul_dirac` (ν^{λ*}_d = c·δ₀, c = 𝒯[1]),
+`tendsto_normalised_partitionObs_equal` (every insertion: c·f(0)). Axiom probe clean. Not derived: explicit c = (√π/4)φ(0) for x²y²
+(would need matching the abstract 𝒯[1] against the box-model asymptotic); depth-one measures ν^{1/2}_1 for x²y². Mirror pins bffaf9e/cb11bc8d9
+(15 ahead of Overleaf). Lean gotchas: section `variable` hypotheses not mentioned in a statement need `include … in`; `{j | p j}` Finset notation
+resists `simp only [Finset.mem_filter]` under binders — prove filter identities by `ext; rw [mem_filter]; by_cases`; `Finset.sup` attained via
+`Finset.exists_mem_eq_sup`; `Multiset.map_congr rfl`; `measure_inter_add_sdiff` + `Set.sdiff_eq` for the singleton decomposition.
