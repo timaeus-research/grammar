@@ -1082,3 +1082,14 @@ uniqueness against `tendsto_normalised_Z_of_extremalData` + `Z_one` ⇒ `x2y2_co
 chart-face constant Γ(1/2)/(1!·2·2) is PER ORTHANT SECTOR; four sectors). Sanity: ∫ e^{−Mx²y²}dy = √π/(√M|x|), ∫_{1/√M<|x|<1} dx/|x| = log M.
 Mirror pin 72f89d5 (17 ahead of Overleaf). Remaining: priors not supported in the symmetric box (scaling), depth-one measure ν^{1/2}_1 explicitly,
 chart-pushforward = ν, subtype measure, zeta continuation. Consult #134 (audit + direction) launched.
+
+### 18.8 CONSULT #134 (2026-09-15): follow-ups AUDITED. Wording: distinguish admissible extremal data from realised positive leading data;
+equal-exponent exact stratum "contained in the origin" (membership needs 0 ∈ W ∩ supp); "need not satisfy"/"these results do not identify" for the
+mass; do not mix the original-parameter (√π/4 per orthant) and square-parameter (√π/2 per orthant, then halve the log) explanations. Constants
+CONFIRMED: ν^{1/2}_2 = √π φ(0) δ₀; ν^{1/2}_1 = √π(φ(x,0)dx/|x| + φ(0,y)dy/|y|) on the punctured axes (both normal sides; no tangential doubling).
+Regression not circular (end-to-end; CDLXII adds an independent normalisation check). Box support: acceptable technical hypothesis; remove via scaling
+x = tz, φ_t(z) = t²φ(tz), Z_φ(N) = Z_{φ_t}(t⁴N). NEXT (ranked): (1) mixed-monomial explicit constant for all smooth insertions — 𝒯[f] =
+2^m Γ(λ)/((m−1)!∏_{J}2k_i) ∫ φ(0_J,z) f(0_J,z) ∏_{j∉J}|z_j|^{−2k_jλ} dz (positive-dimensional leading measure; via headline XIX at zero phase +
+`phaseCoeff_zero_phase`/`amplitudeCoeff`; candidate (v) corrected: prior restricted to the subspace, 2^m not 2^d); (2) chart-pushforward = ν
+(general structural); (3) depth-one x²y² by a DIRECT route (√N ∫φ f e^{−Nx²y²} → √π(∫φf(x,0)dx/|x| + …) for f vanishing near 0, then uniqueness);
+subtype S packaging low; zeta separate. Mirror wording applied (pin 72f89d5; 18 ahead of Overleaf).
