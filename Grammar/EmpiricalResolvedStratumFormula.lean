@@ -10,21 +10,20 @@ import Grammar.SmoothResolvedStratumFormula
 /-!
 # The resolved graded empirical formula (§20, consult #143 priority 2b)
 
-For a smooth root field `ξ` and an observable `F` vanishing near the deep zero fibre
-`D_{c+1} = Z₀ ∩ {depth ≥ c+1}`, the coefficient of the resolved empirical expansion at the top
-logarithmic power `(μ, c − 1)` is the **branchwise weighted stratum sum** (★★★
-`resolvedCoeff_eq_empStratumSum`): over the pieces `p` and the base points `s`, the population
-stratum term of the piece with the amplitude replaced by
-`amp_{p,s} · S_μ(Lψ_p ∘ Tm_{p,s}) / Γ(μ)` — the replacement rule `∂^α A ↦ ∂^α[A S_μ(ζ)]/Γ(μ)`
-applied branch by branch (`pieceCoeff_top_eq_smoothCoeff`), where `ζ = Lψ_p ∘ Tm_{p,s}` is the
-smooth branch representative of the field on the piece. The inputs are the cube replacement rule
-(`empCoeffRect_top_eq_smoothCoeff`) and the deep vanishing of the chart amplitudes within the
-piece boxes (`deepVanishing_amp`, from `Gloc_eventually_zero_deep`). Above the depth the
+For a smooth root field `ξ` and an observable `F` vanishing near the deep zero fibre `D_{c+1} = Z₀
+∩ {depth ≥ c+1}`, the coefficient of the resolved empirical expansion at the top logarithmic power
+`(μ, c − 1)` is the **branchwise weighted stratum sum** (★★★ `resolvedCoeff_eq_empStratumSum`):
+over the pieces `p` and the base points `s`, the population stratum term of the piece with the
+amplitude replaced by `amp_{p,s} · S_μ(Lψ_p ∘ Tm_{p,s}) / Γ(μ)` — the replacement rule `∂^α A ↦
+∂^α[A S_μ(ζ)]/Γ(μ)` applied branch by branch (`pieceCoeff_top_eq_smoothCoeff`), where `ζ = Lψ_p ∘
+Tm_{p,s}` is the smooth branch representative of the field on the piece. The inputs are the cube
+replacement rule (`empCoeffRect_top_eq_smoothCoeff`) and the deep vanishing of the chart amplitudes
+within the piece boxes (`deepVanishing_amp`, from `Gloc_eventually_zero_deep`). Above the depth the
 coefficients vanish (`resolvedCoeff_eq_zero_of_deep`); with `c − 1` in place of `c` the same
 theorem shows that for `c ≥ 2` the coefficient annihilates `𝓘_c`, so it defines a functional on
-`𝓘_{c+1}/𝓘_c`, presented branchwise. Non-claim: the sum is NOT asserted to be the population coefficient of
-a globally defined amplitude on the resolved manifold — the branch representatives need not
-descend across the walls (consult #143). Zero `sorry`/`axiom`.
+`𝓘_{c+1}/𝓘_c`, presented branchwise. Non-claim: the sum is NOT asserted to be the population
+coefficient of a globally defined amplitude on the resolved manifold — the branch representatives
+need not descend across the walls (consult #143). Zero `sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Real Filter Topology Finset
