@@ -1284,3 +1284,18 @@ CRITICAL PATH: rank 5b (annealed limit; UI); the statistical-model input (ξ̂_n
 (L1SeqCLT) and chart-level CLTs, not a C(K)-valued functional CLT; ChartLeading ↔ IsExtremalData bridge; the all-smooth-F stratum-integral
 identification; facewise-varying variance with uniform gap. NEXT: mirror + grammar_lean_2 paragraphs for ranks 3–5a; consult #140 (audit of ranks
 3–5a and direction); update memory/artifact.
+
+### 19.7 CONSULT #140 (2026-09-15) = audit of ranks 3–5a. Verdict: "Ranks 3–5a form a coherent, paper-worthy conditional empirical asymptotics
+theorem"; close them; do not make the functional CLT or annealed convergence a prerequisite. Corrections adopted for the papers: (i) add the
+measurability of ω ↦ Z^emp_n[F;ψ_n] as an explicit hypothesis (measurability of the tuple does NOT imply it — the tail sees ψ off the tuple);
+(ii) tightness is mathematically redundant in E = ∏ C(K_p) (Polish) but retained in the formal theorem — say so; (iii) M_n: measurable nonnegative
+random variables with |ψ_n| ≤ M_n everywhere and M_n = O_p(1) (the formal lemma needs no measurability of M_n: outer-probability form);
+(iv) `ChartLeading` supplies a permissible normalisation, not a sharp one — state NORMALISED convergence, T(G) may be 0; (v) "divisor variance = 2"
+holds in the realisable likelihood normalisation (E f² = 2K + o(K)), not universally (misspecified: varies); (vi) at v = 2 and β = 1 the annealed
+E Z^emp_n[F] = ∫ F dμ_U exactly (realisable), so E[Z/s_n] → ∞ for nonneg F: the finite-mean statement genuinely needs v < 2 / β < 1, and rank 5a is
+about E of the LIMIT only. Recommended next (ranked): 1 freeze scope + paper statements (done in #140 follow-up); 2 varying-variance expectation on
+active faces with uniform gap v_p(z) ≤ 2 − ε: E T(G) = Γ(λ) Σ_{p active} ∫ a_p(z)(1 − v_p(z)/2)^{−λ} dρ_p (small–medium); 3 Polish tightness
+corollary + measurability convenience theorem; 4 exponent bridge (needs attainment conditions — no unqualified equivalence with IsExtremalData);
+5 conditional annealed theorem from UI (sufficient: sup_n E exp(p M_n²/(4(1−a))) < ∞, p > 1, 0 < a < 1 — state the coefficient); 6 functional CLT
+(large; analytic-certificate route via L1SeqCLT + continuous reconstruction more economical than Kolmogorov–Chentsov). Paper theorem wording in
+gpt6_bigpicture_v140.md "Suggested paper theorem".
