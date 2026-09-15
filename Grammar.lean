@@ -789,5 +789,7 @@ import Grammar.EmpiricalResolvedLeading
 import Grammar.EmpiricalFieldLipschitz
 import Grammar.UniformCompactFamilies
 import Grammar.EmpiricalBranchTuples
+import Grammar.UniformCompactTransfer
+import Grammar.EmpiricalFieldLimit
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

@@ -294,28 +294,24 @@ theorem abs_tupleZ_sub_le (f g : Ξ.BranchTuple Y) {N : ℝ} (hN : 0 ≤ N)
 
 /-! ### Uniform asymptotics on compact families -/
 
-/-- ★★★ **Uniform asymptotics on compact field families**: at a chart-leading pair `(λ, m)`, the
-normalised core sums `T_N(f)/(N^{−λ}(log N)^{m−1})` converge to `T(f)` uniformly over every
-compact set `C` of continuous branch tuples. -/
-theorem tendstoUniformlyOn_tupleZ {lam : ℝ} {m : ℕ} (hm : 1 ≤ m) (hlead : Ξ.ChartLeading Y lam m)
-    {C : Set (Ξ.BranchTuple Y)} (hC : IsCompact C) :
-    TendstoUniformlyOn (fun N f => Ξ.tupleZ Y f N / powLogScale lam (m - 1) N)
-      (fun f => Ξ.tupleLimit Y f lam m) atTop C := by
-  obtain ⟨R, hR⟩ := hC.isBounded.exists_norm_le
+/-- The normalised core sums are eventually uniformly Lipschitz on every ball. -/
+theorem exists_eventually_lipschitz_tupleZ_div {lam : ℝ} {m : ℕ} (hm : 1 ≤ m)
+    (hlead : Ξ.ChartLeading Y lam m) (R : ℝ) :
+    ∃ L : ℝ, ∀ᶠ N in atTop, ∀ f g : Ξ.BranchTuple Y, ‖f‖ ≤ R → ‖g‖ ≤ R →
+      |Ξ.tupleZ Y f N / powLogScale lam (m - 1) N - Ξ.tupleZ Y g N / powLogScale lam (m - 1) N| ≤
+        L * ‖f - g‖ := by
   choose A hA using fun p => Ξ.exists_amp_bound Y p
   choose Cb hCb using fun p => exists_eventually_bound_empBoxIntegral_half ((Ξ.X Y).hA p)
     ((Ξ.X Y).kA p) ((Ξ.X Y).kA_pos p) (Y.T.a_pos p.1) hm (hlead p)
   have hA' : ∀ p s (v : Fin ((Ξ.X Y).da p) → ℝ), v ∈ closedBox _ (Y.T.a p.1) →
       |(Ξ.amp Y p).amp s v| ≤ |A p| := fun p s v hv => (hA p s v hv).trans (le_abs_self _)
-  refine tendstoUniformlyOn_of_eventually_lipschitz (L := Real.exp (R ^ 2) *
-    ∑ p, |A p| * Cb p * ((Ξ.piecePresentation Y p).ν).real univ) hC
-    (fun f _ => Ξ.hasLeadingTerm_tupleZ Y f hm hlead) ?_
+  refine ⟨Real.exp (R ^ 2) * ∑ p, |A p| * Cb p * ((Ξ.piecePresentation Y p).ν).real univ, ?_⟩
   filter_upwards [eventually_all.2 hCb, eventually_gt_atTop (1 : ℝ)] with N hN hN1
-  intro f hf g hg
+  intro f g hf hg
   have hN0 : 0 ≤ N := by linarith
   have hscale : 0 < powLogScale lam (m - 1) N := powLogScale_pos _ _ hN1
   have hpl : powLogScale lam (m - 1) N = N ^ (-lam) * Real.log N ^ (m - 1) := rfl
-  rw [dist_eq_norm, ← sub_div, abs_div, abs_of_pos hscale, div_le_iff₀ hscale]
+  rw [← sub_div, abs_div, abs_of_pos hscale, div_le_iff₀ hscale]
   have hL : Ξ.tupleLipConst Y (fun p => |A p|) R N ≤ (Real.exp (R ^ 2) *
       ∑ p, |A p| * Cb p * ((Ξ.piecePresentation Y p).ν).real univ) * powLogScale lam (m - 1) N := by
     unfold tupleLipConst
@@ -336,11 +332,27 @@ theorem tendstoUniformlyOn_tupleZ {lam : ℝ} {m : ℕ} (hm : 1 ≤ m) (hlead : 
           ring
   calc |Ξ.tupleZ Y f N - Ξ.tupleZ Y g N|
       ≤ Ξ.tupleLipConst Y (fun p => |A p|) R N * ‖f - g‖ :=
-        Ξ.abs_tupleZ_sub_le Y f g hN0 (hR f hf) (hR g hg) hA'
+        Ξ.abs_tupleZ_sub_le Y f g hN0 hf hg hA'
     _ ≤ (Real.exp (R ^ 2) * ∑ p, |A p| * Cb p * ((Ξ.piecePresentation Y p).ν).real univ) *
           powLogScale lam (m - 1) N * ‖f - g‖ := mul_le_mul_of_nonneg_right hL (norm_nonneg _)
     _ = (Real.exp (R ^ 2) * ∑ p, |A p| * Cb p * ((Ξ.piecePresentation Y p).ν).real univ) *
           ‖f - g‖ * powLogScale lam (m - 1) N := by ring
+
+/-- ★★★ **Uniform asymptotics on compact field families**: at a chart-leading pair `(λ, m)`, the
+normalised core sums `T_N(f)/(N^{−λ}(log N)^{m−1})` converge to `T(f)` uniformly over every
+compact set `C` of continuous branch tuples. -/
+theorem tendstoUniformlyOn_tupleZ {lam : ℝ} {m : ℕ} (hm : 1 ≤ m) (hlead : Ξ.ChartLeading Y lam m)
+    {C : Set (Ξ.BranchTuple Y)} (hC : IsCompact C) :
+    TendstoUniformlyOn (fun N f => Ξ.tupleZ Y f N / powLogScale lam (m - 1) N)
+      (fun f => Ξ.tupleLimit Y f lam m) atTop C := by
+  obtain ⟨R, hR⟩ := hC.isBounded.exists_norm_le
+  obtain ⟨L, hL⟩ := Ξ.exists_eventually_lipschitz_tupleZ_div Y hm hlead R
+  refine tendstoUniformlyOn_of_eventually_lipschitz (L := L) hC
+    (fun f _ => Ξ.hasLeadingTerm_tupleZ Y f hm hlead) ?_
+  filter_upwards [hL] with N hN
+  intro f hf g hg
+  rw [dist_eq_norm]
+  exact hN f g (hR f hf) (hR g hg)
 
 /-! ### The bridge to root fields -/
 

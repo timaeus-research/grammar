@@ -1265,3 +1265,13 @@ Polish space: Base_p × closedBox compact metric ⇒ C(K,ℝ) separable complete
 `tendstoUniformlyOn_tupleZ` + tightness), T continuous (`abs_limit_sub_le_of_eventually_lipschitz` gives local Lipschitz on balls), T(L_n) ⇒ T(G)
 (continuous mapping), random tail M_n = O_p(1). Check what Mathlib/Grammar already has for convergence in distribution (`Gibbs.tendstoInDistribution_*`
 in GibbsJointRatio.lean) before designing. Rank 5a in parallel: E S_λ(G) = Γ(λ)(1 − v/2)^{−λ} via `integral_fluctuation_gaussianReal`.
+
+### 19.5 RANK 4 LANDED (2026-09-15): CDLXXV `UniformCompactTransfer`, `EmpiricalFieldLimit`; 795 modules.
+`tendstoInDistribution_empZ_div`: Z^emp_n[F;ξ_n]/s_n ⇒ T(G) under (i) measurability of ξ̂_n and of Z^emp_n(·), (ii) ξ̂_n ⇒ G in E (Mathlib
+`TendstoInDistribution`), (iii) tight laws, (iv) M_n ≥ 0 bounds with M_n = O_p(1). Mathlib supplies TendstoInDistribution, continuous_comp,
+tendstoInDistribution_of_tendstoInMeasure_sub and Slutsky (add_of_tendstoInMeasure_const) — no probability infrastructure had to be built.
+NEXT: rank 5a — E S_λ(G) = Γ(λ)(1 − v/2)^{−λ} for G ~ N(0,v), v < 2 (repo has `lintegral_fluctuation_gaussianVector` in GaussianDenominator.lean and
+`fluctuation_le_gaussian`; check for the scalar identity), then the expected limiting residue measure under a uniform facewise variance gap
+v ≤ 2 − ε (Tonelli). Keep 5b (annealed; UI) visibly separate. Also: (a) the statistical-model input — is there a repo theorem giving ξ̂_n ⇒ G in
+C(K) (L1SeqCLT is ℓ¹-sequence-valued; a C(K) tightness/CLT would need Kolmogorov–Chentsov or the paper's analytic-certificate route) — record as an
+input, not on the critical path; (b) mirror + grammar_lean_2 paragraphs for ranks 3–4.
