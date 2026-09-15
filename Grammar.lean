@@ -758,5 +758,6 @@ import Grammar.SmoothRemainderIdentity
 import Grammar.SmoothFaceSumCollapse
 import Grammar.SmoothFaceMonoTop
 import Grammar.SmoothResolvedStratumFormula
+import Grammar.SmoothResolvedStratumPositive
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
