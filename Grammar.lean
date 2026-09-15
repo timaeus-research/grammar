@@ -763,5 +763,7 @@ import Grammar.SmoothResolvedStratumEuclidean
 import Grammar.SmoothStratumIntegrable
 import Grammar.SmoothResolvedStratumExtremal
 import Grammar.SmoothResolvedResidue
+import Grammar.SmoothStratumTest
+import Grammar.SmoothStratumApprox
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
