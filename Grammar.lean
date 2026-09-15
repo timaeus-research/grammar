@@ -818,5 +818,6 @@ import Grammar.SmoothCoeffContinuity
 import Grammar.JetCloseness
 import Grammar.EmpiricalRectContinuity
 import Grammar.EmpiricalResolvedContinuity
+import Grammar.EmpiricalBranchJets
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

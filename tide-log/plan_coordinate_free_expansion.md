@@ -1547,3 +1547,9 @@ continuity gives continuous mapping (tightness alone does not identify the limit
 `coeffOnJets` continuous ⇒ measurable; well-defined by the bound with ε = 0; topology depends on μ; realizable image only); then consolidate;
 (2) lower-log Mellin weights — audit the kernel normalisation first (τ^{2ν−1} vs log(τ²)), one-derivative identity with a locally uniform
 dominator before iterating; (3) conditional random-field subleading theorem via the repo's convergence-in-law abstraction.
+
+### 20.25 CONSULT #145 INTERFACE LANDED (2026-09-16): CDXCIX `EmpiricalBranchJets`; 823 modules.
+`BranchJetSpace μ`, `branchJet`, `coeffOnJets` on the realizable jets, `continuous_coeffOnJets`, `measurable_coeffOnJets`, `tendsto_branchJet`.
+Continuity programme (Astra #144 item 1 + #145 item 1) COMPLETE. NEXT: paper sentence on the jet topology + pin; consolidation; then either
+lower-log Mellin weights (audit kernel normalisation first) or the conditional random-field theorem via the repo's convergence-in-law
+abstraction (`EmpiricalFieldLimit`/`UniformCompactTransfer`).
