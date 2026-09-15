@@ -778,5 +778,8 @@ import Grammar.SmoothChartResidueMeasure
 import Grammar.SmoothChartResidueIdentity
 import Grammar.SmoothStratumJetDependence
 import Grammar.SmoothStratumJetDescent
+import Grammar.FluctuationLipschitz
+import Grammar.EmpiricalRegressionOneDim
+import Grammar.EmpiricalStratumMeasure
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

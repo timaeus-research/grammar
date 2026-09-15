@@ -1211,3 +1211,15 @@ regressions (300–800); 1 F1+E2 fluctuation bounds, weighted measure, locality,
 (1500–4000); 8 uniform C^k asymptotics (3000–8000+). Parallel: compatibility lemma "analytic Taylor-tree coefficient = S-weighted face integral in a
 zero-order leading chart" (500–1500). Regression suite: x² one/two-sided constant field; x²y² constant field with normal-side conventions; boundary-layer
 field h(√n u); a localisation with a lower exponent; constant Gaussian face variance (effective temperature).
+
+### 19.1 RANKS 0–1 LANDED (2026-09-15): CDLXIX `FluctuationLipschitz` + `EmpiricalRegressionOneDim`, CDLXX `EmpiricalStratumMeasure`; 785 modules.
+Conventions fixed by the regressions: the root field is Watanabe's ψ = √n(K − K_n)/√K pulled back to U (β-free: with chart phase βv^{2k}, t = Nβv^{2k}
+gives √N√β|v^k|ψ = √t ψ, so the density relative to OUR ν (which already carries β^{−μ}) is S_{μ,1}(ψ̂)/Γ(μ) — no extra β); the effective field on a piece is the
+branch representative (sign ∏σ_i^{k_i} of u^k absorbed), so the two-sided x² example gives (S(a)+S(−a))/2 (`fluctuation_half_add_neg`,
+`twoSided_constant_field_limit`); the boundary-layer field h(√N x) shows zero-fibre trace convergence is insufficient (`boundaryLayer_field_limit`).
+`RootField` = ψ + continuous branch representatives `loc p` on Base × ℝ^{da} with `loc_eq` off the walls (open box). Empirical measure
+`empiricalStratumMeasure ξ μ c = Γ(μ)/(c−1)! • Σ_I Σ_J (faceDensity · S_μ(faceTrace)/Γ(μ))_*`; zero field = ν; locality; domination ≤ S_μ(M)/Γ(μ) • ν; finite on
+compacts, regular; Lipschitz in sup norm of the representatives with constant fluctLip μ M = S_{μ+1/2}(M)/Γ(μ). NEXT: rank 2 — the marked radial limit
+a_N (P, N·K∘π(P))_*(e^{−NK∘π} μ_U) ⇒ ν ⊗ t^{μ−1}e^{−t}dt/Γ(μ) on X for the leading pair (start: extremal pair (λ*, m*) via `tendsto_normalised_partitionObs_extremal`
+at rescaled N — a_N ∫F e^{−sNK} → s^{−μ}∫F dν is the Laplace transform of the radial marginal), then the continuous-field leading theorem by testing against
+F e^{(1−β)t + βξ√t} (tail bound e^{−βt+βM√t} ≤ e^{βM²/2}e^{−βt/2}); fallback: fixed-δ face sandwich. Lean gotchas recorded in HEADLINES CDLXX.
