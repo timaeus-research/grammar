@@ -1332,3 +1332,16 @@ c_{μj}(w)); Stage 3 constant-field face kernels Z_e(t;a) with compact-a-uniform
 redo the 1D scaling argument per resonant coordinate + the multi-coordinate face monomial); Stage 4 spatial-field jets in several normal variables
 (B(u,τ) = A e^{τξ}, remainder ≤ C ∏u^p (1+τ)^M e^{M₀τ}); Stage 5 `emp_cutoffExpansion` + canonical `empCoeff` (include the 1D
 CutoffExpansion wrapper on (2k)⁻¹ℕ); Stage 6 local graded formula; Stage 7 `SmoothRootField` + resolved assembly.
+
+### 20.2 STAGE 3 (state-density route) LANDED (2026-09-15): CDLXXIX `EmpiricalInnerKernel`; 800 modules.
+Design change vs Astra #141 Stage 3: instead of constant-field face kernels from the analytic box engine, the inner kernel
+∫_{(0,1]^J} u^e G(√t u^k) e^{−t u^{2k}} du for a GENERAL growth-bounded measurable G is reduced by the exact state density of u^{2k}
+(`stateDensityRep`, an explicit finite power–log density) to log-weighted Mellin moments ∫₀^∞ s^{μ−1}(−log s)^ℓ G(√s) e^{−s} ds — an exact
+series identity modulo truncation, with error linear in the growth constant A. This covers constant fields (G = e^{a·}), the τ-polynomial
+jets (G = τ^r e^{aτ}, moments S_{μ+r/2}) and, crucially, w-PARAMETRISED factors G(w;·) whose flatness in w passes to the coefficient functions
+because the functionals are linear. NEXT: (i) package the series as `powLog (latticeBelow Q L) n c t` with the coefficient system
+c μ q := ∏1/(2k) Σ_j coeffAt rep μ j · C(j,q) · mellinMom G μ (j−q) and prove the GLOBAL two-regime estimate (small regime t < 1 via
+`rpow_neg_le_small`/`abs_powLog_le_small`; drop entries with μ ≥ L into the remainder) — the exact input `hZ2` of the face theorem;
+(ii) general box (0,b] by rescaling; (iii) Stage 2 parametrised flat face theorem (coefficient functions c_{μj}(w) flat, remainder with
+∏ w^p factor); (iv) Stage 4 multi-coordinate jets of B(u,τ) = η e^{τξ} (pdMulti in u_J, polynomial in τ) with the growth bound in τ;
+(v) Stage 5 assembly via the subset formula applied to B_τ then τ := √N u^k.
