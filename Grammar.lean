@@ -807,5 +807,6 @@ import Grammar.EmpiricalGeneral
 import Grammar.EmpiricalUniform
 import Grammar.EmpiricalMellinJet
 import Grammar.EmpiricalFaceSumCollapse
+import Grammar.EmpiricalBoxScaling
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

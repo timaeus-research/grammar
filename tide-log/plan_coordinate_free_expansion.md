@@ -1434,3 +1434,12 @@ resonance, and depth-flatness (deep vanishing ⇒ faceAmp = 0 for |J| > c, faceA
 for η vanishing near the deep set — the graded empirical Theorem E in the box, i.e. Astra's #141 conjecture proved at box level;
 `empCoeff_eq_zero_of_deep`. NEXT: unit 5 (general-box scaling adapter: Z_b(N) = A_b Z_1(B_b N; η∘b, ζ∘b), coefficient law), then the
 chart/resolved assembly (Stage 7 `SmoothRootField`: recover `hasLeadingTerm_empZ` at α = 0), and the paper statements (grammar_lean_2 §9).
+
+### 20.12 UNIT 5 LANDED (2026-09-15): CDLXXXVIII `EmpiricalBoxScaling`; 812 modules. Consult #142 units 1–5 COMPLETE.
+`empIntegralRect_eq : Z_b(N) = (∏ b^{h+1}) Z_1(B_b N; η∘b, ζ∘b)`, `empRect_cutoffExpansion` with `empCoeffRect = A_b · scaleCoeff (d−1) B_b (empCoeff …)`.
+STATUS of the empirical Theorem E programme (box level, deterministic smooth field): cutoff expansion with canonical coefficients on every
+rectangle (CDLXXXIV, CDLXXXVIII), uniform in the field data (CDLXXXV), Mellin–jet bridge (CDLXXXVI), graded identification and the
+replacement rule empCoeff μ (c−1) = smoothCoeff (η S_μ(ζ)/Γ(μ)) μ (c−1) (CDLXXXVII). REMAINING: Stage 7 (chart/resolved assembly:
+`SmoothRootField` with branch representatives smooth up to the walls; empirical versions of base-integrated remainder domination, tails,
+coefficient integration; recovery of `hasLeadingTerm_empZ` at α = 0) and the random-field consequences (coefficient convergence under C^{|p|}
+convergence of representatives). Paper: add the box theorem, the uniform bound and the replacement rule to grammar_lean_2 §9 (pins to refresh).
