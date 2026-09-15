@@ -1299,3 +1299,9 @@ corollary + measurability convenience theorem; 4 exponent bridge (needs attainme
 5 conditional annealed theorem from UI (sufficient: sup_n E exp(p M_n²/(4(1−a))) < ∞, p > 1, 0 < a < 1 — state the coefficient); 6 functional CLT
 (large; analytic-certificate route via L1SeqCLT + continuous reconstruction more economical than Kolmogorov–Chentsov). Paper theorem wording in
 gpt6_bigpicture_v140.md "Suggested paper theorem".
+
+### 19.8 RANK 5a′ LANDED (2026-09-15): CDLXXVII varying variance with a uniform gap (same two modules; 797 modules).
+`integral_tupleLimit_gaussian_varying`: E T(G) = Σ_{active p} ∫ faceWeight · Γ(λ)(1 − v_p(faceDomPt z)/2)^{−λ} dρ_p under v_p ≤ 2 − ε measurable.
+Astra #140 priorities 1–2 done. Remaining optional: Polish tightness corollary (convergent ⇒ tight in E) + measurability convenience theorem for
+Z^emp_n from a jointly measurable ψ; conditional annealed theorem from the explicit UI criterion sup_n E exp(p M_n²/(4(1−a))) < ∞; exponent bridge
+with attainment conditions; functional CLT (separate programme). The empirical programme is CLOSED for the paper (Astra #140).

@@ -190,4 +190,66 @@ theorem integral_integral_fluctuation_of_gaussian_marginals {Ω Z : Type*} [Meas
   simp_rw [this]
   rw [integral_mul_const, mul_comm]
 
+/-! ### Varying variance with a uniform gap -/
+
+/-- `κ_μ(v) ≤ Γ(μ)(ε/2)^{−μ}` when `v ≤ 2 − ε`. -/
+theorem gaussianFluctConst_le {μ : ℝ} (hμ : 0 < μ) {ε : ℝ} (hε : 0 < ε) {v : ℝ≥0}
+    (hv : (v : ℝ) ≤ 2 - ε) : gaussianFluctConst μ v ≤ Real.Gamma μ * (ε / 2) ^ (-μ) := by
+  unfold gaussianFluctConst
+  refine mul_le_mul_of_nonneg_left ?_ (Real.Gamma_pos_of_pos hμ).le
+  exact Real.rpow_le_rpow_of_nonpos (by positivity) (by linarith) (by linarith)
+
+theorem measurable_gaussianFluctConst_comp {Z : Type*} [MeasurableSpace Z] (μ : ℝ)
+    {v : Z → ℝ≥0} (hv : Measurable v) : Measurable fun z => gaussianFluctConst μ (v z) := by
+  unfold gaussianFluctConst
+  exact ((measurable_const.sub (hv.coe_nnreal_real.div_const 2)).pow_const _).const_mul _
+
+/-- ★★ **Fubini for a family with Gaussian one-point laws of varying variance**: if
+`X(·, z) ~ N(0, v(z))` with a uniform gap `v(z) ≤ 2 − ε` and `a` is integrable, then
+`E ∫ a(z) S_μ(X(ω, z)) dρ(z) = ∫ a(z) κ_μ(v(z)) dρ(z)`. -/
+theorem integral_integral_fluctuation_of_gaussian_marginals_varying {Ω Z : Type*}
+    [MeasurableSpace Ω] [MeasurableSpace Z] {P : Measure Ω} [IsProbabilityMeasure P]
+    {ρ : Measure Z} [SFinite ρ] {a : Z → ℝ} (ha : Integrable a ρ) {X : Ω × Z → ℝ}
+    (hX : Measurable X) {v : Z → ℝ≥0} (hvm : Measurable v) {ε : ℝ} (hε : 0 < ε)
+    (hv : ∀ z, (v z : ℝ) ≤ 2 - ε) (hlaw : ∀ z, P.map (fun ω => X (ω, z)) = gaussianReal 0 (v z))
+    (μ : ℝ) (hμ : 0 < μ) :
+    Integrable (fun q : Ω × Z => a q.2 * fluctuation 1 μ (X q)) (P.prod ρ) ∧
+    ∫ ω, ∫ z, a z * fluctuation 1 μ (X (ω, z)) ∂ρ ∂P =
+      ∫ z, a z * gaussianFluctConst μ (v z) ∂ρ := by
+  have hc : Continuous (fluctuation 1 μ) := continuous_fluctuation 1 μ one_pos hμ
+  have hv2 : ∀ z, ((v z : ℝ≥0) : ℝ) < 2 := fun z => by linarith [hv z]
+  have hone : ∀ z, Integrable (fun ω => fluctuation 1 μ (X (ω, z))) P ∧
+      ∫ ω, fluctuation 1 μ (X (ω, z)) ∂P = gaussianFluctConst μ (v z) := fun z =>
+    integral_fluctuation_of_map_gaussianReal
+      (hX.comp (measurable_id.prodMk measurable_const)).aemeasurable (hlaw z) μ hμ (hv2 z)
+  have hSnn : ∀ x, 0 ≤ fluctuation 1 μ x := fun x => (fluctuation_pos 1 μ x one_pos hμ).le
+  have hκnn : ∀ z, 0 ≤ gaussianFluctConst μ (v z) := fun z => by
+    rw [← (hone z).2]
+    exact integral_nonneg fun ω => hSnn _
+  have hκint : Integrable (fun z => |a z| * gaussianFluctConst μ (v z)) ρ := by
+    refine (ha.abs.mul_const (Real.Gamma μ * (ε / 2) ^ (-μ))).mono'
+      (ha.abs.aestronglyMeasurable.mul
+        (measurable_gaussianFluctConst_comp μ hvm).aestronglyMeasurable)
+      (Filter.Eventually.of_forall fun z => ?_)
+    rw [Real.norm_eq_abs, abs_mul, abs_abs, abs_of_nonneg (hκnn z)]
+    exact mul_le_mul_of_nonneg_left (gaussianFluctConst_le hμ hε (hv z)) (abs_nonneg _)
+  have hmeas : AEStronglyMeasurable (fun q : Ω × Z => a q.2 * fluctuation 1 μ (X q))
+      (P.prod ρ) :=
+    ha.aestronglyMeasurable.comp_snd.mul (hc.measurable.comp hX).aestronglyMeasurable
+  have hf : Integrable (fun q : Ω × Z => a q.2 * fluctuation 1 μ (X q)) (P.prod ρ) := by
+    refine (integrable_prod_iff' hmeas).2 ⟨Filter.Eventually.of_forall fun z => ?_, ?_⟩
+    · exact (hone z).1.const_mul (a z)
+    · refine hκint.congr (Filter.Eventually.of_forall fun z => ?_)
+      simp only
+      have : ∀ ω, ‖a z * fluctuation 1 μ (X (ω, z))‖ = |a z| * fluctuation 1 μ (X (ω, z)) :=
+        fun ω => by rw [Real.norm_eq_abs, abs_mul, abs_of_nonneg (hSnn _)]
+      simp_rw [this]
+      rw [integral_const_mul, (hone z).2]
+  refine ⟨hf, ?_⟩
+  have hswap := integral_integral_swap (f := fun ω z => a z * fluctuation 1 μ (X (ω, z))) hf
+  rw [hswap]
+  refine integral_congr_ae (Filter.Eventually.of_forall fun z => ?_)
+  simp only
+  rw [integral_const_mul, (hone z).2]
+
 end Grammar

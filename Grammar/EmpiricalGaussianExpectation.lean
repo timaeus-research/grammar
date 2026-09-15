@@ -228,6 +228,21 @@ theorem integral_tupleFaceLimit_eq (f : Ξ.BranchTuple Y) (p : (Ξ.X Y).PIdx) {l
 
 variable {Ω' : Type*} [MeasurableSpace Ω'] {P' : Measure Ω'} [IsProbabilityMeasure P']
 
+/-- The parameter point of the piece at which the face field evaluates the tuple. -/
+noncomputable def faceDomPt (p : (Ξ.X Y).PIdx) (lam : ℝ) (z : Ξ.FaceDom Y p lam) :
+    Ξ.PieceDom Y p :=
+  ((Ξ.facePoint Y p lam z).1, ⟨clampBox (Y.T.a p.1) (Ξ.facePoint Y p lam z).2,
+    clampBox_mem_closedBox (Y.T.a_pos p.1).le _⟩)
+
+theorem continuous_faceDomPt (p : (Ξ.X Y).PIdx) (lam : ℝ) :
+    Continuous (Ξ.faceDomPt Y p lam) :=
+  (continuous_fst.comp (Ξ.continuous_facePoint Y p lam)).prodMk
+    (((continuous_clampBox _).comp
+      (continuous_snd.comp (Ξ.continuous_facePoint Y p lam))).subtype_mk _)
+
+theorem faceField_eq_apply (f : Ξ.BranchTuple Y) (p : (Ξ.X Y).PIdx) (lam : ℝ)
+    (z : Ξ.FaceDom Y p lam) : Ξ.faceField Y f p lam z = f p (Ξ.faceDomPt Y p lam z) := rfl
+
 theorem measurable_faceField_uncurry {G : Ω' → Ξ.BranchTuple Y} (hG : Measurable G)
     (p : (Ξ.X Y).PIdx) (lam : ℝ) :
     Measurable fun q : Ω' × Ξ.FaceDom Y p lam => Ξ.faceField Y (G q.1) p lam q.2 := by
@@ -292,6 +307,48 @@ theorem integral_tupleLimit_gaussian {lam : ℝ} (hlam : 0 < lam) {m : ℕ}
     exact integrable_finsetSum _ fun p _ => (hpiece p).1
   · unfold tupleLimit
     rw [integral_finsetSum _ fun p _ => (hpiece p).1, Finset.mul_sum]
+    exact Finset.sum_congr rfl fun p _ => (hpiece p).2
+
+/-- ★★★ **Varying variance with a uniform gap**: if the one-point law of `G` at the parameter
+point `z` of piece `p` is `N(0, v_p(z))` with measurable `v_p ≤ 2 − ε`, then `T(G)` is integrable
+and `E T(G) = Σ_{p active} ∫ faceWeight_p(z) · Γ(λ)(1 − v_p(z)/2)^{−λ} dρ_p(z)`, the variance
+read at the glued face point. -/
+theorem integral_tupleLimit_gaussian_varying {lam : ℝ} (hlam : 0 < lam) {m : ℕ}
+    (hlead : Ξ.ChartLeading Y lam m) {G : Ω' → Ξ.BranchTuple Y} (hG : Measurable G)
+    {v : ∀ p : (Ξ.X Y).PIdx, Ξ.PieceDom Y p → ℝ≥0} (hvm : ∀ p, Measurable (v p)) {ε : ℝ}
+    (hε : 0 < ε) (hv : ∀ p z, (v p z : ℝ) ≤ 2 - ε)
+    (hlaw : ∀ (p : (Ξ.X Y).PIdx) (z : Ξ.PieceDom Y p),
+      P'.map (fun w => G w p z) = gaussianReal 0 (v p z)) :
+    Integrable (fun w => Ξ.tupleLimit Y (G w) lam m) P' ∧
+    ∫ w, Ξ.tupleLimit Y (G w) lam m ∂P' =
+      ∑ p, if multCount (ratioExp ((Ξ.X Y).hA p) ((Ξ.X Y).kA p)) lam = m then
+        ∫ z, Ξ.faceWeight Y p lam m z * gaussianFluctConst lam (v p (Ξ.faceDomPt Y p lam z))
+          ∂(Ξ.faceProdMeasure Y p lam)
+      else 0 := by
+  have hpiece : ∀ (p : (Ξ.X Y).PIdx),
+      Integrable (fun w => ∫ s, Ξ.tupleFaceLimit Y (G w) p lam m s ∂(Ξ.piecePresentation Y p).ν)
+        P' ∧
+      ∫ w, ∫ s, Ξ.tupleFaceLimit Y (G w) p lam m s ∂(Ξ.piecePresentation Y p).ν ∂P' =
+        if multCount (ratioExp ((Ξ.X Y).hA p) ((Ξ.X Y).kA p)) lam = m then
+          ∫ z, Ξ.faceWeight Y p lam m z * gaussianFluctConst lam (v p (Ξ.faceDomPt Y p lam z))
+            ∂(Ξ.faceProdMeasure Y p lam)
+        else 0 := by
+    intro p
+    simp_rw [Ξ.integral_tupleFaceLimit_eq Y _ p hlam (hlead p)]
+    split_ifs with hmc
+    · have hfam := integral_integral_fluctuation_of_gaussian_marginals_varying (P := P')
+        (ρ := Ξ.faceProdMeasure Y p lam) (Ξ.integrable_faceWeight Y p (hlead p))
+        (X := fun q : Ω' × Ξ.FaceDom Y p lam => Ξ.faceField Y (G q.1) p lam q.2)
+        (Ξ.measurable_faceField_uncurry Y hG p lam) (v := fun z => v p (Ξ.faceDomPt Y p lam z))
+        ((hvm p).comp (Ξ.continuous_faceDomPt Y p lam).measurable) hε (fun z => hv p _)
+        (fun z => hlaw p (Ξ.faceDomPt Y p lam z)) lam hlam
+      exact ⟨hfam.1.integral_prod_left, hfam.2⟩
+    · simp
+  refine ⟨?_, ?_⟩
+  · unfold tupleLimit
+    exact integrable_finsetSum _ fun p _ => (hpiece p).1
+  · unfold tupleLimit
+    rw [integral_finsetSum _ fun p _ => (hpiece p).1]
     exact Finset.sum_congr rfl fun p _ => (hpiece p).2
 
 end ResolvedData
