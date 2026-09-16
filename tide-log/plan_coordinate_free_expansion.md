@@ -1632,3 +1632,27 @@ index shift `Fin (r+1)` vs `Fin (r+2)`; state with a neutral essential count `q`
 (grammar's field ζ = chartXi = −ξCM; the bridge limit `boxFaceLimit (boxExt (−φ))` with φ ~ chartLaw = law of ξCM|α is a pathwise coupling, no
 symmetry argument). (iv) close if Stage A is uneconomic; (iii) order-≤1 tightness only for a named low-order consumer (gradient bounds give
 equicontinuity of the FIELD, not of the gradient; O_p(1) ≠ ∫A² ≤ C); (v) finite-product transfer: defer, no consumer. Next ticket = Stage A.
+
+### 20.36 STAGE A DONE + SURVEY (2026-09-16). Survey of greybook's Theorem 6.1 construction (Explore agent; key facts): the division by `u^k`
+happens INSIDE `Lˢ(μ)`, not pointwise in x: `GreyBook.Ch6.exists_analyticOnNhd_monomial_quotient_Lp_of_normalised` (MonomialQuotientNormalised.lean:168;
+weighted injection Lᵖ → L², divide in L² by the germ quotient of Thm 2.6 `exists_eq_monomial_smul_of_analyticAt`, lift back) gives
+`a α : ℝ^d → Lp ℝ s μ` ANALYTIC on the open chart target `S α ⊇ box` with `F (g α u) = u^k • a α u`; `exists_atlasKernels` (AtlasKernels.lean:141)
+constructs exactly this but EXPORTS only the samplewise representative `fa` (`ContinuousOn` + `HasFDerivWithinAt` on the box, C¹; from
+`exists_compact_representative_deriv`, a σ-selected ball representative — morally a convergent monomial series `∑ (u−u₀)^α A_α(x)` but the
+repo lacks monomial-HasSum → HasFPowerSeriesOnBall, so per-sample analyticity of `fa α x` is genuinely missing (route (c))). hironaka's chart form
+is applied to the SCALAR K only (`HasChartTargets`: analytic `g α` on `S α`, `K ∘ g α = u^{2k}`); the Lp factorisation is greybook's own.
+Derivative kernels: `Dfa` from the series (`exists_coeffExpansion_deriv_of_hasFPowerSeriesOnBall`, any s ≥ 1); `exists_gradientBound` (s = 6 /
+2 / 2k+4) gives O_p(1) gradient envelopes; nothing of order ≥ 2. `boxGamma` audit: `k h : Fin (r+1) → ℕ` in BoxStateDensity.lean:38, so in
+`EssentialChart.Yval` (k h : Fin (C.r+2)) Lean unifies r := C.r+1 — `boxGamma = b^{Σh + q − 2λΣk} (∏ 1/2kᵢ)/(q−1)!` with q = C.r+2 = m: CONSISTENT
+with grammar's `faceFunctional` prefactor `1/((m−1)! ∏ 2kᵢ)` (the b-power is 1 under h_i+1 = 2k_iλ); `scaledBox s b = (0,b)^s` OPEN (a.e. = grammar's
+Ioc box); `limitY` depends on ξ only through the slice ξ(0,·). Sign: grammar's exponent field ζ = chartXi = −ξCM, so the bridge limit
+`boxFaceLimit (boxExt (−φ))`, φ ~ chartLaw = law of ξCM|α, is a pathwise coupling (no Gaussian-symmetry argument).
+STAGE A LANDED in the bridge (`Bridge/AnalyticKernel.lean`, commit 2aa127a): `AnalyticChartKernel A F` (S, isOpen, box ⊆ S, analytic g, a,
+analytic a, factor, mean), `exists_analyticChartKernel` from the book's hypotheses (same proof as AtlasKernels 110–150, now exported);
+`derivKernel Q α n v u := iteratedFDeriv ℝ n (Q.a α) u v` analytic on S α (`AnalyticOnNhd.iteratedFDeriv` + `ContinuousMultilinearMap.apply`),
+`isLpValuedAnalytic_derivKernel` (every derivative kernel is a Definition 5.3 datum), L² push `derivKernelL2`, and the Stage C test
+`exists_law_derivKernel` = greybook Thm 5.9 (`theorem_5_9_of_isLpValuedAnalytic_two`) applied to a derivative kernel: C(box) Gaussian limit law
+of the derivative-kernel empirical process. All axiom-clean. REMAINING for Stage B–E: (B) the pathwise identity `D^γ ξ_n = ξ_n^{(γ)}` needs a
+smooth representative of `a α` with derivatives representing the Lp derivatives simultaneously in u (greybook has this only at order 1, inside
+`exists_compact_representative_deriv`; higher order = new construction), (C) joint law over (α, γ) via `chartProcessCM_law` on an index type
+ι × JetIdx, (D)/(E) adapters to grammar's closed branch jets. Candidate (i) constant identification is now unblocked (audit passed).
