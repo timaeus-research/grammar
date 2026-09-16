@@ -1855,3 +1855,15 @@ then `AnalyticSample` (holomorphic extensions of the sample paths ⇒ the expans
 the sample and their joint law). Scope note: the explicit formula needs the chart weight `w_α · obs∘g_α` to extend holomorphically (analytic unit
 weights; instances `unitWt = 1`, `unitWt = wt` in the grey book); smooth partitions of unity give only the canonical (smooth-engine) coefficients.
 
+### 20.55 CONSULT #156 (★★) LANDED (2026-09-16): the all-orders generating identity `C_{μ,q}[H, φ] = Σ_{r≥0} (1/r!) C^pop_{μ+r/2,q}[φ H^r]`.
+Obstacle found and resolved: odd `r` puts the population term at the half-integer cutoff `L + r/2` while the depth theorems need an integer `L`;
+the monomial family `τ^r η ζ^r` is an amplitude family at the SAME integer depth `p = 2kL − h`, the shift lives in the Mellin moment
+(DXXI `EmpiricalFamilyDepth`, `EmpiricalMonomialFamily`, `EmpiricalFamilyLinear`: family depth theorem, `empCoeffAtDepthFam_expTermFam_eq`,
+linearity by uniqueness, `O(C)` bound). Analysis by truncation, no series/integral interchange (DXXII `EmpiricalExpTail`, `EmpiricalTailJets`:
+`|expTail n x| ≤ (1/2)^n e^{3|x|}`, tail jets with `R`-independent coefficients, `FamJetBound (tailFam R) p 1 (K₀ (1/2)^R) M'`).
+DXXIII `EmpiricalGeneratingIdentity`, `EmpiricalGeneratingRect`: `hasSum_empCoeff_population(_mono)`, `hasSum_empCoeffRect_population`.
+Bridge `GeneratingIdentity`: `hasSum_aggCoeffRect_population`, `isFrozenCoeff_popCoeffObs`, ★★★ `hasSum_frozenCoeff_population` (intrinsic
+systems, any lattices), `hasSum_leadCoeff_population`, ★★ `ae_hasSum_frozenCoeff_population_empDeformation`. Open: the stochastic wrapper as a
+continuous analytic functional of the Gaussian field (consult #155 Stage E), growth bounds `|C^pop_{μ+r/2,q}| ≤ A B^r (1+r)^M Γ(r/2+a)` (Astra's
+suggested route; not needed for the identity), integrability of `obs Hₙ^r e^{−NK}` as a theorem rather than a hypothesis.
+

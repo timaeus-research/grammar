@@ -849,3 +849,4 @@ import Grammar.EmpiricalFamilyLinear
 import Grammar.EmpiricalExpTail
 import Grammar.EmpiricalTailJets
 import Grammar.EmpiricalGeneratingIdentity
+import Grammar.EmpiricalGeneratingRect

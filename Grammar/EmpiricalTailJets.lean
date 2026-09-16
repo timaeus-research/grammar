@@ -62,7 +62,7 @@ theorem contDiff_tailFam_joint (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ �
   (hη.comp contDiff_snd).mul
     (((contDiff_expTail R).of_le le_top).comp (contDiff_fst.mul (hζ.comp contDiff_snd)))
 
-theorem pd_zero_fun (i : Fin d) : pd i (fun _ : Fin d → ℝ => (0 : ℝ)) = fun _ => 0 := by
+theorem pd_fun_zero (i : Fin d) : pd i (fun _ : Fin d → ℝ => (0 : ℝ)) = fun _ => 0 := by
   funext v
   change deriv (fun _ : ℝ => (0 : ℝ)) (v i) = 0
   exact deriv_const _ _
@@ -104,7 +104,7 @@ theorem IsTailJet.pd (hζ : ContDiff ℝ ∞ ζ) {W : ℕ} {P : ℕ → (Fin d �
       (if j = 0 then (0 : ℝ) else P (j - 1) v * SmoothEngine.pd i ζ v) = 0
     have h1 : P j = fun _ => 0 := hvan j (by omega)
     have h2 : P (j - 1) = fun _ => 0 := hvan (j - 1) (by omega)
-    rw [h1, h2, pd_zero_fun, if_neg (by omega)]
+    rw [h1, h2, pd_fun_zero, if_neg (by omega)]
     simp
   · change SmoothEngine.pd i (G R τ) v = _
     have hGf : G R τ = fun v => ∑ j ∈ range (W + 1), P j v * τ ^ j * expTail (R - j) (τ * ζ v) :=
@@ -133,7 +133,7 @@ theorem IsTailJet.pd (hζ : ContDiff ℝ ∞ ζ) {W : ℕ} {P : ℕ → (Fin d �
     rw [hpd, Finset.sum_add_distrib]
     simp only [add_mul, Finset.sum_add_distrib]
     congr 1
-    · rw [Finset.sum_range_succ _ (W + 1), hvan (W + 1) (Nat.lt_succ_self W), pd_zero_fun]
+    · rw [Finset.sum_range_succ _ (W + 1), hvan (W + 1) (Nat.lt_succ_self W), pd_fun_zero]
       simp
     · rw [Finset.sum_range_succ' _ (W + 1)]
       simp only [Nat.add_one_ne_zero, ↓reduceIte, Nat.add_sub_cancel, zero_mul, add_zero,
