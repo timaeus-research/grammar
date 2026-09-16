@@ -1593,3 +1593,12 @@ hand-off note refresh, memory; ARC CLOSED unless the user directs otherwise.
 ### 20.32 (2026-09-16): DV `EmpiricalJetTightness` (Astra #147 follow-up (a)); 830 modules. `isTightMeasureSet_of_jetEnvelope`: sup+Lipschitz
 envelopes with bounded second moments ⇒ tight jet laws (Arzelà–Ascoli + Markov). NOT proved (by design, no data model): fd convergence of the
 jet evaluations / the envelopes for the empirical root fields. NEXT: papers + hand-off + memory; then stop unless directed.
+
+### 20.33 GREYBOOK DATA MODEL (2026-09-16): user asked to use the grey-book formalisation of K vs K_n to fill the stochastic gaps. Survey:
+greybook (1246 modules, same toolchain/Mathlib, hironaka upstream e301b89 ⊂ our fork cb11bc8d) has `preEmpiricalProcess`, `chartXi`,
+`nKn_standardForm` (= our chart integrand with ζ = chartXi), Thm 5.9 C(K) CLT (`theorem_5_9_law`, tightness + Prokhorov + fidi uniqueness),
+Thm 5.8/5.10 sup moments, O_p(1), C¹ envelopes (`ChartFieldData`, `exists_chartFieldData`), `AtlasData`; no C^r≥2. Consult #148 (Astra):
+plan (b) glue repo; deliverables (1) single-chart C⁰ bridge, (2) joint finite-jet law via Thm 5.9 on derivative kernels + simultaneous
+analytic-representative lemma, (3)/(4) resolved assemblies, (5) dependency consolidation; target closed realizable jets; chart-level result is
+"instantiated for a standard-form chart", not a discharge of the resolved hypotheses. Bridge workspace `lean/grammar-greybook-bridge`
+(hironaka pinned to the fork first, path deps to grammar-tide-smooth and greybook) resolves and builds both (10673 jobs).
