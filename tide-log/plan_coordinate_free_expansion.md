@@ -1896,3 +1896,9 @@ the unique local principal-part data of `F_U = mellin R_U + principalParts U` at
 `eval_div_sub_truncQuot_isBigO`, `P/Q` at infinity via `Polynomial.reflect` + `quotientBlocks`). Not done: B(ii) two-scale division
 `quotient_twoScale_isBigO`, A3 Gaussian jet Wick lemma, B(iii) transfer, D finite-dimensional downstairs CLT, bridge corollary
 (polar coefficients of the fluctuation zeta function; `hint`/`hE`/`hE0` from the data).
+
+### 20.59 CONSULT #159 B(ii) LANDED (2026-09-16): actual asymptotic division. Grammar DXXXIV (`TwoScaleDivision`: ★★
+`twoScale_div_isBigO`, exact blocks, `O(x^J g^{J+1})`), DXXXV (`CutoffQuotientExpansion`: ★★★ `cutoff_div_isBigO` — the quotient of
+two cutoff expansions on a common lattice with common leading index is `Σ_{j<J} R_j(log N) N^{−j/Q} + O(N^{−J/Q}(1+log N)^{D(J+1)})`,
+`R_j` the pointwise quotient blocks of the block polynomials). Not done: B(iii) probabilistic transfer; bridge instance (a.s. leading
+block bounded below); A3 Gaussian jet Wick; D; the fluctuation-zeta polar corollary in the bridge (`hE`, `hE0` for the frozen evidence).

@@ -863,3 +863,5 @@ import Grammar.FluctuationComplex
 import Grammar.PrincipalPartUniqueness
 import Grammar.AnnealedGeneratingSeries
 import Grammar.RationalExpansionAtInfinity
+import Grammar.TwoScaleDivision
+import Grammar.CutoffQuotientExpansion
