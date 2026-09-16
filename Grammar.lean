@@ -845,3 +845,7 @@ import Grammar.FaceRestrictionOperators
 import Grammar.EmpiricalTaylorIdentification
 import Grammar.EmpiricalFamilyDepth
 import Grammar.EmpiricalMonomialFamily
+import Grammar.EmpiricalFamilyLinear
+import Grammar.EmpiricalExpTail
+import Grammar.EmpiricalTailJets
+import Grammar.EmpiricalGeneratingIdentity
