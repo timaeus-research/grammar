@@ -1815,3 +1815,10 @@ in probability (consume `ae_totalEvidence_eq`). (c) evidence subleading law: DEF
 Lattice alignment: off-lattice coefficients are unconstrained by `CutoffExpansion` — mask with `if μ ∈ lattice_α`; present the total as a sum of
 chart spectral sums. Leading-constant identification: parked (the factorial (q−1)! = (C.r+1)! is CONSISTENT: `boxGamma` is instantiated with
 r' := C.r + 1 — audited §20.36).
+
+### 20.50 DELIVERABLES 1, 3 OF #152 LANDED IN GRAMMAR (2026-09-16): DXIII `TightNormTail` (`exists_norm_tail_bound_of_isTightMeasureSet`),
+DXIV `FieldJetUniform` (`norm_iteratedFDeriv_exp_mul_le`, `fieldJetBound_of_jetBoundOn` with explicit constant 2^{|p|}|p|! B_η (1+B)^{|p|} via
+Mathlib's `norm_iteratedFDeriv_comp_le` and `norm_iteratedFDeriv_mul_le`). Next: deliverable 2 (`empRect_remainder_uniform_on_jetBall`: unit-box
+`emp_cutoffExpansion_uniform` + dilation `empIntegralRect_eq` + spectral-sum scaling + jets of `ζ ∘ diag b`), then 4 (chart remainder o_P below the
+cutoff rate, localised on jet balls) and 5 (total evidence; greybook's `tail_evidence_tendsto_zero_inProb` already gives n^lam·T → 0 for EVERY lam,
+m := 1).

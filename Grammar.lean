@@ -833,5 +833,7 @@ import Grammar.LipschitzClosureExtension
 import Grammar.CubeCoeffLipschitz
 import Grammar.SmoothCutoff
 import Grammar.CubeJets
+import Grammar.TightNormTail
+import Grammar.FieldJetUniform
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
