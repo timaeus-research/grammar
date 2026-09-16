@@ -1846,3 +1846,12 @@ finite family of queries `(chart, μ, q)`, ★★ `jointChartCoeffLaw`, and `evi
 Astra corrections recorded: the DXIV constant carries the envelope `(1+τ)^{|p|} e^{Bτ}`; "every polynomial rate" holds because the bridge has jets
 of every order `R`; at the cutoff the remainder is `O_P(n^{−U}(1+log n)^{d−1})`.
 
+### 20.54 USER PRIORITY (2026-09-16): the FULL EXPLICIT empirical expansion of the partition function with observable insertion (paper
+`thm:strataempiricalexpansion` + `eq:ExpansionCoefficient`), ahead of the posterior ratio. Grammar: DXX `EmpiricalTaylorIdentification`
+(`empCoeffRect_eq_boxCoeff`, `empCoeffRect_eq_taylorSeries`: by uniqueness of cutoff expansions the smooth engine's canonical coefficients are
+the Taylor tree's explicit series for holomorphic-polydisc data). Bridge: `SequentialRemainder` (the paper's final display: sequential remainders
+`(Zₙ[obs] − Σ_{p≺t} C_p n^{−μ}log^q)/(n^{−μ'}log^{q'}) − C_t → 0` in probability and `⇒ Φ_t(G)`, for every target of the aggregated index set),
+then `AnalyticSample` (holomorphic extensions of the sample paths ⇒ the expansion in probability with the explicit Taylor-tree coefficients of
+the sample and their joint law). Scope note: the explicit formula needs the chart weight `w_α · obs∘g_α` to extend holomorphically (analytic unit
+weights; instances `unitWt = 1`, `unitWt = wt` in the grey book); smooth partitions of unity give only the canonical (smooth-engine) coefficients.
+
