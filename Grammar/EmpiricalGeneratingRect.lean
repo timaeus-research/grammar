@@ -49,15 +49,31 @@ theorem empCoeff_const_mul {F ξ : (Fin d → ℝ) → ℝ} (hF : ContDiff ℝ �
     exact (emp_cutoffExpansion hF hξ hk).const_mul c
   exact (empCoeff_unique (contDiff_const.mul hF) hξ hk hc hμ hj).symm
 
-/-- ★★★ **The all-orders generating identity on a rectangle**: for `μ ∈ Q⁻¹ℕ`, `q ≤ d − 1`,
-`Σ_{r ≥ 0} (1/r!) · empCoeffRect (η (u^k ζ)^r) 0 h k b (μ + r/2) q = empCoeffRect η ζ h k b μ q`
-(unconditionally convergent). -/
-theorem hasSum_empCoeffRect_population (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ)
+/-- The rectangular coefficient as the rescaled finite combination of the unit-box coefficients of
+`(η ∘ diag b, ζ ∘ diag b)`. -/
+theorem empCoeffRect_eq_scale_sum (η ζ : (Fin d → ℝ) → ℝ) (b : Fin d → ℝ) (μ : ℝ) (q : ℕ) :
+    empCoeffRect η ζ h k b μ q = ((∏ i, b i) * mono h b) * mono (fun i => 2 * k i) b ^ (-μ) *
+      ∑ j ∈ Finset.Ico q (d - 1 + 1),
+        ((j.choose q : ℝ) * Real.log (mono (fun i => 2 * k i) b) ^ (j - q)) *
+          empCoeff (η ∘ diag b) (ζ ∘ diag b) h k μ j := by
+  unfold empCoeffRect scaleCoeff
+  simp only [Finset.mul_sum]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  ring
+
+/-- ★ **The population term on a rectangle**: the `β^{−r/2}` of the rescaling cancels the `(b^k)^r`
+of the insertion `(u^k ζ)^r ∘ diag b`. -/
+theorem inv_factorial_mul_empCoeffRect_pow_eq (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ)
     (hk : ∀ i, 0 < k i) {b : Fin d → ℝ} (hb : ∀ i, 0 < b i) {μ : ℝ}
-    (hμ : ∃ m : ℕ, μ = (m : ℝ) / Qamb k) (q : ℕ) :
-    HasSum (fun r : ℕ => (1 / (r.factorial : ℝ)) *
-        empCoeffRect (fun v => η v * (mono k v * ζ v) ^ r) (fun _ => 0) h k b (μ + r / 2) q)
-      (empCoeffRect η ζ h k b μ q) := by
+    (hμ : ∃ m : ℕ, μ = (m : ℝ) / Qamb k) (q r : ℕ) :
+    (1 / (r.factorial : ℝ)) *
+      empCoeffRect (fun v => η v * (mono k v * ζ v) ^ r) (fun _ => 0) h k b (μ + r / 2) q =
+      ((∏ i, b i) * mono h b) * mono (fun i => 2 * k i) b ^ (-μ) *
+        ∑ j ∈ Finset.Ico q (d - 1 + 1),
+          ((j.choose q : ℝ) * Real.log (mono (fun i => 2 * k i) b) ^ (j - q)) *
+            ((1 / (r.factorial : ℝ)) *
+              empCoeff (fun v => (η ∘ diag b) v * (mono k v * (ζ ∘ diag b) v) ^ r)
+                (fun _ => 0) h k (μ + r / 2) j) := by
   set β : ℝ := mono (fun i => 2 * k i) b with hβ
   set A : ℝ := (∏ i, b i) * mono h b with hA
   have hβpos : 0 < β := mono_pos _ hb
@@ -69,61 +85,69 @@ theorem hasSum_empCoeffRect_population (hη : ContDiff ℝ ∞ η) (hζ : ContDi
     ring
   have hηd : ContDiff ℝ ∞ (η ∘ diag b) := hη.comp (contDiff_diag b)
   have hζd : ContDiff ℝ ∞ (ζ ∘ diag b) := hζ.comp (contDiff_diag b)
-  have hterm : ∀ r : ℕ, (1 / (r.factorial : ℝ)) *
-      empCoeffRect (fun v => η v * (mono k v * ζ v) ^ r) (fun _ => 0) h k b (μ + r / 2) q =
-      A * β ^ (-μ) * ∑ j ∈ Finset.Ico q (d - 1 + 1), ((j.choose q : ℝ) * Real.log β ^ (j - q)) *
-        ((1 / (r.factorial : ℝ)) *
-          empCoeff (fun v => (η ∘ diag b) v * (mono k v * (ζ ∘ diag b) v) ^ r)
-            (fun _ => 0) h k (μ + r / 2) j) := by
-    intro r
-    have hμr : ∃ m : ℕ, μ + (r : ℝ) / 2 = (m : ℝ) / Qamb k := by
-      obtain ⟨m, hm⟩ := hμ
-      obtain ⟨m₀, hm₀⟩ := half_mem_lattice k hk r
-      exact ⟨m + m₀, by rw [hm, hm₀]; push_cast; ring⟩
-    have hcomp : (fun v => η v * (mono k v * ζ v) ^ r) ∘ diag b =
-        fun v => mono k b ^ r * ((η ∘ diag b) v * (mono k v * (ζ ∘ diag b) v) ^ r) := by
-      funext v
-      simp only [Function.comp, mono_diag]
+  have hμr : ∃ m : ℕ, μ + (r : ℝ) / 2 = (m : ℝ) / Qamb k := by
+    obtain ⟨m, hm⟩ := hμ
+    obtain ⟨m₀, hm₀⟩ := half_mem_lattice k hk r
+    exact ⟨m + m₀, by rw [hm, hm₀]; push_cast; ring⟩
+  have hcomp : (fun v => η v * (mono k v * ζ v) ^ r) ∘ diag b =
+      fun v => mono k b ^ r * ((η ∘ diag b) v * (mono k v * (ζ ∘ diag b) v) ^ r) := by
+    funext v
+    simp only [Function.comp, mono_diag]
+    ring
+  have hzero : ((fun _ : Fin d → ℝ => (0 : ℝ)) ∘ diag b) = fun _ => 0 := rfl
+  have hF : ContDiff ℝ ∞ fun v => (η ∘ diag b) v * (mono k v * (ζ ∘ diag b) v) ^ r :=
+    hηd.mul (((contDiff_mono k).mul hζd).pow r)
+  have hrp : β ^ (-(μ + (r : ℝ) / 2)) * mono k b ^ r = β ^ (-μ) := by
+    have h1 : β ^ (-(μ + (r : ℝ) / 2)) = β ^ (-μ) * β ^ (-((r : ℝ) / 2)) := by
+      rw [← Real.rpow_add hβpos]
+      ring_nf
+    have h2 : β ^ (-((r : ℝ) / 2)) = (mono k b ^ r)⁻¹ := by
+      rw [hβsq, ← Real.rpow_natCast (mono k b) 2, ← Real.rpow_mul hkb.le,
+        ← Real.rpow_natCast (mono k b) r, ← Real.rpow_neg hkb.le]
+      congr 1
+      push_cast
       ring
-    have hzero : ((fun _ : Fin d → ℝ => (0 : ℝ)) ∘ diag b) = fun _ => 0 := rfl
-    have hF : ContDiff ℝ ∞ fun v => (η ∘ diag b) v * (mono k v * (ζ ∘ diag b) v) ^ r :=
-      hηd.mul (((contDiff_mono k).mul hζd).pow r)
-    have hrp : β ^ (-(μ + (r : ℝ) / 2)) * mono k b ^ r = β ^ (-μ) := by
-      have h1 : β ^ (-(μ + (r : ℝ) / 2)) = β ^ (-μ) * β ^ (-((r : ℝ) / 2)) := by
-        rw [← Real.rpow_add hβpos]
-        ring_nf
-      have h2 : β ^ (-((r : ℝ) / 2)) = (mono k b ^ r)⁻¹ := by
-        rw [hβsq, ← Real.rpow_natCast (mono k b) 2, ← Real.rpow_mul hkb.le,
-          ← Real.rpow_natCast (mono k b) r, ← Real.rpow_neg hkb.le]
-        congr 1
-        push_cast
+    rw [h1, h2, mul_assoc, inv_mul_cancel₀ (pow_pos hkb r).ne', mul_one]
+  unfold empCoeffRect scaleCoeff
+  rw [hcomp, hzero, ← hβ, ← hA]
+  have hsum : ∑ j ∈ Finset.Ico q (d - 1 + 1),
+      empCoeff (fun v => mono k b ^ r * ((η ∘ diag b) v * (mono k v * (ζ ∘ diag b) v) ^ r))
+        (fun _ => 0) h k (μ + r / 2) j * (j.choose q : ℝ) * Real.log β ^ (j - q) =
+      mono k b ^ r * ∑ j ∈ Finset.Ico q (d - 1 + 1),
+        empCoeff (fun v => (η ∘ diag b) v * (mono k v * (ζ ∘ diag b) v) ^ r)
+          (fun _ => 0) h k (μ + r / 2) j * (j.choose q : ℝ) * Real.log β ^ (j - q) := by
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl fun j hj => ?_
+    rw [empCoeff_const_mul h k hF contDiff_const hk _ hμr
+      (Nat.lt_succ_iff.1 (Finset.mem_Ico.1 hj).2)]
+    ring
+  rw [hsum]
+  set S := ∑ j ∈ Finset.Ico q (d - 1 + 1),
+    empCoeff (fun v => (η ∘ diag b) v * (mono k v * (ζ ∘ diag b) v) ^ r)
+      (fun _ => 0) h k (μ + r / 2) j * (j.choose q : ℝ) * Real.log β ^ (j - q) with hS
+  calc _ = A * (β ^ (-(μ + (r : ℝ) / 2)) * mono k b ^ r) * ((1 / (r.factorial : ℝ)) * S) := by
         ring
-      rw [h1, h2, mul_assoc, inv_mul_cancel₀ (pow_pos hkb r).ne', mul_one]
-    unfold empCoeffRect scaleCoeff
-    rw [hcomp, hzero, ← hβ, ← hA]
-    have hsum : ∑ j ∈ Finset.Ico q (d - 1 + 1),
-        empCoeff (fun v => mono k b ^ r * ((η ∘ diag b) v * (mono k v * (ζ ∘ diag b) v) ^ r))
-          (fun _ => 0) h k (μ + r / 2) j * (j.choose q : ℝ) * Real.log β ^ (j - q) =
-        mono k b ^ r * ∑ j ∈ Finset.Ico q (d - 1 + 1),
-          empCoeff (fun v => (η ∘ diag b) v * (mono k v * (ζ ∘ diag b) v) ^ r)
-            (fun _ => 0) h k (μ + r / 2) j * (j.choose q : ℝ) * Real.log β ^ (j - q) := by
-      rw [Finset.mul_sum]
-      refine Finset.sum_congr rfl fun j hj => ?_
-      rw [empCoeff_const_mul h k hF contDiff_const hk _ hμr
-        (Nat.lt_succ_iff.1 (Finset.mem_Ico.1 hj).2)]
-      ring
-    rw [hsum]
-    set S := ∑ j ∈ Finset.Ico q (d - 1 + 1),
-      empCoeff (fun v => (η ∘ diag b) v * (mono k v * (ζ ∘ diag b) v) ^ r)
-        (fun _ => 0) h k (μ + r / 2) j * (j.choose q : ℝ) * Real.log β ^ (j - q) with hS
-    calc _ = A * (β ^ (-(μ + (r : ℝ) / 2)) * mono k b ^ r) * ((1 / (r.factorial : ℝ)) * S) := by
-          ring
-      _ = A * β ^ (-μ) * ((1 / (r.factorial : ℝ)) * S) := by rw [hrp]
-      _ = _ := by
-          rw [hS]
-          simp only [Finset.mul_sum]
-          refine Finset.sum_congr rfl fun j _ => ?_
-          ring
+    _ = A * β ^ (-μ) * ((1 / (r.factorial : ℝ)) * S) := by rw [hrp]
+    _ = _ := by
+        rw [hS]
+        simp only [Finset.mul_sum]
+        refine Finset.sum_congr rfl fun j _ => ?_
+        ring
+
+/-- ★★★ **The all-orders generating identity on a rectangle**: for `μ ∈ Q⁻¹ℕ` and every log
+degree `q`,
+`Σ_{r ≥ 0} (1/r!) · empCoeffRect (η (u^k ζ)^r) 0 h k b (μ + r/2) q = empCoeffRect η ζ h k b μ q`
+(unconditionally convergent). -/
+theorem hasSum_empCoeffRect_population (hη : ContDiff ℝ ∞ η) (hζ : ContDiff ℝ ∞ ζ)
+    (hk : ∀ i, 0 < k i) {b : Fin d → ℝ} (hb : ∀ i, 0 < b i) {μ : ℝ}
+    (hμ : ∃ m : ℕ, μ = (m : ℝ) / Qamb k) (q : ℕ) :
+    HasSum (fun r : ℕ => (1 / (r.factorial : ℝ)) *
+        empCoeffRect (fun v => η v * (mono k v * ζ v) ^ r) (fun _ => 0) h k b (μ + r / 2) q)
+      (empCoeffRect η ζ h k b μ q) := by
+  set β : ℝ := mono (fun i => 2 * k i) b with hβ
+  set A : ℝ := (∏ i, b i) * mono h b with hA
+  have hηd : ContDiff ℝ ∞ (η ∘ diag b) := hη.comp (contDiff_diag b)
+  have hζd : ContDiff ℝ ∞ (ζ ∘ diag b) := hζ.comp (contDiff_diag b)
   have hj_sum : ∀ j ∈ Finset.Ico q (d - 1 + 1), HasSum (fun r : ℕ => (1 / (r.factorial : ℝ)) *
       empCoeff (fun v => (η ∘ diag b) v * (mono k v * (ζ ∘ diag b) v) ^ r) (fun _ => 0) h k
         (μ + r / 2) j) (empCoeff (η ∘ diag b) (ζ ∘ diag b) h k μ j) := fun j hj =>
@@ -136,15 +160,9 @@ theorem hasSum_empCoeffRect_population (hη : ContDiff ℝ ∞ η) (hζ : ContDi
       fun r : ℕ => A * β ^ (-μ) * ∑ j ∈ Finset.Ico q (d - 1 + 1),
         ((j.choose q : ℝ) * Real.log β ^ (j - q)) * ((1 / (r.factorial : ℝ)) *
           empCoeff (fun v => (η ∘ diag b) v * (mono k v * (ζ ∘ diag b) v) ^ r)
-            (fun _ => 0) h k (μ + r / 2) j) := funext hterm
-  have hval : empCoeffRect η ζ h k b μ q = A * β ^ (-μ) * ∑ j ∈ Finset.Ico q (d - 1 + 1),
-      ((j.choose q : ℝ) * Real.log β ^ (j - q)) * empCoeff (η ∘ diag b) (ζ ∘ diag b) h k μ j := by
-    unfold empCoeffRect scaleCoeff
-    rw [← hβ, ← hA]
-    simp only [Finset.mul_sum]
-    refine Finset.sum_congr rfl fun j _ => ?_
-    ring
-  rw [hfun, hval]
+            (fun _ => 0) h k (μ + r / 2) j) :=
+    funext fun r => inv_factorial_mul_empCoeffRect_pow_eq h k hη hζ hk hb hμ q r
+  rw [hfun, empCoeffRect_eq_scale_sum h k η ζ b μ q]
   exact hall
 
 /-- The `tsum` form of `hasSum_empCoeffRect_population`. -/
