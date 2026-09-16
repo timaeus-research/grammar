@@ -115,7 +115,7 @@ theorem logExample_eq {a n : ℝ} (hn : 0 < n) :
     rintro _ ⟨u, hu, rfl⟩
     rw [uIcc_of_le zero_le_one] at hu
     refine ⟨?_, ?_⟩
-    · show 0 ≤ n * u ^ 2
+    · change 0 ≤ n * u ^ 2
       positivity
     change n * u ^ 2 ≤ n
     have : u ^ 2 ≤ 1 := by nlinarith [hu.1, hu.2]
