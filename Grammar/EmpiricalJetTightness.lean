@@ -101,7 +101,7 @@ theorem isCompact_lipBall (M : ℝ≥0) : IsCompact (lipBall K V M) := by
   have hpre : lipBall K V M = e ⁻¹' A := by
     ext f
     have hcoe : (⇑(mkOfCompact f) : K → V) = ⇑f := funext fun x => mkOfCompact_apply f x
-    show ((∀ x, ‖f x‖ ≤ M) ∧ LipschitzWith M ⇑f) ↔
+    change ((∀ x, ‖f x‖ ≤ M) ∧ LipschitzWith M ⇑f) ↔
       ((∀ x, ‖mkOfCompact f x‖ ≤ M) ∧ LipschitzWith M ⇑(mkOfCompact f))
     rw [hcoe]
   rw [hpre]
