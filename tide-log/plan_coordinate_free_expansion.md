@@ -1578,3 +1578,7 @@ closed jet space. Ranked next: (1) extend the coefficient to the CLOSURE of the 
 
 ### 20.29 CONSULT #146 ITEM 2 (2026-09-16): DIII `EmpiricalOneDimSecond`; 827 modules. `empOneDimCoeff_two` closed form (no logs in 1D).
 NEXT: papers (C₂ display in §9 + pin), consolidation/hand-off report; optionally `empOneDimCoeff_three`.
+
+### 20.30 (2026-09-16): `empOneDimCoeff_three` added to DIII (827 modules); hand-off note `projects/grammar/staging/empirical_expansion_handoff.md`
+(SRI 7321d9b5e, pushed). NEXT: consult #147 — design of the stochastic jet programme (hypotheses on the data, tightness route, what the
+repo's `EmpiricalFieldLimit`/`UniformCompactTransfer` machinery already gives) vs. closing the arc.
