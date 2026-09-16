@@ -1656,3 +1656,21 @@ of the derivative-kernel empirical process. All axiom-clean. REMAINING for Stage
 smooth representative of `a α` with derivatives representing the Lp derivatives simultaneously in u (greybook has this only at order 1, inside
 `exists_compact_representative_deriv`; higher order = new construction), (C) joint law over (α, γ) via `chartProcessCM_law` on an index type
 ι × JetIdx, (D)/(E) adapters to grammar's closed branch jets. Candidate (i) constant identification is now unblocked (audit passed).
+
+### 20.37 CONSULT #150 (2026-09-16): Stage B design = C¹-TOWER BOOTSTRAP (no monomial converse, no global smooth-series bounds, no order-R
+generalisation of greybook's series differentiation). For coordinate words b : Fin k → Fin d, the kernels G_{k,b}(u) = D^k a_α(u)[e_b] are
+`derivKernel` instances (analytic on S α); apply greybook's `exists_compact_representative_deriv` to each on a LARGER compact L with
+K₀ ⊂ V ⊂ L ⊂ S α (V open ⊂ interior L, so within-derivatives on L are ambient derivatives on V); Lemma A `ae_fderiv_eq_of_representative`
+(samplewise first derivative represents the Lˢ derivative — difference quotients along a deterministic sequence + "Lˢ-limit of classes with a.e.
+pointwise-convergent representatives ⇒ pointwise limit represents the Lˢ limit" wrapper) identifies d h_{k,b}(x,u)[e_j] = h_{k+1,cons j b}(x,u)
+a.e. per u; countable dense subset of V + continuity ⇒ one measurable conull set N with equality for ALL u; Lemma B
+`contDiffOn_and_iteratedFDeriv_of_coordTower` (deterministic: a finite coordinate C¹ tower on an open set is a C^R jet, with
+`iteratedFDeriv ℝ k (h 0) u (e_b) = h k b u`) gives f := h_{0,∅} on N, 0 off N: EVERY sample path C^R on V, `represents` a.e. per (k,u,v) with the
+SYNCHRONISED representative `fun x => iteratedFDeriv ℝ k (f x) u v` (never "∀ᵐ x, ∀ u, … = (derivKernel u) x" with independent Lp coercions);
+envelopes: B := Σ_{k≤R} Σ_b B_{k,b} from the coefficient majorants (Lemma C `memLp_tsum_abs_majorant`, needs MemLp of each A_i, not just toReal
+summability), jet_bound ‖D^k f(x,u)‖ ≤ B x on the box; joint law: feed the h_{k,b} DIRECTLY (with their existing CoeffExpansion data) to
+`chartProcessCM_law` on the index type (α, k, b), then identify on the good event with the derivatives of the empirical field of f (finite-sum
+differentiation); centering: ∫ G_{k,b} dμ = D^k(∫ F)[e_b] via the integral CLM, = coordinate derivative of the monomial by `Q.mean`.
+Output structure `ChartKernelRep Q α R` (U open ⊇ box ⊆ S α, f, measurable_jet, smooth : ∀ x, ContDiffOn ℝ R (f x) U, represents, B, memLp_B,
+jet_bound). Stage B cannot be avoided (closedness alone doesn't give compatibility). Order of work: Lemma B (pure calculus, grammar), Lemma A +
+wrapper, Lemma C, then the assembly in the bridge.
