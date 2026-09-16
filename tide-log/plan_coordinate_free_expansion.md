@@ -1835,3 +1835,14 @@ a.s. equal to `cubeJet R b (ζ n w)` and `requiredOrder h k U ≤ R` ⇒ `n^A ·
 for every `A < U`. Next: deliverable 5 in the bridge (`Bridge/EvidenceExpansion.lean`): per-chart remainders with `Y n := −chartJetReconstruct`,
 greybook `tail_evidence_tendsto_zero_inProb` (m := 1) for `n^A T n`, `tendsto_zero_inProb_sum` and a.e. congruence with
 `ae_totalEvidence_eq` ⇒ `n^A [Eₙ − Σ_α S_{α,U_α}(n)] → 0` in probability (`TendstoZeroInProb (fun _ => P)`).
+
+### 20.53 CONSULT #153 (2026-09-16): next programme = the JOINT law of all retained coefficients (lower orders, all charts), then constant
+identification, observable insertion, intrinsic spectral support. Stages 1–3 LANDED IN GRAMMAR: DXVII `FieldJetDifference` (difference envelope
+uniform on jet balls, closeness up to `E`), DXVIII `EmpCoeffLipschitz` (every canonical coefficient is Lipschitz on jet balls — face formula,
+linearity of the Mellin/face ingredients, no deep vanishing, no `0 < μ`), DXIX `CubeJetsGeneral` (every coefficient extends continuously to the
+closed realizable cube jets; continuous mapping). Next: bridge `Bridge/ChartCoeffLawGeneral` — `jointCubeCoeffLaw_of_reconstruct_gen` for a
+finite family of queries `(chart, μ, q)`, ★★ `jointChartCoeffLaw`, and `evidence_expansion_jointCoeffLaw` (retained index set
+`Σ_α latticeBelow (Qamb k_α) U_α × range d`; `cubeOrder ≤ requiredOrder` for `μ < U`) combining with `tendstoZeroInProb_evidence_expansion`.
+Astra corrections recorded: the DXIV constant carries the envelope `(1+τ)^{|p|} e^{Bτ}`; "every polynomial rate" holds because the bridge has jets
+of every order `R`; at the cutoff the remainder is `O_P(n^{−U}(1+log n)^{d−1})`.
+

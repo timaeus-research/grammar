@@ -835,6 +835,9 @@ import Grammar.SmoothCutoff
 import Grammar.CubeJets
 import Grammar.TightNormTail
 import Grammar.FieldJetUniform
+import Grammar.FieldJetDifference
+import Grammar.EmpCoeffLipschitz
+import Grammar.CubeJetsGeneral
 import Grammar.RectRemainderUniform
 import Grammar.CubeRemainderProbability
 import Grammar.ProductJetDistribution
