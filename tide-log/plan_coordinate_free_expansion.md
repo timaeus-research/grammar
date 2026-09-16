@@ -1704,3 +1704,15 @@ with `ξ_n(ω) u = (1/√n) Σ_{i<n} (f (X i ω) u − m_α u)`, `m_α u = ∫ a
 the open U (`iteratedFDerivWithin_sum_apply`, `_sub_apply`, `_const_smul_apply`, `iteratedFDerivWithin_of_isOpen`) and
 `ContinuousLinearMap.iteratedFDeriv_comp_left` for `D^k (integralCLM ∘ a_α) = integralCLM ∘ D^k a_α` (so `D^k m_α [e_b] = jetMean`); then the
 adapter to grammar's `BranchJetSpace`/closed realizable jets (Stage E), which needs the resolved-core geometry identification (open).
+
+### 20.41 STAGE D LANDED IN THE BRIDGE (2026-09-16, commit b38ea7b `Bridge/EmpiricalJets.lean`): `chartMean Q α u := ∫ a_α(u) dμ`
+(`= integralCLM ∘ a_α`, C^∞ on S α, `iteratedFDeriv_chartMean_apply : D^k m_α(u)[e_b] = ∫ derivKernel`), `empField Rp α n ω :=
+preEmpiricalProcess X (Rp α).f (chartMean Q α) n ω` (C^R on U for EVERY sample), `GoodSet`, `iteratedFDeriv_empField_apply` (pathwise on the good
+event; within-derivatives of the finite sum on the open U), `ae_forall_mem_goodSet` (iid transfer via `ae_of_ae_map`, no measurability of the
+good set needed), ★★ `ae_iteratedFDeriv_empField_eq : ∀ᵐ ω, ∀ n α (k : Fin (R+1)) b, ∀ u ∈ U, D^k ξ_n(ω)(u)[e_b] = chartUnionProcess X (jetKernel Rp)
+(jetMean Rp) n ω ((α,⟨k,b⟩),u)`. Hence Stage C's joint Gaussian law IS the joint law of the actual derivatives of the empirical field of the smooth
+representative. Axiom-clean. REMAINING for a subleading stochastic theorem: (E1) upgrade the representative to C^∞ (the construction already
+synchronises all orders on one conull set), (E2) a.s. identification `chartXi = empField` on the box (both continuous in u, a.e. equal per u),
+(E3) cube-level jet space + continuity/closure extension of the top cube coefficient (`tendsto_empCoeffRect_top` exists; the
+BranchJetSpace/coeffOnClosedJets machinery is resolved-level only), (E4) transport of the Stage C law to the cube jet space, (E5) continuous
+mapping ⇒ convergence in distribution of the top subleading CHART coefficient; (E6) resolved assembly = geometry identification (open).
