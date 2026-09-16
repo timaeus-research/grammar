@@ -1790,3 +1790,11 @@ evidence at β = 1 as Σ_α empIntegralRect(−globalField α) + smooth tail a.s
 + `ae_chartEvidence_eq`); the uniform remainder (coefficient law → evidence expansion; the diagonal ζ_n, N = n) — genuinely open analysis;
 constant identification (i); lattice alignment across charts for a fixed (μ₀, c) (each chart's `empCoeffRect` at an off-lattice μ₀ — check
 whether it vanishes by definition).
+
+### 20.48 M6b LANDED IN THE BRIDGE (2026-09-16, commit 143d295 `Bridge/TotalEvidence.lean`): ★ `ae_totalEvidence_eq (hgK) (hb) (hXm) (hident) (hμ)
+(hβ : β = 1) (hνχ : νχ = ν.withDensity (ofReal ∘ χ ∘ K)) (hKm) (hχm) (hχ01) : ∀ᵐ ω, ∀ n > 0, ∫ exp(−n Kₙ) dν = Σ_α empIntegralRect (unitWt α)
+(−globalField α n ω) (h α) (k α) (fun _ => rb α) n + D.T.T n ω` (greybook `Zn0_eq_add_tail_smooth` + `integral_boltzmann_empirical` on the cut-off
+prior + `ae_chartEvidence_eq`). With M6a this means: the joint coefficient law concerns the chart-wise cube expansions of the grey book's ACTUAL
+evidence. BRIDGE STATUS: units 1, 2, 1b, A, B, C, D, E, E2, M6a, M6b all landed, axiom-clean (bridge HEAD 143d295). What remains is analysis, not
+plumbing: the uniform remainder (diagonal ζ_n, N = n — Astra #151 qualification 3), the leading-constant identification (i), lattice alignment
+across charts, and the explicit chart hypotheses (`DeepVanishing (unitWt α)`, `0 < k α i`) which the grey book's atlas does not supply.
