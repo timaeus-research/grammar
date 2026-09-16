@@ -1938,3 +1938,11 @@ the Bochner integrability of Gaussian jets from a jet-norm moment bound.
 for pointwise-Gaussian scaled fields `u^kζ ~ N(0, W)`, under Bochner integrability of the jets and the absolute-moment envelope. User
 items 1–6: ALL closed at the theorem level (2D anchor deferred by design; descent skipped by design). Remaining hypotheses to derive from
 the data model: Bochner integrability of Gaussian jets, the envelope (`W < 2`), `hE`/`hE0`/`hint` of the zeta identity.
+
+### 20.65 (2026-09-16) DXLIII `MellinTiltIntegrable`: the zeta identity's analytic hypotheses derived from the standard form —
+★★ `integrable_mellinIntegrand_of_bounded_std` (`hint` on `Re s > 0` from `|Ξ| ≤ C_ψ √K`, bounded `obs`, `∫ K^{−Re s} dν < ∞`; inner
+`L¹` norm `≤ C_obs S_{Re s}(C_ψ) K^{−Re s}` by the substitution `∫ N^{σ−1} e^{−NK+√N a√K} = K^{−σ} S_σ(a)`), ★ `locallyIntegrableOn_integral_tilt`,
+`integral_tilt_isBigO_one` (`hE`, `hE0` for a bounded field and observable, finite `ν`, by dominated convergence). Bridge
+`FluctuationZetaStrip`: `fluctuationZeta_eq_mellinContinuation_of_bounded_std`, `isFrozenCoeff_polarCoeff_unique_of_bounded` with every
+analytic hypothesis derived (Astra #160 "package strip hypotheses implying `hint`"). Remaining: Bochner integrability of Gaussian jets, the
+envelope (`W < 2`); optional (α).

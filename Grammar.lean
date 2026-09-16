@@ -871,4 +871,5 @@ import Grammar.JetHolonomy
 import Grammar.AmplitudeJetSpace
 import Grammar.GaussianAveraging
 import Grammar.WickSeries
+import Grammar.MellinTiltIntegrable
 import Grammar.GaussianEvenMoments
