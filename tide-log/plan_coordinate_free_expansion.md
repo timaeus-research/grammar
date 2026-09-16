@@ -1822,3 +1822,9 @@ Mathlib's `norm_iteratedFDeriv_comp_le` and `norm_iteratedFDeriv_mul_le`). Next:
 `emp_cutoffExpansion_uniform` + dilation `empIntegralRect_eq` + spectral-sum scaling + jets of `ζ ∘ diag b`), then 4 (chart remainder o_P below the
 cutoff rate, localised on jet balls) and 5 (total evidence; greybook's `tail_evidence_tendsto_zero_inProb` already gives n^lam·T → 0 for EVERY lam,
 m := 1).
+
+### 20.51 DELIVERABLE 2 OF #152 LANDED IN GRAMMAR (2026-09-16): DXV `RectRemainderUniform` (`empRect_remainder_uniform_on_jetBall`). Next:
+deliverable 4 `CubeRemainderProbability` (grammar, generic): random smooth fields ζ n ω with jets Y n measurable, tight, a.s. equal to
+`cubeJet R b (ζ n ω)`, required order ≤ R ⇒ for A < U, `TendstoInMeasure P (fun n ω => n^A/(1+log n)^{d−1} · (empIntegralRect η (ζ n ω) … n −
+absSpectralSum … (empCoeffRect η (ζ n ω) …) U n)) atTop 0` (localised jet-ball argument); then deliverable 5 in the bridge (chart remainders +
+greybook tail `tail_evidence_tendsto_zero_inProb` with m := 1 ⇒ total evidence expansion in probability).

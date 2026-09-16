@@ -835,5 +835,6 @@ import Grammar.SmoothCutoff
 import Grammar.CubeJets
 import Grammar.TightNormTail
 import Grammar.FieldJetUniform
+import Grammar.RectRemainderUniform
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
