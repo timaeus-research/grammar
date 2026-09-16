@@ -200,7 +200,7 @@ theorem tail_radial_le (a : ℝ) {n : ℝ} (hn : 1 ≤ n) :
         mul_le_mul_of_nonneg_left hmono (by positivity)
 
 theorem tail_radial_nonneg (a : ℝ) {n : ℝ} (hn : 0 ≤ n) : 0 ≤ ∫ t in Ioi n, radial a t :=
-  setIntegral_nonneg measurableSet_Ioi fun t ht => radial_nonneg a (hn.trans (le_of_lt ht))
+  setIntegral_nonneg measurableSet_Ioi fun _ ht => radial_nonneg a (hn.trans (le_of_lt ht))
 
 theorem fluctuation_half_eq (a : ℝ) : fluctuation 1 (1 / 2) a = ∫ t in Ioi (0 : ℝ), radial a t := by
   rw [← fluctuationLog_zero]
