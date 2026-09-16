@@ -1589,3 +1589,7 @@ the missing jet convergence is a substantive statistical hypothesis, not determi
 Optional deterministic illustration (Astra §4) DONE: DIV `ProductUniformLog` + `LogExampleTwoDim` (829 modules): `K = x²y²`, `h = 0`, constant
 field — `4√n·I(n) = S_{1/2}(a) log n − ∂_ν S_ν(a)|_{1/2} + o(1)`, the `∂_ν S` weight concretely. NEXT: papers (scope paragraph + the example),
 hand-off note refresh, memory; ARC CLOSED unless the user directs otherwise.
+
+### 20.32 (2026-09-16): DV `EmpiricalJetTightness` (Astra #147 follow-up (a)); 830 modules. `isTightMeasureSet_of_jetEnvelope`: sup+Lipschitz
+envelopes with bounded second moments ⇒ tight jet laws (Arzelà–Ascoli + Markov). NOT proved (by design, no data model): fd convergence of the
+jet evaluations / the envelopes for the empirical root fields. NEXT: papers + hand-off + memory; then stop unless directed.
