@@ -860,3 +860,6 @@ import Grammar.IntegralGeneratingSeries
 import Grammar.MellinPowerLog
 import Grammar.MellinRegularization
 import Grammar.FluctuationComplex
+import Grammar.PrincipalPartUniqueness
+import Grammar.AnnealedGeneratingSeries
+import Grammar.RationalExpansionAtInfinity

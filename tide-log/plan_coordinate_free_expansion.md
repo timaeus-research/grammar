@@ -1888,3 +1888,11 @@ threshold was ALREADY in the repo (`GaussianThreshold`, `GaussianDichotomy`, `Ga
 module was written and discarded; survey before writing. Not done: item 3 analytic layer (inverse-log expansion of a block, probabilistic
 transfer), item 2 (2D anchor `c_{μ,0}`, holomorphic-numerator extraction, principal-part uniqueness), item 6 Gaussian Wick evaluation,
 item 4 (continuous descent).
+
+### 20.58 CONSULT #159 STEPS 1–3 LANDED (2026-09-16): polar uniqueness, annealed series, rational expansion. Grammar DXXXI
+(`PrincipalPartUniqueness`: ★★ `polarPart_eq_of_sub_isBigO_one`, ★★★ `polarCoeff_unique` — the coefficients of `N^{−μ₀}(log N)^q` are
+the unique local principal-part data of `F_U = mellin R_U + principalParts U` at every retained `0 < μ₀ < U`), DXXXII
+(`AnnealedGeneratingSeries`: Tonelli packaging of DXXX, `integral_eq_tsum_wickWeights`), DXXXIII (`RationalExpansionAtInfinity`:
+`eval_div_sub_truncQuot_isBigO`, `P/Q` at infinity via `Polynomial.reflect` + `quotientBlocks`). Not done: B(ii) two-scale division
+`quotient_twoScale_isBigO`, A3 Gaussian jet Wick lemma, B(iii) transfer, D finite-dimensional downstairs CLT, bridge corollary
+(polar coefficients of the fluctuation zeta function; `hint`/`hE`/`hE0` from the data).
