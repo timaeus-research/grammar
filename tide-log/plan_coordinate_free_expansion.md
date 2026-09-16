@@ -1566,3 +1566,12 @@ via `hasDerivAt_integral_of_dominated_loc_of_deriv_le` with dominator `(t^{ν₀
 `mellinMom_pow_mul_exp_eq_iteratedDeriv`: the lower-log Mellin weights of the jets are `(−1)^ℓ ∂_ν^ℓ S_ν(a)` at `ν = μ + r/2` (sign convention
 of consult #142 now a theorem; no factors of 2). All Astra #145 items (1)–(3) DONE. NEXT: papers (replace "not formalised" for the lower-log
 identification; pin), consolidation; then consult #146 for direction.
+
+### 20.28 CONSULT #146 (2026-09-16): (1)–(3) ACCEPTED ("close the package"); scope wording: continuity is of the TOP coefficient under the
+stated stratum-vanishing hypothesis (not of every lower coefficient simultaneously); `iteratedDeriv` at ν > 0 is the right object (paper: "∂_ν on
+the open half-line ν > 0"); publish the conditional theorem with limits in the range of the branch-jet map with its inherited metric, not a
+closed jet space. Ranked next: (1) extend the coefficient to the CLOSURE of the realizable jets [DONE: DII `EmpiricalClosedJets`, 826 modules];
+(2) low-dimensional closed coefficient formulas (d = 1 next two exponents; first a finite normal form `empOneDimCoeff = Σ weight · mellinMom
+(τ^power e^{amp τ}) μ logOrder`, then rewrite with the log-weight identity — do NOT promise ∂_ν S before inspecting the extracted log orders);
+(3) full stochastic jet programme (large; hypotheses: pathwise C^{m+1} iid fields, square-integrable derivative envelopes, fd CLTs, tightness);
+(4) no population gap identified. Consolidation report as a short parallel task.

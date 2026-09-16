@@ -821,5 +821,6 @@ import Grammar.EmpiricalResolvedContinuity
 import Grammar.EmpiricalBranchJets
 import Grammar.EmpiricalCoeffDistribution
 import Grammar.MellinLogWeights
+import Grammar.EmpiricalClosedJets
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
