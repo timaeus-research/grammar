@@ -109,7 +109,7 @@ theorem logExample_eq {a n : ℝ} (hn : 0 < n) :
   have himg1 : f '' Ioo (min (0 : ℝ) 1) (max 0 1) ⊆ Ioi 0 := by
     rintro _ ⟨u, hu, rfl⟩
     simp only [min_eq_left zero_le_one, max_eq_right zero_le_one] at hu
-    show 0 < n * u ^ 2
+    change 0 < n * u ^ 2
     exact mul_pos hn (pow_pos hu.1 2)
   have himg2 : f '' uIcc (0 : ℝ) 1 ⊆ Icc 0 n := by
     rintro _ ⟨u, hu, rfl⟩
@@ -117,7 +117,7 @@ theorem logExample_eq {a n : ℝ} (hn : 0 < n) :
     refine ⟨?_, ?_⟩
     · show 0 ≤ n * u ^ 2
       positivity
-    show n * u ^ 2 ≤ n
+    change n * u ^ 2 ≤ n
     have : u ^ 2 ≤ 1 := by nlinarith [hu.1, hu.2]
     nlinarith
   have hgc : ContinuousOn g (f '' Ioo (min (0 : ℝ) 1) (max 0 1)) := by
