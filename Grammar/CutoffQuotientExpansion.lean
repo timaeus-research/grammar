@@ -191,4 +191,61 @@ theorem cutoff_div_isBigO (hQ : 0 < Q) {Z₁ Z₂ : ℝ → ℝ} {c₁ c₂ : �
   have hm : N ^ ((m₀ : ℝ) / Q) ≠ 0 := (Real.rpow_pos_of_pos hN _).ne'
   simp only [mul_div_mul_left _ _ hm]
 
+/-- A block polynomial with some nonzero coefficient is eventually bounded away from zero along
+`log N`: constant if of degree `0`, unbounded otherwise. -/
+theorem exists_eventually_le_abs_blockPoly (Q D : ℕ) (c : ℝ → ℕ → ℝ) (m₀ j : ℕ)
+    (hne : ∃ q ∈ range (D + 1), c (((m₀ + j : ℕ) : ℝ) / Q) q ≠ 0) :
+    ∃ cb > 0, ∀ᶠ N : ℝ in atTop, cb ≤ |blockPoly Q D c m₀ j (Real.log N)| := by
+  obtain ⟨p, hp⟩ : ∃ p : Polynomial ℝ, p = ∑ q ∈ range (D + 1),
+      Polynomial.C (c (((m₀ + j : ℕ) : ℝ) / Q) q) * Polynomial.X ^ q := ⟨_, rfl⟩
+  have hpe : ∀ L, p.eval L = blockPoly Q D c m₀ j L := by
+    intro L
+    rw [hp, Polynomial.eval_finsetSum]
+    unfold blockPoly
+    simp only [Polynomial.eval_mul, Polynomial.eval_C, Polynomial.eval_pow, Polynomial.eval_X]
+  have hpc : ∀ q ∈ range (D + 1), p.coeff q = c (((m₀ + j : ℕ) : ℝ) / Q) q := by
+    intro q hq
+    rw [hp, Polynomial.finsetSum_coeff]
+    simp only [Polynomial.coeff_C_mul_X_pow]
+    rw [Finset.sum_ite_eq (range (D + 1)) q, if_pos hq]
+  have hp0 : p ≠ 0 := by
+    obtain ⟨q, hq, hcq⟩ := hne
+    intro h
+    apply hcq
+    rw [← hpc q hq, h, Polynomial.coeff_zero]
+  rcases lt_or_ge 0 p.degree with hdeg | hdeg
+  · have hlog : Tendsto (fun N : ℝ => ‖Real.log N‖) atTop atTop :=
+      tendsto_abs_atTop_atTop.comp Real.tendsto_log_atTop
+    have ht := (Polynomial.tendsto_norm_atTop p hdeg hlog).eventually_ge_atTop 1
+    refine ⟨1, one_pos, ?_⟩
+    filter_upwards [ht] with N hN
+    rw [Real.norm_eq_abs, hpe] at hN
+    exact hN
+  · have hpC := Polynomial.eq_C_of_degree_le_zero hdeg
+    have h0 : p.coeff 0 ≠ 0 := by
+      intro h
+      apply hp0
+      rw [hpC, h, Polynomial.C_0]
+    refine ⟨|p.coeff 0|, abs_pos.2 h0, Eventually.of_forall fun N => ?_⟩
+    have : p.eval (Real.log N) = p.coeff 0 := by
+      conv_lhs => rw [hpC]
+      exact Polynomial.eval_C
+    rw [← hpe, this]
+
+/-- ★★★ **The quotient of two cutoff expansions to all orders, with the denominator's leading
+block nonzero**: the eventual lower bound of `cutoff_div_isBigO` is automatic once some
+coefficient `c₂(m₀/Q, q)` is nonzero. -/
+theorem cutoff_div_isBigO' (hQ : 0 < Q) {Z₁ Z₂ : ℝ → ℝ} {c₁ c₂ : ℝ → ℕ → ℝ}
+    (h₁ : CutoffExpansion Q D Z₁ c₁) (h₂ : CutoffExpansion Q D Z₂ c₂) {m₀ : ℕ}
+    (hv₁ : VanishBelow Q c₁ m₀) (hv₂ : VanishBelow Q c₂ m₀) {J : ℕ} (hJ : 1 ≤ J)
+    (hne : ∃ q ∈ range (D + 1), c₂ ((m₀ : ℝ) / Q) q ≠ 0) :
+    (fun N : ℝ => Z₁ N / Z₂ N - ∑ j ∈ range J,
+        quotientBlocks (fun i => blockPoly Q D c₁ m₀ i (Real.log N))
+          (fun i => blockPoly Q D c₂ m₀ i (Real.log N)) j * (N ^ (-(1 / (Q : ℝ)))) ^ j)
+      =O[atTop] fun N : ℝ => (N ^ (-(1 / (Q : ℝ)))) ^ J * ((1 + Real.log N) ^ D) ^ (J + 1) := by
+  have hne' : ∃ q ∈ range (D + 1), c₂ (((m₀ + 0 : ℕ) : ℝ) / Q) q ≠ 0 := by
+    simpa only [Nat.add_zero] using hne
+  obtain ⟨cb, hcb, hb0⟩ := exists_eventually_le_abs_blockPoly Q D c₂ m₀ 0 hne'
+  exact cutoff_div_isBigO hQ h₁ h₂ hv₁ hv₂ hJ hcb hb0
+
 end Grammar
