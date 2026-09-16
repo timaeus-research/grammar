@@ -1619,3 +1619,16 @@ theorem instantiated for one standard-form chart); NOT a discharge of the resolv
 derivative kernels — greybook has no C^r≥2 control; would require the simultaneous analytic-representative lemma), deliverable 3 (resolved
 leading assembly: C(𝓜) → BranchTuple adapter + global O_p(1) bound from `hsecond`/`boundedInProbabilitySeq_norm_xi`, then
 `tendstoInDistribution_empZ_div`).
+
+### 20.35 CONSULT #149 (2026-09-16): Astra's ranking after units 1/2/1b — (ii) finite-jet law FIRST but staged, with Stage A "expose an
+analytic L^s-valued standard-form quotient `u ↦ a_α(·,u)` on neighbourhoods of the chart boxes, compatible with `AtlasData.fa`" as the go/no-go
+gate (analytic DIVISION by `u^k` across the divisor is the crux — not derivable from `IsLpValuedAnalytic F` + analytic charts alone; Route A =
+expose the factorisation from the hironaka/Theorem 6.1 construction, Route B = removability from the coherent continuous standard form); Stage B
+one coherent smooth representative family (a.e. in x SIMULTANEOUSLY in u; L^s envelopes on the boxes); Stage C derivative kernels admissible for
+Thm 5.9 (joint finite block, never marginals); Stage D joint chart-jet law `ChartJetSpace R := ∀ α γ, C(closedBox d (rb α), ℝ)` with
+`jointJetLimit_map_zero = μlim.map restrict`; Stage E adapter to grammar's closed branch jets, consume `tendstoInDistribution_resolvedCoeff_top_closed`
+(Borel ≠ continuous-mapping; use the theorem's own hypotheses). (i) constant identification second, AFTER auditing the normalisation (`boxGamma`
+index shift `Fin (r+1)` vs `Fin (r+2)`; state with a neutral essential count `q`; scaledBox conventions; k' = 0 allowed in greybook) and the sign
+(grammar's field ζ = chartXi = −ξCM; the bridge limit `boxFaceLimit (boxExt (−φ))` with φ ~ chartLaw = law of ξCM|α is a pathwise coupling, no
+symmetry argument). (iv) close if Stage A is uneconomic; (iii) order-≤1 tightness only for a named low-order consumer (gradient bounds give
+equicontinuity of the FIELD, not of the gradient; O_p(1) ≠ ∫A² ≤ C); (v) finite-product transfer: defer, no consumer. Next ticket = Stage A.
