@@ -852,3 +852,5 @@ import Grammar.EmpiricalGeneratingIdentity
 import Grammar.EmpiricalGeneratingRect
 import Grammar.EmpiricalTailJetUniform
 import Grammar.EmpiricalGeneratingUniform
+import Grammar.JetProductCalculus
+import Grammar.EmpiricalPopulationJets
