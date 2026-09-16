@@ -1946,3 +1946,13 @@ the data model: Bochner integrability of Gaussian jets, the envelope (`W < 2`), 
 `FluctuationZetaStrip`: `fluctuationZeta_eq_mellinContinuation_of_bounded_std`, `isFrozenCoeff_polarCoeff_unique_of_bounded` with every
 analytic hypothesis derived (Astra #160 "package strip hypotheses implying `hint`"). Remaining: Bochner integrability of Gaussian jets, the
 envelope (`W < 2`); optional (α).
+
+### 20.66 (2026-09-16) Astra #161 (`gpt6_bigpicture_v161.md`): priorities (1) moment-to-`hint` wrapper [DXLIV `JetPowerBound`: DONE —
+`norm_cubeJet_mul_pow_le`, `integrable_cubeJet_mul_pow_of_moment`, ★★★ `integral_empCoeff_gaussian_wick_of_moments`], (2) Gaussianity of the
+jet law on `CubeJetSpace` from the Gaussian VALUE process: derivative evaluations = a.s. limits of finite differences of values (jointly
+Gaussian by closure of Gaussian laws under limits), finite-rank partition-of-unity interpolation `T_n J → J` on each `C(K, multilinear)`,
+`L(T_n J)` Gaussian for every strong-dual `L` → `IsGaussian` of the jet law; then Fernique (`IsGaussian.memLp_id`) discharges the moments,
+(3) the fixed-index monomial-shift lemma `Z_{η(mono k)^r ζ^r}(s) = Z_{η ζ^r}(s − r/2)` for the envelope (`Γ^{(ℓ)}(μ+r/2)` carries the r-growth;
+keep `habs` until it lands; `W < 2` is the scalar absolute-series threshold, not an iff for coefficients), (4) optional (α) `R_j = N_j/B_0^{j+1}`
+with `N_j = A_j B_0^j − Σ_{i=1}^j B_i N_{j−i} B_0^{i−1}` if cheap; skip derivative CLT/Riesz and finite-n asymptotic Wick.
+
