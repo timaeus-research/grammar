@@ -865,3 +865,4 @@ import Grammar.AnnealedGeneratingSeries
 import Grammar.RationalExpansionAtInfinity
 import Grammar.TwoScaleDivision
 import Grammar.CutoffQuotientExpansion
+import Grammar.GaussianEvenMoments

@@ -1902,3 +1902,8 @@ the unique local principal-part data of `F_U = mellin R_U + principalParts U` at
 two cutoff expansions on a common lattice with common leading index is `Σ_{j<J} R_j(log N) N^{−j/Q} + O(N^{−J/Q}(1+log N)^{D(J+1)})`,
 `R_j` the pointwise quotient blocks of the block polynomials). Not done: B(iii) probabilistic transfer; bridge instance (a.s. leading
 block bounded below); A3 Gaussian jet Wick; D; the fluctuation-zeta polar corollary in the bridge (`hE`, `hE0` for the frozen evidence).
+
+### 20.60 (2026-09-16) DXXXVI `GaussianEvenMoments` (even/odd moments of `N(0,v)`, the Wick weights) and bridge `DownstairsFidi`
+(★ `tendstoInDistribution_empDeformation_fidi`: `(Hₙ(w₁),…,Hₙ(w_r)) ⇒ −Y`, `Y ~ N(0, Cov(f(X,wᵢ), f(X,wⱼ)))`, consult #159 D — a
+re-export of the grey book's Theorem 5.9 (3) through `fidiProcess_eq_neg_empDeformation`). Bridge `FluctuationZetaPolar` (C2). Open: A3
+(coefficient functional as a CLM of the amplitude + covariance compatibility), B(iii), the bridge instance of `cutoff_div_isBigO'`.
