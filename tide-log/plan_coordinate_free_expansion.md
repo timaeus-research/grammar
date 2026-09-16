@@ -1553,3 +1553,11 @@ dominator before iterating; (3) conditional random-field subleading theorem via 
 Continuity programme (Astra #144 item 1 + #145 item 1) COMPLETE. NEXT: paper sentence on the jet topology + pin; consolidation; then either
 lower-log Mellin weights (audit kernel normalisation first) or the conditional random-field theorem via the repo's convergence-in-law
 abstraction (`EmpiricalFieldLimit`/`UniformCompactTransfer`).
+
+### 20.26 CONSULT #145 (3) LANDED (2026-09-16): D `EmpiricalCoeffDistribution`; 824 modules.
+`tendstoInDistribution_resolvedCoeff_top`: realizable branch jets ⇒ in distribution (subtype metric) implies `resolvedCoeff μ (c−1)` ⇒ in
+distribution (continuous mapping). Remaining probabilistic input (NOT formalised): jet convergence of the empirical root fields. NEXT: lower-log
+Mellin weights — normalisation AUDITED: `momKernel G μ ℓ s = s^{μ−1}(−log s)^ℓ G(√s) e^{−s}`, `fluctuation 1 ν a = ∫ t^{ν−1} e^{−t+a√t}`, so
+`mellinMom (τ^r e^{aτ}) μ ℓ = (−1)^ℓ ∂_ν^ℓ S_ν(a)|_{ν=μ+r/2}` with NO factors of 2; route: `HasDerivAt (fun ν => ∫ t^{ν−1} (log t)^ℓ e^{−t+a√t}) (∫ t^{ν−1}(log t)^{ℓ+1} …) ν`
+via `hasDerivAt_integral_of_dominated_loc_of_deriv_le` with dominator `(t^{ν₀−δ−1} + t^{ν₀+δ−1}) |log t|^{ℓ+1} e^{−t+a√t}` (integrable by
+`integrableOn_envelope`), then `iteratedDeriv` by induction; papers: add the random-field conditional sentence + pin.
