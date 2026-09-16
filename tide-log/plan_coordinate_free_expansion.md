@@ -1918,3 +1918,10 @@ tight lower log coefficients, `b_{λ,m−1}(n) ⇒ B > 0`, cutoff `U > λ + J/Q`
 `empCoeff η 0 = empCoeffAtDepthFam (fun _ v => η v)`, jet-norm→`FamJetBound` lemma, bounded linear coefficient functional on the CLOSURE
 of the jet range (holonomicity lemma: zeroth-order evaluations separate points of the closed jet range), Gaussian averaging by
 evaluations + DXXXVI, (4) optional (α) nonreduced rational representation `(B_0, P_0, …, P_{J−1})`.
+
+### 20.62 (2026-09-16) BRIDGE INSTANCE LANDED: `Bridge/PosteriorAllOrders` (959dcf1): ★★★ `boundedInProbSeq_posteriorMean_allOrders` — `E_n[obs]/E_n[1] − Σ_{j<J} R_j(log n) n^{−j/Q} = O_P(n^{−J/Q}(1+log n)^{(d−1)(J+1)})` with exact rational-log
+quotient blocks of the aggregated block polynomials `aggBlock`, for every `J ≥ 1` and chart cutoff `U > λ + J/Q` (inputs: tightness of the
+aggregated coefficients from `jointChartCoeffLaw_obs`, `O_P` remainder from `tendstoZeroInProb_evidence_obs_absSpectral`, leading block bounded
+below from `tendstoInDistribution_evidenceOne_div_powLogScale` + `tendstoZeroInProb_evidenceObs_div_sub_logpoly`, vanishing below `λ` from
+`BoxLeading`). User item 3 (posterior expectations beyond the first correction) is now closed deterministically AND probabilistically. Open:
+A(a) jet-level Gaussian Wick (holonomic amplitude space), (α) optional.
