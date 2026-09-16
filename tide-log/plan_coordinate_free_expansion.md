@@ -1716,3 +1716,21 @@ synchronises all orders on one conull set), (E2) a.s. identification `chartXi = 
 (E3) cube-level jet space + continuity/closure extension of the top cube coefficient (`tendsto_empCoeffRect_top` exists; the
 BranchJetSpace/coeffOnClosedJets machinery is resolved-level only), (E4) transport of the Stage C law to the cube jet space, (E5) continuous
 mapping ⇒ convergence in distribution of the top subleading CHART coefficient; (E6) resolved assembly = geometry identification (open).
+
+### 20.42 CONSULT #151 (2026-09-16): Stage E roadmap. Corrections: (1) continuity on realizable jets does NOT give the closure extension — need a
+Lipschitz estimate on bounded jet sets (`cubeCoeff_lipschitz_on_bounded_jets`), then a GENERIC lemma "Lipschitz on bounded parts of a subset of a
+normed space ⇒ unique continuous extension to the closure" (instantiate for branch jets AND cube jets); (2) expansion uniqueness only compares
+GLOBALLY smooth extensions agreeing on the box (`empCoeffRect_congr_box`) — define the local-field coefficient via a global extension (bump `χ ≡ 1`
+near the closed box, `tsupport χ ⊆ U`) and prove extension independence; the raw `empCoeffRect` of a merely locally smooth field needs a separate
+locality lemma; (3) a coefficient law ≠ a stochastic asymptotic expansion (diagonal remainder ζ_n, N = n needs a uniform remainder estimate on
+bounded jet sets + tightness ⇒ o_P); (4) `∀ i, 0 < k α i` and `DeepVanishing (unitWt α) b c` are EXPLICIT hypotheses (resolution cutoffs need not
+vanish near deep strata). Milestones: 1 E2 representative equality `∀ᵐ x, ∀ u ∈ box, D.fa α x u = (Rp α).f x u` (dense set + continuity, μ-level,
+then pull back through every X i; needs g(box) ⊆ K₀ where `hfae` holds — not exported by AtlasData → hypothesis) + `chartMean = u^k` on the box +
+evidence congruence; 2 globalization (`contDiff_globalize`, `iteratedFDeriv_globalize_eq`) + `empCoeffRect_congr_box`; 3 bounded-jet Lipschitz
+estimate for the top cube coefficient (audit the proof of `tendsto_empCoeffRect_top`); 4 generic closure extension; 5 `CubeJetSpace R b := ∀ r :
+Fin (R+1), C(closedBox d b, CMM_r)`, `chartJetReconstruct : C(chartUnion …, ℝ) →L CubeJetSpace` (coordinate reconstruction, `coordMono`), a.s.
+identification with `cubeJet (χ · empField)`, closed support by Portmanteau (`ProbabilityMeasure.le_liminf_measure_open_of_tendsto`), continuous
+mapping ⇒ `chartTopCoeffLaw`; 6 joint finite-chart coefficient law on the GREYBOOK atlas via its exact `decomp` (common lattice refinement,
+zero-extension of coefficients, joint reconstruction, finite sums) — "the coefficient-level multi-chart law does not intrinsically require
+grammar's resolved core transport"; whether it is the paper's Theorem E depends on whether that theorem is atlas-independent. Monomial
+resolved-data shortcut: time-boxed audit only.
