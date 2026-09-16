@@ -1602,3 +1602,20 @@ plan (b) glue repo; deliverables (1) single-chart C⁰ bridge, (2) joint finite-
 analytic-representative lemma, (3)/(4) resolved assemblies, (5) dependency consolidation; target closed realizable jets; chart-level result is
 "instantiated for a standard-form chart", not a discharge of the resolved hypotheses. Bridge workspace `lean/grammar-greybook-bridge`
 (hironaka pinned to the fork first, path deps to grammar-tide-smooth and greybook) resolves and builds both (10673 jobs).
+
+### 20.34 BRIDGE UNITS 1, 2, 1b (2026-09-16): bridge repo `lean/grammar-greybook-bridge` (local git, no remote). `Bridge/ChartBox.lean`:
+`box_const_eq_closedBox` (rfl), `chartBoltzmann_one`, `integral_chartBoltzmann_eq_empBoxIntegral` (grey-book chart evidence integral =
+`empBoxIntegral (A.h α) (A.k α) n b ξ (A.unitWt α)`), `tendsto_chartIntegral_div_boxFaceLimit` (fixed field). `Bridge/ChartLaw.lean`:
+`chartEmb rb α : C(closedBox d (rb α), chartUnion d rb)`, `chartField D α n ω := (D.ξCM n ω).comp (chartEmb rb α)`, `measurable_chartField`,
+`chartLaw D α := D.μlim.map precomp`, `tendsto_chartLaw`, `tendstoInDistribution_chartField` (to the coordinate process of `chartLaw`),
+`chartField_apply : chartField D α n ω u = −chartXi … u` (from `hCf`, `hCfbox`, `clampBox_eq_self`), `chartFieldExt` (clamped continuous
+extension, `= chartXi` on the box), `integral_chartBoltzmann_eq_empBoxIntegral_chartFieldExt`, `chartLaw_map_evalFinE` (Gaussian fidis of the
+chart law = Thm 5.9 restricted). Grammar side (dependency-free contract) DVI `EmpiricalBoxFieldLimit`: `boxExt`, `boxZ`, Lipschitz/continuity,
+uniform convergence on compacts, converse-Prokhorov tightness, ★★ `tendstoInDistribution_boxZ_div`. `Bridge/ChartLimitLaw.lean`: `chartZ D α n ω`
+(standard-form chart partition function), `chartZ_eq_boxZ`, ★★ `tendstoInDistribution_chartZ_div : Z_α(n)/powLogScale lam (m−1) n ⇒
+boxFaceLimit (boxExt (−ψ))` under `chartLaw D α`, hypotheses `hk`, `0 < rb α`, `1 ≤ m`, `BoxLeading (A.h α) (A.k α) lam m`, `Continuous (A.unitWt α)`.
+All axiom-clean (`#print axioms` in `Bridge/Smoke.lean`). Scope: Astra #148 deliverable 1 DONE (the stochastic input of the empirical leading
+theorem instantiated for one standard-form chart); NOT a discharge of the resolved hypotheses. Next: deliverable 2 (joint finite-jet law needs
+derivative kernels — greybook has no C^r≥2 control; would require the simultaneous analytic-representative lemma), deliverable 3 (resolved
+leading assembly: C(𝓜) → BranchTuple adapter + global O_p(1) bound from `hsecond`/`boundedInProbabilitySeq_norm_xi`, then
+`tendstoInDistribution_empZ_div`).

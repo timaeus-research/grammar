@@ -826,5 +826,6 @@ import Grammar.EmpiricalOneDimSecond
 import Grammar.ProductUniformLog
 import Grammar.LogExampleTwoDim
 import Grammar.EmpiricalJetTightness
+import Grammar.EmpiricalBoxFieldLimit
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
