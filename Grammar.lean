@@ -829,5 +829,7 @@ import Grammar.EmpiricalJetTightness
 import Grammar.EmpiricalBoxFieldLimit
 import Grammar.CoordinateJetTower
 import Grammar.LpRepresentativeLimit
+import Grammar.LipschitzClosureExtension
+import Grammar.CubeCoeffLipschitz
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

@@ -1734,3 +1734,9 @@ mapping ⇒ `chartTopCoeffLaw`; 6 joint finite-chart coefficient law on the GREY
 zero-extension of coefficients, joint reconstruction, finite sums) — "the coefficient-level multi-chart law does not intrinsically require
 grammar's resolved core transport"; whether it is the paper's Theorem E depends on whether that theorem is atlas-independent. Monomial
 resolved-data shortcut: time-boxed audit only.
+
+### 20.43 M3, M4 LANDED IN GRAMMAR (2026-09-16): DIX `CubeCoeffLipschitz` (`exists_empCoeffRect_top_bound`), DX `LipschitzClosureExtension`
+(`LipschitzOnBounded`, `closureExtend`, `continuous_closureExtend`). Next M5 (grammar `CubeJets`: `CubeJetSpace d R b`, `cubeJet`, realizable cube
+jets, `cubeCoeff'` well-defined by the ε = 0 case of DIX, `LipschitzOnBounded` from DIX + norm ↔ JetClose/JetBoundOn, `cubeCoeffOnClosedJets :=
+closureExtend`, Borel, `tendstoInDistribution_cubeCoeff_top_closed`), M2 (globalization by a smooth cutoff + `empCoeffRect_congr_box`), then the
+bridge (M1 E2 congruence, reconstruction CLM, closed support by Portmanteau, `chartTopCoeffLaw`).
