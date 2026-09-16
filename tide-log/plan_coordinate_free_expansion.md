@@ -1778,3 +1778,15 @@ continuous representative `D.fa` represents the analytic kernel `Q.a` at every p
 (h α) (k α) (fun _ => rb α) n`). Hence `chartTopCoeffLaw_neg` is about the coefficients of the cube expansion of the ACTUAL grey-book chart evidence
 integrals. Remaining: M6 (joint finite-chart coefficient law via the greybook atlas `decomp`), the uniform remainder (coefficient law → evidence
 expansion), constant identification (i), and the `DeepVanishing (unitWt α)` / `0 < k α i` chart hypotheses (explicit).
+
+### 20.47 M6a LANDED IN THE BRIDGE (2026-09-16, commit b012fb4 `Bridge/ChartCoeffLawJoint.lean`): `JetTuple d R rb := ∀ α, CubeJetSpace d R
+(rb α)` (def, one normed-group instance, borel), `closedTuple` (product of the closed realizable jets, closed), `jointReconstruct` (product of
+the chart reconstructions), `jointCubeCoeffLaw_of_reconstruct` (the generic argument for all charts at once; Tietze extensions chart by chart —
+a subtype of the tuple space resisted instance search), ★★ `jointChartTopCoeffLaw (hk : ∀ α i, 0 < k α i) (hb : ∀ α, 0 < rb α) (hμ₀) (hc) (hη : ∀ α,
+smooth unitWt) (hdeep : ∀ α, DeepVanishing (unitWt α) (rb α) c) (hR : ∀ α, cubeOrder ≤ R) : ∃ νlim φ, Continuous φ ∧ (φ = the vector of
+`cubeCoeffOnClosedJets` on `closedTuple`) ∧ νlim closedTupleᶜ = 0 ∧ TendstoInDistribution (fun n ω α => empCoeffRect (unitWt α) (−globalField α n ω)
+… μ₀ (c−1)) atTop φ …` (JOINT over charts), `sumChartTopCoeffLaw` (the sum over charts). Axiom-clean. Remaining: M6b the grey book's TOTAL
+evidence at β = 1 as Σ_α empIntegralRect(−globalField α) + smooth tail a.s. (greybook `integral_boltzmann_empirical` + `Zn0_eq_add_tail_smooth`
++ `ae_chartEvidence_eq`); the uniform remainder (coefficient law → evidence expansion; the diagonal ζ_n, N = n) — genuinely open analysis;
+constant identification (i); lattice alignment across charts for a fixed (μ₀, c) (each chart's `empCoeffRect` at an off-lattice μ₀ — check
+whether it vanishes by definition).
