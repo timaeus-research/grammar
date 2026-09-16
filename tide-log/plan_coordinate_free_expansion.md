@@ -1681,3 +1681,14 @@ DVIII `LpRepresentativeLimit` (`ae_eq_of_tendsto_Lp_of_tendsto_ae`, `ae_fderiv_e
 (`MemLp` of the coefficient majorant `∑' bᵢ |Aᵢ x|` from `Summable (bᵢ · eLpNorm Aᵢ)` — Minkowski in Lp via `MemLp.toLp` + completeness + the
 wrapper), then the bridge assembly (`Bridge/KernelRep.lean`): compact L with box ⊂ V ⊂ L ⊂ S α, `exists_compact_representative_deriv` on L for
 each `derivKernel Q α k (e_b)`, Lemma A per (k, b, j) on a countable dense subset of V, one conull set N, Lemma B on N, `ChartKernelRep Q α R`.
+
+### 20.39 STAGE B LANDED IN THE BRIDGE (2026-09-16, commit 87b6e05 `Bridge/KernelRep.lean`): `ChartKernelRep Q α R` (U open ⊇ box, ⊆ S α;
+f : E → ℝ^d → ℝ; `smooth : ∀ x, ContDiffOn ℝ R (f x) U`; `measurable_jet`; `represents : ∀ k ≤ R, ∀ b, ∀ u ∈ U,
+(fun x => iteratedFDeriv ℝ k (f x) u (coordVecs b)) =ᵐ[μ] Q.derivKernel α k (coordVecs b) u`), `exists_chartKernelRep (hX) (hμ) (hs : 1 ≤ s) (hd) (R)`
+exactly as designed in #150 (compact L from `exists_compact_between`, `exists_compact_representative_deriv` per (k,b) on L, Lemma A per
+(k,b,j,u), `TopologicalSpace.exists_countable_dense` + `ae_ball_iff` + `toMeasurable` for the conull measurable N, `Set.EqOn.of_subset_closure`
+for the extension to V, `coordLinear_eval` (a CLM is the coordinate form of its basis values), Lemma B). Axiom-clean; Lemma C (envelopes) NOT
+used — envelopes are only needed for grammar's tightness route, which the joint law from Thm 5.9 makes redundant. NEXT (Stage C/D): export the
+per-word representatives with their `CoeffExpansion` data from the construction (extend the structure), feed them to `chartProcessCM_law` on the
+index type ι × Σ k ≤ R, (Fin k → Fin d) (s = 6), and identify the resulting joint process with the coordinate jets of the empirical field of f on
+the good event (differentiation of the finite sum + `integralCLM` commuting with `iteratedFDeriv` for the centring).
