@@ -1674,3 +1674,10 @@ differentiation); centering: ∫ G_{k,b} dμ = D^k(∫ F)[e_b] via the integral 
 Output structure `ChartKernelRep Q α R` (U open ⊇ box ⊆ S α, f, measurable_jet, smooth : ∀ x, ContDiffOn ℝ R (f x) U, represents, B, memLp_B,
 jet_bound). Stage B cannot be avoided (closedness alone doesn't give compatibility). Order of work: Lemma B (pure calculus, grammar), Lemma A +
 wrapper, Lemma C, then the assembly in the bridge.
+
+### 20.38 STAGE B LEMMAS A, B LANDED IN GRAMMAR (2026-09-16): DVII `CoordinateJetTower` (`contDiffOn_of_coordTower`,
+`iteratedFDeriv_coordTower_apply`: a coordinate C¹ tower `D(h k b) = Σⱼ h (k+1) (j :: b) dxⱼ` on an open set is the jet tower of its root),
+DVIII `LpRepresentativeLimit` (`ae_eq_of_tendsto_Lp_of_tendsto_ae`, `ae_fderiv_eq_of_representative`). Remaining for Stage B: Lemma C
+(`MemLp` of the coefficient majorant `∑' bᵢ |Aᵢ x|` from `Summable (bᵢ · eLpNorm Aᵢ)` — Minkowski in Lp via `MemLp.toLp` + completeness + the
+wrapper), then the bridge assembly (`Bridge/KernelRep.lean`): compact L with box ⊂ V ⊂ L ⊂ S α, `exists_compact_representative_deriv` on L for
+each `derivKernel Q α k (e_b)`, Lemma A per (k, b, j) on a countable dense subset of V, one conull set N, Lemma B on N, `ChartKernelRep Q α R`.
