@@ -1798,3 +1798,20 @@ prior + `ae_chartEvidence_eq`). With M6a this means: the joint coefficient law c
 evidence. BRIDGE STATUS: units 1, 2, 1b, A, B, C, D, E, E2, M6a, M6b all landed, axiom-clean (bridge HEAD 143d295). What remains is analysis, not
 plumbing: the uniform remainder (diagonal ζ_n, N = n — Astra #151 qualification 3), the leading-constant identification (i), lattice alignment
 across charts, and the explicit chart hypotheses (`DeepVanishing (unitWt α)`, `0 < k α i`) which the grey book's atlas does not supply.
+
+### 20.49 CONSULT #152 (2026-09-16): the uniform remainder. Corrections: the uniform cutoff estimate gives O_P (not o_P) at its OWN cutoff rate
+n^{−U}(1+log n)^{d−1}; o_P holds at every slower rate A < U; a fixed stochastic jet order R supports only cutoffs U whose required order
+|p_U| ≤ R (a.s. smoothness ≠ tightness of higher derivatives). Deliverables (priority 1 → 2 → 4 → 3 → 5): (1) grammar
+`fieldJetBound_of_jetBoundOn (hη) (hB : 0 ≤ B) : ∃ C ≥ 0, ∀ ζ smooth, JetBoundOn |p| (closedBox) ζ B → FieldJetBound η ζ p b C B` (quantifier order
+matters; audit `exists_pdMulti_fieldFam_bound`'s constant, else direct Leibniz/Faà-di-Bruno with C = A(1+B)^{|p|}); (2) grammar
+`empRect_remainder_uniform_on_jetBall (hB) : ∃ K ≥ 0, ∀ ζ smooth, JetBoundOn p_U box ζ B → ∀ N ≥ 1, |empIntegralRect η ζ h k b N − absSpectralSum
+(Qamb k) (d−1) (empCoeffRect η ζ h k b) U N| ≤ K N^{−U}(1+log N)^{d−1}` (from `emp_cutoffExpansion_uniform` + dilation; no continuity of
+B ↦ K(B) needed); (3) grammar generic `IsTightMeasureSet (range (P.map ∘ Y)) ⇒ ∀ ε > 0, ∃ B ≥ 0, ∀ n, P{B < ‖Y n‖} ≤ ε` (compact ⇒ bounded);
+(4) chart remainder `TendstoInMeasure P (fun n ω => n^A (1+log n)^{−(d−1)} (empIntegralRect η (ζ n ω) … n − absSpectralSum … U n)) atTop 0` for
+A < U, |p_U| ≤ R, tight jets (localised jet-ball argument; the random lower coefficients need their own measurability — parameterised
+integrals — not smuggled through the top law); (5) greybook tail `T n ≤ A e^{−nβε/2} e^{βM_n²/2}`, M_n = O_p(1) ⇒ n^a T n → 0 in probability for
+EVERY a (generalise `TailData.tendstoZero`), then the total evidence: for finitely many charts with U_α > A, n^A [E_n − Σ_α S_{α,U_α}(n, ζ_α,n)] → 0
+in probability (consume `ae_totalEvidence_eq`). (c) evidence subleading law: DEFERRED (needs exact subtraction of preceding random coefficients).
+Lattice alignment: off-lattice coefficients are unconstrained by `CutoffExpansion` — mask with `if μ ∈ lattice_α`; present the total as a sum of
+chart spectral sums. Leading-constant identification: parked (the factorial (q−1)! = (C.r+1)! is CONSISTENT: `boxGamma` is instantiated with
+r' := C.r + 1 — audited §20.36).
