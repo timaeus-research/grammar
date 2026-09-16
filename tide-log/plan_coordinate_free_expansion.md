@@ -1907,3 +1907,14 @@ block bounded below); A3 Gaussian jet Wick; D; the fluctuation-zeta polar coroll
 (★ `tendstoInDistribution_empDeformation_fidi`: `(Hₙ(w₁),…,Hₙ(w_r)) ⇒ −Y`, `Y ~ N(0, Cov(f(X,wᵢ), f(X,wⱼ)))`, consult #159 D — a
 re-export of the grey book's Theorem 5.9 (3) through `fidiProcess_eq_neg_empDeformation`). Bridge `FluctuationZetaPolar` (C2). Open: A3
 (coefficient functional as a CLM of the amplitude + covariance compatibility), B(iii), the bridge instance of `cutoff_div_isBigO'`.
+
+### 20.61 CONSULT #160 STEP 1–2 (grammar side) LANDED (2026-09-16): `twoScale_div_bound` (pointwise quantitative estimate, refactor of
+DXXXIV) and DXXXVII `TwoScaleDivisionProb` (★★★ `twoScale_div_boundedInProbSeq`: division in probability with `O_P` remainder). Consult
+#160 (`gpt6_bigpicture_v160.md`) reviewed DXXVII–DXXXVI + bridge modules (nothing vacuous; keep `g^{J+1}`, `hint`, `−Y`; `VanishBelow`
+over all `q` needs zero-extension at the bridge boundary) and ordered: (1) leading-block bridge facts + quantitative estimate ✓(grammar),
+(2) diagonal all-orders expansion of the posterior via the probabilistic division — bridge instance NOT done (needs: exact lattice identity
+`λ = m₀/Qtot`, vanishing below `m₀` of numerator/denominator aggregated coefficients by expansion uniqueness and `|Z_obs| ≤ ‖obs‖ Z_1`,
+tight lower log coefficients, `b_{λ,m−1}(n) ⇒ B > 0`, cutoff `U > λ + J/Q`), (3) A(a): constant-family compatibility
+`empCoeff η 0 = empCoeffAtDepthFam (fun _ v => η v)`, jet-norm→`FamJetBound` lemma, bounded linear coefficient functional on the CLOSURE
+of the jet range (holonomicity lemma: zeroth-order evaluations separate points of the closed jet range), Gaussian averaging by
+evaluations + DXXXVI, (4) optional (α) nonreduced rational representation `(B_0, P_0, …, P_{J−1})`.
