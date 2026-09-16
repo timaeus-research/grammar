@@ -1878,3 +1878,13 @@ population terms Lipschitz in jets of the FIXED order `cubeOrder h k μ` — via
 continuous-mapping wrapper for `(F, a_0, …, a_R)` (a variant of `jointCubeCoeffLaw_of_reconstruct_gen` with arbitrary continuous chart
 functionals); the analytic API `hasSum_coeffFun_smul`/`analyticAt_coeffFun`; Astra's ranks 2–4.
 
+### 20.57 CONSULT #158 ITEMS 1, 3, 6 (PARTIAL) LANDED (2026-09-16): the fluctuation zeta function. Grammar DXXVII
+(`MellinPowerLog`, `MellinRegularization`: `hasMellin_powLogIci`, the regularised transform `R_U` of any `CutoffExpansion` converges and is
+complex-differentiable on `0 < Re s < U`, `mellin E = mellin R_U + principalParts U`, compatibility in `U` — the coefficients are the
+principal parts of the continuation, with Mathlib's `mellin` alone), DXXVIII (`FluctuationComplex`: `fluctuationCplx`, ★ `mellin_exp_tilt`),
+DXXIX (`QuotientBlocks`: exact rational-log quotient blocks), DXXX (`IntegralGeneratingSeries`: `∫ Σ = Σ ∫` under an envelope). Bridge
+`FluctuationZeta`: `fluctuationZeta νχ K Ξ obs s = ∫ obs K^{−s} S_s(Ξ/√K) dνχ`, ★★ `mellin_frozenEvidenceObs_eq` (Fubini). Item 6's Gaussian
+threshold was ALREADY in the repo (`GaussianThreshold`, `GaussianDichotomy`, `GaussianPMoment`, `GaussianCriticalMoment`) — a duplicate
+module was written and discarded; survey before writing. Not done: item 3 analytic layer (inverse-log expansion of a block, probabilistic
+transfer), item 2 (2D anchor `c_{μ,0}`, holomorphic-numerator extraction, principal-part uniqueness), item 6 Gaussian Wick evaluation,
+item 4 (continuous descent).

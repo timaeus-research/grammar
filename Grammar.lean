@@ -855,3 +855,8 @@ import Grammar.EmpiricalGeneratingUniform
 import Grammar.JetProductCalculus
 import Grammar.EmpiricalPopulationJets
 import Grammar.EmpiricalGeneratingProbability
+import Grammar.QuotientBlocks
+import Grammar.IntegralGeneratingSeries
+import Grammar.MellinPowerLog
+import Grammar.MellinRegularization
+import Grammar.FluctuationComplex
