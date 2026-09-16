@@ -1933,3 +1933,8 @@ by Hahn–Banach), DXLI (`GaussianAveraging`: ★★★ `integral_empCoeff_zero_
 the jets ⇒ `E c^pop(η Y^{2j}) = (2j)!/(2^j j!) c^pop(η V^j)`, odd = 0). Not done: the assembled Wick series for `E C_{μ,q}[Y, η]`
 (combine `hasSum_empCoeff_population`, DXXXII `integral_eq_tsum_wickWeights`, DXLI per `r` with depth data for `(h + rk, μ + r/2)`),
 the Bochner integrability of Gaussian jets from a jet-norm moment bound.
+
+### 20.64 (2026-09-16) DXLII `WickSeries`: ★★★ `integral_empCoeff_gaussian_wick` — `E[C_{μ,q}[ζ,η]] = Σ_j (1/(2^j j!)) C^pop_{μ+j,q}[η W^j]`
+for pointwise-Gaussian scaled fields `u^kζ ~ N(0, W)`, under Bochner integrability of the jets and the absolute-moment envelope. User
+items 1–6: ALL closed at the theorem level (2D anchor deferred by design; descent skipped by design). Remaining hypotheses to derive from
+the data model: Bochner integrability of Gaussian jets, the envelope (`W < 2`), `hE`/`hE0`/`hint` of the zeta identity.

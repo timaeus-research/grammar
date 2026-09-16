@@ -870,4 +870,5 @@ import Grammar.AmplitudeFunctional
 import Grammar.JetHolonomy
 import Grammar.AmplitudeJetSpace
 import Grammar.GaussianAveraging
+import Grammar.WickSeries
 import Grammar.GaussianEvenMoments
