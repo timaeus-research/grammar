@@ -1561,3 +1561,8 @@ Mellin weights — normalisation AUDITED: `momKernel G μ ℓ s = s^{μ−1}(−
 `mellinMom (τ^r e^{aτ}) μ ℓ = (−1)^ℓ ∂_ν^ℓ S_ν(a)|_{ν=μ+r/2}` with NO factors of 2; route: `HasDerivAt (fun ν => ∫ t^{ν−1} (log t)^ℓ e^{−t+a√t}) (∫ t^{ν−1}(log t)^{ℓ+1} …) ν`
 via `hasDerivAt_integral_of_dominated_loc_of_deriv_le` with dominator `(t^{ν₀−δ−1} + t^{ν₀+δ−1}) |log t|^{ℓ+1} e^{−t+a√t}` (integrable by
 `integrableOn_envelope`), then `iteratedDeriv` by induction; papers: add the random-field conditional sentence + pin.
+
+### 20.27 CONSULT #145 (2) LANDED (2026-09-16): DI `MellinLogWeights`; 825 modules.
+`mellinMom_pow_mul_exp_eq_iteratedDeriv`: the lower-log Mellin weights of the jets are `(−1)^ℓ ∂_ν^ℓ S_ν(a)` at `ν = μ + r/2` (sign convention
+of consult #142 now a theorem; no factors of 2). All Astra #145 items (1)–(3) DONE. NEXT: papers (replace "not formalised" for the lower-log
+identification; pin), consolidation; then consult #146 for direction.
