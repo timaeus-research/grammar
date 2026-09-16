@@ -91,4 +91,41 @@ theorem ae_fderiv_eq_of_representative {d : ℕ} {U : Set (Fin d → ℝ)} (hU :
   · exact Filter.Eventually.of_forall fun x => by
       simpa [smul_eq_mul] using (hg_deriv x u hu).lim v hc
 
+/-- **The coefficient majorant of a summable `Lᵖ` series is in `Lᵖ`**: if `∑ bᵢ ‖Aᵢ‖_p < ∞` and
+`∑ bᵢ |Aᵢ x| < ∞` for every `x`, then `x ↦ ∑' bᵢ |Aᵢ x|` is in `Lᵖ(μ)` (Minkowski through the
+completeness of `Lᵖ` and `ae_eq_of_tendsto_Lp_of_tendsto_ae`). -/
+theorem memLp_tsum_abs_majorant {A : ℕ → E → ℝ} {b : ℕ → ℝ} (hA : ∀ i, MemLp (A i) p μ)
+    (hb : ∀ i, 0 ≤ b i) (hsum : Summable fun i => b i * (eLpNorm (A i) p μ).toReal)
+    (hpoint : ∀ x, Summable fun i => b i * |A i x|) :
+    MemLp (fun x => ∑' i, b i * |A i x|) p μ := by
+  have hAi : ∀ i, MemLp (fun x => b i * |A i x|) p μ := fun i => (hA i).norm.const_mul (b i)
+  obtain ⟨g, hg⟩ : ∃ g : ℕ → Lp ℝ p μ, ∀ i, ((g i : E → ℝ) =ᵐ[μ] fun x => b i * |A i x|) ∧
+      ‖g i‖ = b i * (eLpNorm (A i) p μ).toReal := by
+    refine ⟨fun i => (hAi i).toLp _, fun i => ⟨(hAi i).coeFn_toLp, ?_⟩⟩
+    rw [Lp.norm_toLp]
+    have h1 : (fun x => b i * |A i x|) = b i • fun x => ‖A i x‖ := by
+      funext x
+      simp [Real.norm_eq_abs]
+    rw [h1, eLpNorm_const_smul, eLpNorm_norm, ENNReal.toReal_mul, toReal_enorm,
+      Real.norm_of_nonneg (hb i)]
+  have hgs : Summable g := Summable.of_norm (hsum.congr fun i => ((hg i).2).symm)
+  have hlim : Tendsto (fun n => ∑ i ∈ Finset.range n, g i) atTop (𝓝 (∑' i, g i)) :=
+    hgs.hasSum.tendsto_sum_nat
+  have hrep : ∀ n, (fun x => ∑ i ∈ Finset.range n, b i * |A i x|) =ᵐ[μ]
+      ((∑ i ∈ Finset.range n, g i : Lp ℝ p μ) : E → ℝ) := by
+    intro n
+    induction n with
+    | zero =>
+      simp only [Finset.range_zero, Finset.sum_empty]
+      exact (Lp.coeFn_zero ℝ p μ).symm
+    | succ n ih =>
+      simp only [Finset.sum_range_succ]
+      filter_upwards [ih, Lp.coeFn_add (∑ i ∈ Finset.range n, g i) (g n), (hg n).1]
+        with x h1 h2 h3
+      rw [h2, Pi.add_apply, h1, h3]
+  have hpt : ∀ᵐ x ∂μ, Tendsto (fun n => ∑ i ∈ Finset.range n, b i * |A i x|) atTop
+      (𝓝 (∑' i, b i * |A i x|)) :=
+    Filter.Eventually.of_forall fun x => (hpoint x).hasSum.tendsto_sum_nat
+  exact (Lp.memLp _).ae_eq (ae_eq_of_tendsto_Lp_of_tendsto_ae hrep hlim hpt).symm
+
 end Grammar
