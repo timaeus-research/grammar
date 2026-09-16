@@ -836,5 +836,6 @@ import Grammar.CubeJets
 import Grammar.TightNormTail
 import Grammar.FieldJetUniform
 import Grammar.RectRemainderUniform
+import Grammar.CubeRemainderProbability
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

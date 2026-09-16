@@ -1828,3 +1828,10 @@ deliverable 4 `CubeRemainderProbability` (grammar, generic): random smooth field
 `cubeJet R b (ζ n ω)`, required order ≤ R ⇒ for A < U, `TendstoInMeasure P (fun n ω => n^A/(1+log n)^{d−1} · (empIntegralRect η (ζ n ω) … n −
 absSpectralSum … (empCoeffRect η (ζ n ω) …) U n)) atTop 0` (localised jet-ball argument); then deliverable 5 in the bridge (chart remainders +
 greybook tail `tail_evidence_tendsto_zero_inProb` with m := 1 ⇒ total evidence expansion in probability).
+
+### 20.52 DELIVERABLE 4 OF #152 LANDED IN GRAMMAR (2026-09-16): DXVI `CubeRemainderProbability` (`requiredOrder`,
+`tendstoInMeasure_cubeRemainder_of_tendsto`, `tendstoInMeasure_cubeRemainder_rpow`): random smooth fields with measurable, tight jets
+a.s. equal to `cubeJet R b (ζ n w)` and `requiredOrder h k U ≤ R` ⇒ `n^A · (cube integral − cutoff spectral sum) → 0` in probability
+for every `A < U`. Next: deliverable 5 in the bridge (`Bridge/EvidenceExpansion.lean`): per-chart remainders with `Y n := −chartJetReconstruct`,
+greybook `tail_evidence_tendsto_zero_inProb` (m := 1) for `n^A T n`, `tendsto_zero_inProb_sum` and a.e. congruence with
+`ae_totalEvidence_eq` ⇒ `n^A [Eₙ − Σ_α S_{α,U_α}(n)] → 0` in probability (`TendstoZeroInProb (fun _ => P)`).
