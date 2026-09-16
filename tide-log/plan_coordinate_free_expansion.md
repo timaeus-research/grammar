@@ -1752,3 +1752,18 @@ Tietze extension `ContinuousMap.exists_restrict_eq` of `cubeCoeffOnClosedJets` t
 `.congr` ⇒ ★★ `chartTopCoeffLaw : empCoeffRect (unitWt α) (globalField n ω) (h α) (k α) (fun _ => rb α) μ (c−1) ⇒ φ̃ under νlim`, with
 `νlim (closure cubeRealizable)ᶜ = 0` and `φ̃ = cubeCoeffOnClosedJets` on the closure. Hypotheses: `∀ i, 0 < k α i`, `0 < rb α`, `0 < μ`, `1 ≤ c`,
 `DeepVanishing (unitWt α) (rb α) c`, `ContDiff ℝ ∞ (unitWt α)`, `cubeOrder ≤ R`, iid sample data; then M1 E2 (chart evidence congruence) separately.
+
+### 20.45 ★★ STAGE E LANDED IN THE BRIDGE (2026-09-16, commit 7cc77cc `Bridge/ChartCoeffLaw.lean`): `chartCutoff` (DXI), `globalField := χ ·
+empField` (C^∞ on ℝ^d, same jets on the closed box), `cmm_eq_sum_coordMono` (a multilinear map on ℝ^d is Σ_b m(e_b) • coordMono),
+`wordEmb`, `monoScale`, `chartJetReconstruct : C(chartUnion d (fun p : ι × JetWord d R => rb p.1), ℝ) → CubeJetSpace d R (rb α)` (continuous;
+order r: Σ_b Z((α,⟨r,b⟩),·) • coordMono r b), `chartJetReconstruct_eq` (on the Stage D good event, = `cubeJet R (rb α) (globalField n ω)`),
+`chartTopCoeffLaw (hX hμ hindep hXm hident) (α) (hk : ∀ i, 0 < A.k α i) (hb : 0 < rb α) (hμ₀ : 0 < μ₀) (hc : 1 ≤ c) (hη : ContDiff ℝ ⊤ (unitWt α))
+(hdeep : DeepVanishing (unitWt α) (rb α) c) (hR : cubeOrder (h α) (k α) μ₀ ≤ R) : ∃ νlim : ProbabilityMeasure (CubeJetSpace d R (rb α)), ∃ φ,
+Continuous φ ∧ (∀ z ∈ closure cubeRealizable, φ z = cubeCoeffOnClosedJets … ⟨z,_⟩) ∧ νlim (closure cubeRealizable)ᶜ = 0 ∧ TendstoInDistribution
+(fun n ω => empCoeffRect (unitWt α) (globalField n ω) (h α) (k α) (fun _ => rb α) μ₀ (c−1)) atTop φ (fun _ => P) νlim` — νlim = pushforward of
+the joint Gaussian jet law μlim (Stage C) by the reconstruction; closed support via `ProbabilityMeasure.limsup_measure_closed_le_of_tendsto`;
+Tietze `ContinuousMap.exists_restrict_eq`; `TendstoInDistribution.continuous_comp` + `.congr`. Axiom-clean. THIS IS THE FIRST SUBLEADING
+STOCHASTIC THEOREM: on the grey book's data model, the top subleading coefficient of a chart's cube expansion with the empirical field converges in
+distribution to a functional of the Gaussian jet field. Remaining: M1 E2 (`chartXi = empField` a.s. on the box ⇒ chart evidence = empIntegralRect
+(unitWt) (globalField)), M6 (multi-chart law on the greybook atlas via `decomp`), the uniform remainder (coefficient law → evidence expansion),
+paper/hand-off/artifact updates.
