@@ -823,5 +823,7 @@ import Grammar.EmpiricalCoeffDistribution
 import Grammar.MellinLogWeights
 import Grammar.EmpiricalClosedJets
 import Grammar.EmpiricalOneDimSecond
+import Grammar.ProductUniformLog
+import Grammar.LogExampleTwoDim
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

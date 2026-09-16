@@ -1582,3 +1582,10 @@ NEXT: papers (C₂ display in §9 + pin), consolidation/hand-off report; optiona
 ### 20.30 (2026-09-16): `empOneDimCoeff_three` added to DIII (827 modules); hand-off note `projects/grammar/staging/empirical_expansion_handoff.md`
 (SRI 7321d9b5e, pushed). NEXT: consult #147 — design of the stochastic jet programme (hypotheses on the data, tightness route, what the
 repo's `EmpiricalFieldLimit`/`UniformCompactTransfer` machinery already gives) vs. closing the arc.
+
+### 20.31 CONSULT #147 (2026-09-16): stochastic jet programme — recommendation (c) > (a) ≫ (b): CLOSE THIS ARC as "deterministic + conditional";
+the missing jet convergence is a substantive statistical hypothesis, not deterministic bookkeeping; (a) an abstract envelope-to-tightness theorem
+(Arzelà–Ascoli + Markov on `BranchJetSpace`, no Prokhorov needed) is preserved as a separately scoped follow-up; paper scope paragraph supplied.
+Optional deterministic illustration (Astra §4) DONE: DIV `ProductUniformLog` + `LogExampleTwoDim` (829 modules): `K = x²y²`, `h = 0`, constant
+field — `4√n·I(n) = S_{1/2}(a) log n − ∂_ν S_ν(a)|_{1/2} + o(1)`, the `∂_ν S` weight concretely. NEXT: papers (scope paragraph + the example),
+hand-off note refresh, memory; ARC CLOSED unless the user directs otherwise.
