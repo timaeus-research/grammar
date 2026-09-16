@@ -1925,3 +1925,11 @@ aggregated coefficients from `jointChartCoeffLaw_obs`, `O_P` remainder from `ten
 below from `tendstoInDistribution_evidenceOne_div_powLogScale` + `tendstoZeroInProb_evidenceObs_div_sub_logpoly`, vanishing below `λ` from
 `BoxLeading`). User item 3 (posterior expectations beyond the first correction) is now closed deterministically AND probabilistically. Open:
 A(a) jet-level Gaussian Wick (holonomic amplitude space), (α) optional.
+
+### 20.63 CONSULT #160 A(a) LANDED (2026-09-16): Gaussian averaging of the population coefficient. Grammar DXXXVIII
+(`AmplitudeFunctional`: constant-family compatibility, jet-norm bound, linearity, jet-locality), DXXXIX (`JetHolonomy`: ★★★ zeroth-order
+evaluations separate the closed jet range — derivative relations survive uniform limits), DXL (`AmplitudeJetSpace`: ★★ `exists_popCoeffCLM`
+by Hahn–Banach), DXLI (`GaussianAveraging`: ★★★ `integral_empCoeff_zero_pow_even/odd` — pointwise Gaussian laws + Bochner integrability of
+the jets ⇒ `E c^pop(η Y^{2j}) = (2j)!/(2^j j!) c^pop(η V^j)`, odd = 0). Not done: the assembled Wick series for `E C_{μ,q}[Y, η]`
+(combine `hasSum_empCoeff_population`, DXXXII `integral_eq_tsum_wickWeights`, DXLI per `r` with depth data for `(h + rk, μ + r/2)`),
+the Bochner integrability of Gaussian jets from a jet-norm moment bound.

@@ -866,4 +866,8 @@ import Grammar.RationalExpansionAtInfinity
 import Grammar.TwoScaleDivision
 import Grammar.CutoffQuotientExpansion
 import Grammar.TwoScaleDivisionProb
+import Grammar.AmplitudeFunctional
+import Grammar.JetHolonomy
+import Grammar.AmplitudeJetSpace
+import Grammar.GaussianAveraging
 import Grammar.GaussianEvenMoments
