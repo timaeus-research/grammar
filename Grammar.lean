@@ -843,3 +843,5 @@ import Grammar.CubeRemainderProbability
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators
 import Grammar.EmpiricalTaylorIdentification
+import Grammar.EmpiricalFamilyDepth
+import Grammar.EmpiricalMonomialFamily
