@@ -1767,3 +1767,14 @@ STOCHASTIC THEOREM: on the grey book's data model, the top subleading coefficien
 distribution to a functional of the Gaussian jet field. Remaining: M1 E2 (`chartXi = empField` a.s. on the box ⇒ chart evidence = empIntegralRect
 (unitWt) (globalField)), M6 (multi-chart law on the greybook atlas via `decomp`), the uniform remainder (coefficient law → evidence expansion),
 paper/hand-off/artifact updates.
+
+### 20.46 E2 LANDED IN THE BRIDGE (2026-09-16, commit bde1da2 `Bridge/ChartEvidence.lean`; `ChartCoeffLaw` refactored around the generic
+`cubeCoeffLaw_of_reconstruct`, with `chartTopCoeffLaw_neg` for the field `−globalField`): `ae_fa_eq_a_of_pos` / `ae_fa_eq_a` (the grey book's
+continuous representative `D.fa` represents the analytic kernel `Q.a` at every point of the box — interior points with positive coordinates via
+`hid` + `hfae` + `Q.factor`, then the Lp-limit wrapper along `v_j := (1 − t_j) u + t_j (b/2)`; needs `hgK : ∀ u ∈ box, g α u ∈ D.K₀`, not exported by
+`AtlasData`), `ae_fa_eq_rep_on_box` (one conull set via `TopologicalSpace.exists_countable_dense` on the box SUBTYPE + `Subtype.dense_iff` +
+`Set.EqOn.of_subset_closure`), `ae_chartXi_eq_neg_empField` (a.s. `chartXi = −empField` on every chart box for every n; `Q.mean` gives
+`chartMean = u^k`), ★ `ae_chartEvidence_eq` (a.s. the grey book's chart evidence at β = 1 equals `empIntegralRect (unitWt α) (−globalField n ω)
+(h α) (k α) (fun _ => rb α) n`). Hence `chartTopCoeffLaw_neg` is about the coefficients of the cube expansion of the ACTUAL grey-book chart evidence
+integrals. Remaining: M6 (joint finite-chart coefficient law via the greybook atlas `decomp`), the uniform remainder (coefficient law → evidence
+expansion), constant identification (i), and the `DeepVanishing (unitWt α)` / `0 < k α i` chart hypotheses (explicit).
