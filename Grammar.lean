@@ -854,3 +854,4 @@ import Grammar.EmpiricalTailJetUniform
 import Grammar.EmpiricalGeneratingUniform
 import Grammar.JetProductCalculus
 import Grammar.EmpiricalPopulationJets
+import Grammar.EmpiricalGeneratingProbability

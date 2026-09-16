@@ -6,6 +6,7 @@ Authors: Timaeus Research
 import Grammar.EmpiricalTailJetUniform
 import Grammar.EmpiricalGeneratingRect
 import Grammar.EmpCoeffLipschitz
+import Grammar.RectRemainderUniform
 
 /-!
 # The generating tail estimate, uniform on jet balls (§20, Stage E)
@@ -21,7 +22,8 @@ ball: for `JetBoundOn (cubeOrder h k μ) (closedBox d b) ζ B`, one constant per
 Ingredients: the partial-sum identity `empCoeffAtDepth_eq_sum_add_tailCoeff` (coefficient =
 finite generating sum + tail coefficient), the `O(C)` bound of the family coefficients with the
 fixed envelope `M' = 3B`, the uniform tail jet bounds `famJetBound_tailFam_of_jetBoundOn`, and
-jet transport under the dilation `diag b` (`jetBoundOn_comp_diag`).  This is the input for the
+jet transport under the dilation `diag b` (`jetBoundOn_comp_diag` of
+`RectRemainderUniform`).  This is the input for the
 extension of the identity to the completed cube jets (Astra #157, Stage E).
 
 Zero `sorry`/`axiom`.
@@ -135,34 +137,6 @@ theorem exists_generatingTail_bound_jetBall_empCoeff (hη : ContDiff ℝ ∞ η)
       rw [empCoeffAtDepthFam_expTermFam_eq hη hζ hk hL hp hp0 r hμL hq]
   rw [hsum]
   exact hC ζ hζ hζB R μ hμL q hq
-
-/-- Jet bounds of the dilated field on the unit box from jet bounds on the cube. -/
-theorem jetBoundOn_comp_diag (hζ : ContDiff ℝ ∞ ζ) {b : ℝ} (hb : 0 < b) {P : ℕ} {B : ℝ}
-    (hB : 0 ≤ B) (hbd : JetBoundOn P (closedBox d b) ζ B) :
-    JetBoundOn P (closedBox d 1) (ζ ∘ diag (fun _ : Fin d => b)) ((max 1 b) ^ P * B) := by
-  intro r hr x hx
-  set g : (Fin d → ℝ) →L[ℝ] (Fin d → ℝ) := b • ContinuousLinearMap.id ℝ (Fin d → ℝ) with hg
-  have hgn : ‖g‖ ≤ b := by
-    calc ‖g‖ ≤ ‖b‖ * ‖ContinuousLinearMap.id ℝ (Fin d → ℝ)‖ := norm_smul_le _ _
-      _ ≤ b * 1 := by
-          rw [Real.norm_of_nonneg hb.le]
-          exact mul_le_mul_of_nonneg_left ContinuousLinearMap.norm_id_le hb.le
-      _ = b := mul_one b
-  rw [diag_const_eq, ← hg,
-    ContinuousLinearMap.iteratedFDeriv_comp_right g hζ x (natCast_le_infty r)]
-  have hgx : g x ∈ closedBox d b := by
-    have := diag_const_mem_closedBox hb.le hx
-    rwa [diag_const_eq, ← hg] at this
-  calc ‖(iteratedFDeriv ℝ r ζ (g x)).compContinuousLinearMap fun _ => g‖
-      ≤ ‖iteratedFDeriv ℝ r ζ (g x)‖ * ∏ _i : Fin r, ‖g‖ :=
-        ContinuousMultilinearMap.norm_compContinuousLinearMap_le _ _
-    _ ≤ B * (max 1 b) ^ P := by
-        rw [Finset.prod_const, Finset.card_univ, Fintype.card_fin]
-        refine mul_le_mul (hbd r hr (g x) hgx) ?_ (by positivity) hB
-        calc ‖g‖ ^ r ≤ (max 1 b) ^ r :=
-              pow_le_pow_left₀ (norm_nonneg _) (hgn.trans (le_max_right _ _)) r
-          _ ≤ (max 1 b) ^ P := pow_le_pow_right₀ (le_max_left _ _) hr
-    _ = (max 1 b) ^ P * B := mul_comm _ _
 
 /-- ★★ **The generating tail estimate on a cube, uniform on jet balls**: for every `(η, h, k, b, μ,
 q, B)` one constant `C` with

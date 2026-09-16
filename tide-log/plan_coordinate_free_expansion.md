@@ -1867,3 +1867,14 @@ systems, any lattices), `hasSum_leadCoeff_population`, ★★ `ae_hasSum_frozenC
 continuous analytic functional of the Gaussian field (consult #155 Stage E), growth bounds `|C^pop_{μ+r/2,q}| ≤ A B^r (1+r)^M Γ(r/2+a)` (Astra's
 suggested route; not needed for the identity), integrability of `obs Hₙ^r e^{−NK}` as a theorem rather than a hypothesis.
 
+### 20.56 CONSULT #157 RANK 1 LANDED (2026-09-16): the jet-space generating identity and its stochastic wrapper. Grammar DXXIV
+(`EmpiricalTailJetUniform`, `EmpiricalGeneratingUniform`: uniform-on-jet-balls tail jets via Faà di Bruno for `expTail R ∘ τζ`, the
+generating tail estimate `≤ C_B (1/2)^R` at fixed depth / canonical cutoff / cubes), DXXV (`JetProductCalculus`, `EmpiricalPopulationJets`:
+population terms Lipschitz in jets of the FIXED order `cubeOrder h k μ` — via the family coefficients at fixed depth, as Astra required —
+`genTermOnClosedJets` by closure extension, ★★★ `hasSum_genTermOnClosedJets` on every closed realizable cube jet), DXXVI
+(`EmpiricalGeneratingProbability`: `tendstoInMeasure_generatingTruncation` for tight random jets and `R_n → ∞`). Bridge
+`GeneratingProbability`: `hasSum_genTerm_closedTuple`, `ae_hasSum_genTerm_of_closedTuple` (the Gaussian limit law), ★★
+`tendstoInMeasure_chartGeneratingTruncation` (chart fields of the empirical process, observable insertion). Not done: the joint
+continuous-mapping wrapper for `(F, a_0, …, a_R)` (a variant of `jointCubeCoeffLaw_of_reconstruct_gen` with arbitrary continuous chart
+functionals); the analytic API `hasSum_coeffFun_smul`/`analyticAt_coeffFun`; Astra's ranks 2–4.
+
