@@ -1692,3 +1692,15 @@ used — envelopes are only needed for grammar's tightness route, which the join
 per-word representatives with their `CoeffExpansion` data from the construction (extend the structure), feed them to `chartProcessCM_law` on the
 index type ι × Σ k ≤ R, (Fin k → Fin d) (s = 6), and identify the resulting joint process with the coordinate jets of the empirical field of f on
 the good event (differentiation of the finite sum + `integralCLM` commuting with `iteratedFDeriv` for the centring).
+
+### 20.40 STAGE C LANDED IN THE BRIDGE (2026-09-16, commit d61940c `Bridge/JointJetLaw.lean`): `ChartKernelRep X P Q α R` now also exports the raw
+per-word representatives `jet k b` with `jet_cont/jet_meas/jet_rep`, `jet_eq : ∀ᵐ x, ∀ k ≤ R, ∀ b, ∀ u ∈ U, D^k (f x) u [e_b] = jet k b x u`, and
+`jet_exp : CoeffExpansion X P (jet k b) (∫ derivKernel) U s`. `jointJetLaw (hrb : ∀ α, A.b α = fun _ => rb α) (hX hμ hindep hXm hident)`:
+greybook `chartProcessCM_law` (Thm 5.9 on `chartUnion d (fun p : ι × JetWord d R => rb p.1)`, s = 6) on the family `jetKernel Rp p := (Rp p.1).jet
+p.2.1 p.2.2` — the joint C(⨆ boxes)-valued process of ALL chart jets converges in law to `μlim` with Gaussian fidis
+`covMatrix (fidiVec X (fun x p => jetKernel p.1 x p.2) (jetMean) …)` (cross-chart, cross-derivative) and sup norm O_p(1). Axiom-clean.
+NEXT Stage D: the identification `chartProcessCM … n ω ⟨(α,(k,b)),u⟩ = D^k ξ_n(ω)(u)[e_b]` on the probability-one event `∀ i, X i ω ∈ good set`,
+with `ξ_n(ω) u = (1/√n) Σ_{i<n} (f (X i ω) u − m_α u)`, `m_α u = ∫ a_α u dμ` (= u^k on S α by `Q.mean`): within-derivatives of the finite sum on
+the open U (`iteratedFDerivWithin_sum_apply`, `_sub_apply`, `_const_smul_apply`, `iteratedFDerivWithin_of_isOpen`) and
+`ContinuousLinearMap.iteratedFDeriv_comp_left` for `D^k (integralCLM ∘ a_α) = integralCLM ∘ D^k a_α` (so `D^k m_α [e_b] = jetMean`); then the
+adapter to grammar's `BranchJetSpace`/closed realizable jets (Stage E), which needs the resolved-core geometry identification (open).
