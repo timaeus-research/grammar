@@ -831,5 +831,7 @@ import Grammar.CoordinateJetTower
 import Grammar.LpRepresentativeLimit
 import Grammar.LipschitzClosureExtension
 import Grammar.CubeCoeffLipschitz
+import Grammar.SmoothCutoff
+import Grammar.CubeJets
 import Grammar.ProductJetDistribution
 import Grammar.FaceRestrictionOperators

@@ -1740,3 +1740,15 @@ resolved-data shortcut: time-boxed audit only.
 jets, `cubeCoeff'` well-defined by the ε = 0 case of DIX, `LipschitzOnBounded` from DIX + norm ↔ JetClose/JetBoundOn, `cubeCoeffOnClosedJets :=
 closureExtend`, Borel, `tendstoInDistribution_cubeCoeff_top_closed`), M2 (globalization by a smooth cutoff + `empCoeffRect_congr_box`), then the
 bridge (M1 E2 congruence, reconstruction CLM, closed support by Portmanteau, `chartTopCoeffLaw`).
+
+### 20.44 M2, M5 LANDED IN GRAMMAR (2026-09-16): DXI `SmoothCutoff` (`exists_smooth_cutoff`, `contDiff_cutoff_mul`, `iteratedFDeriv_cutoff_mul`),
+DXII `CubeJets` (`CubeJetSpace`, `cubeJet`, `cubeRealizable`, `cubeOrder`, `cubeCoeff'`, `cubeCoeffOnClosedJets`, `continuous_cubeCoeffOnClosedJets`,
+`tendstoInDistribution_cubeCoeff_top_closed`). All Stage E grammar contracts are in place. Next: the bridge assembly `Bridge/ChartCoeffLaw.lean`:
+cutoff `chartCutoff`, `globalField := χ · empField` (C^∞ everywhere), coordinate reconstruction `chartJetReconstruct : C(chartUnion …, ℝ) →
+CubeJetSpace d R (rb α)` (continuous; per order r the finite sum Σ_b Z((α,⟨r,b⟩),·) • coordMono r b via `ContinuousMap.continuous_postcomp`),
+a.s. identification `reconstruct (chartProcessCM n ω) = cubeJet R b (globalField n ω)` (Stage D + `iteratedFDeriv_cutoff_mul` + the coordinate
+expansion of a CMM), pushforward law `νlim := μlim.map reconstruct`, closed support via `ProbabilityMeasure.limsup_measure_closed_le_of_tendsto`,
+Tietze extension `ContinuousMap.exists_restrict_eq` of `cubeCoeffOnClosedJets` to the ambient space + `TendstoInDistribution.continuous_comp` +
+`.congr` ⇒ ★★ `chartTopCoeffLaw : empCoeffRect (unitWt α) (globalField n ω) (h α) (k α) (fun _ => rb α) μ (c−1) ⇒ φ̃ under νlim`, with
+`νlim (closure cubeRealizable)ᶜ = 0` and `φ̃ = cubeCoeffOnClosedJets` on the closure. Hypotheses: `∀ i, 0 < k α i`, `0 < rb α`, `0 < μ`, `1 ≤ c`,
+`DeepVanishing (unitWt α) (rb α) c`, `ContDiff ℝ ∞ (unitWt α)`, `cubeOrder ≤ R`, iid sample data; then M1 E2 (chart evidence congruence) separately.
