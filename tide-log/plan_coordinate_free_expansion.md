@@ -1575,3 +1575,6 @@ closed jet space. Ranked next: (1) extend the coefficient to the CLOSURE of the 
 (τ^power e^{amp τ}) μ logOrder`, then rewrite with the log-weight identity — do NOT promise ∂_ν S before inspecting the extracted log orders);
 (3) full stochastic jet programme (large; hypotheses: pathwise C^{m+1} iid fields, square-integrable derivative envelopes, fd CLTs, tightness);
 (4) no population gap identified. Consolidation report as a short parallel task.
+
+### 20.29 CONSULT #146 ITEM 2 (2026-09-16): DIII `EmpiricalOneDimSecond`; 827 modules. `empOneDimCoeff_two` closed form (no logs in 1D).
+NEXT: papers (C₂ display in §9 + pin), consolidation/hand-off report; optionally `empOneDimCoeff_three`.
