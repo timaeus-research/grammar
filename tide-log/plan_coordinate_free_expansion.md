@@ -2005,3 +2005,6 @@ Landed after DLVII: DLVIII `GibbsJoint` (the joint Gibbs measure `μ_g` on `K ×
 `∫φ dμ = ⟨φ⟩`, `∫φ√t = ⟨φ⟩^{½}`, `∫φt = T`, `∬h√t₁√t₂ = B`, and ★★★ `GaussianField.integral_eval_mul_compactAvg_replica`: Stein in
 two-replica form). Remaining: three-replica form of `compactMeanResponse` (reductions available), Fréchet derivative (V), empirical
 bridge (VI), higher cumulants (IV), convergent source series (III).
+Landed after DLVIII: DLIX `GibbsJointResponse` (★★★ `compactMeanResponse_eq_replica`: the mean response as a three-replica
+expectation; `compactBilocal_swap`). Astra #163 candidate II complete. Remaining: (V) Fréchet derivative on `C(K,ℝ)`, (VI) empirical
+bridge (joint convergence + uniform integrability), (IV) higher cumulants, (III) convergent source series.
