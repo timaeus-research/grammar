@@ -1994,3 +1994,10 @@ Landed after DLII–DLIII: DLIV `PosteriorWeightStein` (finite-atom Stein for `�
 `E[v₀⟨f⟩_{v'}] = βΣ b_{0,i+1}E[W_i(f_i − ⟨f⟩)]`), DLV `CompactBaseStein` (★★★ `GaussianField.integral_eval_mul_compactAvg`:
 `E[G(x₀)⟨f⟩_G] = βE[⟨f𝒞(x₀,·)⟩^{½}_G − ⟨f⟩_G⟨𝒞(x₀,·)⟩^{½}_G]`). Remaining from Astra #162: covariance interpolation of the
 averaged posterior mean (three replicas), the convergent source expansion, averaged subleading transfer (needs rates).
+Astra #163 (`gpt6_bigpicture_v163.md`): do (I) — the three-replica covariance interpolation — and stop at the integrated
+compact-base identity; (II) joint Gibbs measure API, (V) Fréchet derivative, (IV) higher cumulants, (III) convergent source series
+ranked below; (VI) bridge to the empirical side needs joint convergence + uniform integrability. Landed: DLVI `PosteriorResponseDet`
+(`∂_jH_i`, Stein at scaled covariance, `A'(s) = E H_b(√sG)`, ★★★ `integral_postAvg_eq`), DLVII `CompactBaseResponse`
+(`compactFirstMoment`, `compactBilocal`, `compactMeanResponse`, quadratic domination, ★★★ `GaussianField.integral_compactAvg_eq`:
+`E⟨f⟩_G = ρ(f)/ρ(K) + ∫₀¹ E H_f(√sG) ds`). Naming audit (Astra #163 §6): `compactHalfAvg` is a radial-moment–weighted integral, not a
+posterior expectation (its sum over atoms is `⟨√t⟩`, not 1) — say so in the notes.

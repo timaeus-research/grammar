@@ -887,4 +887,6 @@ import Grammar.InverseEvidence
 import Grammar.QuenchedSource
 import Grammar.PosteriorWeightStein
 import Grammar.CompactBaseStein
+import Grammar.PosteriorResponseDet
+import Grammar.CompactBaseResponse
 import Grammar.GaussianEvenMoments
