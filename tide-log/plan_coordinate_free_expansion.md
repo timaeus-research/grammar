@@ -1986,3 +1986,7 @@ the grammar2 Overleaf (`papers/grammar2/notes_posterior.tex`). Landed: DL `Sourc
 `κ₂ = B⁻¹C − (B⁻¹A)²`, block level = `varianceBlocks`), DLI `PosteriorVarianceExpansion` (★★★ `emp_variance_isBigO`: the posterior
 variance to all orders for a fixed sample). Next: inverse-evidence moments (`compactD` inverse bound, all moments), the anchored
 quenched source (`Ψ'(0) = E⟨f⟩_G`, `Ψ''(0) = E Var_G(f)`), the compact-base Stein identity for posterior averages.
+Landed after DL–DLI: DLII `InverseEvidence` (`D_ρ(g)⁻¹ ≤ λe^{2β}ρ(K)⁻¹(1+‖g‖)^{2λ}`, all inverse moments for a Gaussian Borel
+law, radial moments `⟨t^p⟩_g ≤ Π(2(λ+i)/β + R²/4)`), DLIII `QuenchedSource` (`Ψ(ε) = E log⟨e^{εf}⟩_G`, `|log⟨e^{εf}⟩_g| ≤ |ε|M`,
+`Ψ'(0) = E⟨f⟩_G`, `Ψ''(0) = E Var_G(f)`). Next: the compact-base Stein identity for posterior averages (Fréchet derivative of
+`g ↦ ⟨f⟩_g` on `C(K,ℝ)`, `E[G(x₀)⟨f⟩_G] = E[D⟨f⟩_G[C(x₀,·)]]` via `gaussianVector_stein` on atoms and the quantisation limit).

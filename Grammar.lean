@@ -883,4 +883,6 @@ import Grammar.MonomialShift
 import Grammar.WickEnvelope
 import Grammar.SourceLog
 import Grammar.PosteriorVarianceExpansion
+import Grammar.InverseEvidence
+import Grammar.QuenchedSource
 import Grammar.GaussianEvenMoments
