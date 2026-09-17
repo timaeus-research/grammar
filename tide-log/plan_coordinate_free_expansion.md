@@ -2017,3 +2017,13 @@ worth having is the two-site exchangeable-weight balancing (landed as DLXI `TwoS
 Gaussian posterior expectation (candidate VI; the bridge's limits are jet-tuple functionals, not a `C(K,ℝ)` field) — the notes must not
 silently identify the two. Naming: `compactHalfAvg → compactSqrtTimeMoment`, `compactFirstMoment → compactTimeMoment` (done);
 write `⟨φ√t⟩_g`, `⟨φ t⟩_g` rather than `⟨φ⟩^{½}`; "Banach-form Stein" = for THIS functional; `Ψ''(0)` = expected CONDITIONAL variance.
+
+Astra #165 (`gpt6_bigpicture_v165.md`, the readable first correction of `Z_n[f]` in `d ≥ 2`): route R1 — Fubini along the resonant
+coordinate, the uniform one-dimensional two-term estimate `B(T,w)`, dominated convergence with the weight `w^{h_L−2k_Lμ₁}`, then a
+reading-off lemma from the cutoff expansion. Landed as DLXII `FirstCorrection` (generic case `J₀ = {i₀}`, `μ₁ < λ_l` for `l ≠ i₀`):
+`c(λ,0)` and `c(μ₁,0)` as face integrals, no logs at `λ`, `μ₁`, nothing between (`empCoeff_generic`, `empCoeff_firstCorrection`,
+`tendsto_firstCorrection`, `CutoffExpansion.coeff_eq_of_twoTerm`); `EmpiricalOneDim.empOneDim_expansion` refactored to the explicit
+constant `oneDimExpConst`. Open (Astra #165 §§4–5): the general singleton-resonance formula
+`c(μ,0) = (1/(2k_iα_i!)) FP∫ w^{h_L−2k_Lμ} ∂_i^{α_i}[η S_μ(ζ)]|_{v_i=0} dw` with tensor-product Hadamard finite parts for the
+coordinates with `λ_l < μ`; multiple resonance as a Laurent functional `c(μ,q) = (1/q!)[z^{−q−1}]𝓕_μ(z)` (highest log = one deepest-face
+FP integral); origin-Taylor forms need analyticity (counterexample `e^{−1/v₂²}`), the face form is the right smooth statement.

@@ -483,23 +483,28 @@ theorem abs_integral_remFn_le (hη : ContDiff ℝ ∞ η) (hξ : ContDiff ℝ �
 
 /-! ### The expansion -/
 
-/-- ★★★ **The one-dimensional empirical smooth expansion**: for smooth `η, ξ`, `k ≥ 1`, `b > 0` and
-`2kL ≤ q + 1 + h`, there is `C` with
-`|∫_0^b η u^h e^{−Nu^{2k} + √N u^k ξ} du − ∑_{j ≤ q} empOneDimCoeff_j N^{−(h+j+1)/2k}| ≤ C N^{−L}`
-for all `N ≥ 1` with `b N^{1/2k} ≥ 1`, where
-`empOneDimCoeff_j = ∂_u^j[η(u) S_{(h+j+1)/2k}(ξ(u))]|_{u=0} / (j! · 2k)`. -/
-theorem empOneDim_expansion (hη : ContDiff ℝ ∞ η) (hξ : ContDiff ℝ ∞ ξ) (h : ℕ) {k : ℕ}
-    (hk : 0 < k) {b : ℝ} (hb : 0 < b) (q L : ℕ) (hqL : 2 * k * L ≤ q + 1 + h) :
-    ∃ C : ℝ, ∀ N : ℝ, 1 ≤ N → 1 ≤ b * N ^ (1 / (2 * (k : ℝ))) →
-      |empOneDim η ξ h k b N -
+/-- The explicit constant of the one-dimensional expansion: it depends on the field data only
+through the bound `M ≥ ξ` and the jet bounds `C_j` (so it is uniform over families sharing
+those bounds). -/
+noncomputable def oneDimExpConst (h k q L : ℕ) (b M : ℝ) (Cj : ℕ → ℝ) : ℝ :=
+  (∑ j ∈ Finset.range (q + 1), 2 * Cj j * kernelConst (h + 2 * j) M / (j.factorial : ℝ)) *
+    (max 1 ((2 * k * L).factorial : ℝ) * (2 / b) ^ (2 * k * L)) +
+  Cj (q + 1) / (q.factorial : ℝ) * kernelConst (h + 2 * q + 2) M *
+    ∫ x in Ioi (0 : ℝ), exp (-x ^ (2 * k) / 2)
+
+/-- ★★★ **The one-dimensional empirical expansion with an explicit constant**: under the bound
+`ξ ≤ M` on `[0, b]` and the jet bounds `|P_j(v, τ)| ≤ C_j (1+τ)^j` on `[0, b]`, for `N ≥ 1` with
+`b N^{1/2k} ≥ 1` and `2kL ≤ q + 1 + h`,
+`|Z(N) − Σ_{j ≤ q} C_j N^{−μ_j}| ≤ oneDimExpConst · N^{−L}`. -/
+theorem empOneDim_expansion_of_bounds (hη : ContDiff ℝ ∞ η) (hξ : ContDiff ℝ ∞ ξ) (h : ℕ)
+    {k : ℕ} (hk : 0 < k) {b : ℝ} (hb : 0 < b) (q L : ℕ) (hqL : 2 * k * L ≤ q + 1 + h) {M : ℝ}
+    (hM' : ∀ t ∈ Icc 0 b, ξ t ≤ M) {Cj : ℕ → ℝ}
+    (hCj : ∀ j, 0 ≤ Cj j ∧ ∀ v ∈ Icc 0 b, ∀ τ : ℝ, 0 ≤ τ → |jetPoly η ξ j v τ| ≤ Cj j * (1 + τ) ^ j)
+    {N : ℝ} (hN : 1 ≤ N) (hX : 1 ≤ b * N ^ (1 / (2 * (k : ℝ)))) :
+    |empOneDim η ξ h k b N -
         ∑ j ∈ Finset.range (q + 1), empOneDimCoeff η ξ h k j * N ^ (-lam k (j + h))| ≤
-        C * N ^ (-(L : ℝ)) := by
-  obtain ⟨M, hM⟩ := isCompact_Icc.exists_bound_of_continuousOn
-    (hξ.continuous.continuousOn (s := Icc 0 b))
-  have hM' : ∀ t ∈ Icc 0 b, ξ t ≤ M := fun t ht =>
-    (le_abs_self _).trans (Real.norm_eq_abs _ ▸ hM t ht)
+        oneDimExpConst h k q L b M Cj * N ^ (-(L : ℝ)) := by
   have hM0 : ξ 0 ≤ M := hM' 0 (left_mem_Icc.2 hb.le)
-  choose Cj hCj using fun j => exists_jetPoly_bound hη hξ j 0 b
   have hCj0 : ∀ j τ, 0 ≤ τ → |jetPoly η ξ j 0 τ| ≤ Cj j * (1 + τ) ^ j :=
     fun j τ hτ => (hCj j).2 0 (left_mem_Icc.2 hb.le) τ hτ
   set R : ℝ := Cj (q + 1) / (q.factorial : ℝ) * kernelConst (h + 2 * q + 2) M *
@@ -512,7 +517,7 @@ theorem empOneDim_expansion (hη : ContDiff ℝ ∞ η) (hξ : ContDiff ℝ ∞ 
     positivity
   set E : ℝ := max 1 ((2 * k * L).factorial : ℝ) * (2 / b) ^ (2 * k * L) with hE
   have hE0 : 0 ≤ E := by positivity
-  refine ⟨T * E + R, fun N hN hX => ?_⟩
+  change _ ≤ (T * E + R) * N ^ (-(L : ℝ))
   have hN0 : 0 < N := by linarith
   set ε := scaleEps k N with hε
   have hε0 : 0 < ε := scaleEps_pos hN0
@@ -634,6 +639,25 @@ theorem empOneDim_expansion (hη : ContDiff ℝ ∞ η) (hξ : ContDiff ℝ ∞ 
     _ ≤ 1 * (T * (E * N ^ (-(L : ℝ)))) + N ^ (-(L : ℝ)) * R := by
         gcongr
     _ = (T * E + R) * N ^ (-(L : ℝ)) := by ring
+
+/-- ★★★ **The one-dimensional empirical smooth expansion**: for smooth `η, ξ`, `k ≥ 1`, `b > 0` and
+`2kL ≤ q + 1 + h`, there is `C` with
+`|∫_0^b η u^h e^{−Nu^{2k} + √N u^k ξ} du − ∑_{j ≤ q} empOneDimCoeff_j N^{−(h+j+1)/2k}| ≤ C N^{−L}`
+for all `N ≥ 1` with `b N^{1/2k} ≥ 1`, where
+`empOneDimCoeff_j = ∂_u^j[η(u) S_{(h+j+1)/2k}(ξ(u))]|_{u=0} / (j! · 2k)`. -/
+theorem empOneDim_expansion (hη : ContDiff ℝ ∞ η) (hξ : ContDiff ℝ ∞ ξ) (h : ℕ) {k : ℕ}
+    (hk : 0 < k) {b : ℝ} (hb : 0 < b) (q L : ℕ) (hqL : 2 * k * L ≤ q + 1 + h) :
+    ∃ C : ℝ, ∀ N : ℝ, 1 ≤ N → 1 ≤ b * N ^ (1 / (2 * (k : ℝ))) →
+      |empOneDim η ξ h k b N -
+        ∑ j ∈ Finset.range (q + 1), empOneDimCoeff η ξ h k j * N ^ (-lam k (j + h))| ≤
+        C * N ^ (-(L : ℝ)) := by
+  obtain ⟨M, hM⟩ := isCompact_Icc.exists_bound_of_continuousOn
+    (hξ.continuous.continuousOn (s := Icc 0 b))
+  have hM' : ∀ t ∈ Icc 0 b, ξ t ≤ M := fun t ht =>
+    (le_abs_self _).trans (Real.norm_eq_abs _ ▸ hM t ht)
+  choose Cj hCj using fun j => exists_jetPoly_bound hη hξ j 0 b
+  exact ⟨oneDimExpConst h k q L b M Cj, fun N hN hX =>
+    empOneDim_expansion_of_bounds hη hξ h hk hb q L hqL hM' hCj hN hX⟩
 
 /-! ### Compatibility and the first jets -/
 
