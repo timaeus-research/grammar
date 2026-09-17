@@ -2011,3 +2011,9 @@ bridge (joint convergence + uniform integrability), (IV) higher cumulants, (III)
 Landed after DLIX: DLX `PosteriorFrechet` (★ `hasFDerivAt_weightedFunctional`, ★★ `hasFDerivAt_compactAvg`: `g ↦ ⟨f⟩_g` Fréchet
 differentiable on `C(K,ℝ)`, `D⟨f⟩_g[h] = β(⟨fh⟩^{½} − ⟨f⟩⟨h⟩^{½})`, ★★★ `GaussianField.integral_eval_mul_compactAvg_fderiv`: Stein in
 Banach form). Astra #163 candidate V complete. Remaining: (VI) empirical bridge, (IV) higher cumulants, (III) convergent source series.
+Astra #164 (`gpt6_bigpicture_v164.md`): the compact Gaussian calculus is CLOSED at DLX; write-up now has priority; the one extra theorem
+worth having is the two-site exchangeable-weight balancing (landed as DLXI `TwoSiteExchange`: `E Q_p − p = (p(1−p)(1−2p)/2)E[kernel]`,
+`E Q_p ∈ [min(p,½), max(p,½)]`). NOT closed: the identification of the limit of the averaged EMPIRICAL posterior mean with the compact
+Gaussian posterior expectation (candidate VI; the bridge's limits are jet-tuple functionals, not a `C(K,ℝ)` field) — the notes must not
+silently identify the two. Naming: `compactHalfAvg → compactSqrtTimeMoment`, `compactFirstMoment → compactTimeMoment` (done);
+write `⟨φ√t⟩_g`, `⟨φ t⟩_g` rather than `⟨φ⟩^{½}`; "Banach-form Stein" = for THIS functional; `Ψ''(0)` = expected CONDITIONAL variance.
