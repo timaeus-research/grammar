@@ -876,4 +876,9 @@ import Grammar.JetPowerBound
 import Grammar.GaussianLimit
 import Grammar.GaussianDerivativeProcess
 import Grammar.GaussianJetLaw
+import Grammar.TailPowerLog
+import Grammar.CutoffExpansionIntegral
+import Grammar.PopulationDerivative
+import Grammar.MonomialShift
+import Grammar.WickEnvelope
 import Grammar.GaussianEvenMoments

@@ -1963,3 +1963,13 @@ Fernique moments `integrable_norm_cubeJet_pow`; ★★★ `integral_empCoeff_gau
 DISCHARGED from Gaussianity of the value process). Remaining for the Wick theorem: the envelope `habs` (priority 3: monomial-shift lemma),
 measurability of the jet maps (hypothesis). Optional (α) not done.
 
+### 20.68 (2026-09-17) Astra #161 priority 3 CLOSED (user: "let's proceed with this proof"): the envelope. Route chosen: real-variable
+derivative in `N` instead of the Mellin transform. DXLVIII `TailPowerLog` (tail integrals of `t^{−a−1}log^q t` in closed form, inversion
+identity of the coefficients), `CutoffExpansionIntegral` (★★ `CutoffExpansion.integral_Ioi`, ★ `intCoeff_shift`), `PopulationDerivative`
+(differentiation under the integral, decay), `MonomialShift` (★★★ `empCoeff_mono_mul_shift`: `C_{μ+1,q}[u^{2k}η] = μ C_{μ,q}[η] − (q+1)
+C_{μ,q+1}[η]`; ★★★ `abs_empCoeff_mono_pow_le`: Gamma growth `Π_{i<j}(μ₀+i+d−1)` at FIXED depth). DXLIX `WickEnvelope` (★★
+`abs_empCoeff_wick_term_le`, ratio test with limit `1/(4δ)`, ★★★ `summable_wick_envelope` from `E e^{δ‖J_R ζ‖²} < ∞`, `δ > 1/4` = the
+scalar threshold `W < 2`; ★★★ `integral_empCoeff_gaussian_wick_of_exp_moment`: the Wick series with every integrability hypothesis
+discharged). Remaining explicit hypotheses of the Wick series: Gaussian value process on an open neighbourhood of the cube, the variance
+profile `W`, jet-map measurability, the exponential moment with `δ > 1/4`. Not done: optional (α).
+
