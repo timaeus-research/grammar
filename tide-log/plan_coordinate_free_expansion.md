@@ -1973,3 +1973,16 @@ scalar threshold `W < 2`; ★★★ `integral_empCoeff_gaussian_wick_of_exp_mome
 discharged). Remaining explicit hypotheses of the Wick series: Gaussian value process on an open neighbourhood of the cube, the variance
 profile `W`, jet-map measurability, the exponential moment with `δ > 1/4`. Not done: optional (α).
 
+
+### 20.69 (2026-09-17) Posterior expectations `Z_n[f]/Z_n[1]` (user: "return to the actual expectation values against the
+posterior"; Astra #162). Assessment corrected by Astra: (i) for a fixed sample the ratio is the formal quotient, organised by the
+anchored source `log(Z_N[η e^{εf}]/Z_N[η])` whose `ε`-coefficients are the posterior cumulants — universal polynomials in the quotient
+blocks; (ii) `E D = ∞` past the Gaussian threshold does NOT obstruct averaged posterior expectations: `D(g)⁻¹ ≤ λe^{2β}ρ(K)⁻¹(1+‖g‖)^{2λ}`
+so all inverse-evidence moments are finite (Fernique); (iii) the exact averaged structure is Gaussian integration by parts on the
+limit Gibbs measure with replicas (Stein: `E[G(x₀)⟨f⟩_G] = β E⟨f(x₁)(√t₁ C(x₀,x₁) − √t₂ C(x₀,x₂))⟩^{⊗2}`) and covariance
+interpolation (three replicas for a posterior mean, `A'(s) = (β²/2) E⟨f(x₁)(R₁₁ − 2R₁₂ − R₂₂ + 2R₂₃)⟩^{⊗3}`); (iv) the anchored
+quenched source `Ψ(ε) = E log⟨e^{εf}⟩_G` has a convergent source expansion for bounded `f` (`|ε| < log 2/‖f‖`). Notes written to
+the grammar2 Overleaf (`papers/grammar2/notes_posterior.tex`). Landed: DL `SourceLog` (formal source logarithm, `κ₁ = B⁻¹A`,
+`κ₂ = B⁻¹C − (B⁻¹A)²`, block level = `varianceBlocks`), DLI `PosteriorVarianceExpansion` (★★★ `emp_variance_isBigO`: the posterior
+variance to all orders for a fixed sample). Next: inverse-evidence moments (`compactD` inverse bound, all moments), the anchored
+quenched source (`Ψ'(0) = E⟨f⟩_G`, `Ψ''(0) = E Var_G(f)`), the compact-base Stein identity for posterior averages.

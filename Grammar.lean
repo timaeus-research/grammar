@@ -881,4 +881,6 @@ import Grammar.CutoffExpansionIntegral
 import Grammar.PopulationDerivative
 import Grammar.MonomialShift
 import Grammar.WickEnvelope
+import Grammar.SourceLog
+import Grammar.PosteriorVarianceExpansion
 import Grammar.GaussianEvenMoments
