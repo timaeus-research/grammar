@@ -1990,3 +1990,7 @@ Landed after DL–DLI: DLII `InverseEvidence` (`D_ρ(g)⁻¹ ≤ λe^{2β}ρ(K)�
 law, radial moments `⟨t^p⟩_g ≤ Π(2(λ+i)/β + R²/4)`), DLIII `QuenchedSource` (`Ψ(ε) = E log⟨e^{εf}⟩_G`, `|log⟨e^{εf}⟩_g| ≤ |ε|M`,
 `Ψ'(0) = E⟨f⟩_G`, `Ψ''(0) = E Var_G(f)`). Next: the compact-base Stein identity for posterior averages (Fréchet derivative of
 `g ↦ ⟨f⟩_g` on `C(K,ℝ)`, `E[G(x₀)⟨f⟩_G] = E[D⟨f⟩_G[C(x₀,·)]]` via `gaussianVector_stein` on atoms and the quantisation limit).
+Landed after DLII–DLIII: DLIV `PosteriorWeightStein` (finite-atom Stein for `⟨f⟩`: `∂_j⟨f⟩ = βW_j(f_j − ⟨f⟩)`,
+`E[v₀⟨f⟩_{v'}] = βΣ b_{0,i+1}E[W_i(f_i − ⟨f⟩)]`), DLV `CompactBaseStein` (★★★ `GaussianField.integral_eval_mul_compactAvg`:
+`E[G(x₀)⟨f⟩_G] = βE[⟨f𝒞(x₀,·)⟩^{½}_G − ⟨f⟩_G⟨𝒞(x₀,·)⟩^{½}_G]`). Remaining from Astra #162: covariance interpolation of the
+averaged posterior mean (three replicas), the convergent source expansion, averaged subleading transfer (needs rates).

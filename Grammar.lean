@@ -885,4 +885,6 @@ import Grammar.SourceLog
 import Grammar.PosteriorVarianceExpansion
 import Grammar.InverseEvidence
 import Grammar.QuenchedSource
+import Grammar.PosteriorWeightStein
+import Grammar.CompactBaseStein
 import Grammar.GaussianEvenMoments
