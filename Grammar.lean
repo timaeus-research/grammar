@@ -889,4 +889,5 @@ import Grammar.PosteriorWeightStein
 import Grammar.CompactBaseStein
 import Grammar.PosteriorResponseDet
 import Grammar.CompactBaseResponse
+import Grammar.GibbsJoint
 import Grammar.GaussianEvenMoments

@@ -2001,3 +2001,7 @@ ranked below; (VI) bridge to the empirical side needs joint convergence + unifor
 (`compactFirstMoment`, `compactBilocal`, `compactMeanResponse`, quadratic domination, ★★★ `GaussianField.integral_compactAvg_eq`:
 `E⟨f⟩_G = ρ(f)/ρ(K) + ∫₀¹ E H_f(√sG) ds`). Naming audit (Astra #163 §6): `compactHalfAvg` is a radial-moment–weighted integral, not a
 posterior expectation (its sum over atoms is `⟨√t⟩`, not 1) — say so in the notes.
+Landed after DLVII: DLVIII `GibbsJoint` (the joint Gibbs measure `μ_g` on `K × ℝ` as a `withDensity`, probability, reductions
+`∫φ dμ = ⟨φ⟩`, `∫φ√t = ⟨φ⟩^{½}`, `∫φt = T`, `∬h√t₁√t₂ = B`, and ★★★ `GaussianField.integral_eval_mul_compactAvg_replica`: Stein in
+two-replica form). Remaining: three-replica form of `compactMeanResponse` (reductions available), Fréchet derivative (V), empirical
+bridge (VI), higher cumulants (IV), convergent source series (III).
