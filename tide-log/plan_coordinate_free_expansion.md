@@ -1956,3 +1956,10 @@ Gaussian by closure of Gaussian laws under limits), finite-rank partition-of-uni
 keep `habs` until it lands; `W < 2` is the scalar absolute-series threshold, not an iff for coefficients), (4) optional (α) `R_j = N_j/B_0^{j+1}`
 with `N_j = A_j B_0^j − Σ_{i=1}^j B_i N_{j−i} B_0^{i−1}` if cheap; skip derivative CLT/Riesz and finite-n asymptotic Wick.
 
+### 20.67 (2026-09-17) Astra #161 priorities 1–2 CLOSED: DXLIV `JetPowerBound` (moments → `hint`), DXLV `GaussianLimit` (a.s. limits of real
+Gaussians are Gaussian — NOT in Mathlib), DXLVI `GaussianDerivativeProcess` (derivative processes of a smooth Gaussian field are Gaussian,
+jointly in all orders), DXLVII `GaussianJetLaw` (★★★ `hasGaussianLaw_cubeJet`: the cube jet is a Gaussian random element of `CubeJetSpace`;
+Fernique moments `integrable_norm_cubeJet_pow`; ★★★ `integral_empCoeff_gaussian_wick_of_isGaussianProcess`: the Wick series with `hint`
+DISCHARGED from Gaussianity of the value process). Remaining for the Wick theorem: the envelope `habs` (priority 3: monomial-shift lemma),
+measurability of the jet maps (hypothesis). Optional (α) not done.
+

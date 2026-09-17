@@ -875,4 +875,5 @@ import Grammar.MellinTiltIntegrable
 import Grammar.JetPowerBound
 import Grammar.GaussianLimit
 import Grammar.GaussianDerivativeProcess
+import Grammar.GaussianJetLaw
 import Grammar.GaussianEvenMoments
