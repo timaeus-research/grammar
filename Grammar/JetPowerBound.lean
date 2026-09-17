@@ -56,7 +56,8 @@ theorem norm_iteratedFDeriv_pow_le_of_forall_le {Y : (Fin d → ℝ) → ℝ} (h
     have h1 := norm_iteratedFDeriv_mul_le hY (hY.pow r) x (n := n) (natCast_le_infty _)
     refine h1.trans ?_
     have hterm : ∀ i ∈ range (n + 1),
-        (n.choose i : ℝ) * ‖iteratedFDeriv ℝ i Y x‖ * ‖iteratedFDeriv ℝ (n - i) (fun v => Y v ^ r) x‖
+        (n.choose i : ℝ) * ‖iteratedFDeriv ℝ i Y x‖ *
+            ‖iteratedFDeriv ℝ (n - i) (fun v => Y v ^ r) x‖
           ≤ (n.choose i : ℝ) * M * ((r : ℝ) ^ (n - i) * M ^ r) := by
       intro i hi
       have hi' : i ≤ n := Nat.lt_succ_iff.1 (mem_range.1 hi)
