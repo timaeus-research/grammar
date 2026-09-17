@@ -12,8 +12,8 @@ import Mathlib.Analysis.Calculus.Deriv.Slope
 
 For a random field `ζ_o : ℝ^d → ℝ`, smooth for every `o`, whose value process on an open set `U`
 is Gaussian (`IsGaussianProcess (fun (x : U) o => ζ o x) P`), every derivative-evaluation process
-`(x, w) ↦ ∂^r ζ_o(x)(w₁,…,w_r)` on `U` is Gaussian (`isGaussianProcess_iteratedFDeriv`), and jointly in all orders
-(`isGaussianProcess_jetEval_le`).  Route:
+`(x, w) ↦ ∂^r ζ_o(x)(w₁,…,w_r)` on `U` is Gaussian (`isGaussianProcess_iteratedFDeriv`), and
+jointly in all orders (`isGaussianProcess_jetEval_le`).  Route:
 induction on `r`; the order-`r+1` evaluation at `(x, v, w)` is the a.s. (everywhere) limit of the
 difference quotients `h_n⁻¹ (∂^r ζ(x + h_n v)(w) − ∂^r ζ(x)(w))`, each a continuous linear image
 of two values of the order-`r` process (`IsGaussianProcess.of_isGaussianProcess`), and Gaussian
@@ -34,7 +34,7 @@ variable {Ω : Type*} [MeasurableSpace Ω] {P : Measure Ω} [IsProbabilityMeasur
 theorem hasGaussianLaw_pi_of_tendsto_ae {ι : Type*} [Finite ι] {V : ℕ → Ω → ι → ℝ}
     {W : Ω → ι → ℝ} (hV : ∀ n, HasGaussianLaw (V n) P)
     (hlim : ∀ᵐ o ∂P, Tendsto (fun n => V n o) atTop (𝓝 (W o))) : HasGaussianLaw W P := by
-  letI := Fintype.ofFinite ι
+  let _ := Fintype.ofFinite ι
   have hVm : ∀ n, AEMeasurable (V n) P := fun n => (hV n).aemeasurable
   have hW : AEMeasurable W P := aemeasurable_of_tendsto_metrizable_ae atTop hVm hlim
   refine ⟨⟨fun L => ?_⟩⟩
