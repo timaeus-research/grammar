@@ -873,4 +873,5 @@ import Grammar.GaussianAveraging
 import Grammar.WickSeries
 import Grammar.MellinTiltIntegrable
 import Grammar.JetPowerBound
+import Grammar.GaussianLimit
 import Grammar.GaussianEvenMoments
