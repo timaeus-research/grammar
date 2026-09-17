@@ -19,7 +19,8 @@ integral of the **mean response** along the covariance scale:
 (`compactMeanResponse`), with the radial-moment–weighted integrals
 `T_g(φ) = ∫ φ S_{λ+1}(g) dρ / D_ρ(g)` (`compactFirstMoment`, `= ⟨φ t⟩_g`), the bilocal
 `B_g(h) = ∫∫ h(x,y) S_{λ+1/2}(g x) S_{λ+1/2}(g y) dρ dρ / D_ρ(g)²` (`compactBilocal`,
-`= ⟨h(x₁,x₂)√t₁√t₂⟩^{⊗2}_g`), the diagonal `c_Δ(x) = 𝒞(x,x)` and `(𝒞f)(x,y) = 𝒞(x,y) f(y)`.  In replica language
+`= ⟨h(x₁,x₂)√t₁√t₂⟩^{⊗2}_g`), the diagonal `c_Δ(x) = 𝒞(x,x)` and `(𝒞f)(x,y) = 𝒞(x,y) f(y)`.
+In replica language
 `H_f(g) = (β²/2) E^{⊗3}_{μ_g}[(f(x₁) − f(x₂))(t₁ 𝒞(x₁,x₁) − 2√t₁√t₃ 𝒞(x₁,x₃))]`: three replicas
 (Astra #163).
 
