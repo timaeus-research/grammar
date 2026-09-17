@@ -891,4 +891,5 @@ import Grammar.PosteriorResponseDet
 import Grammar.CompactBaseResponse
 import Grammar.GibbsJoint
 import Grammar.GibbsJointResponse
+import Grammar.PosteriorFrechet
 import Grammar.GaussianEvenMoments

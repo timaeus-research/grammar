@@ -17,7 +17,7 @@ integral of the **mean response** along the covariance scale:
 
 `H_f(g) = (β²/2)[(T_g(f c_Δ) − ⟨f⟩_g T_g(c_Δ)) − 2(B_g(𝒞 f) − ⟨f⟩_g B_g(𝒞))]`
 (`compactMeanResponse`), with the radial-moment–weighted integrals
-`T_g(φ) = ∫ φ S_{λ+1}(g) dρ / D_ρ(g)` (`compactFirstMoment`, `= ⟨φ t⟩_g`), the bilocal
+`T_g(φ) = ∫ φ S_{λ+1}(g) dρ / D_ρ(g)` (`compactTimeMoment`, `= ⟨φ t⟩_g`), the bilocal
 `B_g(h) = ∫∫ h(x,y) S_{λ+1/2}(g x) S_{λ+1/2}(g y) dρ dρ / D_ρ(g)²` (`compactBilocal`,
 `= ⟨h(x₁,x₂)√t₁√t₂⟩^{⊗2}_g`), the diagonal `c_Δ(x) = 𝒞(x,x)` and `(𝒞f)(x,y) = 𝒞(x,y) f(y)`.
 In replica language
@@ -42,7 +42,7 @@ section Defs
 variable {K : Type*} [MeasurableSpace K]
 
 /-- `T_g(φ) = ∫ φ S_{λ+1}(g) dρ / D_ρ(g)`, the radial-first-moment–weighted integral `⟨φ t⟩_g`. -/
-noncomputable def compactFirstMoment (β lam : ℝ) (ρ : Measure K) (g φ : K → ℝ) : ℝ :=
+noncomputable def compactTimeMoment (β lam : ℝ) (ρ : Measure K) (g φ : K → ℝ) : ℝ :=
   compactWeighted β (lam + 1) ρ g φ / compactD β lam ρ g
 
 /-- `B_g(h) = ∫∫ h(x,y) S_{λ+1/2}(g x) S_{λ+1/2}(g y) dρ dρ / D_ρ(g)²`, the bilocal
@@ -85,8 +85,8 @@ theorem PSDKernel.abs_le_of_diag_le {c : ℝ} (hc0 : 0 ≤ c) (hc : ∀ x, 𝒞.
 `H_f(g) = (β²/2)[(T_g(f c_Δ) − ⟨f⟩_g T_g(c_Δ)) − 2(B_g(𝒞f) − ⟨f⟩_g B_g(𝒞))]`. -/
 noncomputable def compactMeanResponse [MeasurableSpace K] (β lam : ℝ) (ρ : Measure K)
     (𝒞 : PSDKernel K) (f : C(K, ℝ)) (g : K → ℝ) : ℝ :=
-  β ^ 2 / 2 * ((compactFirstMoment β lam ρ g (f * kernelDiag 𝒞 : C(K, ℝ)) -
-      compactAvg β lam ρ g f * compactFirstMoment β lam ρ g (kernelDiag 𝒞)) -
+  β ^ 2 / 2 * ((compactTimeMoment β lam ρ g (f * kernelDiag 𝒞 : C(K, ℝ)) -
+      compactAvg β lam ρ g f * compactTimeMoment β lam ρ g (kernelDiag 𝒞)) -
     2 * (compactBilocal β lam ρ g (kernelObs 𝒞 f) -
       compactAvg β lam ρ g f * compactBilocal β lam ρ g (kernelFun 𝒞)))
 
@@ -99,10 +99,10 @@ variable {K : Type*} [MetricSpace K] [CompactSpace K] [MeasurableSpace K] [Borel
 include hβ hlam
 
 /-- `|T_g(φ)| ≤ ‖φ‖ M₂(g)`. -/
-theorem abs_compactFirstMoment_le (hρ : ρ ≠ 0) (g : C(K, ℝ)) (φ : C(K, ℝ)) :
-    |compactFirstMoment β lam ρ g φ| ≤ ‖φ‖ * compactM2 β lam ρ g := by
+theorem abs_compactTimeMoment_le (hρ : ρ ≠ 0) (g : C(K, ℝ)) (φ : C(K, ℝ)) :
+    |compactTimeMoment β lam ρ g φ| ≤ ‖φ‖ * compactM2 β lam ρ g := by
   have hD := compactD_pos ρ hβ hlam hρ g
-  unfold compactFirstMoment compactWeighted compactM2
+  unfold compactTimeMoment compactWeighted compactM2
   rw [abs_div, abs_of_pos hD, mul_div_assoc', div_le_div_iff_of_pos_right hD]
   refine abs_integral_le_integral_abs.trans ?_
   rw [← integral_const_mul]
@@ -223,18 +223,18 @@ theorem abs_compactMeanResponse_le (hρ : ρ ≠ 0) (𝒞 : PSDKernel K) {c : �
     have := f.norm_coe_le_norm z.2
     rwa [Real.norm_eq_abs] at this
   -- the four terms
-  have h1 := abs_compactFirstMoment_le ρ hβ hlam hρ g (f * kernelDiag 𝒞)
-  have h2 := abs_compactFirstMoment_le ρ hβ hlam hρ g (kernelDiag 𝒞)
+  have h1 := abs_compactTimeMoment_le ρ hβ hlam hρ g (f * kernelDiag 𝒞)
+  have h2 := abs_compactTimeMoment_le ρ hβ hlam hρ g (kernelDiag 𝒞)
   have h3 := abs_compactBilocal_le ρ hβ hlam hρ g (kernelObs 𝒞 f)
   have h4 := abs_compactBilocal_le ρ hβ hlam hρ g (kernelFun 𝒞)
   have hsq := sq_sqrt_add_half_le hβ hlam ‖g‖
   have hsq0 : 0 ≤ (Real.sqrt (2 * lam / β) + ‖g‖ / 2) ^ 2 := sq_nonneg _
-  have e1 : |compactFirstMoment β lam ρ g (f * kernelDiag 𝒞 : C(K, ℝ))| ≤
+  have e1 : |compactTimeMoment β lam ρ g (f * kernelDiag 𝒞 : C(K, ℝ))| ≤
       ‖f‖ * c * compactM2 β lam ρ g := h1.trans (mul_le_mul_of_nonneg_right hfdiag hM20)
-  have e2 : |compactAvg β lam ρ g f * compactFirstMoment β lam ρ g (kernelDiag 𝒞)| ≤
+  have e2 : |compactAvg β lam ρ g f * compactTimeMoment β lam ρ g (kernelDiag 𝒞)| ≤
       ‖f‖ * c * compactM2 β lam ρ g := by
     rw [abs_mul]
-    calc |compactAvg β lam ρ g f| * |compactFirstMoment β lam ρ g (kernelDiag 𝒞)| ≤
+    calc |compactAvg β lam ρ g f| * |compactTimeMoment β lam ρ g (kernelDiag 𝒞)| ≤
           ‖f‖ * (c * compactM2 β lam ρ g) :=
           mul_le_mul hF (h2.trans (mul_le_mul_of_nonneg_right hdiag hM20)) (abs_nonneg _)
             (norm_nonneg _)
@@ -248,14 +248,14 @@ theorem abs_compactMeanResponse_le (hρ : ρ ≠ 0) (𝒞 : PSDKernel K) {c : �
     exact mul_le_mul hF (h4.trans (mul_le_mul hfun hsq hsq0 hc0)) (abs_nonneg _) (norm_nonneg _)
   unfold compactMeanResponse
   rw [abs_mul, abs_of_pos (by positivity : (0 : ℝ) < β ^ 2 / 2)]
-  have hT : |compactFirstMoment β lam ρ g (f * kernelDiag 𝒞 : C(K, ℝ)) -
-      compactAvg β lam ρ g f * compactFirstMoment β lam ρ g (kernelDiag 𝒞)| ≤
+  have hT : |compactTimeMoment β lam ρ g (f * kernelDiag 𝒞 : C(K, ℝ)) -
+      compactAvg β lam ρ g f * compactTimeMoment β lam ρ g (kernelDiag 𝒞)| ≤
         2 * (‖f‖ * c * compactM2 β lam ρ g) := (abs_sub _ _).trans (by linarith)
   have hBt : |compactBilocal β lam ρ g (kernelObs 𝒞 f) -
       compactAvg β lam ρ g f * compactBilocal β lam ρ g (kernelFun 𝒞)| ≤
         2 * (c * ‖f‖ * (2 * (2 * lam / β + ‖g‖ ^ 2 / 4))) := (abs_sub _ _).trans (by linarith)
-  have hall : |compactFirstMoment β lam ρ g (f * kernelDiag 𝒞 : C(K, ℝ)) -
-      compactAvg β lam ρ g f * compactFirstMoment β lam ρ g (kernelDiag 𝒞) -
+  have hall : |compactTimeMoment β lam ρ g (f * kernelDiag 𝒞 : C(K, ℝ)) -
+      compactAvg β lam ρ g f * compactTimeMoment β lam ρ g (kernelDiag 𝒞) -
       2 * (compactBilocal β lam ρ g (kernelObs 𝒞 f) -
         compactAvg β lam ρ g f * compactBilocal β lam ρ g (kernelFun 𝒞))| ≤
       2 * (‖f‖ * c * compactM2 β lam ρ g) +
@@ -282,10 +282,10 @@ variable {K : Type*} [MetricSpace K] [CompactSpace K] [MeasurableSpace K] [Borel
 include hβ hlam hq
 
 omit [CompactSpace K] [IsFiniteMeasure ρ] in
-theorem compactFirstMoment_map (φ : C(K, ℝ)) :
-    compactFirstMoment β lam (ρ.map q) g φ =
+theorem compactTimeMoment_map (φ : C(K, ℝ)) :
+    compactTimeMoment β lam (ρ.map q) g φ =
       (∫ x, φ (q x) * fluctuation β (lam + 1) (g (q x)) ∂ρ) / compactD β lam (ρ.map q) g := by
-  unfold compactFirstMoment
+  unfold compactTimeMoment
   rw [compactWeighted_map ρ hβ g hq (lam + 1) (by linarith)]
 
 theorem compactBilocal_map (h : C(K × K, ℝ)) :
@@ -306,11 +306,11 @@ theorem compactBilocal_map (h : C(K × K, ℝ)) :
 variable (hfin : (Set.range q).Finite)
 include hfin
 
-theorem compactFirstMoment_map_eq (φ : C(K, ℝ)) :
-    compactFirstMoment β lam (ρ.map q) g φ =
+theorem compactTimeMoment_map_eq (φ : C(K, ℝ)) :
+    compactTimeMoment β lam (ρ.map q) g φ =
       ∑ i, φ (atomPt ρ hfin i) *
         quartetR β lam (atomWt ρ hfin) i (fun i => g (atomPt ρ hfin i)) := by
-  rw [compactFirstMoment_map ρ hβ hlam g hq, integral_comp_finiteRange_atoms ρ hq hfin
+  rw [compactTimeMoment_map ρ hβ hlam g hq, integral_comp_finiteRange_atoms ρ hq hfin
     (fun x => φ x * fluctuation β (lam + 1) (g x)), compactD_map_eq ρ hβ hlam g hq hfin]
   unfold quartetR
   rw [Finset.sum_div]
@@ -363,7 +363,7 @@ theorem compactMeanResponse_map_eq (𝒞 : PSDKernel K) (f : C(K, ℝ)) :
       postResp β lam (atomWt ρ hfin) (fun i => f (atomPt ρ hfin i))
         (𝒞.kernelMatrix (atomPt ρ hfin)) (fun i => g (atomPt ρ hfin i)) := by
   unfold compactMeanResponse postResp
-  rw [compactFirstMoment_map_eq ρ hβ hlam g hq hfin, compactFirstMoment_map_eq ρ hβ hlam g hq hfin,
+  rw [compactTimeMoment_map_eq ρ hβ hlam g hq hfin, compactTimeMoment_map_eq ρ hβ hlam g hq hfin,
     compactBilocal_map_eq ρ hβ hlam g hq hfin, compactBilocal_map_eq ρ hβ hlam g hq hfin,
     compactAvg_map_eq ρ hβ hlam g hq hfin]
   congr 1
@@ -410,10 +410,10 @@ variable {K : Type*} [MetricSpace K] [CompactSpace K] [MeasurableSpace K] [Borel
   (hε : Tendsto ε atTop (𝓝 0)) (hqε : ∀ n x, dist x (q n x) < ε n)
 include hβ hlam hρ hq hε hqε
 
-theorem tendsto_compactFirstMoment_map (φ : C(K, ℝ)) :
-    Tendsto (fun n => compactFirstMoment β lam (ρ.map (q n)) g φ) atTop
-      (𝓝 (compactFirstMoment β lam ρ g φ)) := by
-  simp_rw [compactFirstMoment_map ρ hβ hlam g (hq _)]
+theorem tendsto_compactTimeMoment_map (φ : C(K, ℝ)) :
+    Tendsto (fun n => compactTimeMoment β lam (ρ.map (q n)) g φ) atTop
+      (𝓝 (compactTimeMoment β lam ρ g φ)) := by
+  simp_rw [compactTimeMoment_map ρ hβ hlam g (hq _)]
   exact (tendsto_integral_comp_quantise ρ (weightedFluctC hβ (lam + 1) (by linarith) φ g)
     hq hε hqε).div (tendsto_compactD_map ρ hβ hlam g hq hε hqε) (compactD_pos ρ hβ hlam hρ g).ne'
 
@@ -437,9 +437,9 @@ theorem tendsto_compactMeanResponse_map (𝒞 : PSDKernel K) (f : C(K, ℝ)) :
   unfold compactMeanResponse
   refine tendsto_const_nhds.mul (Tendsto.sub (Tendsto.sub ?_ (Tendsto.mul ?_ ?_))
     (tendsto_const_nhds.mul (Tendsto.sub ?_ (Tendsto.mul ?_ ?_))))
-  · exact tendsto_compactFirstMoment_map ρ hβ hlam hρ g hq hε hqε _
+  · exact tendsto_compactTimeMoment_map ρ hβ hlam hρ g hq hε hqε _
   · exact tendsto_compactAvg_map ρ hβ hlam g hρ f hq hε hqε
-  · exact tendsto_compactFirstMoment_map ρ hβ hlam hρ g hq hε hqε _
+  · exact tendsto_compactTimeMoment_map ρ hβ hlam hρ g hq hε hqε _
   · exact tendsto_compactBilocal_map ρ hβ hlam hρ g hq hε hqε _
   · exact tendsto_compactAvg_map ρ hβ hlam g hρ f hq hε hqε
   · exact tendsto_compactBilocal_map ρ hβ hlam hρ g hq hε hqε _

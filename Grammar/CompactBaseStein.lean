@@ -14,9 +14,9 @@ posterior `⟨φ⟩_g = ∫ φ S_λ(g) dρ / D_ρ(g)` (`compactAvg`), the Gaussi
 identity for the posterior average of a continuous observable `f` reads
 
 ★★★ `GaussianField.integral_eval_mul_compactAvg`:
-`E[G(x₀) ⟨f⟩_G] = β E[⟨f · 𝒞(x₀,·)⟩^{½}_G − ⟨f⟩_G ⟨𝒞(x₀,·)⟩^{½}_G]`,
+`E[G(x₀) ⟨f⟩_G] = β E[⟨f · 𝒞(x₀,·)√t⟩_G − ⟨f⟩_G ⟨𝒞(x₀,·)√t⟩_G]`,
 
-where `⟨φ⟩^{½}_g = ∫ φ S_{λ+1/2}(g) dρ / D_ρ(g)` (`compactHalfAvg`) is the posterior average of
+where `⟨φ√t⟩_g = ∫ φ S_{λ+1/2}(g) dρ / D_ρ(g)` (`compactSqrtTimeMoment`) is the posterior average of
 `φ(x)√t` on the joint Gibbs measure `μ_g(dx dt) ∝ t^{λ−1} e^{−βt + βg(x)√t} dρ dt`.  This is
 `E[G(x₀) F(G)] = E[DF(G)[𝒞(x₀,·)]]` with the Fréchet derivative
 `DF_f(g)[h] = β(⟨f √t h⟩_g − ⟨f⟩_g ⟨√t h⟩_g)` of the posterior average (Astra #162 §5): the
@@ -27,7 +27,7 @@ Route: on a quantised base `ρ ∘ q⁻¹` the identity is the finite-atom Stein
 `integral_coord_mul_postAvg_tail` for the joint Gaussian vector `(G(x₀), G(atoms))` supplied by
 `GaussianField.law` (`integral_eval_mul_compactAvg_map`); the passage to `ρ` is dominated
 convergence along a quantisation sequence with the bounds `|⟨f⟩_g| ≤ ‖f‖` and
-`|⟨φ⟩^{½}_g| ≤ ‖φ‖(√(2λ/β) + ‖g‖/2)` (`abs_compactHalfAvg_le`).
+`|⟨φ√t⟩_g| ≤ ‖φ‖(√(2λ/β) + ‖g‖/2)` (`abs_compactSqrtTimeMoment_le`).
 
 Zero `sorry`/`axiom`.
 -/
@@ -40,8 +40,8 @@ section Defs
 
 variable {K : Type*} [MeasurableSpace K]
 
-/-- The posterior average of `φ(x) √t`: `⟨φ⟩^{½}_g = ∫ φ S_{λ+1/2}(g) dρ / D_ρ(g)`. -/
-noncomputable def compactHalfAvg (β lam : ℝ) (ρ : Measure K) (g φ : K → ℝ) : ℝ :=
+/-- The posterior average of `φ(x) √t`: `⟨φ√t⟩_g = ∫ φ S_{λ+1/2}(g) dρ / D_ρ(g)`. -/
+noncomputable def compactSqrtTimeMoment (β lam : ℝ) (ρ : Measure K) (g φ : K → ℝ) : ℝ :=
   compactWeighted β (lam + 1 / 2) ρ g φ / compactD β lam ρ g
 
 end Defs
@@ -81,12 +81,12 @@ theorem abs_compactAvg_le (hρ : ρ ≠ 0) (g : C(K, ℝ)) (f : C(K, ℝ)) :
   have := f.norm_coe_le_norm x
   rwa [Real.norm_eq_abs] at this
 
-/-- `|⟨φ⟩^{½}_g| ≤ ‖φ‖ (√(2λ/β) + ‖g‖/2)`. -/
-theorem abs_compactHalfAvg_le (hρ : ρ ≠ 0) (g : C(K, ℝ)) (φ : C(K, ℝ)) :
-    |compactHalfAvg β lam ρ g φ| ≤ ‖φ‖ * (Real.sqrt (2 * lam / β) + ‖g‖ / 2) := by
+/-- `|⟨φ√t⟩_g| ≤ ‖φ‖ (√(2λ/β) + ‖g‖/2)`. -/
+theorem abs_compactSqrtTimeMoment_le (hρ : ρ ≠ 0) (g : C(K, ℝ)) (φ : C(K, ℝ)) :
+    |compactSqrtTimeMoment β lam ρ g φ| ≤ ‖φ‖ * (Real.sqrt (2 * lam / β) + ‖g‖ / 2) := by
   have hD := compactD_pos ρ hβ hlam hρ g
   have hB : 0 ≤ Real.sqrt (2 * lam / β) + ‖g‖ / 2 := by positivity
-  unfold compactHalfAvg compactWeighted
+  unfold compactSqrtTimeMoment compactWeighted
   rw [abs_div, abs_of_pos hD, div_le_iff₀ hD]
   refine abs_integral_le_integral_abs.trans ?_
   unfold compactD
@@ -140,10 +140,10 @@ theorem compactAvg_map (f : C(K, ℝ)) :
   rw [compactWeighted_map ρ hβ g hq lam hlam]
 
 omit [CompactSpace K] [IsFiniteMeasure ρ] in
-theorem compactHalfAvg_map (φ : C(K, ℝ)) :
-    compactHalfAvg β lam (ρ.map q) g φ =
+theorem compactSqrtTimeMoment_map (φ : C(K, ℝ)) :
+    compactSqrtTimeMoment β lam (ρ.map q) g φ =
       (∫ x, φ (q x) * fluctuation β (lam + 1 / 2) (g (q x)) ∂ρ) / compactD β lam (ρ.map q) g := by
-  unfold compactHalfAvg
+  unfold compactSqrtTimeMoment
   rw [compactWeighted_map ρ hβ g hq (lam + 1 / 2) (by linarith)]
 
 variable (hfin : (Set.range q).Finite)
@@ -159,11 +159,11 @@ theorem compactAvg_map_eq (f : C(K, ℝ)) :
   rw [Finset.sum_div]
   exact Finset.sum_congr rfl fun i _ => by ring
 
-theorem compactHalfAvg_map_eq (φ : C(K, ℝ)) :
-    compactHalfAvg β lam (ρ.map q) g φ =
+theorem compactSqrtTimeMoment_map_eq (φ : C(K, ℝ)) :
+    compactSqrtTimeMoment β lam (ρ.map q) g φ =
       ∑ i, φ (atomPt ρ hfin i) *
         quartetW β lam (atomWt ρ hfin) i (fun i => g (atomPt ρ hfin i)) := by
-  rw [compactHalfAvg_map ρ hβ hlam g hq, integral_comp_finiteRange_atoms ρ hq hfin
+  rw [compactSqrtTimeMoment_map ρ hβ hlam g hq, integral_comp_finiteRange_atoms ρ hq hfin
     (fun x => φ x * fluctuation β (lam + 1 / 2) (g x)), compactD_map_eq ρ hβ hlam g hq hfin]
   unfold quartetW quartetN
   rw [Finset.sum_div]
@@ -181,12 +181,12 @@ theorem tendsto_compactAvg_map (hρ : ρ ≠ 0) (f : C(K, ℝ)) {q : ℕ → K �
     (tendsto_compactD_map ρ hβ hlam g hq hε hqε) (compactD_pos ρ hβ hlam hρ g).ne'
 
 omit hq hfin in
-theorem tendsto_compactHalfAvg_map (hρ : ρ ≠ 0) (φ : C(K, ℝ)) {q : ℕ → K → K}
+theorem tendsto_compactSqrtTimeMoment_map (hρ : ρ ≠ 0) (φ : C(K, ℝ)) {q : ℕ → K → K}
     (hq : ∀ n, Measurable (q n)) {ε : ℕ → ℝ} (hε : Tendsto ε atTop (𝓝 0))
     (hqε : ∀ n x, dist x (q n x) < ε n) :
-    Tendsto (fun n => compactHalfAvg β lam (ρ.map (q n)) g φ) atTop
-      (𝓝 (compactHalfAvg β lam ρ g φ)) := by
-  simp_rw [compactHalfAvg_map ρ hβ hlam g (hq _)]
+    Tendsto (fun n => compactSqrtTimeMoment β lam (ρ.map (q n)) g φ) atTop
+      (𝓝 (compactSqrtTimeMoment β lam ρ g φ)) := by
+  simp_rw [compactSqrtTimeMoment_map ρ hβ hlam g (hq _)]
   exact (tendsto_integral_comp_quantise ρ (weightedFluctC hβ (lam + 1 / 2) (by linarith) φ g)
     hq hε hqε).div (tendsto_compactD_map ρ hβ hlam g hq hε hqε) (compactD_pos ρ hβ hlam hρ g).ne'
 
@@ -240,12 +240,12 @@ theorem tailCLM_steinPts (x₀ : K) (ω : Ω) :
   simp [tailCLM_apply, steinPts]
 
 /-- **Stein's identity on a quantised base**:
-`E[G(x₀) ⟨f⟩_{G}] = β E[⟨f 𝒞(x₀,·)⟩^{½} − ⟨f⟩ ⟨𝒞(x₀,·)⟩^{½}]` for `ρ ∘ q⁻¹`. -/
+`E[G(x₀) ⟨f⟩_{G}] = β E[⟨f 𝒞(x₀,·)√t⟩ − ⟨f⟩ ⟨𝒞(x₀,·)√t⟩]` for `ρ ∘ q⁻¹`. -/
 theorem integral_eval_mul_compactAvg_map (f : C(K, ℝ)) (x₀ : K) :
     ∫ ω, Γ.G ω x₀ * compactAvg β lam (ρ.map q) (Γ.G ω) f ∂P =
-      β * ∫ ω, (compactHalfAvg β lam (ρ.map q) (Γ.G ω) (f * kernelSection 𝒞 x₀ : C(K, ℝ)) -
+      β * ∫ ω, (compactSqrtTimeMoment β lam (ρ.map q) (Γ.G ω) (f * kernelSection 𝒞 x₀ : C(K, ℝ)) -
         compactAvg β lam (ρ.map q) (Γ.G ω) f *
-          compactHalfAvg β lam (ρ.map q) (Γ.G ω) (kernelSection 𝒞 x₀)) ∂P := by
+          compactSqrtTimeMoment β lam (ρ.map q) (Γ.G ω) (kernelSection 𝒞 x₀)) ∂P := by
   have := nonempty_atoms ρ hq hfin hρ
   have hw := atomWt_pos ρ hfin
   set m := (posAtoms ρ hfin).card
@@ -258,16 +258,16 @@ theorem integral_eval_mul_compactAvg_map (f : C(K, ℝ)) (x₀ : K) :
     intro ω
     rw [compactAvg_map_eq ρ hβ hlam (Γ.G ω) hq hfin f, Γ.tailCLM_steinPts ρ hfin x₀ ω]
     rfl
-  have hR : ∀ ω, compactHalfAvg β lam (ρ.map q) (Γ.G ω) (f * kernelSection 𝒞 x₀ : C(K, ℝ)) -
+  have hR : ∀ ω, compactSqrtTimeMoment β lam (ρ.map q) (Γ.G ω) (f * kernelSection 𝒞 x₀ : C(K, ℝ)) -
       compactAvg β lam (ρ.map q) (Γ.G ω) f *
-        compactHalfAvg β lam (ρ.map q) (Γ.G ω) (kernelSection 𝒞 x₀) =
+        compactSqrtTimeMoment β lam (ρ.map q) (Γ.G ω) (kernelSection 𝒞 x₀) =
       ∑ i, 𝒞.C x₀ (atomPt ρ hfin i) *
         (quartetW β lam (atomWt ρ hfin) i (tailCLM m fun i => Γ.G ω (steinPts ρ hfin x₀ i)) *
           (f (atomPt ρ hfin i) - postAvg β lam (atomWt ρ hfin) (fun i => f (atomPt ρ hfin i))
             (tailCLM m fun i => Γ.G ω (steinPts ρ hfin x₀ i)))) := by
     intro ω
-    rw [compactHalfAvg_map_eq ρ hβ hlam (Γ.G ω) hq hfin (f * kernelSection 𝒞 x₀),
-      compactHalfAvg_map_eq ρ hβ hlam (Γ.G ω) hq hfin (kernelSection 𝒞 x₀),
+    rw [compactSqrtTimeMoment_map_eq ρ hβ hlam (Γ.G ω) hq hfin (f * kernelSection 𝒞 x₀),
+      compactSqrtTimeMoment_map_eq ρ hβ hlam (Γ.G ω) hq hfin (kernelSection 𝒞 x₀),
       compactAvg_map_eq ρ hβ hlam (Γ.G ω) hq hfin, Γ.tailCLM_steinPts ρ hfin x₀ ω,
       Finset.mul_sum, ← Finset.sum_sub_distrib]
     refine Finset.sum_congr rfl fun i _ => ?_
@@ -312,8 +312,8 @@ theorem measurable_compactAvg_comp (f : C(K, ℝ)) :
     f.continuous.measurable).div (measurable_compactD_comp ρ hβ hlam Γ.G Γ.measurable_uncurry_G)
 
 omit hρ [Nonempty K] in
-theorem measurable_compactHalfAvg_comp (φ : C(K, ℝ)) :
-    Measurable fun ω => compactHalfAvg β lam ρ (Γ.G ω) φ :=
+theorem measurable_compactSqrtTimeMoment_comp (φ : C(K, ℝ)) :
+    Measurable fun ω => compactSqrtTimeMoment β lam ρ (Γ.G ω) φ :=
   (measurable_compactWeighted_comp ρ hβ (by linarith : (0 : ℝ) < lam + 1 / 2) Γ.G
     Γ.measurable_uncurry_G φ.continuous.measurable).div
     (measurable_compactD_comp ρ hβ hlam Γ.G Γ.measurable_uncurry_G)
@@ -332,14 +332,14 @@ theorem measurable_compactAvg_map_comp {q : K → K} (hq : Measurable q)
     (measurable_pi_lambda _ fun i => Γ.measurable_eval _)
 
 omit [Nonempty K] in
-theorem measurable_compactHalfAvg_map_comp {q : K → K} (hq : Measurable q)
+theorem measurable_compactSqrtTimeMoment_map_comp {q : K → K} (hq : Measurable q)
     (hfin : (Set.range q).Finite) (φ : C(K, ℝ)) :
-    Measurable fun ω => compactHalfAvg β lam (ρ.map q) (Γ.G ω) φ := by
+    Measurable fun ω => compactSqrtTimeMoment β lam (ρ.map q) (Γ.G ω) φ := by
   have := nonempty_atoms ρ hq hfin hρ
-  have : (fun ω => compactHalfAvg β lam (ρ.map q) (Γ.G ω) φ) = fun ω =>
+  have : (fun ω => compactSqrtTimeMoment β lam (ρ.map q) (Γ.G ω) φ) = fun ω =>
       ∑ i, φ (atomPt ρ hfin i) *
         quartetW β lam (atomWt ρ hfin) i (fun i => Γ.G ω (atomPt ρ hfin i)) :=
-    funext fun ω => compactHalfAvg_map_eq ρ hβ hlam (Γ.G ω) hq hfin φ
+    funext fun ω => compactSqrtTimeMoment_map_eq ρ hβ hlam (Γ.G ω) hq hfin φ
   rw [this]
   exact (continuous_finsetSum _ fun i _ => continuous_const.mul
     (continuous_quartetW hβ hlam (atomWt_pos ρ hfin) i)).measurable.comp
@@ -349,22 +349,22 @@ omit [IsFiniteMeasure ρ] hρ [Nonempty K] in
 /-- The Stein right-hand side is dominated by `C (1 + ‖g‖²)`. -/
 theorem abs_stein_rhs_le (ρ' : Measure K) [IsFiniteMeasure ρ'] (hρ' : ρ' ≠ 0) (g : C(K, ℝ))
     (f φ : C(K, ℝ)) :
-    |compactHalfAvg β lam ρ' g (f * φ : C(K, ℝ)) -
-        compactAvg β lam ρ' g f * compactHalfAvg β lam ρ' g φ| ≤
+    |compactSqrtTimeMoment β lam ρ' g (f * φ : C(K, ℝ)) -
+        compactAvg β lam ρ' g f * compactSqrtTimeMoment β lam ρ' g φ| ≤
       (‖(f * φ : C(K, ℝ))‖ + ‖f‖ * ‖φ‖) * (Real.sqrt (2 * lam / β) + 1 / 2) *
         (1 + ‖g‖ ^ 2) := by
   have hB : 0 ≤ Real.sqrt (2 * lam / β) := Real.sqrt_nonneg _
-  have h1 := abs_compactHalfAvg_le ρ' hβ hlam hρ' g (f * φ)
+  have h1 := abs_compactSqrtTimeMoment_le ρ' hβ hlam hρ' g (f * φ)
   have h2 := abs_compactAvg_le ρ' hβ hlam hρ' g f
-  have h3 := abs_compactHalfAvg_le ρ' hβ hlam hρ' g φ
+  have h3 := abs_compactSqrtTimeMoment_le ρ' hβ hlam hρ' g φ
   have h4 : Real.sqrt (2 * lam / β) + ‖g‖ / 2 ≤
       (Real.sqrt (2 * lam / β) + 1 / 2) * (1 + ‖g‖ ^ 2) := by
     nlinarith [norm_nonneg g, sq_nonneg (‖g‖ - 1), mul_nonneg hB (sq_nonneg ‖g‖)]
   have h5 : 0 ≤ Real.sqrt (2 * lam / β) + ‖g‖ / 2 := by positivity
-  calc |compactHalfAvg β lam ρ' g (f * φ : C(K, ℝ)) -
-        compactAvg β lam ρ' g f * compactHalfAvg β lam ρ' g φ| ≤
-        |compactHalfAvg β lam ρ' g (f * φ : C(K, ℝ))| +
-          |compactAvg β lam ρ' g f| * |compactHalfAvg β lam ρ' g φ| := by
+  calc |compactSqrtTimeMoment β lam ρ' g (f * φ : C(K, ℝ)) -
+        compactAvg β lam ρ' g f * compactSqrtTimeMoment β lam ρ' g φ| ≤
+        |compactSqrtTimeMoment β lam ρ' g (f * φ : C(K, ℝ))| +
+          |compactAvg β lam ρ' g f| * |compactSqrtTimeMoment β lam ρ' g φ| := by
         rw [← abs_mul]; exact abs_sub _ _
     _ ≤ ‖(f * φ : C(K, ℝ))‖ * (Real.sqrt (2 * lam / β) + ‖g‖ / 2) +
           ‖f‖ * (‖φ‖ * (Real.sqrt (2 * lam / β) + ‖g‖ / 2)) :=
@@ -406,36 +406,37 @@ theorem tendsto_integral_eval_mul_compactAvg_map (f : C(K, ℝ)) (x₀ : K) :
 omit [Nonempty K] in
 /-- The Stein right-hand sides converge along the quantisation sequence. -/
 theorem tendsto_integral_stein_rhs_map (f : C(K, ℝ)) (x₀ : K) :
-    Tendsto (fun n => ∫ ω, (compactHalfAvg β lam (ρ.map (q n)) (Γ.G ω)
+    Tendsto (fun n => ∫ ω, (compactSqrtTimeMoment β lam (ρ.map (q n)) (Γ.G ω)
         (f * kernelSection 𝒞 x₀ : C(K, ℝ)) - compactAvg β lam (ρ.map (q n)) (Γ.G ω) f *
-          compactHalfAvg β lam (ρ.map (q n)) (Γ.G ω) (kernelSection 𝒞 x₀)) ∂P) atTop
-      (𝓝 (∫ ω, (compactHalfAvg β lam ρ (Γ.G ω) (f * kernelSection 𝒞 x₀ : C(K, ℝ)) -
+          compactSqrtTimeMoment β lam (ρ.map (q n)) (Γ.G ω) (kernelSection 𝒞 x₀)) ∂P) atTop
+      (𝓝 (∫ ω, (compactSqrtTimeMoment β lam ρ (Γ.G ω) (f * kernelSection 𝒞 x₀ : C(K, ℝ)) -
         compactAvg β lam ρ (Γ.G ω) f *
-          compactHalfAvg β lam ρ (Γ.G ω) (kernelSection 𝒞 x₀)) ∂P)) := by
+          compactSqrtTimeMoment β lam ρ (Γ.G ω) (kernelSection 𝒞 x₀)) ∂P)) := by
   refine tendsto_integral_of_dominated_convergence
     (fun ω => (‖(f * kernelSection 𝒞 x₀ : C(K, ℝ))‖ + ‖f‖ * ‖kernelSection 𝒞 x₀‖) *
       (Real.sqrt (2 * lam / β) + 1 / 2) * (1 + ‖Γ.G ω‖ ^ 2))
-    (fun n => ((Γ.measurable_compactHalfAvg_map_comp ρ hβ hlam hρ (hq n) (hfin n) _).sub
+    (fun n => ((Γ.measurable_compactSqrtTimeMoment_map_comp ρ hβ hlam hρ (hq n) (hfin n) _).sub
       ((Γ.measurable_compactAvg_map_comp ρ hβ hlam hρ (hq n) (hfin n) f).mul
-        (Γ.measurable_compactHalfAvg_map_comp ρ hβ hlam hρ (hq n) (hfin n) _)))
+        (Γ.measurable_compactSqrtTimeMoment_map_comp ρ hβ hlam hρ (hq n) (hfin n) _)))
       |>.aestronglyMeasurable)
     (integrable_const_mul_one_add_sq P Γ.G Γ.integrable_sq_norm _)
     (fun n => Eventually.of_forall fun ω => ?_)
     (Eventually.of_forall fun ω =>
-      (tendsto_compactHalfAvg_map ρ hβ hlam (Γ.G ω) hρ _ hq hε hqε).sub
+      (tendsto_compactSqrtTimeMoment_map ρ hβ hlam (Γ.G ω) hρ _ hq hε hqε).sub
         ((tendsto_compactAvg_map ρ hβ hlam (Γ.G ω) hρ f hq hε hqε).mul
-          (tendsto_compactHalfAvg_map ρ hβ hlam (Γ.G ω) hρ _ hq hε hqε)))
+          (tendsto_compactSqrtTimeMoment_map ρ hβ hlam (Γ.G ω) hρ _ hq hε hqε)))
   rw [Real.norm_eq_abs]
   exact abs_stein_rhs_le hβ hlam (ρ.map (q n)) (map_quantise_ne_zero ρ (hq n) hρ) (Γ.G ω) f _
 
 omit hq hfin hε hqε in
 /-- ★★★ **Stein's identity for posterior averages on the compact base**:
-`E[G(x₀) ⟨f⟩_G] = β E[⟨f 𝒞(x₀,·)⟩^{½}_G − ⟨f⟩_G ⟨𝒞(x₀,·)⟩^{½}_G]`, i.e.
+`E[G(x₀) ⟨f⟩_G] = β E[⟨f 𝒞(x₀,·)√t⟩_G − ⟨f⟩_G ⟨𝒞(x₀,·)√t⟩_G]`, i.e.
 `E[G(x₀) F_f(G)] = E[DF_f(G)[𝒞(x₀,·)]]` with `DF_f(g)[h] = β(⟨f√t h⟩_g − ⟨f⟩_g⟨√t h⟩_g)`. -/
 theorem integral_eval_mul_compactAvg (f : C(K, ℝ)) (x₀ : K) :
     ∫ ω, Γ.G ω x₀ * compactAvg β lam ρ (Γ.G ω) f ∂P =
-      β * ∫ ω, (compactHalfAvg β lam ρ (Γ.G ω) (f * kernelSection 𝒞 x₀ : C(K, ℝ)) -
-        compactAvg β lam ρ (Γ.G ω) f * compactHalfAvg β lam ρ (Γ.G ω) (kernelSection 𝒞 x₀)) ∂P := by
+      β * ∫ ω, (compactSqrtTimeMoment β lam ρ (Γ.G ω) (f * kernelSection 𝒞 x₀ : C(K, ℝ)) -
+        compactAvg β lam ρ (Γ.G ω) f *
+          compactSqrtTimeMoment β lam ρ (Γ.G ω) (kernelSection 𝒞 x₀)) ∂P := by
   obtain ⟨q, hq, hfin, hqε⟩ := exists_quantisation_seq (K := K)
   have h1 := Γ.tendsto_integral_eval_mul_compactAvg_map ρ hβ hlam hρ hq hfin
     tendsto_one_div_add_atTop_nhds_zero_nat hqε f x₀

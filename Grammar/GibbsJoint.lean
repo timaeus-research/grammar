@@ -13,8 +13,8 @@ of `ρ ⊗ Lebesgue|_(0,∞)` — Astra #163 §4).  Its reductions identify the 
 far with genuine expectations:
 
 * `integral_gibbsJoint_obs`: `∫ φ(x) dμ_g = ⟨φ⟩_g` (`compactAvg`);
-* `integral_gibbsJoint_sqrt`: `∫ φ(x)√t dμ_g = ⟨φ⟩^{½}_g` (`compactHalfAvg`);
-* `integral_gibbsJoint_radial`: `∫ φ(x) t dμ_g = T_g(φ)` (`compactFirstMoment`);
+* `integral_gibbsJoint_sqrt`: `∫ φ(x)√t dμ_g = ⟨φ√t⟩_g` (`compactSqrtTimeMoment`);
+* `integral_gibbsJoint_radial`: `∫ φ(x) t dμ_g = T_g(φ)` (`compactTimeMoment`);
 * `integral_gibbsJoint_prod_sqrt`: `∫∫ h(x₁,x₂)√t₁√t₂ dμ_g dμ_g = B_g(h)` (`compactBilocal`),
 
 for bounded measurable `φ` and continuous `h`.  With them the Stein identity of `CompactBaseStein`
@@ -221,7 +221,7 @@ theorem integrable_gibbsJoint_obs {φ : K → ℝ} (hφm : Measurable φ) {M : �
 
 theorem integral_gibbsJoint_sqrt {φ : K → ℝ} (hφm : Measurable φ) {M : ℝ}
     (hφb : ∀ x, |φ x| ≤ M) :
-    ∫ z, φ z.1 * Real.sqrt z.2 ∂gibbsJoint β lam ρ g = compactHalfAvg β lam ρ g φ :=
+    ∫ z, φ z.1 * Real.sqrt z.2 ∂gibbsJoint β lam ρ g = compactSqrtTimeMoment β lam ρ g φ :=
   (integrable_and_integral_gibbsJoint_weight ρ hβ hlam hρ g (by linarith : (0 : ℝ) < lam + 1 / 2)
     (fun a t ht => fluctIntegrandFn_mul_sqrt a t ht) hφm hφb).2
 
@@ -233,7 +233,7 @@ theorem integrable_gibbsJoint_sqrt {φ : K → ℝ} (hφm : Measurable φ) {M : 
 
 theorem integral_gibbsJoint_radial {φ : K → ℝ} (hφm : Measurable φ) {M : ℝ}
     (hφb : ∀ x, |φ x| ≤ M) :
-    ∫ z, φ z.1 * z.2 ∂gibbsJoint β lam ρ g = compactFirstMoment β lam ρ g φ :=
+    ∫ z, φ z.1 * z.2 ∂gibbsJoint β lam ρ g = compactTimeMoment β lam ρ g φ :=
   (integrable_and_integral_gibbsJoint_weight ρ hβ hlam hρ g (by linarith : (0 : ℝ) < lam + 1)
     (fun a t ht => fluctIntegrandFn_mul_self a t ht) hφm hφb).2
 
@@ -310,8 +310,8 @@ theorem integral_gibbsJoint_prod_sqrt (h : C(K × K, ℝ)) :
     rw [this, integral_const_mul, hinner z₁.1, mul_comm]
   simp_rw [hin2]
   rw [integral_gibbsJoint_sqrt ρ hβ hlam hρ g hψm hψb]
-  -- `⟨ψ⟩^{½} = B_g(h)`
-  unfold compactHalfAvg compactWeighted compactBilocal
+  -- `⟨ψ√t⟩ = B_g(h)`
+  unfold compactSqrtTimeMoment compactWeighted compactBilocal
   rw [integral_prod _ (integrable_bilocal ρ hβ hlam g h)]
   have hx : ∀ x, ψ x * fluctuation β (lam + 1 / 2) (g x) =
       (∫ y, h (x, y) * fluctuation β (lam + 1 / 2) (g x) * fluctuation β (lam + 1 / 2) (g y) ∂ρ) /
@@ -337,12 +337,13 @@ include hβ hlam hρ
 
 omit [Nonempty K] in
 /-- The Stein right-hand side as a two-replica integral, for a fixed field `g`:
-`∬ f(x₁)(√t₁ 𝒞(x₀,x₁) − √t₂ 𝒞(x₀,x₂)) dμ_g dμ_g = ⟨f 𝒞(x₀,·)⟩^{½}_g − ⟨f⟩_g ⟨𝒞(x₀,·)⟩^{½}_g`. -/
+`∬ f(x₁)(√t₁ 𝒞(x₀,x₁) − √t₂ 𝒞(x₀,x₂)) dμ_g dμ_g = ⟨f 𝒞(x₀,·)√t⟩_g − ⟨f⟩_g ⟨𝒞(x₀,·)√t⟩_g`. -/
 theorem integral_gibbsJoint_prod_stein (g : C(K, ℝ)) (f : C(K, ℝ)) (x₀ : K) :
     ∫ z, f z.1.1 * (Real.sqrt z.1.2 * 𝒞.C x₀ z.1.1 - Real.sqrt z.2.2 * 𝒞.C x₀ z.2.1)
       ∂(gibbsJoint β lam ρ g).prod (gibbsJoint β lam ρ g) =
-      compactHalfAvg β lam ρ g (f * GaussianField.kernelSection 𝒞 x₀ : C(K, ℝ)) -
-        compactAvg β lam ρ g f * compactHalfAvg β lam ρ g (GaussianField.kernelSection 𝒞 x₀) := by
+      compactSqrtTimeMoment β lam ρ g (f * GaussianField.kernelSection 𝒞 x₀ : C(K, ℝ)) -
+        compactAvg β lam ρ g f *
+          compactSqrtTimeMoment β lam ρ g (GaussianField.kernelSection 𝒞 x₀) := by
   have hprob := isProbabilityMeasure_gibbsJoint ρ hβ hlam hρ g
   set fc : C(K, ℝ) := f * GaussianField.kernelSection 𝒞 x₀ with hfc
   have hF₁ : Integrable (fun z : K × ℝ => fc z.1 * Real.sqrt z.2) (gibbsJoint β lam ρ g) :=

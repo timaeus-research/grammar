@@ -1998,8 +1998,8 @@ Astra #163 (`gpt6_bigpicture_v163.md`): do (I) — the three-replica covariance 
 compact-base identity; (II) joint Gibbs measure API, (V) Fréchet derivative, (IV) higher cumulants, (III) convergent source series
 ranked below; (VI) bridge to the empirical side needs joint convergence + uniform integrability. Landed: DLVI `PosteriorResponseDet`
 (`∂_jH_i`, Stein at scaled covariance, `A'(s) = E H_b(√sG)`, ★★★ `integral_postAvg_eq`), DLVII `CompactBaseResponse`
-(`compactFirstMoment`, `compactBilocal`, `compactMeanResponse`, quadratic domination, ★★★ `GaussianField.integral_compactAvg_eq`:
-`E⟨f⟩_G = ρ(f)/ρ(K) + ∫₀¹ E H_f(√sG) ds`). Naming audit (Astra #163 §6): `compactHalfAvg` is a radial-moment–weighted integral, not a
+(`compactTimeMoment`, `compactBilocal`, `compactMeanResponse`, quadratic domination, ★★★ `GaussianField.integral_compactAvg_eq`:
+`E⟨f⟩_G = ρ(f)/ρ(K) + ∫₀¹ E H_f(√sG) ds`). Naming audit (Astra #163 §6): `compactSqrtTimeMoment` is a radial-moment–weighted integral, not a
 posterior expectation (its sum over atoms is `⟨√t⟩`, not 1) — say so in the notes.
 Landed after DLVII: DLVIII `GibbsJoint` (the joint Gibbs measure `μ_g` on `K × ℝ` as a `withDensity`, probability, reductions
 `∫φ dμ = ⟨φ⟩`, `∫φ√t = ⟨φ⟩^{½}`, `∫φt = T`, `∬h√t₁√t₂ = B`, and ★★★ `GaussianField.integral_eval_mul_compactAvg_replica`: Stein in
@@ -2008,3 +2008,6 @@ bridge (VI), higher cumulants (IV), convergent source series (III).
 Landed after DLVIII: DLIX `GibbsJointResponse` (★★★ `compactMeanResponse_eq_replica`: the mean response as a three-replica
 expectation; `compactBilocal_swap`). Astra #163 candidate II complete. Remaining: (V) Fréchet derivative on `C(K,ℝ)`, (VI) empirical
 bridge (joint convergence + uniform integrability), (IV) higher cumulants, (III) convergent source series.
+Landed after DLIX: DLX `PosteriorFrechet` (★ `hasFDerivAt_weightedFunctional`, ★★ `hasFDerivAt_compactAvg`: `g ↦ ⟨f⟩_g` Fréchet
+differentiable on `C(K,ℝ)`, `D⟨f⟩_g[h] = β(⟨fh⟩^{½} − ⟨f⟩⟨h⟩^{½})`, ★★★ `GaussianField.integral_eval_mul_compactAvg_fderiv`: Stein in
+Banach form). Astra #163 candidate V complete. Remaining: (VI) empirical bridge, (IV) higher cumulants, (III) convergent source series.
