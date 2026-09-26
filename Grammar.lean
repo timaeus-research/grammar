@@ -863,6 +863,7 @@ import Grammar.FluctuationComplex
 import Grammar.PrincipalPartUniqueness
 import Grammar.PolarAmplitudeAlgebra
 import Grammar.LeadingFaceMeasure
+import Grammar.ChartZetaStrip
 import Grammar.AnnealedGeneratingSeries
 import Grammar.RationalExpansionAtInfinity
 import Grammar.TwoScaleDivision
