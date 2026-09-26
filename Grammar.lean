@@ -874,6 +874,7 @@ import Grammar.EmpiricalChartMellin
 import Grammar.EmpiricalMellinContinuation
 import Grammar.EmpiricalIntegratedPolar
 import Grammar.CoupledPolarInterchange
+import Grammar.EmpiricalCouplingAllLog
 import Grammar.AnnealedGeneratingSeries
 import Grammar.RationalExpansionAtInfinity
 import Grammar.TwoScaleDivision
