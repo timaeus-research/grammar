@@ -1,0 +1,74 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{newunicodechar}
+\newunicodechar{ℝ}{\ensuremath{\mathbb{R}}}
+\newunicodechar{∑}{\ensuremath{\sum}}
+\newunicodechar{∈}{\ensuremath{\in}}
+\newunicodechar{→}{\ensuremath{\to}}
+\newunicodechar{≤}{\ensuremath{\le}}
+\newcommand{\tideref}[2][]{\href{https://therisensea.org/tides/#2/}{\ifx&#1&\texttt{#2}\else#1\fi}}
+\newcommand{\reviewref}[2][]{\href{https://therisensea.org/reviews/#2/}{\ifx&#1&\texttt{#2}\else#1\fi}}
+\newcommand{\gptbox}[1]{\par\medskip\begin{quote}\small\textbf{\textcolor{green!50!black}{GPT-6 Astra:}} #1\end{quote}\medskip}
+
+\title{Review retrospective:\\\emph{the whole grammar library, statement surfaces against the paper}}
+\author{Claude (Fable 5.1), with GPT-6 Astra as independent reviewer}
+\date{2026-09-26}
+
+\begin{document}
+\maketitle
+
+\section{Setting}
+
+The grammar library (\texttt{timaeus-research/grammar}, Lean content at commit \texttt{d56efc8}) has 897 modules and 15{,}606 declarations. It was not built by tides on a fixed text: from step DL onward the library led the mathematics and the paper \emph{Expectations and the Exceptional Divisor} was then written from it, with \S13 and per-result pin comments naming the correspondence. The user asked for a review of all the Lean ``for correctness and faithfulness to intended mathematical statement''. The review skill's unit is one file; at this scale the loop was adapted to a fidelity-only, report-only pass over \emph{statement surfaces}: definitions with their bodies and theorem statements without proofs. Nothing was edited.
+
+\section{What was reviewed, and how}
+
+Two mechanical checks first. \texttt{scripts/sorries} reports zero \texttt{sorry}, \texttt{\#exit}, \texttt{native\_decide} and \texttt{axiom}. A metaprogram ran \texttt{collectAxioms} over every declaration in the \texttt{Grammar} namespace: none depends on anything beyond \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. Proof correctness is therefore the kernel's, and the review concerns only whether the statements say what is claimed.
+
+Then two kinds of consult with GPT-6 Astra. Batch A computed, by a second metaprogram, the definitional closure of the 73 declarations pinned in the paper (412 declarations across 120 modules), extracted their source with section variables, and sent it together with the full paper text. Batches B01--B24 sent the statement surface of every module, roughly 250\,KB per batch, with the \texttt{HEADLINES.md} rows and module docstrings as the informal ground truth. Each response was triaged by reading the Lean behind every CRITICAL or MAJOR finding. The review log with all responses is \texttt{learning-theory/projects/grammar/review-log/2026-09-26-05-36-review-grammar-whole.md}.
+
+\section{Fidelity findings}
+
+\paragraph{No incorrect statement was found.} Every finding Astra rated CRITICAL turned out to be a false alarm on verification. Two batches read the box-dilation exponent \texttt{b \^{} (∑ i, h i + (n + 1))} as $b^{\sum_i(h_i+d)}$; Lean parses the body of a big operator at precedence 67, so it is $b^{|h|+d}$, and a two-line \texttt{rfl} confirms it. Two others reported missing independence, identical-distribution and finite-dimensionality hypotheses that are section variables the extract had dropped. One reported a natural-number subtraction at multiplicity one; every theorem using the definition assumes multiplicity at least two. No vacuous main theorem, wrong normalisation constant, or junk-value trivialisation of a headline result was established anywhere.
+
+\paragraph{Seven disclosures for the paper's pinned declarations.} These are true statements whose scope is narrower than the prose around them.
+\begin{enumerate}[nosep]
+\item \texttt{ResolvedData} carries an \emph{open} set $W$, a globally smooth prior with closed support inside $W$, and \texttt{partitionObs} integrates over all of $\mathbb R^d$. The assembled theorems therefore cover a prior compactly supported in the interior of an open domain; boundary walls of the parameter space are handled only chart-level. The running example $x^2y^6$ on $[0,1]^2$ is not an instance of the resolved statements.
+\item \texttt{exists\_rlct\_asymptotic} requires the prior to be positive at every zero of $K$ in its closed support. On a connected component $C$ of $\{K=0\}$ the set $C\cap\operatorname{supp}\varphi$ is then closed and open in $C$, so $C\subseteq\operatorname{supp}\varphi$ and $C$ is compact. The hypothesis cannot be met by a compactly supported prior meeting a noncompact connected zero component, such as the planes of $x^2y^2$ on $\mathbb R^3$, unless $K$ is modified away from a compact region.
+\item \texttt{tendstoInDistribution\_resolvedCoeff\_top} takes its limit in the actual range of the branch-jet map on smooth root fields, so the limiting jet must be realised by a globally smooth field; and it is a statement for one exponent, not jointly for several.
+\item \texttt{hasLeadingTerm\_empZ\_eq\_integral} needs a test observable (compact support inside the open stratum); the constant observable qualifies only on a compact resolved manifold.
+\item \texttt{IsExtremalData lam m} is a pair of bounds, not attainment; the theorems are more general than the paper's ``the minimum and its multiplicity'', and the candidate stratum measure can be zero for a non-attained pair.
+\item \texttt{exactStratum}, \texttt{deepZeroFibre} and \texttt{stratumOpen} are intersected with the pullback of the prior's support, so they are support-truncated versions of the paper's $S^\mu_c$, $D_{c+1}$, $X_c$.
+\item The pin at the mixed-ratio bare-moment asymptotic cites \texttt{faceMonoCoeff\_top}, which covers only the equal-ratio constant.
+\end{enumerate}
+Items 1 and 2 belong in \S13 of the paper; 3 and 4 are already partly disclosed there.
+
+\paragraph{The earlier programmes.} Outside the paper's closure the findings fall into three recurring patterns, all statement-strength or documentation, none kernel-level.
+\begin{itemize}[nosep]
+\item \emph{Existential conclusions weaker than their docstrings.} A witness is produced but not tied to the advertised object: a compact $\Omega$ containing the chart point that may be a singleton (\texttt{IsMonomialChart.local\_cutoffExpansion}); a limiting \texttt{ProbabilityMeasure} not asserted Gaussian (\texttt{reconstruct\_tendstoInDistribution}, \texttt{assembled\_expansion\_of\_tangential}); a constant $c>0$ chosen per observable where a common RLCT constant is claimed (\texttt{tendsto\_normalised\_partitionObs\_equal}); a tube of unspecified radius (\texttt{coordStratumTube}, \texttt{stratum\_tube}); a partial resolution on a set $N$ never asserted to be a neighbourhood of $w$ (\texttt{exponent\_of\_analytic}); a chart family that may be a singleton (\texttt{laplace\_pair\_eq\_resolution\_pair}).
+\item \emph{Totalised integrals and \texttt{tsum}s without the integrability the prose claims.} The bilocal two-point identities hold outside the cross-threshold with both sides junk; several Taylor--moment identities export equality with a \texttt{tsum} but no \texttt{Summable}; \texttt{UniformIntegrableLaws} is satisfied by Cauchy laws; \texttt{twoScale\_div\_boundedInProbSeq} has no eventual $x_n\ne0$.
+\item \emph{Docstring drift.} The temperature convention is the commonest: \texttt{fluctuation β μ a} is $\beta^{-\mu}S_\mu(\sqrt\beta\,a)$, and a dozen docstrings write it as $S_\mu(a)$; multiplicity-versus-log-degree off-by-ones; stale headers after the tangential-weight and weighted-tubular generalisations; posterior-probability language for signed amplitudes; \texttt{MomentTensor} typed as the dual of all multilinear forms rather than the symmetric ones.
+\end{itemize}
+
+\section{Simplifications applied}
+
+None. The pass was fidelity-only by design.
+
+\section{Disagreements and open questions}
+
+Astra's misparse of big-operator precedence recurred in two independent batches; when a consult reports an exponent or sum error, check the parse before believing it. The remaining disagreement is one of scope, for the user: whether the earlier-programme findings warrant docstring and HEADLINES repairs, given that those programmes are frozen and superseded by the smooth engine that the paper rests on.
+
+\section{Lessons}
+
+Extraction matters: declaration ranges start at the doc comment, and section variables live outside the declaration, so a naive extract sends a reviewer docstrings without statements (the first batch A attempt) or statements without their hypotheses (the false CRITICALs). The closure metaprogram plus per-module variable skeleton is the right unit. Astra's reviews were accurate on statement strength and on junk values, and its counterexamples were checkable; its parser is not Lean's.
+
+\section{Follow-ups}
+
+Add disclosures 1 and 2 to \S13 of the paper. Consider a forward tide relaxing the RLCT positivity hypothesis to positivity somewhere on each leading stratum. Repair the temperature-convention docstrings in bulk. Decide whether to expose \texttt{Summable} alongside the \texttt{tsum} identities and to constrain the existential witnesses in the resolution-identification layer.
+
+\end{document}
