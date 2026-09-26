@@ -868,6 +868,7 @@ import Grammar.ChartZetaFace
 import Grammar.ChartZetaRegularization
 import Grammar.ChartZetaPolar
 import Grammar.ChartZetaPolarSupport
+import Grammar.FiniteFacePolar
 import Grammar.AnnealedGeneratingSeries
 import Grammar.RationalExpansionAtInfinity
 import Grammar.TwoScaleDivision
