@@ -865,6 +865,7 @@ import Grammar.PolarAmplitudeAlgebra
 import Grammar.LeadingFaceMeasure
 import Grammar.ChartZetaStrip
 import Grammar.ChartZetaFace
+import Grammar.ChartZetaRegularization
 import Grammar.AnnealedGeneratingSeries
 import Grammar.RationalExpansionAtInfinity
 import Grammar.TwoScaleDivision

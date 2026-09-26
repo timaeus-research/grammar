@@ -9,7 +9,8 @@ import Grammar.SmoothGeneralDepth
 # The zeta face-term identity and the subset formula (polar-distribution programme, unit 3)
 
 Consult #167 (A1, expression (3); `tide-log/plan_polar_distribution.md`). The Laplace-side face
-construction of the smooth engine (`sum_faceOp`, `faceTerm_integral`, `integral_eq_sum_faceIntegral`)
+construction of the smooth engine (`sum_faceOp`, `faceTerm_integral`,
+`integral_eq_sum_faceIntegral`)
 is mirrored on the zeta side. The inner monomial integral is explicit,
   `∫_{(0,1]^ι} ∏ uᵢ^{eᵢ − 2kᵢ s} du = ∏ᵢ 1/(eᵢ + 1 − 2kᵢ s)`   (`integral_box_cpowWeight`),
 and the face term of the Taylor-subtracted amplitude `faceOp p J F` splits into the inner
