@@ -861,6 +861,7 @@ import Grammar.MellinPowerLog
 import Grammar.MellinRegularization
 import Grammar.FluctuationComplex
 import Grammar.PrincipalPartUniqueness
+import Grammar.PolarAmplitudeAlgebra
 import Grammar.AnnealedGeneratingSeries
 import Grammar.RationalExpansionAtInfinity
 import Grammar.TwoScaleDivision
