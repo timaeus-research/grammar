@@ -98,20 +98,58 @@ M7. Variance-2 lemma: in the realisable standard form `E a(X,u)² → 2` as `u^k
    finite-jet bound.
 6. ✓ `ChartZetaPolarSupport` (DLXIX) — support in the resonance superlevel set, reality, rectangular jet congruence
    (NOT an exact-stratum ideal-power statement for lower r: false).
-7. `HolomorphicCubeFamily` — Taylor in s with remainder controlled in a finite-jet seminorm (genuine
-   infrastructure; de-risk in d = 1 with `g = g₀ + (s−μ)g₁` at a double pole).
-8. `ChartZetaHolomorphicAmplitude` — polar array of a family via 1, 5, 7.
-9. `ComplexFluctuation` — `complexFluctuation (s : ℂ) (a : ℝ)`, ofReal, derivative, index derivatives
-   `= iteratedDeriv (fun ν ↦ fluctuation 1 ν a)` (do not change the real `fluctuation`).
-10. `FluctuationAmplitudeFamily` — `G · S(s, ζ)` is a HolomorphicCubeFamily; jet Lipschitz.
-11. `EmpiricalChartMellin` — `mellin (empIntegral G ζ h k) s = chartZeta (G S(s,ζ)) h k s` on the strip;
-    local integrability; O(1) at 0⁺.
-12. `EmpiricalPolarCoefficients` — (*) in real form:
-    `empCoeff G ζ h k μ q = (1/q!) Σ_{j∈Ico q d} ((−1)^{j−q}/(j−q)!) chartPolarReal h k μ (j+1)
-    (fun u ↦ G u * iteratedDeriv (j−q) (fun ν ↦ fluctuation 1 ν (ζ u)) μ)`; population form (12) with
-    `Γ^{(j−q)}(μ)`. Via `polarCoeff_unique` (do NOT reprove the face construction equals it).
-13. `ChartPolarFinitePart` — `finitePartPower`, depth independence, `chartPolar_one_resonant` (15),
-    top = faceCoeffInt under the gap.
+7–13 REPLACED by ROUTE B (consult #168, `tide-log/gpt6_route_v168.md`; real amplitudes only, all holomorphic
+   parameter dependence in explicit scalar exponential kernels):
+   B7. `FiniteFacePolar` — the finite-family polar lemma abstracted from unit 5: for weights `w_x`, orders `c_x ≤ D+1`
+       and `f_x` holomorphic near `μ`, `Σ_x w_x (μ−s)^{−c_x} f_x(s) − polarPart D (finiteFacePolarCoeff …) μ = O(1)`
+       on `𝓝[≠] μ`; unit 5's `chartPolarCoeff` is the instance `w = faceW·resConst`, `f = faceHolo`.
+   B8. `CoupledZetaBounds` — envelopes for a real coupling family `H : ℝ → (ι → ℝ) → ℝ` with
+       `FlatOn (H τ) p (C(1+τ)^R e^{Mτ})`: integrability of `(t^{a−1}+t^{b−1}) e^{−t+M√t}(1+√t)^R w^{p+h−2kb}
+       (|log t| + 2|logSum k w|)^n` on `(0,∞) × box` for `0 < a < b`, `pᵢ+hᵢ−2kᵢb > −1`, ALL log orders `n`.
+   B9. `CoupledChartZeta` — `coupledChartZeta H h k s = ∫_0^∞ t^{s−1} e^{−t} chartZeta (H √t) h k s dt`
+       (= the product-measure integral), holomorphic on `{0 < Re s} ∩ FlatStrip p h k` by dominated
+       differentiation on `(volume.restrict (Ioi 0)).prod (volume.restrict (box ι 1))` with the single multiplier
+       `(log t − 2 logSum k w)`; `iteratedDeriv n = coupledChartZetaLogMoment H h k n s` (all `n`).
+   B10. `EmpiricalChartMellin` — `LocallyIntegrableOn (empIntegral : ℂ) (Ioi 0)`, `empIntegral = O(1)` at `0⁺`
+       (from `MellinTiltIntegrable` with coefficient `η v^h`), and (B1)
+       `mellin (empIntegral η ζ h k) s = coupledChartZeta (fieldFam η ζ) h k s` for `0 < Re s`, `ZetaStrip h k s`
+       (two Fubini interchanges with the AM–GM majorant `exp_tilt_le`; `mellin_exp_tilt` pointwise).
+   B11. `EmpiricalMellinContinuation` — `coupledFaceZeta p η ζ h k J m s := coupledChartZeta (faceAmp p J (fieldFam η ζ ·) m)`,
+       `empZetaAtDepth p η ζ h k s := Σ_x faceW · innerFactor · coupledFaceZeta` (μ-independent); holomorphic on the
+       positive flat strip off `PoleAt` (growth bound `growthLE_faceAmp_fieldFam`, joint continuity
+       `continuous_faceAmp_fieldFam_joint`); `= mellin empIntegral` on the initial strip (finite-sum interchange +
+       `chartZeta_eq_sum_faces`); `= mellinContinuation (Qamb k) (d−1) empIntegral empCoeff U` on
+       `{0 < Re s < min(U, flatEdge)} \ (PoleAt ∪ latticeBelow)` by the identity theorem, seeded on a small
+       initial substrip `0 < Re s < a` with `a ≤ 1/Q` (so `hlow` of `mellin_eq_mellin_cutoffRemainderFun_add_principalParts`
+       holds: every lattice exponent `≥ 1/Q`; check whether `latticeBelow` contains `0`); local corollary
+       `empZetaAtDepth =ᶠ[𝓝[≠] μ] mellinContinuation` for `0 < μ < U`, `FlatStrip p h k μ` (choose
+       `p = depthOf h k L`, `U = L`, `L = cutoffOf h μ`).
+   B12. `EmpiricalIntegratedPolar` — `empFaceHolo = regularFactor · coupledFaceZeta`, `empIntegratedPolarCoeff` (B3)
+       via B7; `empIntegratedPolarCoeff … μ q = polarCoeff (empCoeff η ζ h k) μ q` for `μ ∈ latticeBelow`, `q ≤ d−1`
+       (`polarCoeff_unique`). FIRST COMPLETION MILESTONE.
+   B13a. `CoupledPolarInterchange` — `iteratedDeriv n (coupledFaceZeta) μ = ∫∫ kernel · (log t − 2 logSum k w)^n`
+       (compact API), binomial expansion, inner log-moment formulas, finite Leibniz for `regularFactor`,
+       factorial/binomial normalisation lemma, regrouping `j = r−q−1`; explicit integrability of every
+       `t ↦ chartPolarCoeff p (fieldFam η ζ √t) h k μ j` integrand.
+   B13b. `EmpiricalCouplingAllLog` — (B4) in zero-based form:
+       `couplingPolarCoeff … q = Σ_{j ∈ Ico q d} ((j−q)!)⁻¹ ∫_0^∞ t^{μ−1} (log t)^{j−q} e^{−t}
+       chartPolarCoeff p (fieldFam η ζ √t) h k μ j dt = polarCoeff (empCoeff η ζ h k) μ q`; real form via
+       `ofReal_chartPolarReal`. SIGN TRAP: `mellinMom` uses `(−log t)^ℓ`.
+   B15–B16 (optional, gives (*)): log-weighted `mellinMom_pdMulti_fieldFam` (all `ℓ`), smoothness of
+       `η · m_{μ,ℓ}(ζ)` with `m_{μ,ℓ}(a) = ∫ t^{μ−1}(log t)^ℓ e^{−t+a√t} dt = ∂_s^ℓ S(s,a)|_μ`, interchange through
+       `remList`/`faceAmp` and the finite-order polar functional:
+       `c_{μ,q} = (1/q!) Σ_{r=q+1}^{d} ((−1)^{r−q−1}/(r−q−1)!) A_{μ,r}[η m_{μ,r−q−1}(ζ)]`, `A_{μ,r}[F] = (−1)^r chartPolarCoeff p F h k μ (r−1)`
+       (= `logAmplitudeCoeffReal` with `b(j,ℓ) = A_{μ,j+1}[η m_{μ,ℓ}(ζ)]`).
+   Regressions: (i) `d = 1`, `η = 1`, `ζ = 0`, `μ = (h+1)/(2k)`: `chartPolarCoeff … 0 = −1/(2k)`, `a₀ = −Γ(μ)/(2k)`,
+       `empCoeff μ 0 = Γ(μ)/(2k)` (Mellin transform `Γ(s)/(h+1−2ks)`); with constant `ζ = a`: `S(μ,a)/(2k)`.
+       (ii) `x²y²`, `η = 1`, `ζ = 0`, `h = 0`, `k = (1,1)`, `μ = 1/2`: `chartPolarCoeff 1 = 1/4`, `0 = 0`;
+       `a₁ = Γ(1/2)/4`, `a₀ = Γ'(1/2)/4`; `c_{1/2,1} = √π/4`, `c_{1/2,0} = −Γ'(1/2)/4 = (√π/4)(γ + 2 log 2)`;
+       `√N/log N · E(N) → √π/4` (unit 14 vs `tendsto_logExample`; check its domain — a full square gives a factor 4).
+   Traps (Astra #168 §5): `0 < Re s` is indispensable for the coupling integrals (t^{s−1} at 0); `(−log t)` in `mellinMom`;
+       measurability via `continuous_faceAmp_fieldFam_joint ∘ (t,w) ↦ (√t,w)`; candidate poles are lattice points
+       `(mᵢ+hᵢ+1)∏_{j≠i}kⱼ / Q` (use the erased product, no ℕ-division); lattice membership ≠ chart pole; `q ≤ d−1` only —
+       a separate support lemma for `empCoeff … μ q = 0` above; pointwise `O(1)` remainders cannot be integrated
+       (integrate the holomorphic factors first, then B7); (*) needs the log-weighted jet interchange, not linearity alone.
 14. `PolarTwoDimExamples` — the x²y² regression against `tendsto_logExample`. FIRST MILESTONE.
 15. `ResolvedZetaFunctional` — `ResolvedData.zetaPairing`, `polarFunctional`, transport independence,
     `comp_gv` (phase constants c^{−s} retained).
@@ -198,4 +236,4 @@ Notation: `T(s)`, `M_F(s;ψ)`; `N` frozen, `n` diagonal; `E^pop_N`; "polar distr
 "wall-crossing" and "primes"; lattice denominator lcm.
 
 ## 4. Log
-- 2026-09-26: plan drafted; consult #167 (Astra) returned the 24-unit route above, the conventions of §1b, the risk list (two-variable continuation interface; ChartLeading vs IsExtremalData; orthant signs; branch-space compactness; lower-pole jets; variance-2 hypotheses) and twelve further paper corrections (applied 2026-09-26). Unit 1 `PolarAmplitudeAlgebra` LANDED (u898, DLXIII). Unit 18 `LeadingFaceMeasure` LANDED (u899, DLXIV). Unit 2 LANDED as `ChartZetaStrip` (u900, DLXV; the complex amplitude infrastructure of Astra's unit 2 is avoided: amplitudes stay real, complex families will be split into real and imaginary parts, and the flat-amplitude strip theorem replaces the separate bounded/flat treatments). Unit 3 LANDED as `ChartZetaFace` (u901, DLXVI). Unit 4 LANDED as `ChartZetaRegularization` (u902, DLXVII; strip-minus-finite-set connectedness via the arctan homeomorphism `stripMap`). Unit 5 LANDED as `ChartZetaPolar` (u903, DLXVIII): `faceResSet`/`poleOrder`/`resConst`/`regularFactor`, the exact factorisation `innerFactor_eq_res` (all `s`), `faceHolo` holomorphic on the open `faceRegSet`, the Taylor remainder `taylor_remainder_isBigO` via `HasFPowerSeriesAt.isBigO_sub_partialSum_pow` + `factorial_smul`, `pole_taylor_isBigO_one`, `chartPolarCoeff p F h k μ q` (coefficient of `(s−μ)^{−(q+1)}`; sign `(−1)^c` with Taylor expansion in `(s−μ)`, i.e. `A_{μ,q+1} = Σ_{c≥q+1} faceW·resConst·(−1)^c·faceHolo^{(c−1−q)}(μ)/(c−1−q)!`), and ★★ `chartZetaAtDepth_sub_polarPart_isBigO_one` (+ `'` with `D = d`, off-pole boundedness, canonical-depth form `chartZetaAtDepth_depthOf_sub_polarPart_isBigO_one` for `L ≥ L₀ h`, `μ < L`). Unit 6 LANDED as `ChartZetaPolarSupport` (u904, DLXIX): `ConjSymm` closed under `deriv`/`iteratedDeriv` (Mathlib `deriv_conj_conj`), `chartZeta_conj`, `chartPolarReal` with `ofReal_chartPolarReal` (REALITY); `resCoord`, `resStratum p h k μ r`, support `chartPolarCoeff_eq_zero_of_jetsZeroOn`/`_of_eqOn_zero`, jet congruence `chartPolarCoeff_congr`/`_of_eqOn` via the face-local `faceAmp_congr_closedFaceBox`. Next: unit 7/8 — since the amplitudes stay real (unit 2 decision), the ‘holomorphic cube family’ is realised as: for a family `A : ℂ → (Fin d → ℝ) → ℝ`-valued in real and imaginary parts, i.e. `G·S(s,ζ)` split as `G·Re S` and `G·Im S`, the s-dependence enters `chartZeta (A s) h k s`; the polar array of the family is obtained from unit 5 applied to the Taylor coefficients `A_ℓ := ∂_s^ℓ A|_μ` (real amplitudes) through `polarAmplitudeCoeff` (unit 1). Concretely, unit 7 `ChartZetaFamilyTaylor`: for `A(s,u) = Σ_{ℓ<L} A_ℓ(u)(s−μ)^ℓ + (s−μ)^L R(s,u)` with `R` flat-bounded uniformly near `μ`, `chartZetaAtDepth p (A s) h k s − Σ_ℓ (s−μ)^ℓ chartZetaAtDepth p A_ℓ h k s = O(|s−μ|^{L−M_μ})`, hence the polar part of the family is `polarAmplitudeCoeff` of the array `chartPolarCoeff p A_ℓ h k μ (·)`. Then unit 9 `ComplexFluctuation` (real/imaginary parts of `S(s,ζ)`), unit 10 the fluctuation family jets, unit 11 `EmpiricalChartMellin` (`mellin (empIntegral) s = Γ(s)·chartZeta(G S(s,ζ)) h k s`? — check the library's `empIntegral`/Mellin normalisation first), unit 12 (*) via `polarCoeff_unique`.
+- 2026-09-26: plan drafted; consult #167 (Astra) returned the 24-unit route above, the conventions of §1b, the risk list (two-variable continuation interface; ChartLeading vs IsExtremalData; orthant signs; branch-space compactness; lower-pole jets; variance-2 hypotheses) and twelve further paper corrections (applied 2026-09-26). Unit 1 `PolarAmplitudeAlgebra` LANDED (u898, DLXIII). Unit 18 `LeadingFaceMeasure` LANDED (u899, DLXIV). Unit 2 LANDED as `ChartZetaStrip` (u900, DLXV; the complex amplitude infrastructure of Astra's unit 2 is avoided: amplitudes stay real, complex families will be split into real and imaginary parts, and the flat-amplitude strip theorem replaces the separate bounded/flat treatments). Unit 3 LANDED as `ChartZetaFace` (u901, DLXVI). Unit 4 LANDED as `ChartZetaRegularization` (u902, DLXVII; strip-minus-finite-set connectedness via the arctan homeomorphism `stripMap`). Unit 5 LANDED as `ChartZetaPolar` (u903, DLXVIII): `faceResSet`/`poleOrder`/`resConst`/`regularFactor`, the exact factorisation `innerFactor_eq_res` (all `s`), `faceHolo` holomorphic on the open `faceRegSet`, the Taylor remainder `taylor_remainder_isBigO` via `HasFPowerSeriesAt.isBigO_sub_partialSum_pow` + `factorial_smul`, `pole_taylor_isBigO_one`, `chartPolarCoeff p F h k μ q` (coefficient of `(s−μ)^{−(q+1)}`; sign `(−1)^c` with Taylor expansion in `(s−μ)`, i.e. `A_{μ,q+1} = Σ_{c≥q+1} faceW·resConst·(−1)^c·faceHolo^{(c−1−q)}(μ)/(c−1−q)!`), and ★★ `chartZetaAtDepth_sub_polarPart_isBigO_one` (+ `'` with `D = d`, off-pole boundedness, canonical-depth form `chartZetaAtDepth_depthOf_sub_polarPart_isBigO_one` for `L ≥ L₀ h`, `μ < L`). Unit 6 LANDED as `ChartZetaPolarSupport` (u904, DLXIX): `ConjSymm` closed under `deriv`/`iteratedDeriv` (Mathlib `deriv_conj_conj`), `chartZeta_conj`, `chartPolarReal` with `ofReal_chartPolarReal` (REALITY); `resCoord`, `resStratum p h k μ r`, support `chartPolarCoeff_eq_zero_of_jetsZeroOn`/`_of_eqOn_zero`, jet congruence `chartPolarCoeff_congr`/`_of_eqOn` via the face-local `faceAmp_congr_closedFaceBox`. Consult #168 (Astra, `tide-log/gpt6_route_v168.md`): ROUTE B ADOPTED — the coupling-integral representation `mellin E (s) = ∫_0^∞ t^{s−1} e^{−t} chartZeta(fieldFam η ζ √t) h k s dt`, units B7–B13 above replace 7–13; (B4) = Γ-weighted coupling average of the population polar functionals, (*) as an optional corollary. Next: B7 `FiniteFacePolar`. [superseded note: unit 7/8 — since the amplitudes stay real (unit 2 decision), the ‘holomorphic cube family’ is realised as: for a family `A : ℂ → (Fin d → ℝ) → ℝ`-valued in real and imaginary parts, i.e. `G·S(s,ζ)` split as `G·Re S` and `G·Im S`, the s-dependence enters `chartZeta (A s) h k s`; the polar array of the family is obtained from unit 5 applied to the Taylor coefficients `A_ℓ := ∂_s^ℓ A|_μ` (real amplitudes) through `polarAmplitudeCoeff` (unit 1). Concretely, unit 7 `ChartZetaFamilyTaylor`: for `A(s,u) = Σ_{ℓ<L} A_ℓ(u)(s−μ)^ℓ + (s−μ)^L R(s,u)` with `R` flat-bounded uniformly near `μ`, `chartZetaAtDepth p (A s) h k s − Σ_ℓ (s−μ)^ℓ chartZetaAtDepth p A_ℓ h k s = O(|s−μ|^{L−M_μ})`, hence the polar part of the family is `polarAmplitudeCoeff` of the array `chartPolarCoeff p A_ℓ h k μ (·)`. Then unit 9 `ComplexFluctuation` (real/imaginary parts of `S(s,ζ)`), unit 10 the fluctuation family jets, unit 11 `EmpiricalChartMellin` (`mellin (empIntegral) s = Γ(s)·chartZeta(G S(s,ζ)) h k s`? — check the library's `empIntegral`/Mellin normalisation first), unit 12 (*) via `polarCoeff_unique`.
