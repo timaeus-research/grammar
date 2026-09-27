@@ -939,6 +939,7 @@ import Grammar.PolynomialDepthStep
 import Grammar.PolynomialDepthAll
 import Grammar.PolynomialRateUnique
 import Grammar.PolynomialEngineCoefficients
+import Grammar.PolynomialEngineSubleading
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
