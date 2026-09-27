@@ -958,6 +958,7 @@ import Grammar.RealDigammaSeries
 import Grammar.DigammaSeriesComplex
 import Grammar.DepthZetaClosedForms
 import Grammar.FlatDepthZetaClosed
+import Grammar.BlowUpQuarticLinear
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
