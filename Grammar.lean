@@ -889,6 +889,7 @@ import Grammar.StateDensityPolar
 import Grammar.TieFormulaSmooth
 import Grammar.LogSquareDensityPolar
 import Grammar.HadamardWall
+import Grammar.GaussianProductZeta
 import Grammar.RankOneGauss
 import Grammar.RankOneNormalTilt
 import Grammar.NaiveBayes
