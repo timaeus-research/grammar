@@ -21,15 +21,21 @@ Pushing forward along `X ↪ U` gives the GLOBAL extremal stratum measure
 `globalExtremalStratumMeasure = Γ(λ*)/(m*−1)! · ρ|_X` on `U`
 (★★★ `globalExtremalStratumMeasure_eq_restrict`), and it is the full multiple
 `Γ(λ*)/(m*−1)! · ρ` exactly when the raw measure gives the deep fibre `D_{m*+1} ∩ Z₀` measure zero
-(★★ `globalExtremalStratumMeasure_eq_iff`).  In particular the extremal stratum measure is FINITE
-with total mass `Γ(λ*)/(m*−1)! · ρ(X)` (`extremalStratumMeasure_univ`,
-`isFiniteMeasure_extremalStratumMeasure`) — the deep-fibre nullity itself (the statement that the
-raw measure charges no point of depth `> m*`) is left to the intrinsic-depth/coordinate-wall bridge.
+(★★ `globalExtremalStratumMeasure_eq_iff`).  The deep fibre IS null: a face of `m` walls maps a
+point into the deep fibre only when a complementary chart coordinate vanishes, since the intrinsic
+depth is the number of vanishing chart coordinates (`depth_divPt_eq`), and the coordinate
+hyperplanes are null for the face reference measure (★★ `leadingResidueMeasureU_deepZeroFibre`).
+Hence ★★★ `globalExtremalStratumMeasure_eq`: `ν^{λ*}_{m*} = Γ(λ*)/(m*−1)! · ρ^{λ*}_{m*}` on all of
+`U`, the coefficient functional at the extremal pair is the global stratum measure for EVERY smooth
+observable (`coeff_withF_eq_integral_globalExtremalStratumMeasure`), and the extremal stratum
+measure is FINITE with total mass `Γ(λ*)/(m*−1)! · ρ(U)` (`extremalStratumMeasure_univ`,
+`isFiniteMeasure_extremalStratumMeasure`).
 -/
 
 open MeasureTheory Set Filter Topology
 open scoped ENNReal ContDiff Manifold
 open Monomialize.VolumeScaling Monomialize.Transport Monomialize.Manifold
+open Grammar.NormalCrossing Grammar.NormalCrossing.EvenChartBoxDepth
 
 namespace Grammar
 
@@ -72,6 +78,73 @@ theorem regular_leadingResidueMeasureX {lam : ℝ} {m : ℕ} (hμ : 0 < lam)
   haveI := Ξ.regular_leadingResidueMeasureU Y hμ hlead
   Measure.Regular.comap' _ (Ξ.isOpen_stratumOpen m).isOpenEmbedding_subtypeVal
 
+/-! ### The deep fibre is null for the raw leading measure -/
+
+/-- The coordinate hyperplanes of the complementary walls are null for the face reference
+measure. -/
+theorem faceRef_exists_eq_zero_null (p : (Ξ.X Y).PIdx) (J : Finset (Fin ((Ξ.X Y).da p))) :
+    Ξ.faceRef Y p J {z | ∃ i, z.2 i = 0} = 0 := by
+  have ht : (volume : Measure ({i // ¬ inJ J i} → ℝ)) {w | ∃ i, w i = 0} = 0 := by
+    have : {w : {i // ¬ inJ J i} → ℝ | ∃ i, w i = 0} = ⋃ i, {w | w i = 0} := by ext w; simp
+    rw [this]
+    exact measure_iUnion_null fun i => by rw [volume_pi]; exact Measure.pi_hyperplane _ i 0
+  unfold faceRef
+  rw [show {z : Base ((Ξ.X Y).act p.1) (Y.T.a p.1) × ({i // ¬ inJ J i} → ℝ) | ∃ i, z.2 i = 0} =
+      univ ×ˢ {w | ∃ i, w i = 0} by ext z; simp, Measure.prod_prod,
+    Measure.restrict_apply' (measurableSet_box _), measure_mono_null inter_subset_left ht,
+    mul_zero]
+
+/-- A point of the face box mapped into the deep fibre `D_{m+1} ∩ Z₀` by a face of `m` walls has a
+vanishing complementary coordinate: the intrinsic depth is the number of vanishing chart
+coordinates (`depth_divPt_eq`). -/
+theorem exists_eq_zero_of_faceMap_mem_deepZeroFibre (p : (Ξ.X Y).PIdx) {m : ℕ}
+    {J : Finset (Fin ((Ξ.X Y).da p))} (hJ : J.card = m)
+    {z : Base ((Ξ.X Y).act p.1) (Y.T.a p.1) × ({i // ¬ inJ J i} → ℝ)}
+    (hz : z.2 ∈ box {i // ¬ inJ J i} (Y.T.a p.1)) (hmem : Ξ.faceMap Y p J z ∈ Ξ.deepZeroFibre m) :
+    ∃ i, z.2 i = 0 := by
+  by_contra hne
+  simp only [not_exists] at hne
+  have hdepth : m + 1 ≤ depth Ξ.R Ξ.hK0 (Ξ.faceMap Y p J z) := hmem.2
+  rw [Ξ.faceMap_eq_divPt Y p J hz, Ξ.depth_divPt_eq Y p z.1
+    (Ξ.glue_mem_closedBox_of_mem_box Y p J hz) (J := J) ?_, hJ] at hdepth
+  · omega
+  · intro i
+    by_cases hi : i ∈ J
+    · simp [glue_apply_of_mem J _ _ hi, hi]
+    · simp [glue_apply_of_not_mem J _ _ hi, hi, hne ⟨i, hi⟩]
+
+/-- ★ **A face measure of `m` walls gives the deep fibre `D_{m+1} ∩ Z₀` measure zero.** -/
+theorem faceMeasureU_deepZeroFibre (p : (Ξ.X Y).PIdx) {m : ℕ}
+    {J : Finset (Fin ((Ξ.X Y).da p))} (hJ : J.card = m) (μ : ℝ) :
+    Ξ.faceMeasureU Y p J μ (Ξ.deepZeroFibre m) = 0 := by
+  unfold faceMeasureU
+  rw [Measure.map_apply (Ξ.measurable_faceMap Y p J) (Ξ.measurableSet_deepZeroFibre m)]
+  refine withDensity_absolutelyContinuous _ _ (measure_mono_null (t := {z | z.2 ∉ box
+    {i // ¬ inJ J i} (Y.T.a p.1)} ∪ {z | ∃ i, z.2 i = 0}) ?_
+    (measure_union_null (ae_iff.1 (Ξ.ae_faceRef_mem_box Y p J))
+      (Ξ.faceRef_exists_eq_zero_null Y p J)))
+  intro z hz
+  by_cases hzb : z.2 ∈ box {i // ¬ inJ J i} (Y.T.a p.1)
+  · exact Or.inr (Ξ.exists_eq_zero_of_faceMap_mem_deepZeroFibre Y p hJ hzb hz)
+  · exact Or.inl hzb
+
+/-- ★★ **Deep-fibre nullity**: the raw leading measure `ρ^λ_m` gives `D_{m+1} ∩ Z₀` measure zero. -/
+theorem leadingResidueMeasureU_deepZeroFibre (lam : ℝ) (m : ℕ) :
+    Ξ.leadingResidueMeasureU Y lam m (Ξ.deepZeroFibre m) = 0 := by
+  unfold leadingResidueMeasureU
+  rw [Measure.finsetSum_apply]
+  refine Finset.sum_eq_zero fun p _ => ?_
+  rw [Measure.finsetSum_apply]
+  refine Finset.sum_eq_zero fun J hJ => ?_
+  exact Ξ.faceMeasureU_deepZeroFibre Y p (Finset.mem_filter.1 hJ).2.1 lam
+
+/-- The raw leading measure is carried by the open stratum `X = U ∖ D_{m+1}`. -/
+theorem leadingResidueMeasureU_restrict_stratumOpen (lam : ℝ) (m : ℕ) :
+    (Ξ.leadingResidueMeasureU Y lam m).restrict (Ξ.stratumOpen m) =
+      Ξ.leadingResidueMeasureU Y lam m :=
+  Measure.restrict_eq_self_of_ae_mem
+    (compl_mem_ae_iff.2 (Ξ.leadingResidueMeasureU_deepZeroFibre Y lam m))
+
 /-! ### The extremal stratum measure is the raw leading measure on the stratum -/
 
 /-- ★★★ **The extremal stratum measure is the raw leading measure on the open stratum**:
@@ -91,13 +164,14 @@ theorem extremalStratumMeasure_eq_leadingResidue {lam : ℝ} {m : ℕ} (h : Ξ.I
       fun x hx => image_eq_zero_of_notMem_tsupport fun hx' => hx (hGt.2 hx')]
   exact (Ξ.coeff_withF_eq_integral_leadingResidueMeasureU Y h hc hμ hm hG).symm
 
-/-- The total mass of the extremal stratum measure is `Γ(λ*)/(m*−1)! · ρ^{λ*}_{m*}(X)`. -/
+/-- The total mass of the extremal stratum measure is `Γ(λ*)/(m*−1)! · ρ^{λ*}_{m*}(U)`. -/
 theorem extremalStratumMeasure_univ {lam : ℝ} {m : ℕ} (h : Ξ.IsExtremalData lam m)
     (hc : Ξ.ExtremalCertificate Y) (hμ : 0 < lam) (hm : 1 ≤ m) :
     Ξ.extremalStratumMeasure Y h hm univ =
-      ENNReal.ofReal (residueConst lam m) * Ξ.leadingResidueMeasureU Y lam m (Ξ.stratumOpen m) := by
+      ENNReal.ofReal (residueConst lam m) * Ξ.leadingResidueMeasureU Y lam m univ := by
   rw [Ξ.extremalStratumMeasure_eq_leadingResidue Y h hc hμ hm, Measure.smul_apply, smul_eq_mul,
-    Ξ.leadingResidueMeasureX_apply, image_univ, Subtype.range_coe]
+    Ξ.leadingResidueMeasureX_apply, image_univ, Subtype.range_coe, ← Measure.restrict_apply_univ,
+    Ξ.leadingResidueMeasureU_restrict_stratumOpen]
 
 /-- ★ The extremal stratum measure is finite under the certificate. -/
 theorem isFiniteMeasure_extremalStratumMeasure {lam : ℝ} {m : ℕ} (h : Ξ.IsExtremalData lam m)
@@ -147,6 +221,26 @@ theorem globalExtremalStratumMeasure_eq_iff {lam : ℝ} {m : ℕ} (h : Ξ.IsExtr
   · intro hnull
     rw [Measure.restrict_eq_self_of_ae_mem]
     exact compl_mem_ae_iff.2 hnull
+
+/-- ★★★ **The global extremal stratum measure is the residue-constant multiple of the raw leading
+measure on all of `U`**: `ν^{λ*}_{m*} = Γ(λ*)/(m*−1)! · ρ^{λ*}_{m*}` (the deep fibre is null). -/
+theorem globalExtremalStratumMeasure_eq {lam : ℝ} {m : ℕ} (h : Ξ.IsExtremalData lam m)
+    (hc : Ξ.ExtremalCertificate Y) (hμ : 0 < lam) (hm : 1 ≤ m) :
+    Ξ.globalExtremalStratumMeasure Y h hm =
+      ENNReal.ofReal (residueConst lam m) • Ξ.leadingResidueMeasureU Y lam m :=
+  (Ξ.globalExtremalStratumMeasure_eq_iff Y h hc hμ hm).2
+    (Ξ.leadingResidueMeasureU_deepZeroFibre Y lam m)
+
+/-- ★★★ **The coefficient functional at the extremal pair is the global extremal stratum measure
+for EVERY smooth observable** (no test hypothesis). -/
+theorem coeff_withF_eq_integral_globalExtremalStratumMeasure {lam : ℝ} {m : ℕ}
+    (h : Ξ.IsExtremalData lam m) (hc : Ξ.ExtremalCertificate Y) (hμ : 0 < lam) (hm : 1 ≤ m)
+    {G : Ξ.R.U → ℝ} (hG : ContMDiff 𝓘(ℝ, Fin d → ℝ) 𝓘(ℝ, ℝ) ∞ G) :
+    (Ξ.withF G hG).coeff Y lam (m - 1) =
+      ∫ x, G x ∂(Ξ.globalExtremalStratumMeasure Y h hm) := by
+  rw [Ξ.globalExtremalStratumMeasure_eq Y h hc hμ hm, integral_smul_measure,
+    ENNReal.toReal_ofReal (residueConst_pos hμ m).le, smul_eq_mul]
+  exact Ξ.coeff_withF_eq_integral_leadingResidueMeasureU Y h hc hμ hm hG
 
 /-- The global extremal stratum measure integrates every smooth observable vanishing off the open
 stratum to the coefficient functional. -/
