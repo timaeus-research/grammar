@@ -222,7 +222,8 @@ theorem lintegral_square_cube {Ψ : ℝ → ℝ≥0∞} (hΨ : Measurable Ψ) :
 
 /-- ★★★ **The mixed monomial `x²y⁶` with flat prior, to all orders**: for `N > 0`,
 
-  ∫_{[−1,1]²} e^{−N x²y⁶} dx dy = Γ(1/6) N^{−1/6} − √π N^{−1/2} + 2∫_1^∞ e^{−Nt²}(1 − t^{−2/3}) dt`. -/
+  ∫_{[−1,1]²} e^{−N x²y⁶} dx dy
+    = Γ(1/6) N^{−1/6} − √π N^{−1/2} + 2∫_1^∞ e^{−Nt²}(1 − t^{−2/3}) dt`. -/
 theorem mixed_flat_allOrders {N : ℝ} (hN : 0 < N) :
     ∫ w in Icc (-1 : ℝ) 1 ×ˢ Icc (-1 : ℝ) 1, Real.exp (-N * (w.1 * w.2 ^ 3) ^ 2) =
       Real.Gamma (1 / 6) * N ^ (-(1 / 6) : ℝ) - Real.sqrt Real.pi / Real.sqrt N +
