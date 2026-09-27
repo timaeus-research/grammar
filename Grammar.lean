@@ -915,6 +915,7 @@ import Grammar.ConeSecondCoefficientSymmetric
 import Grammar.GaussianAbsMean
 import Grammar.ConeSecondCoefficientExact
 import Grammar.DepthThreeMellinBridge
+import Grammar.DepthThreeGammaJet
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
