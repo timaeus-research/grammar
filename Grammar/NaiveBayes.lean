@@ -27,6 +27,10 @@ Two measure-theoretic facts about this map are proved (examples_slop §5):
   probability and preserves the prior, so for every sample and every sample size the posterior
   mean of the class probability `t` is exactly `1/2`, and every label-antisymmetric observable
   has posterior mean zero (`integral_nbLik_antisymm`).
+* The Fisher information of the saturated model in moment coordinates at an independent truth is
+  `diag(1/v₁, 1/v₂, 1/(v₁v₂))` (`nbFisher_mu_mu`, `nbFisher_l₁_mu`, …), and the cubic coefficient
+  of the phase in the covariance direction is `V² Σ_x s_x/p*(x)² = (1 − 2λ₁)(1 − 2λ₂)`
+  (`nbCubic_mu`): the data of the leading Laplace expansion and of its `N^{−2}` correction.
 
 Zero `sorry`/`axiom`.
 -/
@@ -275,5 +279,129 @@ theorem map_nbMomentMap_restrict_nbBox :
 `λ − tη ∈ [0,1]` and `λ + (1 − t)η ∈ [0,1]`. -/
 theorem nbMomentMap_image_nbBox : nbMomentMap '' nbBox = nbMomentInv ⁻¹' nbBox :=
   congrFun (Set.image_eq_preimage_of_inverse nbMomentInv_nbMomentMap nbMomentMap_nbMomentInv) nbBox
+
+/-! ### The cells as polynomials in the moments, and the Fisher information at an independent
+truth -/
+
+/-- The sign pattern `(+, −, −, +)` of the covariance in the four cells. -/
+def nbSign : Bool × Bool → ℝ
+  | (true, true) => 1
+  | (false, false) => 1
+  | (true, false) => -1
+  | (false, true) => -1
+
+@[simp] theorem bern_true (p : ℝ) : bern p true = p := rfl
+@[simp] theorem bern_false (p : ℝ) : bern p false = 1 - p := rfl
+
+/-- The cell probabilities as polynomials in the moment coordinates `(λ₁, λ₂, μ)`. -/
+def nbCellY (l₁ l₂ μ : ℝ) (x : Bool × Bool) : ℝ :=
+  bern l₁ x.1 * bern l₂ x.2 + nbSign x * μ
+
+/-- The likelihood factors through the moment map. -/
+theorem nbCell_eq_nbCellY (θ : NBParam) (x : Bool × Bool) :
+    nbCell θ x = nbCellY (nbMean₁ θ) (nbMean₂ θ) (nbCov θ) x := by
+  obtain ⟨x₁, x₂⟩ := x
+  cases x₁ <;> cases x₂ <;>
+    simp only [nbCellY, nbSign, bern_true, bern_false, nbCell_true_true, nbCell_true_false,
+      nbCell_false_true, nbCell_false_false] <;> ring
+
+/-- The `λ₁`-derivative of the cells: `(λ₂, 1 − λ₂, −λ₂, −(1 − λ₂))`. -/
+def nbDl₁ (l₂ : ℝ) (x : Bool × Bool) : ℝ := (if x.1 then 1 else -1) * bern l₂ x.2
+
+/-- The `λ₂`-derivative of the cells: `(λ₁, −λ₁, 1 − λ₁, −(1 − λ₁))`. -/
+def nbDl₂ (l₁ : ℝ) (x : Bool × Bool) : ℝ := bern l₁ x.1 * (if x.2 then 1 else -1)
+
+theorem hasDerivAt_nbCellY_mu (l₁ l₂ μ : ℝ) (x : Bool × Bool) :
+    HasDerivAt (fun μ => nbCellY l₁ l₂ μ x) (nbSign x) μ := by
+  have h := ((hasDerivAt_id μ).const_mul (nbSign x)).const_add (bern l₁ x.1 * bern l₂ x.2)
+  simpa [nbCellY] using h
+
+theorem hasDerivAt_nbCellY_l₁ (l₁ l₂ μ : ℝ) (x : Bool × Bool) :
+    HasDerivAt (fun l₁ => nbCellY l₁ l₂ μ x) (nbDl₁ l₂ x) l₁ := by
+  obtain ⟨x₁, x₂⟩ := x
+  cases x₁
+  · have h := (((hasDerivAt_id l₁).const_sub 1).mul_const (bern l₂ x₂)).add_const
+      (nbSign (false, x₂) * μ)
+    simpa [nbCellY, nbDl₁] using h
+  · have h := ((hasDerivAt_id l₁).mul_const (bern l₂ x₂)).add_const (nbSign (true, x₂) * μ)
+    simpa [nbCellY, nbDl₁] using h
+
+theorem hasDerivAt_nbCellY_l₂ (l₁ l₂ μ : ℝ) (x : Bool × Bool) :
+    HasDerivAt (fun l₂ => nbCellY l₁ l₂ μ x) (nbDl₂ l₁ x) l₂ := by
+  obtain ⟨x₁, x₂⟩ := x
+  cases x₂
+  · have h := (((hasDerivAt_id l₂).const_sub 1).const_mul (bern l₁ x₁)).add_const
+      (nbSign (x₁, false) * μ)
+    simpa [nbCellY, nbDl₂] using h
+  · have h := ((hasDerivAt_id l₂).const_mul (bern l₁ x₁)).add_const (nbSign (x₁, true) * μ)
+    simpa [nbCellY, nbDl₂] using h
+
+section Fisher
+
+variable {l₁ l₂ : ℝ} (h₁ : 0 < l₁) (h₁' : l₁ < 1) (h₂ : 0 < l₂) (h₂' : l₂ < 1)
+include h₁ h₁' h₂ h₂'
+
+/-- The `(μ, μ)` entry of the Fisher information at an independent truth is `1/(v₁v₂)`. -/
+theorem nbFisher_mu_mu :
+    ∑ x : Bool × Bool, nbSign x * nbSign x / nbCellY l₁ l₂ 0 x =
+      1 / (l₁ * (1 - l₁) * (l₂ * (1 - l₂))) := by
+  simp only [Fintype.sum_prod_type, Fintype.sum_bool, nbCellY, nbSign, bern_true, bern_false,
+    mul_zero, add_zero]
+  have := sub_pos.mpr h₁'; have := sub_pos.mpr h₂'
+  field_simp; ring
+
+/-- The `(λ₁, μ)` entry of the Fisher information at an independent truth vanishes. -/
+theorem nbFisher_l₁_mu :
+    ∑ x : Bool × Bool, nbDl₁ l₂ x * nbSign x / nbCellY l₁ l₂ 0 x = 0 := by
+  simp only [Fintype.sum_prod_type, Fintype.sum_bool, nbCellY, nbSign, nbDl₁, bern_true,
+    bern_false, mul_zero, add_zero, if_true, Bool.false_eq_true, if_false]
+  have := sub_pos.mpr h₁'; have := sub_pos.mpr h₂'
+  field_simp; ring
+
+/-- The `(λ₂, μ)` entry of the Fisher information at an independent truth vanishes. -/
+theorem nbFisher_l₂_mu :
+    ∑ x : Bool × Bool, nbDl₂ l₁ x * nbSign x / nbCellY l₁ l₂ 0 x = 0 := by
+  simp only [Fintype.sum_prod_type, Fintype.sum_bool, nbCellY, nbSign, nbDl₂, bern_true,
+    bern_false, mul_zero, add_zero, if_true, Bool.false_eq_true, if_false]
+  have := sub_pos.mpr h₁'; have := sub_pos.mpr h₂'
+  field_simp; ring
+
+/-- The `(λ₁, λ₂)` entry of the Fisher information at an independent truth vanishes. -/
+theorem nbFisher_l₁_l₂ :
+    ∑ x : Bool × Bool, nbDl₁ l₂ x * nbDl₂ l₁ x / nbCellY l₁ l₂ 0 x = 0 := by
+  simp only [Fintype.sum_prod_type, Fintype.sum_bool, nbCellY, nbSign, nbDl₁, nbDl₂,
+    bern_true, bern_false, mul_zero, add_zero, if_true, Bool.false_eq_true, if_false]
+  have := sub_pos.mpr h₁'; have := sub_pos.mpr h₂'
+  field_simp; ring
+
+omit h₂ in
+/-- The `(λ₁, λ₁)` entry of the Fisher information at an independent truth is `1/v₁`. -/
+theorem nbFisher_l₁_l₁ :
+    ∑ x : Bool × Bool, nbDl₁ l₂ x * nbDl₁ l₂ x / nbCellY l₁ l₂ 0 x = 1 / (l₁ * (1 - l₁)) := by
+  simp only [Fintype.sum_prod_type, Fintype.sum_bool, nbCellY, nbSign, nbDl₁, bern_true,
+    bern_false, mul_zero, add_zero, if_true, Bool.false_eq_true, if_false]
+  have := sub_pos.mpr h₁'; have := sub_pos.mpr h₂'
+  field_simp; ring
+
+omit h₁ in
+/-- The `(λ₂, λ₂)` entry of the Fisher information at an independent truth is `1/v₂`. -/
+theorem nbFisher_l₂_l₂ :
+    ∑ x : Bool × Bool, nbDl₂ l₁ x * nbDl₂ l₁ x / nbCellY l₁ l₂ 0 x = 1 / (l₂ * (1 - l₂)) := by
+  simp only [Fintype.sum_prod_type, Fintype.sum_bool, nbCellY, nbSign, nbDl₂, bern_true,
+    bern_false, mul_zero, add_zero, if_true, Bool.false_eq_true, if_false]
+  have := sub_pos.mpr h₁'; have := sub_pos.mpr h₂'
+  field_simp; ring
+
+/-- The cubic coefficient of the phase in the covariance direction:
+`V² Σ_x s_x / p*(x)² = (1 − 2λ₁)(1 − 2λ₂)`. -/
+theorem nbCubic_mu :
+    (l₁ * (1 - l₁) * (l₂ * (1 - l₂))) ^ 2 *
+      ∑ x : Bool × Bool, nbSign x / nbCellY l₁ l₂ 0 x ^ 2 = (1 - 2 * l₁) * (1 - 2 * l₂) := by
+  simp only [Fintype.sum_prod_type, Fintype.sum_bool, nbCellY, nbSign, bern_true, bern_false,
+    mul_zero, add_zero]
+  have := sub_pos.mpr h₁'; have := sub_pos.mpr h₂'
+  field_simp; ring
+
+end Fisher
 
 end Grammar
