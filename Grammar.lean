@@ -900,6 +900,7 @@ import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
 import Grammar.MonomialRenormalised
+import Grammar.MonomialFamilyExpansion
 import Grammar.GammaSecondDerivHalf
 import Grammar.AveragedFibrePolar
 import Grammar.LogSqDominationAdapter
