@@ -11,7 +11,8 @@ For the flat prior on `[−1, 1]²` the law of the product `t = w₁w₂` has de
 `0 < |t| < 1` (the product-of-uniforms density of `Grammar.NaiveBayesDensity` at the unit square),
 so every integral of a function of the product — the partition function of the deep linear
 network of depth two with zero target, `K = t²/2`, with or without the regression field
-`√N ξ t` — is a one-dimensional integral against this state density (the pushforward of the prior; the paper's polar distribution is its Mellin data)
+`√N ξ t` — is a one-dimensional integral against this state density (the pushforward of the prior; the
+paper's polar distribution is its Mellin data)
 (★★ `lintegral_crossing_flat`, `lintegral_crossing_flat_field`; examples_slop §2).
 Zero `sorry`/`axiom`.
 -/
