@@ -945,6 +945,7 @@ import Grammar.GaussJlogPowBridge
 import Grammar.DepthMellinClosedForm
 import Grammar.DepthThreeCubicJet
 import Grammar.GammaThirdDerivDuplication
+import Grammar.GammaLogMomentsIteratedDeriv
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
