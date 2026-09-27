@@ -79,7 +79,8 @@ theorem blowK_rpow_gauss_polar {r : ℝ} (hr : 0 < r) (θ w : ℝ) :
   rw [blowK_polar, gauss2_polar]
   have h1 : r ^ 4 * Real.cos θ ^ 2 / 2 = (r ^ 4 * Real.cos θ ^ 2) * (2 : ℝ)⁻¹ := by ring
   rw [h1, Real.mul_rpow (by positivity) (by positivity),
-    Real.mul_rpow (by positivity) (by positivity), Real.inv_rpow (by norm_num), ← Real.rpow_neg (by norm_num), ← sq_abs (Real.cos θ),
+    Real.mul_rpow (by positivity) (by positivity), Real.inv_rpow (by norm_num),
+    ← Real.rpow_neg (by norm_num), ← sq_abs (Real.cos θ),
     ← Real.rpow_natCast r 4, ← Real.rpow_natCast |Real.cos θ| 2, ← Real.rpow_mul hr.le,
     ← Real.rpow_mul (abs_nonneg _)]
   push_cast
