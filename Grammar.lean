@@ -905,6 +905,8 @@ import Grammar.GaussianDepthThreeResidual
 import Grammar.BlowUpObservables
 import Grammar.ConeAveragedRemainder
 import Grammar.GaussianDepthThreeRate
+import Grammar.GaussianDepthAllThreeTerm
+import Grammar.GaussianDepthAllThirdCoeff
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
