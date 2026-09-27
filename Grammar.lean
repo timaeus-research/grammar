@@ -932,6 +932,7 @@ import Grammar.GaussianDepthFiveConst
 import Grammar.GaussianResidualCutoffBounds
 import Grammar.GaussianDepthFiveRate
 import Grammar.NaiveBayesFibreFiniteness
+import Grammar.NaiveBayesFibreMass
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
