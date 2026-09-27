@@ -16,7 +16,7 @@ Gaussian DLN at `z = 1 − 2u`: `M(1 − 2u) = F(u)/(2 s u²)` (next unit).  Her
 from `Γ(½) = √π`, `Γ(1) = 1`, `Γ'(½) = −√π(γ + 2 log 2)`, `Γ'(1) = −γ`, DCVIII's
 `Γ''(½) = √π((γ + 2 log 2)² + π²/2)` and DCXXXVIII's `Γ''(1) = γ² + π²/6`, so by l'Hôpital
 
-  `(F(u) − 1 − c u)/u² → (c² + 5π²/6)/2` as `u → 0⁺`   (★★★ `tendsto_depthThreeF_second`).
+  `(F(u) − 1 − c u)/u² → (c² + 5π²/6)/2` as `u → 0⁺`   (★★★ `tendsto_gammaJetF_second`).
 
 The complex function `jetF` carries the derivatives (through DCVIII's `hasDerivAt_Gamma_of_re_pos`
 and `hasDerivAt_deriv_Gamma_of_re_pos`); the real `gammaJetF u = (jetF u).re` inherits them by
@@ -230,11 +230,11 @@ noncomputable def gammaJetF (u : ℝ) : ℝ := (jetF u).re
 /-- `F'(u)` (the real part of `jetF'`). -/
 noncomputable def gammaJetF' (u : ℝ) : ℝ := (jetF' u).re
 
-theorem hasDerivAt_depthThreeF {u : ℝ} (hu1 : -1 < u) (hu2 : u < 1 / 2) :
+theorem hasDerivAt_gammaJetF {u : ℝ} (hu1 : -1 < u) (hu2 : u < 1 / 2) :
     HasDerivAt gammaJetF (gammaJetF' u) u :=
   (hasDerivAt_jetF (by simpa using hu1) (by simpa using hu2)).real_of_complex
 
-theorem hasDerivAt_depthThreeF'_zero :
+theorem hasDerivAt_gammaJetF'_zero :
     HasDerivAt gammaJetF' (depthThreeC ^ 2 + 5 * Real.pi ^ 2 / 6) 0 := by
   have h : HasDerivAt jetF' (((depthThreeC ^ 2 + 5 * Real.pi ^ 2 / 6 : ℝ) : ℂ)) ((0 : ℝ) : ℂ) := by
     simpa using hasDerivAt_jetF'_zero'
@@ -242,14 +242,14 @@ theorem hasDerivAt_depthThreeF'_zero :
   rw [Complex.ofReal_re] at this
   exact this
 
-theorem depthThreeF_zero : gammaJetF 0 = 1 := by
+theorem gammaJetF_zero : gammaJetF 0 = 1 := by
   simp [gammaJetF, jetF_zero]
 
 theorem gammaJetF'_zero : gammaJetF' 0 = depthThreeC := by
   rw [gammaJetF', Complex.ofReal_zero, jetF'_zero, Complex.ofReal_re]
 
 /-- ★★★ **The regularised jet**: `(F(u) − 1 − c u)/u² → (c² + 5π²/6)/2` as `u → 0⁺`. -/
-theorem tendsto_depthThreeF_second :
+theorem tendsto_gammaJetF_second :
     Tendsto (fun u : ℝ => (gammaJetF u - 1 - depthThreeC * u) / u ^ 2) (𝓝[>] (0 : ℝ))
       (𝓝 ((depthThreeC ^ 2 + 5 * Real.pi ^ 2 / 6) / 2)) := by
   have hmem : Set.Ioo (0 : ℝ) (1 / 2) ∈ 𝓝[>] (0 : ℝ) := Ioo_mem_nhdsGT (by norm_num)
@@ -258,7 +258,7 @@ theorem tendsto_depthThreeF_second :
   · filter_upwards [hmem] with u hu
     have h2 : HasDerivAt (fun u : ℝ => depthThreeC * u) depthThreeC u := by
       simpa using (hasDerivAt_id' (x := u)).const_mul depthThreeC
-    exact ((hasDerivAt_depthThreeF (by linarith [hu.1]) hu.2).sub_const 1).sub h2
+    exact ((hasDerivAt_gammaJetF (by linarith [hu.1]) hu.2).sub_const 1).sub h2
   · refine Eventually.of_forall fun u => ?_
     have h : HasDerivAt (fun u : ℝ => u ^ 2) (((2 : ℕ) : ℝ) * u ^ (2 - 1) * 1) u :=
       (hasDerivAt_id' (x := u)).pow 2
@@ -267,13 +267,13 @@ theorem tendsto_depthThreeF_second :
   · filter_upwards [hmem] with u hu
     linarith [hu.1]
   · have hc : ContinuousAt gammaJetF 0 :=
-      (hasDerivAt_depthThreeF (by norm_num) (by norm_num)).continuousAt
+      (hasDerivAt_gammaJetF (by norm_num) (by norm_num)).continuousAt
     have := ((hc.tendsto.sub_const 1).sub (tendsto_id.const_mul depthThreeC)).mono_left
       (nhdsWithin_le_nhds (s := Set.Ioi (0 : ℝ)))
-    simpa [depthThreeF_zero] using this
+    simpa [gammaJetF_zero] using this
   · have : Tendsto (fun u : ℝ => u ^ 2) (𝓝 0) (𝓝 ((0 : ℝ) ^ 2)) := (continuous_pow 2).tendsto 0
     simpa using this.mono_left (nhdsWithin_le_nhds (s := Set.Ioi (0 : ℝ)))
-  · have h := hasDerivAt_depthThreeF'_zero.tendsto_slope_zero_right
+  · have h := hasDerivAt_gammaJetF'_zero.tendsto_slope_zero_right
     have h2 := h.div_const 2
     refine h2.congr' ?_
     filter_upwards [hmem] with u hu
