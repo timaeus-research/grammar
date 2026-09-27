@@ -908,6 +908,8 @@ import Grammar.GaussianDepthThreeRate
 import Grammar.GaussianDepthAllThreeTerm
 import Grammar.GaussianDepthAllThirdCoeff
 import Grammar.BlowUpPosterior
+import Grammar.GammaSecondDerivOne
+import Grammar.GaussJlogExact
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
