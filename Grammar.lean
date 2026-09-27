@@ -941,6 +941,7 @@ import Grammar.PolynomialRateUnique
 import Grammar.PolynomialEngineCoefficients
 import Grammar.PolynomialEngineSubleading
 import Grammar.GammaOneLogMoments
+import Grammar.GaussJlogPowBridge
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
