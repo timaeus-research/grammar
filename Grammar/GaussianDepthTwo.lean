@@ -18,7 +18,7 @@ reduces exactly, by the Gaussian integral in `y` at fixed `x`, to the one-dimens
 with no Bessel functions and no product-density theorem (examples_slop §2, eq. dln_gauss at `L = 2`;
 Astra round-4 target 1).  The two-term expansion
 `Z_N = (log N + 3 log 2 − γ)/√(2πN) + O(N^{−3/2} log N)` follows from this representation by the
-`J(ε)` route of the consult and is a follow-up.
+`J(ε)` route of the consult in `Grammar.GaussianDepthTwoExpansion`.
 Zero `sorry`/`axiom`.
 -/
 
