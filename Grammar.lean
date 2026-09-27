@@ -896,6 +896,7 @@ import Grammar.NaiveBayesPushforward
 import Grammar.NaiveBayesSurrogate
 import Grammar.CrossingFlatPrior
 import Grammar.CrossingFlatAllOrders
+import Grammar.CrossingFlatDepth
 import Grammar.MixedMonomialFlat
 import Grammar.CrossingFlatField
 import Grammar.AnnealedGeneratingSeries
