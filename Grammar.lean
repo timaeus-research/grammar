@@ -919,6 +919,7 @@ import Grammar.DepthThreeGammaJet
 import Grammar.DepthThreeMellinClosedForm
 import Grammar.DepthThreeConstExact
 import Grammar.GaussianThirdCoeffClosed
+import Grammar.MellinResidualLemma
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
