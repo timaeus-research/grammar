@@ -29,7 +29,8 @@ dominated convergence, and its limit is the Gaussian double integral `E[(a + G)�
 This is the domination argument the note does not give (Astra round-10 target 2: the average of
 ratios, not the ratio of averages, which is the prior expectation).  The denominator is
 `cone_evidence_eq`; the identification of the numerator's Leray density with the four-dimensional
-integral `∫ u₁² e^{−Nq²/2 + √N q a} φ` is the next unit.  Zero `sorry`/`axiom`.
+integral `∫ u₁² e^{−Nq²/2 + √N q a} φ` is `ConeLerayWeighted` (`coneNumSq_eq`).
+Zero `sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Filter Topology
