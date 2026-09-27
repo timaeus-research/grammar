@@ -897,6 +897,7 @@ import Grammar.GaussianDepthThree
 import Grammar.GaussianDepthThreeTwoTerm
 import Grammar.GaussianDepthAllLeading
 import Grammar.GaussianDepthAllTwoTerm
+import Grammar.BesselK0Bridge
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
