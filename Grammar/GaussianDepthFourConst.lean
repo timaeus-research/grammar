@@ -246,7 +246,8 @@ theorem sqrt_mul_gaussLaplaceL_four_split {N : ℝ} (hN : 0 < N) :
       2 * ∫ v in Ioi (0 : ℝ), gaussDensity (v / Real.sqrt N) * depthFourTail v := by
   rw [sqrt_mul_gaussLaplaceL_four_eq hN, ← mul_add]
   congr 1
-  have hT : IntegrableOn (fun v : ℝ => gaussDensity (v / Real.sqrt N) * depthFourTail v) (Ioi 0) := by
+  have hT : IntegrableOn (fun v : ℝ => gaussDensity (v / Real.sqrt N) * depthFourTail v)
+      (Ioi 0) := by
     refine IntegrableOn.congr_fun ((integrableOn_gaussDensity_div_mul_gaussLaplaceL hN).sub
       (integrableOn_gaussDensity_div_mul_depthFourQ (N := N))) (fun v _ => ?_) measurableSet_Ioi
     simp only [Pi.sub_apply]
@@ -294,7 +295,7 @@ theorem tail_integral_eq {N : ℝ} (hN : 0 < N) :
         intro h1
         apply hm
         have : (1 : ℝ) < Real.sqrt N * x := h1
-        show (1 : ℝ) / Real.sqrt N < x
+        change (1 : ℝ) / Real.sqrt N < x
         rwa [div_lt_iff₀ hsN, mul_comm]
       rw [indicator_of_notMem hm, indicator_of_notMem hm1, mul_zero, mul_zero]
   rw [setIntegral_congr_fun measurableSet_Ioi e, setIntegral_indicator measurableSet_Ioi,
@@ -312,7 +313,8 @@ theorem gaussDensity_eq_gaussH (x : ℝ) :
 theorem depthThreeJet_shift (ℓ y : ℝ) :
     depthThreeJet (ℓ + 2 * y) = (ℓ ^ 2 / (4 * Real.pi) +
       (2 * Real.log 2 - Real.eulerMascheroniConstant) / Real.pi * ℓ + depthThreeConst) +
-      (4 * ℓ / (4 * Real.pi) + 2 * ((2 * Real.log 2 - Real.eulerMascheroniConstant) / Real.pi)) * y +
+      (4 * ℓ / (4 * Real.pi) +
+        2 * ((2 * Real.log 2 - Real.eulerMascheroniConstant) / Real.pi)) * y +
       4 * (1 / (4 * Real.pi)) * y ^ 2 := by
   unfold depthThreeJet; ring
 
@@ -349,7 +351,8 @@ theorem integrableOn_jet_div_Ioc {N : ℝ} (hN : 1 ≤ N) :
   have ha1 : 1 / Real.sqrt N ≤ 1 := by rw [div_le_one hsN]; exact Real.one_le_sqrt.2 hN
   rw [← intervalIntegrable_iff_integrableOn_Ioc_of_le ha1]
   refine ContinuousOn.intervalIntegrable ?_
-  refine ContinuousOn.div (ContinuousOn.comp (by unfold depthThreeJet; fun_prop : Continuous depthThreeJet).continuousOn
+  have hcont : Continuous depthThreeJet := by unfold depthThreeJet; fun_prop
+  refine ContinuousOn.div (ContinuousOn.comp hcont.continuousOn
     (continuousOn_const.add (continuousOn_const.mul (Real.continuousOn_log.mono fun x hx => ?_)))
     (mapsTo_univ _ _)) continuousOn_id fun x hx => ?_
   · rw [uIcc_of_le ha1] at hx
@@ -449,7 +452,8 @@ theorem flat_integral_eq {N : ℝ} (hN : 1 ≤ N) :
   simp only [hG, Real.log_one, mul_zero, add_zero, hlog]
   ring
 
-/-- The cutoff `h`-moments `R(a) = ∫_a^∞ h/x`, `J(a) = ∫_a^∞ h log x/x`, `J₂(a) = ∫_a^∞ h log²x/x`. -/
+/-- The cutoff `h`-moments `R(a) = ∫_a^∞ h/x`, `J(a) = ∫_a^∞ h log x/x`,
+`J₂(a) = ∫_a^∞ h log²x/x`. -/
 theorem hpart_integral_eq {N : ℝ} (hN : 1 ≤ N) :
     ∫ x in Ioi (1 / Real.sqrt N), gaussH x * depthThreeJet (Real.log N + 2 * Real.log x) / x =
       ((Real.log N) ^ 2 / (4 * Real.pi) +
