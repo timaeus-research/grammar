@@ -894,6 +894,7 @@ import Grammar.GaussianDepthTwo
 import Grammar.GammaSecondDerivHalf
 import Grammar.AveragedFibrePolar
 import Grammar.BlowUpLaurent
+import Grammar.RenormalisedExpIntegral
 import Grammar.RankOneGauss
 import Grammar.RankOneNormalTilt
 import Grammar.NaiveBayes
