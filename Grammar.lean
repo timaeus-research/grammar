@@ -912,6 +912,8 @@ import Grammar.GammaSecondDerivOne
 import Grammar.GaussJlogExact
 import Grammar.ConeSecondCoefficient
 import Grammar.ConeSecondCoefficientSymmetric
+import Grammar.GaussianAbsMean
+import Grammar.ConeSecondCoefficientExact
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
