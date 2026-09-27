@@ -885,6 +885,7 @@ import Grammar.ConeClosedForm
 import Grammar.BlowUpPolar
 import Grammar.BlowUpZeta
 import Grammar.TieFormulaPolynomial
+import Grammar.StateDensityPolar
 import Grammar.RankOneGauss
 import Grammar.RankOneNormalTilt
 import Grammar.NaiveBayes
