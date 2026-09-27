@@ -879,6 +879,7 @@ import Grammar.PolarTwoDimExamples
 import Grammar.ResolvedLeadingMeasure
 import Grammar.ResolvedExtremalLocalisation
 import Grammar.SmoothGlobalLeadingMeasure
+import Grammar.ConeExample
 import Grammar.AnnealedGeneratingSeries
 import Grammar.RationalExpansionAtInfinity
 import Grammar.TwoScaleDivision
