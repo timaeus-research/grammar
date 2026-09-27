@@ -893,6 +893,8 @@ import Grammar.GaussianProductZeta
 import Grammar.GaussianDepthTwo
 import Grammar.GaussianDepthTwoExpansion
 import Grammar.GaussianDepthAll
+import Grammar.GaussianDepthThree
+import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
 import Grammar.GammaSecondDerivHalf
