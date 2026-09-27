@@ -15,7 +15,7 @@ integral `∫₀^∞ e^{−v} log v dv = −γ` (`integral_exp_neg_log`), and
 
 This is the constant behind the two-term expansion of the depth-two Gaussian partition function
 `Z_N = (log N + 3 log 2 − γ)/√(2πN) + …` (examples_slop §2, eq. dln_gauss at `L = 2`; the `J(ε)`
-route of Astra round 5).  Zero `sorry`/`axiom`.
+route of Astra round 5, completed in `Grammar.GaussianDepthTwoExpansion`).  Zero `sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Filter Topology

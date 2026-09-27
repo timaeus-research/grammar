@@ -891,6 +891,7 @@ import Grammar.LogSquareDensityPolar
 import Grammar.HadamardWall
 import Grammar.GaussianProductZeta
 import Grammar.GaussianDepthTwo
+import Grammar.GaussianDepthTwoExpansion
 import Grammar.GammaSecondDerivHalf
 import Grammar.AveragedFibrePolar
 import Grammar.BlowUpLaurent
