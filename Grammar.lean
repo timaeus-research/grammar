@@ -924,6 +924,7 @@ import Grammar.PowerLogFaceCertificate
 import Grammar.MellinLogPolynomialTransfer
 import Grammar.NaiveBayesLogSqMoment
 import Grammar.GaussianDepthFourConst
+import Grammar.GaussianDepthFourRate
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
