@@ -886,6 +886,7 @@ import Grammar.BlowUpPolar
 import Grammar.BlowUpZeta
 import Grammar.TieFormulaPolynomial
 import Grammar.RankOneGauss
+import Grammar.RankOneNormalTilt
 import Grammar.NaiveBayes
 import Grammar.NaiveBayesDensity
 import Grammar.NaiveBayesClosedForm
