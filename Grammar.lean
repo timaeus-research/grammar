@@ -898,6 +898,7 @@ import Grammar.CrossingFlatPrior
 import Grammar.CrossingFlatAllOrders
 import Grammar.CrossingFlatDepth
 import Grammar.DlnFlatProductDensity
+import Grammar.DlnFlatSymmetricBox
 import Grammar.MixedMonomialFlat
 import Grammar.CrossingFlatField
 import Grammar.AnnealedGeneratingSeries

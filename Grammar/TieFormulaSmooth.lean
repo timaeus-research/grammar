@@ -351,18 +351,14 @@ theorem re_lt_of_flatEdge {s : ℂ} (hs : s.re < flatEdge ![1, 1] tieH tieK) : s
   simp [tieH, tieK] at h
   linarith
 
-/-- ★★★ **The tie formula for smooth amplitudes in the wall decomposition**: for
-`η = a + u g₁(u) + v g₂(v) + u v ρ(u,v)` on the chart `h = (1,0)`, `k = (2,1)`,
-`C_{½,2}[η] = a/8` and `C_{½,1}[η] = −½ ∫₀¹ g₁ − ¼ ∫₀¹ g₂`. -/
-theorem chartPolarCoeff_tieAmp_half (a : ℝ) {g₁ g₂ : ℝ → ℝ} (hg₁ : ContDiff ℝ ∞ g₁)
-    (hg₂ : ContDiff ℝ ∞ g₂) {ρ : (Fin 2 → ℝ) → ℝ} (hρ : ContDiff ℝ ∞ ρ) :
+/-- The tie formula with the minimal hypotheses: `η = tieAmp a g₁ g₂ ρ` smooth and the wall
+profiles `g₁, g₂, ρ` merely continuous (the proof uses only their continuity). -/
+theorem chartPolarCoeff_tieAmp_half' (a : ℝ) {g₁ g₂ : ℝ → ℝ} {ρ : (Fin 2 → ℝ) → ℝ}
+    (hF : ContDiff ℝ ∞ (tieAmp a g₁ g₂ ρ)) (hg₁c : Continuous g₁) (hg₂c : Continuous g₂)
+    (hρc : Continuous ρ) :
     ∀ q ≤ 1, chartPolarCoeff ![1, 1] (tieAmp a g₁ g₂ ρ) tieH tieK (1 / 2) q =
       tieSmoothA a g₁ g₂ q := by
-  have hF := contDiff_tieAmp a hg₁ hg₂ hρ
   have hp0 : ∀ i, 0 < (![1, 1] : Fin 2 → ℕ) i := fun i => by fin_cases i <;> simp
-  have hg₁c := hg₁.continuous
-  have hg₂c := hg₂.continuous
-  have hρc := hρ.continuous
   -- the explicit continuation
   set g : ℂ → ℂ := fun s => (a : ℂ) * monoTerm 0 s + wallU g₁ s * (1 / (1 - 2 * s)) +
     (1 / (2 - 4 * s)) * wallV g₂ s + chartZeta ρ tieHuv tieK s with hgdef
@@ -433,5 +429,15 @@ theorem chartPolarCoeff_tieAmp_half (a : ℝ) {g₁ g₂ : ℝ → ℝ} (hg₁ :
     ring
   exact chartPolarCoeff_eq_of_eventuallyEq ![1, 1] hF tieH tieK hp0 flatStrip_tie_half
     (fun x _ => poleOrder_le _ _ x.1 x.2 _) hev ha
+
+/-- ★★★ **The tie formula for smooth amplitudes in the wall decomposition**: for
+`η = a + u g₁(u) + v g₂(v) + u v ρ(u,v)` with `g₁, g₂, ρ` smooth, on the chart `h = (1,0)`,
+`k = (2,1)`, `C_{½,2}[η] = a/8` and `C_{½,1}[η] = −½ ∫₀¹ g₁ − ¼ ∫₀¹ g₂`. -/
+theorem chartPolarCoeff_tieAmp_half (a : ℝ) {g₁ g₂ : ℝ → ℝ} (hg₁ : ContDiff ℝ ∞ g₁)
+    (hg₂ : ContDiff ℝ ∞ g₂) {ρ : (Fin 2 → ℝ) → ℝ} (hρ : ContDiff ℝ ∞ ρ) :
+    ∀ q ≤ 1, chartPolarCoeff ![1, 1] (tieAmp a g₁ g₂ ρ) tieH tieK (1 / 2) q =
+      tieSmoothA a g₁ g₂ q :=
+  chartPolarCoeff_tieAmp_half' a (contDiff_tieAmp a hg₁ hg₂ hρ) hg₁.continuous hg₂.continuous
+    hρ.continuous
 
 end Grammar
