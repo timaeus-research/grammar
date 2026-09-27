@@ -899,6 +899,7 @@ import Grammar.GaussianDepthAllLeading
 import Grammar.GaussianDepthAllTwoTerm
 import Grammar.BesselK0Bridge
 import Grammar.MonomialFamilyLogFree
+import Grammar.ConeAveragedPosterior
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
