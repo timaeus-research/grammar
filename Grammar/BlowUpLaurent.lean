@@ -18,8 +18,8 @@ analytic at `t = 0` (`blowupZetaReg`), and its value and derivative at `0` give 
 i.e. the population polar data `A_{½,2} = 1/√2`, `A_{½,1} = (3 log 2 − 2γ)/√2` of the blow-up
 example (examples_slop §4, the finite parts along the two walls; Astra round 5), from `Γ(1) = 1` and
 `Γ'(1) = −γ` (Mathlib) only — no derivative of `Γ` at its pole.  The paper's Laplace polynomial
-`√(π/2)[log N + 5 log 2 − γ]` at `N^{−1/2}` follows by the Gamma transform (a derivation until the
-transfer theorem is formal).  Zero `sorry`/`axiom`.
+`√(π/2)[log N + 5 log 2 − γ]` at `N^{−1/2}` is the Gamma transform of this data; it is proved directly
+from the integral in `Grammar.BlowUpLaplaceExpansion`.  Zero `sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Filter Topology Asymptotics
