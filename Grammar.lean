@@ -952,6 +952,8 @@ import Grammar.GammaDuplicationAllOrders
 import Grammar.DigammaJets
 import Grammar.DepthJetRecurrence
 import Grammar.DepthFiveJetClosed
+import Grammar.DigammaCompat
+import Grammar.ConeThirdCoefficient
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
