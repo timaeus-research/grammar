@@ -929,6 +929,8 @@ import Grammar.MellinTransferInterfaces
 import Grammar.GaussianDepthFourRateLinear
 import Grammar.NaiveBayesFixedDomainDensity
 import Grammar.GaussianDepthFiveConst
+import Grammar.GaussianResidualCutoffBounds
+import Grammar.GaussianDepthFiveRate
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
