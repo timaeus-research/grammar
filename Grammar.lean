@@ -922,6 +922,7 @@ import Grammar.GaussianThirdCoeffClosed
 import Grammar.MellinResidualLemma
 import Grammar.PowerLogFaceCertificate
 import Grammar.MellinLogPolynomialTransfer
+import Grammar.NaiveBayesLogSqMoment
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
