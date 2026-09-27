@@ -894,6 +894,7 @@ import Grammar.GaussianDepthTwo
 import Grammar.GaussianDepthTwoExpansion
 import Grammar.GammaSecondDerivHalf
 import Grammar.AveragedFibrePolar
+import Grammar.LogSqDominationAdapter
 import Grammar.BlowUpLaurent
 import Grammar.RenormalisedExpIntegral
 import Grammar.RankOneGauss
