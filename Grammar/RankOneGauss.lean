@@ -7,14 +7,16 @@ import Grammar.BlowUpPolar
 /-!
 # Rank-one matrix factorisation: the column-wise Gaussian integration
 
-For the model with output `x yᵀ` (`x : Fin M → ℝ`, `y : Fin N → ℝ`), unit Gaussian noise and the truth
-`A`, the empirical divergence with a frozen field `Ξ` is
-`n K − √n ⟨x yᵀ − A, Ξ⟩ = (n/2) Σ_{ij} (xᵢ yⱼ − Aᵢⱼ)² − √n Σ_{ij} (xᵢ yⱼ − Aᵢⱼ) Ξᵢⱼ`, and it is a sum over
-the columns `j` of quadratics in `yⱼ`.  Against the Gaussian prior `e^{−|y|²/2}` the `y`-integral is
-therefore a product of one-dimensional Gaussian integrals with linear terms (examples_slop §4):
+For the model with output `x yᵀ` (`x : Fin M → ℝ`, `y : Fin N → ℝ`), unit Gaussian noise and
+the truth `A`, the empirical divergence with a frozen field `Ξ` is
+`n K − √n ⟨x yᵀ − A, Ξ⟩ = (n/2) Σ_{ij} (xᵢ yⱼ − Aᵢⱼ)² − √n Σ_{ij} (xᵢ yⱼ − Aᵢⱼ) Ξᵢⱼ`,
+a sum over the columns `j` of quadratics in `yⱼ`.  Against the Gaussian prior `e^{−|y|²/2}`
+the `y`-integral is therefore a product of one-dimensional Gaussian integrals with linear
+terms (examples_slop §4):
 
   `∫_{ℝ^N} e^{−nK + √n⟨x yᵀ − A, Ξ⟩ − |y|²/2} dy
-      = ∏_j √(2π/(n|x|²+1)) · exp( (n⟨x,A_j⟩ + √n⟨x,Ξ_j⟩)² / (2(n|x|²+1)) − n|A_j|²/2 − √n⟨A_j,Ξ_j⟩ )`
+      = ∏_j √(2π/(n|x|²+1))
+          · exp( (n⟨x,A_j⟩ + √n⟨x,Ξ_j⟩)² / (2(n|x|²+1)) − n|A_j|²/2 − √n⟨A_j,Ξ_j⟩ )`
 
 (★★ `integral_rankOne_gauss`), which reduces the `M+N`-dimensional partition function to an
 `M`-dimensional integral exactly, field included.  The one-dimensional input is the real quadratic
@@ -27,7 +29,8 @@ open scoped ENNReal
 
 namespace Grammar
 
-/-- The real Gaussian integral with a linear term: `∫ e^{−αy² + βy − γ} dy = √(π/α) e^{β²/(4α) − γ}`. -/
+/-- The real Gaussian integral with a linear term:
+`∫ e^{−αy² + βy − γ} dy = √(π/α) e^{β²/(4α) − γ}`. -/
 theorem integral_exp_quadratic_real {α : ℝ} (hα : 0 < α) (β γ : ℝ) :
     ∫ y : ℝ, Real.exp (-α * y ^ 2 + β * y - γ) =
       Real.sqrt (Real.pi / α) * Real.exp (β ^ 2 / (4 * α) - γ) := by
@@ -42,7 +45,8 @@ theorem integral_exp_quadratic_real {α : ℝ} (hα : 0 < α) (β γ : ℝ) :
     ring_nf
   simp_rw [hpt]
   rw [h]
-  have hsqrt : ((Real.pi : ℂ) / -(-(α : ℂ))) ^ (1 / 2 : ℂ) = ((Real.sqrt (Real.pi / α) : ℝ) : ℂ) := by
+  have hsqrt : ((Real.pi : ℂ) / -(-(α : ℂ))) ^ (1 / 2 : ℂ) =
+      ((Real.sqrt (Real.pi / α) : ℝ) : ℂ) := by
     rw [neg_neg, Real.sqrt_eq_rpow, Complex.ofReal_cpow (by positivity)]
     push_cast
     ring_nf
