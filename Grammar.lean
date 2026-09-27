@@ -898,6 +898,7 @@ import Grammar.BlowUpLaplaceExpansion
 import Grammar.GammaSecondDerivHalf
 import Grammar.AveragedFibrePolar
 import Grammar.LogSqDominationAdapter
+import Grammar.LogSqEnvelopeCertificate
 import Grammar.BlowUpLaurent
 import Grammar.RenormalisedExpIntegral
 import Grammar.RankOneGauss
