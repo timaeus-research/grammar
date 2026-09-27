@@ -901,6 +901,7 @@ import Grammar.BesselK0Bridge
 import Grammar.MonomialFamilyLogFree
 import Grammar.ConeAveragedPosterior
 import Grammar.ConeLerayWeighted
+import Grammar.GaussianDepthThreeResidual
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
