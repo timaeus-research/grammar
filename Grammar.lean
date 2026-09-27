@@ -890,6 +890,7 @@ import Grammar.TieFormulaSmooth
 import Grammar.LogSquareDensityPolar
 import Grammar.HadamardWall
 import Grammar.GaussianProductZeta
+import Grammar.GaussianDepthTwo
 import Grammar.RankOneGauss
 import Grammar.RankOneNormalTilt
 import Grammar.NaiveBayes
