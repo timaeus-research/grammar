@@ -21,8 +21,9 @@ oriented blow-up of the origin, and the phase is the crossing `w² s²` in the c
     `∫_{ℝ²} K^w e^{−|z|²/2} dz = 2^w Γ(2w + 1) · ∫_{−π}^{π} |cos θ|^{2w} dθ`.
 
 The angular integral is the Beta function `2√π Γ(w + ½)/Γ(w + 1)`, giving
-`ζ(w) = 2^{3w+1} Γ(w + ½)²` with double poles at the half-integers; its evaluation is an analytic
-derivation (not in Mathlib) and the note records it as such.  Zero `sorry`/`axiom`.
+`ζ(w) = 2^{3w+1} Γ(w + ½)²` with double poles at the half-integers; both are proved in
+`Grammar.BlowUpZeta` (`lintegral_abs_cos_rpow`, `lintegral_blowK_gauss_closed`).
+Zero `sorry`/`axiom`.
 -/
 
 open MeasureTheory Set Filter Topology

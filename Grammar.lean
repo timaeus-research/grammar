@@ -882,6 +882,7 @@ import Grammar.SmoothGlobalLeadingMeasure
 import Grammar.ConeExample
 import Grammar.ConeGaussian
 import Grammar.BlowUpPolar
+import Grammar.BlowUpZeta
 import Grammar.RankOneGauss
 import Grammar.NaiveBayes
 import Grammar.NaiveBayesDensity
