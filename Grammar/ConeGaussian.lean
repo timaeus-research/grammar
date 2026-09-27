@@ -141,7 +141,7 @@ theorem image_sub_two_mul (p : ℝ) : (fun v : ℝ => p - 2 * v) '' Iio (p / 2) 
   constructor
   · rintro ⟨v, hv, rfl⟩
     have : v < p / 2 := hv
-    show (0 : ℝ) < p - 2 * v
+    change (0 : ℝ) < p - 2 * v
     linarith
   · intro ht
     have ht' : (0 : ℝ) < t := ht
