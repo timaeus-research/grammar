@@ -888,6 +888,7 @@ import Grammar.TieFormulaPolynomial
 import Grammar.StateDensityPolar
 import Grammar.TieFormulaSmooth
 import Grammar.LogSquareDensityPolar
+import Grammar.HadamardWall
 import Grammar.RankOneGauss
 import Grammar.RankOneNormalTilt
 import Grammar.NaiveBayes
