@@ -889,6 +889,7 @@ import Grammar.NaiveBayesDensity
 import Grammar.NaiveBayesClosedForm
 import Grammar.NaiveBayesPushforward
 import Grammar.CrossingFlatPrior
+import Grammar.CrossingFlatAllOrders
 import Grammar.AnnealedGeneratingSeries
 import Grammar.RationalExpansionAtInfinity
 import Grammar.TwoScaleDivision
