@@ -954,6 +954,7 @@ import Grammar.DepthJetRecurrence
 import Grammar.DepthFiveJetClosed
 import Grammar.DigammaCompat
 import Grammar.ConeThirdCoefficient
+import Grammar.RealDigammaSeries
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
