@@ -886,6 +886,7 @@ import Grammar.RankOneGauss
 import Grammar.NaiveBayes
 import Grammar.NaiveBayesDensity
 import Grammar.NaiveBayesClosedForm
+import Grammar.NaiveBayesPushforward
 import Grammar.AnnealedGeneratingSeries
 import Grammar.RationalExpansionAtInfinity
 import Grammar.TwoScaleDivision
