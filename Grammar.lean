@@ -937,6 +937,7 @@ import Grammar.NaiveBayesConditionalDensity
 import Grammar.PolynomialJetTools
 import Grammar.PolynomialDepthStep
 import Grammar.PolynomialDepthAll
+import Grammar.PolynomialRateUnique
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
