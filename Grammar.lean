@@ -881,6 +881,7 @@ import Grammar.ResolvedExtremalLocalisation
 import Grammar.SmoothGlobalLeadingMeasure
 import Grammar.ConeExample
 import Grammar.ConeGaussian
+import Grammar.ConeClosedForm
 import Grammar.BlowUpPolar
 import Grammar.BlowUpZeta
 import Grammar.RankOneGauss
