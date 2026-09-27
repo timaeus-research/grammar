@@ -905,6 +905,7 @@ import Grammar.BlowUpLaurent
 import Grammar.RenormalisedExpIntegral
 import Grammar.RankOneGauss
 import Grammar.RankOneNormalTilt
+import Grammar.RankOneGeneralPosition
 import Grammar.NaiveBayes
 import Grammar.NaiveBayesDensity
 import Grammar.NaiveBayesClosedForm
