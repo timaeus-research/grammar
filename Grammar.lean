@@ -877,6 +877,7 @@ import Grammar.CoupledPolarInterchange
 import Grammar.EmpiricalCouplingAllLog
 import Grammar.PolarTwoDimExamples
 import Grammar.ResolvedLeadingMeasure
+import Grammar.ResolvedExtremalLocalisation
 import Grammar.AnnealedGeneratingSeries
 import Grammar.RationalExpansionAtInfinity
 import Grammar.TwoScaleDivision
