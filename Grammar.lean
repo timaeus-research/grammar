@@ -889,6 +889,7 @@ import Grammar.NaiveBayes
 import Grammar.NaiveBayesDensity
 import Grammar.NaiveBayesClosedForm
 import Grammar.NaiveBayesPushforward
+import Grammar.NaiveBayesSurrogate
 import Grammar.CrossingFlatPrior
 import Grammar.CrossingFlatAllOrders
 import Grammar.MixedMonomialFlat

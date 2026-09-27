@@ -5,13 +5,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import Grammar.NaiveBayesDensity
 
 /-!
-# The crossing `x²y²` with the flat prior: the one-dimensional polar distribution
+# The crossing `x²y²` with the flat prior: the one-dimensional state density
 
 For the flat prior on `[−1, 1]²` the law of the product `t = w₁w₂` has density `2 log(1/|t|)` on
 `0 < |t| < 1` (the product-of-uniforms density of `Grammar.NaiveBayesDensity` at the unit square),
 so every integral of a function of the product — the partition function of the deep linear
 network of depth two with zero target, `K = t²/2`, with or without the regression field
-`√N ξ t` — is a one-dimensional integral against this polar distribution
+`√N ξ t` — is a one-dimensional integral against this state density (the pushforward of the prior; the paper's polar distribution is its Mellin data)
 (★★ `lintegral_crossing_flat`, `lintegral_crossing_flat_field`; examples_slop §2).
 Zero `sorry`/`axiom`.
 -/
@@ -71,7 +71,7 @@ theorem lintegral_crossing_flat {Ψ : ℝ → ℝ≥0∞} (hΨ : Measurable Ψ) 
 
 /-- The depth-two deep linear network with zero target, flat prior on `[−1, 1]²` and frozen
 regression field `ξ`: the partition function with an insertion `f(w₁w₂)` is the one-dimensional
-integral against the polar distribution `2 log(1/|t|)`. -/
+integral against the state density `2 log(1/|t|)`. -/
 theorem lintegral_crossing_flat_field (N ξ : ℝ) {f : ℝ → ℝ} (hf : Measurable f) :
     ∫⁻ w in Icc (-1 : ℝ) 1 ×ˢ Icc (-1 : ℝ) 1,
         ENNReal.ofReal (f (w.1 * w.2) *
