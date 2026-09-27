@@ -946,6 +946,8 @@ import Grammar.DepthMellinClosedForm
 import Grammar.DepthThreeCubicJet
 import Grammar.GammaThirdDerivDuplication
 import Grammar.GammaLogMomentsIteratedDeriv
+import Grammar.JetUniqueness
+import Grammar.DepthJetAllCoefficients
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
