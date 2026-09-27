@@ -897,6 +897,7 @@ import Grammar.GaussianDepthThree
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
+import Grammar.MonomialRenormalised
 import Grammar.GammaSecondDerivHalf
 import Grammar.AveragedFibrePolar
 import Grammar.LogSqDominationAdapter
@@ -906,6 +907,7 @@ import Grammar.RenormalisedExpIntegral
 import Grammar.RankOneGauss
 import Grammar.RankOneNormalTilt
 import Grammar.RankOneGeneralPosition
+import Grammar.RankOneProjection
 import Grammar.NaiveBayes
 import Grammar.NaiveBayesDensity
 import Grammar.NaiveBayesClosedForm
