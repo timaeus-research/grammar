@@ -960,6 +960,7 @@ import Grammar.DepthZetaClosedForms
 import Grammar.FlatDepthZetaClosed
 import Grammar.BlowUpQuarticLinear
 import Grammar.BlowUpMovingAmplitude
+import Grammar.BlowUpQuarticSecondOrder
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
