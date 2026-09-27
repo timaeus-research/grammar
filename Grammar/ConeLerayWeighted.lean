@@ -333,4 +333,17 @@ theorem coneNumSq_eq (N a : ℝ) :
     (by fun_prop)]
   rfl
 
+/-- ★★★ **The averaged first correction, four-dimensional on both sides**: with
+`Z_N[f; a] = ∫_{ℝ⁴} f(u) e^{−N q²/2 + √N q a} e^{−|u|²/2} du` and the sample field `a ∼ N(0,1)`,
+`√N (E_a[Z_N[u₁²; a]/Z_N[1; a]] − ½) → 1/√π`. -/
+theorem cone_averaged_correction_fourDim :
+    Tendsto (fun N : ℝ => Real.sqrt N *
+      ((∫ a, (∫ u : (ℝ × ℝ) × (ℝ × ℝ),
+        Real.exp (-N * coneQ u ^ 2 / 2 + Real.sqrt N * coneQ u * a) * (u.1.1 ^ 2 * gaussW u)) /
+        (∫ u : (ℝ × ℝ) × (ℝ × ℝ),
+          Real.exp (-N * coneQ u ^ 2 / 2 + Real.sqrt N * coneQ u * a) * gaussW u) *
+        gaussDensity a) - 1 / 2)) atTop (𝓝 (1 / Real.sqrt Real.pi)) := by
+  simp_rw [← coneNumSq_eq, ← coneDen_eq]
+  exact cone_averaged_correction
+
 end Grammar
