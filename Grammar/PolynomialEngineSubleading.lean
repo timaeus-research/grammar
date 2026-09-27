@@ -10,7 +10,8 @@ import Grammar.DepthThreeConstExact
 
 The coefficient recursion of DCLXVI, with only the `j = 0` (resp. `j = 0, 1`) Hasse terms
 surviving at the top, gives the subleading coefficients of `enginePoly L` in closed form at
-every depth: ★★ `coeff_enginePoly_second : (enginePoly L)_{L−2} = [(L+1) log 2 − (L−1)γ]/((L−2)! s^{L−1})`
+every depth: ★★ `coeff_enginePoly_second :
+(enginePoly L)_{L−2} = [(L+1) log 2 − (L−1)γ]/((L−2)! s^{L−1})`
 for `L ≥ 2` (DCXXVI's `B_L`; recursion `B_{L+1} = B_L/(s(L−1)) + 2R₀A_L/s`) and
 ★★ `coeff_enginePoly_third : (enginePoly L)_{L−3} = [D_L² + (L+3)π²/6]/(2(L−3)! s^{L−1})`,
 `D_L = (L+1) log 2 − (L−1)γ`, for `L ≥ 3` (DCXLVI's `C_L`, seeded by DCXLV's exact `C₃`;
@@ -28,7 +29,8 @@ theorem enginePoly_three : enginePoly 3 = depthThreePoly := by
   rw [enginePoly_succ 2 le_rfl, enginePoly_two, stepPoly_two]
 
 theorem coeff_depthTwoPoly_zero :
-    depthTwoPoly.coeff 0 = (3 * Real.log 2 - Real.eulerMascheroniConstant) / Real.sqrt (2 * Real.pi) := by
+    depthTwoPoly.coeff 0 =
+      (3 * Real.log 2 - Real.eulerMascheroniConstant) / Real.sqrt (2 * Real.pi) := by
   unfold depthTwoPoly; simp
 
 theorem coeff_depthThreePoly_zero : depthThreePoly.coeff 0 = depthThreeConst := by
@@ -39,7 +41,8 @@ theorem coeff_enginePoly_eq_zero {L n : ℕ} (hL : 2 ≤ L) (hn : L - 1 < n) :
     (enginePoly L).coeff n = 0 :=
   coeff_eq_zero_of_natDegree_lt (by rw [natDegree_enginePoly L hL]; exact hn)
 
-/-- ★★ The second coefficient at every depth `L ≥ 2`: `B_L = [(L+1) log 2 − (L−1)γ]/((L−2)! s^{L−1})`. -/
+/-- ★★ The second coefficient at every depth `L ≥ 2`:
+`B_L = [(L+1) log 2 − (L−1)γ]/((L−2)! s^{L−1})`. -/
 theorem coeff_enginePoly_second :
     ∀ L : ℕ, 2 ≤ L → (enginePoly L).coeff (L - 2) =
       (((L : ℝ) + 1) * Real.log 2 - ((L : ℝ) - 1) * Real.eulerMascheroniConstant) /
