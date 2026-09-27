@@ -146,4 +146,49 @@ theorem gaussLaplace2_eq_besselK0Integral {N : ℝ} (hN : 0 < N) :
       rw [show -(1 / (2 * N)) * t ^ 2 = -t ^ 2 / (2 * N) by ring]
       exact div_le_div_of_nonneg_right (by linarith) (by positivity)
 
+/-- ★★ **The small-argument expansion of `e^z K₀(z)`**, read off DCXII through the bridge:
+`|e^z K₀(z) − (log(1/z) + log 2 − γ)| ≤ 2z(log(1/(2z)) + 3)` for `0 < z ≤ 1/2`
+(the `2 log 2` of `N = 1/(4z)` absorbs the DLN constant `3 log 2 − γ` into `log 2 − γ`). -/
+theorem expK0_two_term_bound {z : ℝ} (hz : 0 < z) (hz1 : z ≤ 1 / 2) :
+    |Real.exp z * besselK0Integral z -
+      (Real.log (1 / z) + Real.log 2 - Real.eulerMascheroniConstant)| ≤
+      2 * z * (Real.log (1 / (2 * z)) + 3) := by
+  set N : ℝ := 1 / (4 * z) with hNdef
+  have hN0 : 0 < N := by positivity
+  have hN : 1 / 2 ≤ N := by
+    rw [hNdef, div_le_div_iff₀ (by norm_num) (by positivity)]
+    linarith
+  have hzN : 1 / (4 * N) = z := by rw [hNdef]; field_simp
+  have hB := gaussLaplace2_eq_besselK0Integral hN0
+  rw [hzN] at hB
+  have hbound := gaussLaplace2_two_term_bound hN
+  have hs : 0 < Real.sqrt (2 * Real.pi * N) := Real.sqrt_pos.2 (by positivity)
+  have hlogN : Real.log N = Real.log (1 / z) - 2 * Real.log 2 := by
+    rw [hNdef, one_div, one_div, Real.log_inv, Real.log_inv, Real.log_mul (by norm_num) hz.ne',
+      show (4 : ℝ) = 2 ^ 2 by norm_num, Real.log_pow]
+    push_cast
+    ring
+  have hlog2N : Real.log (2 * N) = Real.log (1 / (2 * z)) := by
+    rw [hNdef]
+    congr 1
+    field_simp
+    norm_num
+  have hK : Real.exp z * besselK0Integral z = gaussLaplace2 N * Real.sqrt (2 * Real.pi * N) := by
+    rw [hB]
+    field_simp
+  rw [hK, show gaussLaplace2 N * Real.sqrt (2 * Real.pi * N) -
+      (Real.log (1 / z) + Real.log 2 - Real.eulerMascheroniConstant) =
+      (gaussLaplace2 N - (Real.log N + 3 * Real.log 2 - Real.eulerMascheroniConstant) /
+        Real.sqrt (2 * Real.pi * N)) * Real.sqrt (2 * Real.pi * N) by
+        rw [hlogN]; field_simp; ring,
+    abs_mul, abs_of_pos hs]
+  calc |gaussLaplace2 N - (Real.log N + 3 * Real.log 2 - Real.eulerMascheroniConstant) /
+        Real.sqrt (2 * Real.pi * N)| * Real.sqrt (2 * Real.pi * N)
+      ≤ (Real.log (2 * N) + 3) / (2 * N * Real.sqrt (2 * Real.pi * N)) *
+          Real.sqrt (2 * Real.pi * N) := mul_le_mul_of_nonneg_right hbound hs.le
+    _ = 2 * z * (Real.log (1 / (2 * z)) + 3) := by
+        rw [hlog2N, hNdef]
+        field_simp
+        ring
+
 end Grammar
