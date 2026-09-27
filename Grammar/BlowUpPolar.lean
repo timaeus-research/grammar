@@ -78,8 +78,8 @@ theorem blowK_rpow_gauss_polar {r : ℝ} (hr : 0 < r) (θ w : ℝ) :
       (2 : ℝ) ^ (-w) * r ^ (4 * w) * Real.exp (-r ^ 2 / 2) * |Real.cos θ| ^ (2 * w) := by
   rw [blowK_polar, gauss2_polar]
   have h1 : r ^ 4 * Real.cos θ ^ 2 / 2 = (r ^ 4 * Real.cos θ ^ 2) * (2 : ℝ)⁻¹ := by ring
-  rw [h1, Real.mul_rpow (by positivity) (by positivity), Real.mul_rpow (by positivity) (by positivity),
-    Real.inv_rpow (by norm_num), ← Real.rpow_neg (by norm_num), ← sq_abs (Real.cos θ),
+  rw [h1, Real.mul_rpow (by positivity) (by positivity),
+    Real.mul_rpow (by positivity) (by positivity), Real.inv_rpow (by norm_num), ← Real.rpow_neg (by norm_num), ← sq_abs (Real.cos θ),
     ← Real.rpow_natCast r 4, ← Real.rpow_natCast |Real.cos θ| 2, ← Real.rpow_mul hr.le,
     ← Real.rpow_mul (abs_nonneg _)]
   push_cast
@@ -98,7 +98,8 @@ theorem integral_radial_gamma {w : ℝ} (hw : -1 / 2 < w) :
     ring_nf
   rw [hfun, h, show (4 * w + 1 + 1) / 2 = 2 * w + 1 by ring]
   have h2 : ((1 / 2 : ℝ) ^ (-(4 * w + 1 + 1) / 2)) = (2 : ℝ) ^ (2 * w + 1) := by
-    rw [show (1 / 2 : ℝ) = 2⁻¹ by norm_num, Real.inv_rpow (by norm_num), ← Real.rpow_neg (by norm_num)]
+    rw [show (1 / 2 : ℝ) = 2⁻¹ by norm_num, Real.inv_rpow (by norm_num),
+      ← Real.rpow_neg (by norm_num)]
     congr 1
     ring
   rw [h2, Real.rpow_add (by norm_num : (0 : ℝ) < 2), Real.rpow_one]
