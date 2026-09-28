@@ -1,3 +1,6 @@
+> **Archived.** This repository was merged into the resolution monorepo on 2026-09-27:
+> it now lives at [`lean/grammar/`](https://github.com/resolutionorg/resolution/tree/main/lean/grammar).
+
 # grammar
 
 A Lean 4 + Mathlib formalisation of Sections 3–4 of *Grammar (Expectations and the
