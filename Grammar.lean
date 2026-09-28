@@ -962,6 +962,7 @@ import Grammar.BlowUpQuarticLinear
 import Grammar.BlowUpMovingAmplitude
 import Grammar.BlowUpQuarticSecondOrder
 import Grammar.BlowUpBesselClosedForm
+import Grammar.ConeProductCorner
 import Grammar.CrossingGaussianLaplace
 import Grammar.AmplitudeJ
 import Grammar.BlowUpLaplaceExpansion
